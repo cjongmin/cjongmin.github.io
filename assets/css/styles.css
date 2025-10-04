@@ -104,12 +104,14 @@ body.has-rail .site-footer {
 body.has-rail main.container {
   padding-left: 320px; /* 300px rail + 20px gap */
   padding-right: 20px;
+  max-width: 1040px; /* Keep same max-width */
 }
 
 @media (max-width: 1200px) {
   body.has-rail main.container {
     padding-left: 20px;
     padding-right: 20px;
+    max-width: 1040px; /* Same max-width as with rail */
   }
   
   /* Hide profile rail and adjust main content */
@@ -124,7 +126,6 @@ body.has-rail main.container {
   
   /* Show mobile profile section */
   .mobile-profile {
-    display: block;
     margin-bottom: 40px;
   }
 }
@@ -132,6 +133,13 @@ body.has-rail main.container {
 /* Mobile profile section (hidden by default) */
 .mobile-profile {
   display: none;
+}
+
+/* Show mobile profile when profile rail is hidden */
+@media (max-width: 1200px) {
+  .mobile-profile {
+    display: block;
+  }
 }
 
 .mobile-profile-content {
@@ -393,6 +401,16 @@ main {
 
   .nav-toggle {
     display: inline-block; /* Show toggle button */
+  }
+}
+
+/* Mobile menu adjustments */
+@media (max-width: 768px) {
+  .site-nav {
+    right: 16px;
+    left: 16px;
+    width: auto;
+    top: 76px;
   }
 }
 
@@ -662,6 +680,16 @@ main.container {
   background: var(--accent);
   color: #ffffff;
 }
+.chip-scholar { 
+  border-color: #4285f4; 
+  background: #4285f4; 
+  color: #ffffff; 
+  font-weight: 600;
+}
+.chip-scholar:hover {
+  background: #3367d6;
+  border-color: #3367d6;
+}
 .chip-plain { 
   background: transparent; 
   border-color: var(--border);
@@ -669,6 +697,19 @@ main.container {
 .chip-plain:hover {
   background: var(--surface);
   border-color: var(--muted);
+}
+
+/* Citation count styling */
+.pub-citations {
+  display: inline-block;
+  padding: 4px 8px;
+  margin: 2px;
+  background: rgba(66, 133, 244, 0.1);
+  color: #4285f4;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid rgba(66, 133, 244, 0.2);
 }
 
 .award-list { line-height: 1.8; }
@@ -721,12 +762,133 @@ main.container {
   font-weight: 500;
 }
 
-/* Section titles */
-section h2 {
-  font-weight: 700;
-  font-size: 24px;
+/* Statistics section */
+.stats-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 24px;
+}
+
+.stats-chart {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.stats-chart h3 {
+  font-size: 18px;
+  font-weight: 600;
   color: var(--text);
-  margin-bottom: 16px;
+  margin: 0 0 20px 0;
+  text-align: center;
+}
+
+.chart-container {
+  height: 200px;
+  position: relative;
+}
+
+/* Bar chart styling */
+.bar-chart {
+  display: flex;
+  align-items: end;
+  height: 100%;
+  gap: 8px;
+  padding: 0 16px;
+}
+
+.bar-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.bar {
+  width: 100%;
+  background: linear-gradient(to top, var(--brand), var(--accent));
+  border-radius: 4px 4px 0 0;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.bar:hover {
+  transform: scaleY(1.05);
+  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+}
+
+.bar-label {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+.bar-value {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--surface);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+/* Line chart styling */
+.line-chart {
+  position: relative;
+  height: 100%;
+  padding: 20px;
+}
+
+.line-chart svg {
+  width: 100%;
+  height: 100%;
+}
+
+.line-path {
+  fill: none;
+  stroke: var(--brand);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.line-points {
+  fill: var(--brand);
+}
+
+.line-points circle {
+  r: 4;
+  transition: r 0.2s ease;
+}
+
+.line-points circle:hover {
+  r: 6;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .stats-container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .stats-chart {
+    padding: 16px;
+  }
+  
+  .chart-container {
+    height: 150px;
+  }
 }
 
 /* Blog */

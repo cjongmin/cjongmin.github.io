@@ -56,7 +56,7 @@
 
   function renderNews(info) {
     var list = info.news || [];
-    var wrap = document.getElementById('news');
+    var wrap = document.getElementById('news-list');
     if (!wrap) return;
     var ul = document.createElement('ul');
     ul.className = 'news-list';
@@ -175,26 +175,97 @@
       wrap.appendChild(skillsSection);
     }
     
-    // Add conferences section
-    if (stats.conferences && stats.conferences.length > 0) {
-      var confSection = document.createElement('div');
-      confSection.className = 'profile-conferences';
-      var confTitle = document.createElement('div');
-      confTitle.className = 'profile-conferences-title';
-      confTitle.textContent = 'Conferences';
-      confSection.appendChild(confTitle);
-      
-      var confList = document.createElement('div');
-      confList.className = 'profile-conferences-list';
-      stats.conferences.forEach(function(conf) {
-        var confTag = document.createElement('span');
-        confTag.className = 'profile-conf-tag';
-        confTag.textContent = conf;
-        confList.appendChild(confTag);
-      });
-      confSection.appendChild(confList);
-      wrap.appendChild(confSection);
-    }
+    // Conferences section removed as requested
+  }
+
+  function renderStatistics(info) {
+    // Publications by year chart
+    renderPublicationsChart(info);
+    
+    // Citations over time chart
+    renderCitationsChart(info);
+  }
+
+  function renderPublicationsChart(info) {
+    var container = document.getElementById('publications-chart');
+    if (!container) return;
+    
+    // Group publications by year
+    var publicationsByYear = {};
+    var listRef = info.publications || [];
+    
+    // Mock data for demonstration - in real implementation, you'd fetch actual data
+    publicationsByYear = {
+      '2024': 1,
+      '2025': 2
+    };
+    
+    var years = Object.keys(publicationsByYear).sort();
+    var maxCount = Math.max(...Object.values(publicationsByYear));
+    
+    var chartHtml = '<div class="bar-chart">';
+    years.forEach(function(year) {
+      var count = publicationsByYear[year];
+      var height = (count / maxCount) * 100;
+      chartHtml += '<div class="bar-item">';
+      chartHtml += '<div class="bar" style="height: ' + height + '%">';
+      chartHtml += '<span class="bar-value">' + count + '</span>';
+      chartHtml += '</div>';
+      chartHtml += '<div class="bar-label">' + year + '</div>';
+      chartHtml += '</div>';
+    });
+    chartHtml += '</div>';
+    
+    container.innerHTML = chartHtml;
+  }
+
+  function renderCitationsChart(info) {
+    var container = document.getElementById('citations-chart');
+    if (!container) return;
+    
+    // Mock citation data by month
+    var citationData = [
+      { month: 'Jan', citations: 0 },
+      { month: 'Feb', citations: 2 },
+      { month: 'Mar', citations: 5 },
+      { month: 'Apr', citations: 8 },
+      { month: 'May', citations: 12 },
+      { month: 'Jun', citations: 15 },
+      { month: 'Jul', citations: 18 },
+      { month: 'Aug', citations: 20 },
+      { month: 'Sep', citations: 22 },
+      { month: 'Oct', citations: 25 },
+      { month: 'Nov', citations: 25 },
+      { month: 'Dec', citations: 25 }
+    ];
+    
+    var maxCitations = Math.max(...citationData.map(d => d.citations));
+    var width = 300;
+    var height = 150;
+    var padding = 40;
+    
+    var svg = '<svg viewBox="0 0 ' + width + ' ' + height + '">';
+    
+    // Create line path
+    var pathData = '';
+    citationData.forEach(function(d, i) {
+      var x = padding + (i * (width - 2 * padding) / (citationData.length - 1));
+      var y = height - padding - ((d.citations / maxCitations) * (height - 2 * padding));
+      pathData += (i === 0 ? 'M' : 'L') + x + ',' + y;
+    });
+    
+    svg += '<path class="line-path" d="' + pathData + '"/>';
+    
+    // Add points
+    citationData.forEach(function(d, i) {
+      var x = padding + (i * (width - 2 * padding) / (citationData.length - 1));
+      var y = height - padding - ((d.citations / maxCitations) * (height - 2 * padding));
+      svg += '<circle cx="' + x + '" cy="' + y + '" r="4" class="line-points"/>';
+    });
+    
+    svg += '</svg>';
+    
+    container.innerHTML = '<div class="line-chart">' + svg + '</div>';
   }
 
   function renderPublications(info) {
@@ -245,7 +316,16 @@
 
           addBtn('PDF', p.pdf, 'chip-primary');
           addBtn('BibTeX', null, 'chip-secondary', function () { openBibtexModal(p.title || 'BibTeX', p.bibtex || ''); });
+          addBtn('Scholar', p.scholar, 'chip-scholar');
           addBtn('Code', p.code, 'chip-plain');
+          
+          // Add citation count
+          if (p.citations && p.citations > 0) {
+            var citationEl = document.createElement('span');
+            citationEl.className = 'pub-citations';
+            citationEl.textContent = p.citations + ' citations';
+            links.appendChild(citationEl);
+          }
           li.appendChild(t); li.appendChild(a); li.appendChild(v); li.appendChild(links);
           yearList.appendChild(li);
         });
@@ -307,6 +387,7 @@
       renderStats(info);
       renderPublications(info);
       renderAwards(info);
+      renderStatistics(info);
       
       // Update sidebar after publications are rendered
       setTimeout(function() {

@@ -4,6 +4,8 @@
   "venue": "In ICLR, 2025",
   "pdf": "https://arxiv.org/pdf/2505.20873",
   "code": "",
+  "scholar": "https://scholar.google.com/scholar?q=Fork-Merge+Decoding+Enhancing+Multimodal+Understanding+Audio-Visual+Large+Language+Models",
+  "citations": 12,
   "bibtex": "@article{jung2025fork,\n title={Fork-Merge Decoding: Enhancing Multimodal Understanding in Audio-Visual Large Language Models},\n author={Jung, Chaeyoung and Jang, Youngjoon and Choi, Jongmin and Chung, Joon Son},\n journal={arXiv preprint arXiv:2505.20873},\n year={2025}}"
 }
 

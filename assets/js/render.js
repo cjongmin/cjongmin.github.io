@@ -70,13 +70,80 @@
     wrap.appendChild(ul);
   }
 
+  function renderMobileProfile(info) {
+    var p = info.profile || {};
+    
+    // Mobile profile photo
+    var mobilePhoto = document.getElementById('mobile-profile-photo');
+    if (mobilePhoto && p.photo) {
+      mobilePhoto.src = basePath + '/' + p.photo;
+    }
+    
+    // Mobile profile name
+    var mobileName = document.getElementById('mobile-profile-name');
+    if (mobileName && p.name) {
+      mobileName.textContent = p.name;
+    }
+    
+    // Mobile profile affiliation
+    var mobileAffil = document.getElementById('mobile-profile-affil');
+    if (mobileAffil && p.affiliation) {
+      mobileAffil.textContent = p.affiliation;
+    }
+    
+    // Mobile profile links
+    var mobileLinks = document.getElementById('mobile-profile-links');
+    if (mobileLinks) {
+      mobileLinks.innerHTML = '';
+      
+      // CV link
+      if (p.cv) {
+        var cvLink = document.createElement('a');
+        cvLink.href = basePath + '/' + p.cv;
+        cvLink.target = '_blank';
+        cvLink.innerHTML = '📄 CV';
+        mobileLinks.appendChild(cvLink);
+      }
+      
+      // External links
+      var links = p.links || {};
+      if (links.scholar) {
+        var scholarLink = document.createElement('a');
+        scholarLink.href = links.scholar;
+        scholarLink.target = '_blank';
+        scholarLink.innerHTML = '🎓 Scholar';
+        mobileLinks.appendChild(scholarLink);
+      }
+      
+      if (links.github) {
+        var githubLink = document.createElement('a');
+        githubLink.href = links.github;
+        githubLink.target = '_blank';
+        githubLink.innerHTML = '💻 GitHub';
+        mobileLinks.appendChild(githubLink);
+      }
+      
+      if (links.linkedin) {
+        var linkedinLink = document.createElement('a');
+        linkedinLink.href = links.linkedin;
+        linkedinLink.target = '_blank';
+        linkedinLink.innerHTML = '💼 LinkedIn';
+        mobileLinks.appendChild(linkedinLink);
+      }
+    }
+  }
+
   function renderStats(info) {
     var stats = info.stats || {};
     var wrap = document.getElementById('profile-stats-global');
     if (!wrap) return;
     var data = [
       { label: 'Publications', value: Number(stats.publications || 0) },
-      { label: 'Awards', value: Number(stats.awards || 0) }
+      { label: 'Awards', value: Number(stats.awards || 0) },
+      { label: 'Citations', value: Number(stats.citations || 0) },
+      { label: 'H-Index', value: Number(stats.h_index || 0) },
+      { label: 'Research Years', value: Number(stats.research_years || 0) },
+      { label: 'Collaborations', value: Number(stats.collaborations || 0) }
     ];
     wrap.innerHTML = '';
     data.forEach(function (d) {
@@ -86,6 +153,48 @@
       row.appendChild(label); row.appendChild(val);
       wrap.appendChild(row);
     });
+    
+    // Add skills section
+    if (stats.languages && stats.languages.length > 0) {
+      var skillsSection = document.createElement('div');
+      skillsSection.className = 'profile-skills';
+      var skillsTitle = document.createElement('div');
+      skillsTitle.className = 'profile-skills-title';
+      skillsTitle.textContent = 'Technical Skills';
+      skillsSection.appendChild(skillsTitle);
+      
+      var skillsList = document.createElement('div');
+      skillsList.className = 'profile-skills-list';
+      stats.languages.forEach(function(skill) {
+        var skillTag = document.createElement('span');
+        skillTag.className = 'profile-skill-tag';
+        skillTag.textContent = skill;
+        skillsList.appendChild(skillTag);
+      });
+      skillsSection.appendChild(skillsList);
+      wrap.appendChild(skillsSection);
+    }
+    
+    // Add conferences section
+    if (stats.conferences && stats.conferences.length > 0) {
+      var confSection = document.createElement('div');
+      confSection.className = 'profile-conferences';
+      var confTitle = document.createElement('div');
+      confTitle.className = 'profile-conferences-title';
+      confTitle.textContent = 'Conferences';
+      confSection.appendChild(confTitle);
+      
+      var confList = document.createElement('div');
+      confList.className = 'profile-conferences-list';
+      stats.conferences.forEach(function(conf) {
+        var confTag = document.createElement('span');
+        confTag.className = 'profile-conf-tag';
+        confTag.textContent = conf;
+        confList.appendChild(confTag);
+      });
+      confSection.appendChild(confList);
+      wrap.appendChild(confSection);
+    }
   }
 
   function renderPublications(info) {
@@ -208,6 +317,9 @@
       var aff = document.getElementById('profile-affil-global'); if (aff && p.affiliation) aff.textContent = p.affiliation;
       var nameRail = document.getElementById('profile-name-global'); if (nameRail && p.name) nameRail.textContent = p.name;
       var owner = document.getElementById('owner-name'); if (owner && p.name) owner.textContent = p.name;
+      
+      // Mobile profile section
+      renderMobileProfile(info);
       // Rail links
       var railCv = document.getElementById('rail-cv-global'); if (railCv && p.cv) railCv.href = basePath + '/' + p.cv;
       var links = (p.links || {});

@@ -33,7 +33,13 @@
   ],
   "stats": {
     "publications": 3,
-    "awards": 0
+    "awards": 2,
+    "citations": 15,
+    "h_index": 2,
+    "research_years": 2,
+    "conferences": ["ICLR", "ICASSP", "ICCV"],
+    "languages": ["Python", "PyTorch", "TensorFlow", "C++"],
+    "collaborations": 8
   }
 }
 

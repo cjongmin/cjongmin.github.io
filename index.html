@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>[Your Name] • AI Researcher</title>
+    <meta name="description" content="AI Researcher profile — About, Publications, Awards, Contact" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/styles.css" />
+  </head>
+  <body class="has-rail">
+    <aside class="profile-rail-global">
+      <div class="profile-card">
+        <img class="profile-photo" id="profile-photo-global" alt="profile photo" />
+        <div class="profile-name" id="profile-name-global">[Your Name]</div>
+        <div class="profile-affil" id="profile-affil-global"></div>
+        
+        <div class="profile-divider"></div>
+        
+        <div class="profile-section">
+          <div class="profile-section-title">At a Glance</div>
+          <div class="profile-stats" id="profile-stats-global"></div>
+        </div>
+        
+        <div class="profile-divider"></div>
+        
+        <div class="profile-section">
+          <div class="profile-section-title">Links</div>
+          <div class="profile-links">
+            <a class="chip" id="rail-cv-global" href="#" target="_blank" rel="noopener"><span class="icon">📄</span>CV</a>
+            <a class="chip" href="#" id="rail-scholar-global" target="_blank" rel="noopener"><span class="icon">🎓</span>Scholar</a>
+            <a class="chip" href="#" id="rail-github-global" target="_blank" rel="noopener"><span class="icon">🐙</span>GitHub</a>
+            <a class="chip" href="#" id="rail-linkedin-global" target="_blank" rel="noopener"><span class="icon">🔗</span>LinkedIn</a>
+          </div>
+        </div>
+      </div>
+    </aside>
+    
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href="./index.html">[Your Name]</a>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="./index.html" data-nav>About</a>
+          <a href="./publications.html" data-nav>Publications</a>
+          <a href="./awards.html" data-nav>Awards</a>
+          <a href="./blog.html" data-nav>Blog</a>
+          <a href="./contact.html" data-nav>Contact</a>
+        </nav>
+        <div>
+          <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+            <span class="icon moon">☾</span>
+            <span class="icon sun">☀</span>
+          </button>
+          <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
+        </div>
+      </div>
+    </header>
+    <main class="container">
+      <section class="hero reveal">
+        <div class="hero-text">
+          <h1>[Your Name]</h1>
+          <p class="subtitle">AI Researcher — Machine Learning, LLMs, Multimodal</p>
+          <p class="lead" id="bio">Short bio goes here...</p>
+      </section>
+
+      <section class="reveal">
+        <h2>Recent News</h2>
+        <div id="news"></div>
+      </section>
+
+      <section class="reveal">
+        <h2>Research Interests</h2>
+        <ul class="pill-list"></ul>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <p>© <span id="year"></span> <span id="owner-name">[Your Name]</span>. All rights reserved.</p>
+      </div>
+    </footer>
+    <script src="./assets/js/main.js"></script>
+    <script src="./assets/js/render.js"></script>
+  </body>
+  </html>
+
+ 

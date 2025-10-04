@@ -1,0 +1,38 @@
+{
+  "profile": {
+    "name": "Jongmin Choi",
+    "title": "AI Researcher — Machine Learning, LLMs, Multimodal",
+    "email": "jongmin@mmai.io",
+    "affiliation": "M.S. Student, Multimodal AI (MMAI) Laboratory, KAIST, Daejeon, Republic of Korea",
+    "bio": "Hello! I am Jongmin Choi, a master's student in the Multimodal AI (MMAI) Laboratory at KAIST.\n My research focuses on understanding and mitigating the modality gap observed in multimodal models, aiming to leverage cross-modal synergy more effectively.\n\n I have explored approaches to reduce distributional gaps through embedding-level diffusion in audio captioning tasks, and through CS-divergence and alignment-based loss functions that improve consistency between modalities. In particular, my work involves guiding large language models (LLMs) using logit-level aligned embeddings to enhance multimodal representation learning.\n\n Currently, I am also interested in spiking neural networks (SNNs) that better reflect the behavior of biological neurons. My ongoing research focuses on modeling Generalized Leaky Integrate-and-Fire (GLIF) neurons and developing spiking neural architectures based on them.",
+    "photo": "assets/images/profile.jpeg",
+    "cv": "assets/cv/cv.pdf",
+    "links": {
+      "scholar": "",
+      "github": "",
+      "linkedin": ""
+    },
+    "interests": [
+      "Multimodal Learning",
+      "Modality Gap",
+      "Spiking Neural Networks"
+    ]
+  },
+  "news": [
+    { "date": "2025-09-25", "text": "Served as the second author on a paper submitted to ICLR 2026."},
+    { "date": "2025-09-17", "text": "Served as a co-first author on two papers submitted to ICASSP 2026."}
+  ],
+  "publications": [
+    "publications/2505.20873.json"
+  ],
+  "awards": [
+    { "year": "2025", "name": "Best Paper Award", "by": "[Conference]" },
+    { "year": "2024", "name": "Research Excellence", "by": "[Institution]" }
+  ],
+  "stats": {
+    "publications": 3,
+    "awards": 0
+  }
+}
+
+

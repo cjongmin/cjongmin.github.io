@@ -1,0 +1,8 @@
+{
+  "title": "Example Paper from 2024",
+  "authors": "Jongmin Choi, Example Author",
+  "venue": "In Example Conference, 2024",
+  "pdf": "https://example.com/paper.pdf",
+  "code": "https://github.com/example/repo",
+  "bibtex": "@article{choi2024example,\n title={Example Paper from 2024},\n author={Choi, Jongmin and Author, Example},\n journal={Example Conference},\n year={2024}}"
+}

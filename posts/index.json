@@ -6,7 +6,8 @@
       "date": "2025-10-15",
       "summary": "My experience at ICCV 2025 in Hawaii, exploring the latest advances in computer vision and multimodal learning.",
       "tags": ["Conference", "Travel", "Multimodal Learning"],
-      "cover": "assets/images/profile.jpeg"
+      "cover": "assets/images/profile.jpeg",
+      "category": "Conference"
     },
     {
       "slug": "hello-world",
@@ -14,7 +15,8 @@
       "date": "2025-10-04",
       "summary": "First post.",
       "tags": ["intro"],
-      "cover": "assets/images/profile.jpeg"
+      "cover": "assets/images/profile.jpeg",
+      "category": "Talk"
     }
   ]
 }

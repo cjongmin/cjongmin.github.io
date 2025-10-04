@@ -1,0 +1,8 @@
+{
+  "title": "Another Paper from 2025",
+  "authors": "Jongmin Choi, Another Author",
+  "venue": "In Another Conference, 2025",
+  "pdf": "https://example.com/another.pdf",
+  "code": "",
+  "bibtex": "@article{choi2025another,\n title={Another Paper from 2025},\n author={Choi, Jongmin and Author, Another},\n journal={Another Conference},\n year={2025}}"
+}

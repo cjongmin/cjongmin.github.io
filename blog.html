@@ -42,13 +42,13 @@
       <div class="container">
         <a class="brand" href="./index.html">[Your Name]</a>
         <nav class="site-nav" aria-label="Primary">
-          <a href="./index.html" data-nav>About</a>
+          <a href="./index.html" data-nav>About Me</a>
           <a href="./publications.html" data-nav>Publications</a>
           <a href="./awards.html" data-nav>Awards</a>
           <a href="./blog.html" data-nav>Blog</a>
           <a href="./contact.html" data-nav>Contact</a>
         </nav>
-        <div>
+        <div class="header-actions">
           <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
             <span class="icon moon">☾</span>
             <span class="icon sun">☀</span>
@@ -59,6 +59,7 @@
     </header>
     <main class="container">
       <h1>Blog</h1>
+      <div class="blog-categories" id="blog-categories"></div>
       <div class="blog-controls">
         <input id="search" class="search-input" type="search" placeholder="Search posts..." />
         <button id="view-grid" class="view-toggle">Grid</button>
@@ -74,5 +75,16 @@
     <script src="./assets/js/main.js"></script>
     <script src="./assets/js/render.js"></script>
     <script src="./assets/js/blog.js"></script>
+    <script>
+      console.log('All scripts loaded');
+      // Test if blog-list element exists
+      setTimeout(function() {
+        var blogList = document.getElementById('blog-list');
+        console.log('Blog list element:', blogList);
+        if (blogList) {
+          console.log('Blog list innerHTML:', blogList.innerHTML);
+        }
+      }, 1000);
+    </script>
   </body>
   </html>

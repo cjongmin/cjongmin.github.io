@@ -23,7 +23,9 @@
     { "date": "2025-09-17", "text": "Served as a co-first author on two papers submitted to ICASSP 2026."}
   ],
   "publications": [
-    "publications/2505.20873.json"
+    "publications/2505.20873.json",
+    "publications/2025.another.json",
+    "publications/2024.example.json"
   ],
   "awards": [
     { "year": "2025", "name": "Best Paper Award", "by": "[Conference]" },

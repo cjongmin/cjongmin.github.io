@@ -106,16 +106,6 @@ main {
 }
 /* --- End Layout Structure --- */
 
-@media (max-width: 1100px) {
-  .profile-rail-global {
-    display: none;
-  }
-  body.has-rail main,
-  body.has-rail .site-footer {
-    padding-left: 0;
-  }
-}
-
 .container {
   max-width: 1040px;
   margin-left: auto;
@@ -124,23 +114,6 @@ main {
   padding-right: 20px;
 }
 
-/* For pages with a left rail, ensure the container is centered in the remaining space */
-body.has-rail .site-header .container {
-    padding-left: calc(20px + 300px);
-    margin: 0;
-    max-width: none;
-}
-body.has-rail main .container, body.has-rail .site-footer .container {
-    margin: 0 auto; /* Center main content */
-}
-
-@media (max-width: 1100px) {
-    body.has-rail .site-header .container {
-        padding-left: 20px;
-    }
-}
-
-
 :root[data-theme="dark"] .site-header {
   background: rgba(10, 14, 20, 0.85);
 }
@@ -148,8 +121,8 @@ body.has-rail main .container, body.has-rail .site-footer .container {
 .site-header .container {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   height: 64px;
+  position: relative;
 }
 
 .brand {
@@ -157,9 +130,24 @@ body.has-rail main .container, body.has-rail .site-footer .container {
   color: var(--text);
   font-weight: 700;
   letter-spacing: 0.2px;
+  position: fixed;
+  left: 150px;
+  top: 50%;
+  /* Use translate to center the element horizontally on the 150px mark */
+  transform: translate(-50%, -50%);
+  z-index: 51;
 }
 
-.site-nav { display: flex; gap: 18px; }
+.site-nav {
+  display: flex;
+  gap: 18px;
+  position: fixed;
+  left: 330px;
+  top: 32px; /* half of 64px header height */
+  transform: translateY(-50%);
+  z-index: 51;
+}
+
 .site-nav a {
   text-decoration: none;
   color: var(--muted);
@@ -169,8 +157,22 @@ body.has-rail main .container, body.has-rail .site-footer .container {
 .site-nav a:hover { color: var(--text); background: rgba(255,255,255,0.04); }
 .site-nav a.active { color: var(--bg); background: var(--brand); }
 
+
+/* Theme and Nav Toggle Buttons Wrapper */
+.header-actions {
+    position: fixed;
+    /* Position at the right edge of the viewport with some padding */
+    right: 20px; 
+    top: 32px; /* half of 64px header height */
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 51;
+}
+
 .nav-toggle {
-  display: none;
+  display: none; /* Hidden by default */
   border: 1px solid var(--border);
   background: var(--surface);
   color: var(--text);
@@ -187,7 +189,6 @@ body.has-rail main .container, body.has-rail .site-footer .container {
   color: var(--text);
   padding: 8px 12px;
   border-radius: 10px;
-  margin-left: 10px;
 }
 .theme-toggle .icon { width: 16px; height: 16px; display: inline-block; }
 .theme-toggle .moon { display: inline; }
@@ -199,19 +200,52 @@ body.has-rail main .container, body.has-rail .site-footer .container {
   :root:not([data-theme]) .theme-toggle .sun { display: inline; }
 }
 
-@media (max-width: 860px) {
-  .nav-toggle { display: inline-block; }
-  .site-nav {
-    position: absolute; right: 12px; top: 64px; min-width: 240px;
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; padding: 10px; display: none; flex-direction: column; gap: 6px;
+/* Screen width <= 1100px */
+@media (max-width: 1100px) {
+  .profile-rail-global {
+    display: none;
   }
-  .site-nav a { padding: 10px 12px; }
-  .site-nav.open { display: flex; }
+  body.has-rail main,
+  body.has-rail .site-footer {
+    padding-left: 0;
+  }
 }
 
+/* Screen width <= 860px */
+@media (max-width: 860px) {
+  .brand {
+      /* The transform property still applies, keeping it centered at 150px */
+      left: 150px;
+  }
+  
+  .site-nav {
+    /* Hide the main nav and prepare for toggle */
+    display: none;
+    position: fixed;
+    right: 20px;
+    top: 76px; /* 64px + 12px gap */
+    min-width: 240px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px;
+    flex-direction: column;
+    gap: 6px;
+    transform: none; /* Reset transform */
+    z-index: 100;
+  }
+
+  .site-nav a { padding: 10px 12px; }
+  .site-nav.open { display: flex; }
+
+  .nav-toggle {
+    display: inline-block; /* Show toggle button */
+  }
+}
+
+
 main.container { 
-  padding-top: 36px;
+  padding-top: 100px;
   padding-bottom: 56px;
 }
 
@@ -688,4 +722,3 @@ main.container {
 @media (prefers-reduced-motion: reduce) {
   .reveal, .reveal-visible { opacity: 1 !important; transform: none !important; transition: none !important; }
 }
-

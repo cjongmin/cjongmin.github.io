@@ -83,6 +83,7 @@ body.has-rail {
   backdrop-filter: blur(12px) saturate(180%);
   border-bottom: 1px solid var(--border);
   box-shadow: var(--shadow-sm);
+  width: 100%;
 }
 :root[data-theme="dark"] .site-header {
   background: rgba(10, 14, 20, 0.85);
@@ -485,12 +486,14 @@ main.container { padding: 36px 20px 56px; }
 .post-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
 .post-list { display: grid; gap: 16px; }
 .post-card { 
+  display: block; /* Ensure <a> tag behaves like a block */
+  color: inherit; /* Prevent text from turning into link color */
+  text-decoration: none; /* Remove underline */
   border: 1px solid var(--border); 
   background: var(--surface); 
   border-radius: 14px; 
   overflow: hidden;
   transition: all 0.2s ease;
-  cursor: pointer;
 }
 .post-card:hover {
   transform: translateY(-2px);

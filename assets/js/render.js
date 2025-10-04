@@ -1,6 +1,10 @@
 (function(){
+  // Determine base path depending on whether the page is a blog post or not
+  var isPostPage = window.location.pathname.includes('/posts/');
+  var basePath = isPostPage ? '..' : '.';
+
   function loadInfo() {
-    return fetch('./assets/info.json', { cache: 'no-store' }).then(function (r) { return r.json(); });
+    return fetch(basePath + '/assets/info.json', { cache: 'no-store' }).then(function (r) { return r.json(); });
   }
 
   function setProfileCommon(info) {
@@ -25,7 +29,7 @@
 
     // CV & external links
     var cv = document.getElementById('chip-cv');
-    if (cv && p.cv) cv.href = p.cv;
+    if (cv && p.cv) cv.href = basePath + '/' + p.cv;
     var links = p.links || {};
     var elScholar = document.getElementById('chip-scholar'); if (elScholar && links.scholar) elScholar.href = links.scholar;
     var elGithub = document.getElementById('chip-github'); if (elGithub && links.github) elGithub.href = links.github;
@@ -47,7 +51,7 @@
     var p = info.profile || {};
     var photoUrl = p.photo;
     var railImg = document.getElementById('profile-photo-global');
-    if (railImg && photoUrl) railImg.src = photoUrl;
+    if (railImg && photoUrl) railImg.src = basePath + '/' + photoUrl;
   }
 
   function renderNews(info) {
@@ -115,7 +119,7 @@
 
     // If entries are paths, fetch and merge
     if (listRef.length && typeof listRef[0] === 'string') {
-      var fetches = listRef.map(function (path) { return fetch('./' + path).then(function (r) { return r.json(); }); });
+      var fetches = listRef.map(function (path) { return fetch(basePath + '/' + path).then(function (r) { return r.json(); }); });
       Promise.all(fetches).then(function (items) { renderItems(items); }).catch(function (e) { console.error('Failed to load publications', e); });
     } else {
       renderItems(listRef);
@@ -164,7 +168,7 @@
       var nameRail = document.getElementById('profile-name-global'); if (nameRail && p.name) nameRail.textContent = p.name;
       var owner = document.getElementById('owner-name'); if (owner && p.name) owner.textContent = p.name;
       // Rail links
-      var railCv = document.getElementById('rail-cv-global'); if (railCv && p.cv) railCv.href = p.cv;
+      var railCv = document.getElementById('rail-cv-global'); if (railCv && p.cv) railCv.href = basePath + '/' + p.cv;
       var links = (p.links || {});
       var railSch = document.getElementById('rail-scholar-global'); if (railSch && links.scholar) railSch.href = links.scholar;
       var railGh = document.getElementById('rail-github-global'); if (railGh && links.github) railGh.href = links.github;
@@ -180,5 +184,4 @@
     onLoad();
   }
 })();
-
 

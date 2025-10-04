@@ -9,18 +9,38 @@
     root.className = mode === 'list' ? 'post-list reveal' : 'post-grid reveal';
     root.innerHTML = '';
     posts.forEach(function (p) {
-      var card = document.createElement('article'); card.className = 'post-card';
-      var cover = document.createElement('img'); cover.className = 'post-cover'; cover.alt = p.title || 'cover'; cover.src = p.cover || '';
-      var body = document.createElement('div'); body.className = 'post-body';
-      var h = document.createElement('a'); h.className = 'post-title'; h.textContent = p.title || ''; h.href = './posts/' + (p.slug || '') + '.html';
-      var meta = document.createElement('div'); meta.className = 'post-meta'; meta.textContent = (p.date || '') + (p.tags && p.tags.length ? ' • ' + p.tags.join(', ') : '');
-      body.appendChild(h); body.appendChild(meta);
+      // Create an anchor tag to make the whole card clickable
+      var cardLink = document.createElement('a');
+      cardLink.className = 'post-card';
+      cardLink.href = './posts/' + (p.slug || '') + '.html';
+
+      var cover = document.createElement('img');
+      cover.className = 'post-cover';
+      cover.alt = p.title || 'cover';
+      cover.src = p.cover || '';
+      
+      var body = document.createElement('div');
+      body.className = 'post-body';
+      
+      // The title is no longer a link itself, but part of the card link
+      var h = document.createElement('div');
+      h.className = 'post-title';
+      h.textContent = p.title || '';
+      
+      var meta = document.createElement('div');
+      meta.className = 'post-meta';
+      meta.textContent = (p.date || '') + (p.tags && p.tags.length ? ' • ' + p.tags.join(', ') : '');
+      
+      body.appendChild(h);
+      body.appendChild(meta);
+      
       if (mode === 'list') {
-        card.appendChild(body);
+        cardLink.appendChild(body);
       } else {
-        card.appendChild(cover); card.appendChild(body);
+        cardLink.appendChild(cover);
+        cardLink.appendChild(body);
       }
-      root.appendChild(card);
+      root.appendChild(cardLink);
     });
   }
 
@@ -41,6 +61,13 @@
     loadPosts().then(function (data) {
       posts = data.posts || [];
       apply();
+    }).catch(function (e) {
+      console.error('Failed to load blog posts:', e);
+      // Fallback: show error message
+      var root = document.getElementById('blog-list');
+      if (root) {
+        root.innerHTML = '<p style="text-align: center; color: var(--muted);">Failed to load blog posts. Please check the posts/index.json file.</p>';
+      }
     });
 
     var search = document.getElementById('search');

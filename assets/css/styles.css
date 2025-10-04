@@ -53,38 +53,94 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-body.has-rail {
+main {
+  flex-grow: 1;
+}
+
+/* --- Layout Structure --- */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px) saturate(180%);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+.profile-rail-global { 
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 300px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  z-index: 20;
+  padding: 24px 20px;
+  padding-top: 88px; /* 64px header height + 24px */
+}
+
+body.has-rail main,
+body.has-rail .site-footer {
   padding-left: 300px;
 }
 
+main {
+  padding-top: 64px; /* Space for the fixed header */
+}
+/* --- End Layout Structure --- */
+
 @media (max-width: 1100px) {
-  body.has-rail {
+  .profile-rail-global {
+    display: none;
+  }
+  body.has-rail main,
+  body.has-rail .site-footer {
     padding-left: 0;
   }
 }
 
 .container {
   max-width: 1040px;
-  margin: 0 auto;
-  padding: 0 20px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px) saturate(180%);
-  border-bottom: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
-  width: 100%;
+/* For pages with a left rail, ensure the container is centered in the remaining space */
+body.has-rail .site-header .container {
+    padding-left: calc(20px + 300px);
+    margin: 0;
+    max-width: none;
 }
+body.has-rail main .container, body.has-rail .site-footer .container {
+    margin: 0 auto; /* Center main content */
+}
+
+@media (max-width: 1100px) {
+    body.has-rail .site-header .container {
+        padding-left: 20px;
+    }
+}
+
+
 :root[data-theme="dark"] .site-header {
   background: rgba(10, 14, 20, 0.85);
 }
@@ -154,20 +210,9 @@ body.has-rail {
   .site-nav.open { display: flex; }
 }
 
-main.container { padding: 36px 20px 56px; }
-
-/* Global fixed left rail */
-.profile-rail-global { 
-  position: fixed;
-  left: 0;
-  top: 64px;
-  bottom: 0;
-  width: 300px;
-  background: var(--surface);
-  border-right: 1px solid var(--border);
-  overflow-y: auto;
-  z-index: 10;
-  padding: 24px 20px;
+main.container { 
+  padding-top: 36px;
+  padding-bottom: 56px;
 }
 
 .profile-card { 
@@ -260,12 +305,6 @@ main.container { padding: 36px 20px 56px; }
   font-size: 18px;
   font-weight: 700;
   color: var(--brand);
-}
-
-@media (max-width: 1100px) {
-  .profile-rail-global {
-    display: none;
-  }
 }
 
 .hero {
@@ -486,9 +525,9 @@ main.container { padding: 36px 20px 56px; }
 .post-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
 .post-list { display: grid; gap: 16px; }
 .post-card { 
-  display: block; /* Ensure <a> tag behaves like a block */
-  color: inherit; /* Prevent text from turning into link color */
-  text-decoration: none; /* Remove underline */
+  display: block;
+  color: inherit;
+  text-decoration: none;
   border: 1px solid var(--border); 
   background: var(--surface); 
   border-radius: 14px; 
@@ -509,13 +548,14 @@ main.container { padding: 36px 20px 56px; }
 }
 .post-body { padding: 16px; }
 .post-title { 
-  font-weight: 600; 
+  font-weight: 700; /* Bolder */
+  font-size: 17px; /* Larger */
   margin: 0 0 8px; 
   color: var(--text);
-  text-decoration: none;
   display: block;
+  line-height: 1.4; /* Tighter line height */
 }
-.post-title:hover { color: var(--brand); }
+.post-card:hover .post-title { color: var(--brand); } /* Hover on card */
 .post-meta { color: var(--muted); font-size: 13px; }
 
 /* Modal overlay for BibTeX */
@@ -586,7 +626,7 @@ main.container { padding: 36px 20px 56px; }
   to { transform: translateY(0); opacity: 1; }
 }
 
-.site-footer { border-top: 1px solid var(--border); padding: 20px 0; background: transparent; margin-top: 48px; }
+.site-footer { border-top: 1px solid var(--border); padding: 20px 0; background: transparent; margin-top: auto; }
 .site-footer .container { text-align: center; color: var(--muted); font-size: 14px; }
 
 /* Blog post content */
@@ -649,4 +689,3 @@ main.container { padding: 36px 20px 56px; }
   .reveal, .reveal-visible { opacity: 1 !important; transform: none !important; transition: none !important; }
 }
 
- 

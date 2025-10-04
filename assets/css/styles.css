@@ -96,9 +96,21 @@ main {
   padding-top: 88px; /* 64px header height + 24px */
 }
 
-body.has-rail main,
 body.has-rail .site-footer {
   padding-left: 300px;
+}
+
+/* Ensure proper padding for main content */
+body.has-rail main.container {
+  padding-left: 320px; /* 300px rail + 20px gap */
+  padding-right: 20px;
+}
+
+@media (max-width: 1200px) {
+  body.has-rail main.container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 }
 
 main {
@@ -122,6 +134,11 @@ main {
   }
   
   main.container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  
+  body.has-rail main.container {
     padding-left: 16px;
     padding-right: 16px;
   }
@@ -233,7 +250,7 @@ main {
   
   .site-nav {
     /* Hide the main nav and prepare for toggle */
-    display: none;
+    display: flex;
     position: fixed;
     right: 16px;
     left: 16px;

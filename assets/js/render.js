@@ -301,7 +301,7 @@
         e.preventDefault();
         var target = document.querySelector(section.href);
         if (target) {
-          var headerHeight = 80; // Account for fixed header
+          var headerHeight = 50; // Account for fixed header
           var targetPosition = target.offsetTop - headerHeight;
           window.scrollTo({
             top: targetPosition,
@@ -329,7 +329,7 @@
         e.preventDefault();
         var target = document.querySelector('#year-' + header.textContent);
         if (target) {
-          var headerHeight = 80; // Account for fixed header
+          var headerHeight = 50; // Account for fixed header
           var targetPosition = target.offsetTop - headerHeight;
           window.scrollTo({
             top: targetPosition,
@@ -358,7 +358,7 @@
         e.preventDefault();
         var target = document.querySelector('#award-' + index);
         if (target) {
-          var headerHeight = 80; // Account for fixed header
+          var headerHeight = 50; // Account for fixed header
           var targetPosition = target.offsetTop - headerHeight;
           window.scrollTo({
             top: targetPosition,
@@ -386,7 +386,7 @@
         e.preventDefault();
         var target = document.querySelector('#post-' + index);
         if (target) {
-          var headerHeight = 80; // Account for fixed header
+          var headerHeight = 50; // Account for fixed header
           var targetPosition = target.offsetTop - headerHeight;
           window.scrollTo({
             top: targetPosition,
@@ -418,7 +418,7 @@
         e.preventDefault();
         var target = document.querySelector('#' + heading.id);
         if (target) {
-          var headerHeight = 80; // Account for fixed header
+          var headerHeight = 50; // Account for fixed header
           var targetPosition = target.offsetTop - headerHeight;
           window.scrollTo({
             top: targetPosition,

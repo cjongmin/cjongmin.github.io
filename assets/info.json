@@ -8,9 +8,9 @@
     "photo": "assets/images/profile.jpeg",
     "cv": "assets/cv/cv.pdf",
     "links": {
-      "scholar": "",
-      "github": "",
-      "linkedin": ""
+      "scholar": "https://scholar.google.com/citations?user=example",
+      "github": "https://github.com/jongminchoi",
+      "linkedin": "https://linkedin.com/in/jongminchoi"
     },
     "interests": [
       "Multimodal Learning",
@@ -40,7 +40,33 @@
     "conferences": ["ICLR", "ICASSP", "ICCV"],
     "languages": ["Python", "PyTorch", "TensorFlow", "C++"],
     "collaborations": 8
-  }
+  },
+  "gallery": [
+    {
+      "src": "assets/images/gallery/conference1.jpg",
+      "alt": "Conference Presentation",
+      "title": "ICLR 2025 Presentation",
+      "description": "Presenting our research on multimodal learning"
+    },
+    {
+      "src": "assets/images/gallery/lab1.jpg", 
+      "alt": "Lab Work",
+      "title": "Research Lab",
+      "description": "Working in the Multimodal AI Laboratory"
+    },
+    {
+      "src": "assets/images/gallery/team1.jpg",
+      "alt": "Research Team",
+      "title": "Research Collaboration",
+      "description": "Collaborating with fellow researchers"
+    },
+    {
+      "src": "assets/images/gallery/campus1.jpg",
+      "alt": "KAIST Campus",
+      "title": "KAIST Campus",
+      "description": "Beautiful campus view at KAIST"
+    }
+  ]
 }
 
 

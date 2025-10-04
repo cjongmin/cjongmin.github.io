@@ -74,6 +74,11 @@ document.addEventListener('DOMContentLoaded', function () {
   } else {
     reveals.forEach(function (el) { el.classList.add('reveal-visible'); });
   }
+  
+  // Load and render content
+  if (typeof onLoad === 'function') {
+    onLoad();
+  }
 });
 
  

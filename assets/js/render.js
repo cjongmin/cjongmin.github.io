@@ -15,11 +15,14 @@
 
     // Title/subtitle on index
     var h1 = document.querySelector('.hero-text h1');
-    if (h1 && p.name) h1.textContent = p.name;
+    if (h1) h1.textContent = 'Introduction'; // Keep as Introduction instead of name
     var subtitle = document.querySelector('.subtitle');
-    if (subtitle && p.title) subtitle.textContent = p.title;
+    if (subtitle) subtitle.style.display = 'none'; // Hide subtitle
     var bio = document.getElementById('bio');
     if (bio && p.bio) bio.textContent = p.bio;
+    
+    // Render intro buttons
+    renderIntroButtons(info);
 
     // Email links
     var emailLink = document.getElementById('email-link');
@@ -70,10 +73,44 @@
     wrap.appendChild(ul);
   }
 
+  function renderIntroButtons(info) {
+    var container = document.getElementById('intro-buttons');
+    if (!container) return;
+    
+    var p = info.profile || {};
+    var interests = p.interests || [];
+    var stats = info.stats || {};
+    var languages = stats.languages || [];
+    
+    container.innerHTML = '';
+    
+    // Research Interests button
+    if (interests.length > 0) {
+      var interestsBtn = document.createElement('div');
+      interestsBtn.className = 'intro-button';
+      interestsBtn.innerHTML = '<span class="intro-icon">🔬</span><span class="intro-label">Research Interests</span>';
+      interestsBtn.addEventListener('click', function() {
+        // Show interests in a modal or expand
+        alert('Research Interests:\n• ' + interests.join('\n• '));
+      });
+      container.appendChild(interestsBtn);
+    }
+    
+    // Technical Skills button
+    if (languages.length > 0) {
+      var skillsBtn = document.createElement('div');
+      skillsBtn.className = 'intro-button';
+      skillsBtn.innerHTML = '<span class="intro-icon">💻</span><span class="intro-label">Technical Skills</span>';
+      skillsBtn.addEventListener('click', function() {
+        // Show skills in a modal or expand
+        alert('Technical Skills:\n• ' + languages.join('\n• '));
+      });
+      container.appendChild(skillsBtn);
+    }
+  }
+  
   function renderMobileProfile(info) {
     var p = info.profile || {};
-    
-    // Mobile profile photo
     var mobilePhoto = document.getElementById('mobile-profile-photo');
     if (mobilePhoto && p.photo) {
       mobilePhoto.src = basePath + '/' + p.photo;
@@ -141,9 +178,7 @@
       { label: 'Publications', value: Number(stats.publications || 0) },
       { label: 'Awards', value: Number(stats.awards || 0) },
       { label: 'Citations', value: Number(stats.citations || 0) },
-      { label: 'H-Index', value: Number(stats.h_index || 0) },
-      { label: 'Research Years', value: Number(stats.research_years || 0) },
-      { label: 'Collaborations', value: Number(stats.collaborations || 0) }
+      { label: 'Research Years', value: Number(stats.research_years || 0) }
     ];
     wrap.innerHTML = '';
     data.forEach(function (d) {
@@ -153,37 +188,14 @@
       row.appendChild(label); row.appendChild(val);
       wrap.appendChild(row);
     });
-    
-    // Add skills section
-    if (stats.languages && stats.languages.length > 0) {
-      var skillsSection = document.createElement('div');
-      skillsSection.className = 'profile-skills';
-      var skillsTitle = document.createElement('div');
-      skillsTitle.className = 'profile-skills-title';
-      skillsTitle.textContent = 'Technical Skills';
-      skillsSection.appendChild(skillsTitle);
-      
-      var skillsList = document.createElement('div');
-      skillsList.className = 'profile-skills-list';
-      stats.languages.forEach(function(skill) {
-        var skillTag = document.createElement('span');
-        skillTag.className = 'profile-skill-tag';
-        skillTag.textContent = skill;
-        skillsList.appendChild(skillTag);
-      });
-      skillsSection.appendChild(skillsList);
-      wrap.appendChild(skillsSection);
-    }
-    
-    // Conferences section removed as requested
   }
 
   function renderStatistics(info) {
-    // Publications by year chart
+    // Publications by year chart only
     renderPublicationsChart(info);
     
-    // Citations over time chart
-    renderCitationsChart(info);
+    // Render gallery
+    renderGallery(info);
   }
 
   function renderPublicationsChart(info) {
@@ -203,10 +215,23 @@
     var years = Object.keys(publicationsByYear).sort();
     var maxCount = Math.max(...Object.values(publicationsByYear));
     
-    var chartHtml = '<div class="bar-chart">';
+    var chartHtml = '<div class="chart-axes">';
+    chartHtml += '<div class="y-axis"></div>';
+    chartHtml += '<div class="x-axis"></div>';
+    
+    // Add Y-axis ticks
+    for (var i = 0; i <= maxCount; i++) {
+      var yPos = (i / maxCount) * 100;
+      chartHtml += '<div class="y-tick" style="top: ' + (100 - yPos) + '%">' + i + '</div>';
+    }
+    
+    chartHtml += '</div>';
+    chartHtml += '<div class="bar-chart">';
+    
     years.forEach(function(year) {
       var count = publicationsByYear[year];
-      var height = (count / maxCount) * 100;
+      // Calculate height as percentage of chart height, ensuring minimum height for visibility
+      var height = Math.max((count / maxCount) * 100, 10); // Minimum 10% height
       chartHtml += '<div class="bar-item">';
       chartHtml += '<div class="bar" style="height: ' + height + '%">';
       chartHtml += '<span class="bar-value">' + count + '</span>';
@@ -218,54 +243,81 @@
     
     container.innerHTML = chartHtml;
   }
-
-  function renderCitationsChart(info) {
-    var container = document.getElementById('citations-chart');
+  
+  function renderGallery(info) {
+    var container = document.getElementById('gallery-container');
     if (!container) return;
     
-    // Mock citation data by month
-    var citationData = [
-      { month: 'Jan', citations: 0 },
-      { month: 'Feb', citations: 2 },
-      { month: 'Mar', citations: 5 },
-      { month: 'Apr', citations: 8 },
-      { month: 'May', citations: 12 },
-      { month: 'Jun', citations: 15 },
-      { month: 'Jul', citations: 18 },
-      { month: 'Aug', citations: 20 },
-      { month: 'Sep', citations: 22 },
-      { month: 'Oct', citations: 25 },
-      { month: 'Nov', citations: 25 },
-      { month: 'Dec', citations: 25 }
-    ];
+    var gallery = info.gallery || [];
+    if (gallery.length === 0) {
+      container.innerHTML = '<p style="text-align: center; color: var(--muted); padding: 40px;">Gallery images will be added soon.</p>';
+      return;
+    }
     
-    var maxCitations = Math.max(...citationData.map(d => d.citations));
-    var width = 300;
-    var height = 150;
-    var padding = 40;
+    container.innerHTML = '';
     
-    var svg = '<svg viewBox="0 0 ' + width + ' ' + height + '">';
+    gallery.forEach(function(item, index) {
+      var galleryItem = document.createElement('div');
+      galleryItem.className = 'gallery-item';
+      
+      var img = document.createElement('img');
+      img.src = basePath + '/' + item.src;
+      img.alt = item.alt;
+      img.loading = 'lazy';
+      
+      var overlay = document.createElement('div');
+      overlay.className = 'gallery-overlay';
+      
+      var title = document.createElement('h4');
+      title.className = 'gallery-title';
+      title.textContent = item.title;
+      
+      var description = document.createElement('p');
+      description.className = 'gallery-description';
+      description.textContent = item.description;
+      
+      overlay.appendChild(title);
+      overlay.appendChild(description);
+      
+      galleryItem.appendChild(img);
+      galleryItem.appendChild(overlay);
+      
+      // Add click handler for lightbox effect
+      galleryItem.addEventListener('click', function() {
+        showLightbox(item, index, gallery);
+      });
+      
+      container.appendChild(galleryItem);
+    });
+  }
+  
+  function showLightbox(item, currentIndex, allItems) {
+    // Simple lightbox implementation
+    var lightbox = document.createElement('div');
+    lightbox.className = 'lightbox';
+    lightbox.innerHTML = `
+      <div class="lightbox-content">
+        <button class="lightbox-close">&times;</button>
+        <img src="${basePath}/${item.src}" alt="${item.alt}">
+        <div class="lightbox-info">
+          <h3>${item.title}</h3>
+          <p>${item.description}</p>
+        </div>
+      </div>
+    `;
     
-    // Create line path
-    var pathData = '';
-    citationData.forEach(function(d, i) {
-      var x = padding + (i * (width - 2 * padding) / (citationData.length - 1));
-      var y = height - padding - ((d.citations / maxCitations) * (height - 2 * padding));
-      pathData += (i === 0 ? 'M' : 'L') + x + ',' + y;
+    document.body.appendChild(lightbox);
+    
+    // Close handlers
+    lightbox.querySelector('.lightbox-close').addEventListener('click', function() {
+      document.body.removeChild(lightbox);
     });
     
-    svg += '<path class="line-path" d="' + pathData + '"/>';
-    
-    // Add points
-    citationData.forEach(function(d, i) {
-      var x = padding + (i * (width - 2 * padding) / (citationData.length - 1));
-      var y = height - padding - ((d.citations / maxCitations) * (height - 2 * padding));
-      svg += '<circle cx="' + x + '" cy="' + y + '" r="4" class="line-points"/>';
+    lightbox.addEventListener('click', function(e) {
+      if (e.target === lightbox) {
+        document.body.removeChild(lightbox);
+      }
     });
-    
-    svg += '</svg>';
-    
-    container.innerHTML = '<div class="line-chart">' + svg + '</div>';
   }
 
   function renderPublications(info) {
@@ -302,8 +354,24 @@
         
         groupedByYear[year].forEach(function (p) {
           var li = document.createElement('li');
-          var t = document.createElement('span'); t.className = 'pub-title'; t.textContent = p.title || '';
-          var a = document.createElement('span'); a.className = 'pub-authors'; a.textContent = p.authors || '';
+          var t = document.createElement('span'); t.className = 'pub-title'; 
+          
+          // Bold the author's name in the title
+          var titleText = p.title || '';
+          var authorsText = p.authors || '';
+          if (authorsText.includes('Jongmin Choi')) {
+            // Split authors by comma and bold only Jongmin Choi
+            var authors = authorsText.split(', ');
+            var formattedAuthors = authors.map(function(author) {
+              return author.trim() === 'Jongmin Choi' ? 
+                '<strong style="color: #000000;">Jongmin Choi</strong>' : 
+                '<span style="color: #666666; font-weight: normal;">' + author.trim() + '</span>';
+            }).join(', ');
+            t.innerHTML = titleText + '<br><span class="pub-authors">' + formattedAuthors + '</span>';
+          } else {
+            t.textContent = titleText;
+          }
+          
           var v = document.createElement('span'); v.className = 'pub-venue'; v.textContent = p.venue || '';
           var links = document.createElement('span'); links.className = 'pub-links';
 
@@ -326,7 +394,7 @@
             citationEl.textContent = p.citations + ' citations';
             links.appendChild(citationEl);
           }
-          li.appendChild(t); li.appendChild(a); li.appendChild(v); li.appendChild(links);
+          li.appendChild(t); li.appendChild(v); li.appendChild(links);
           yearList.appendChild(li);
         });
         
@@ -383,6 +451,7 @@
     loadInfo().then(function (info) {
       setProfileCommon(info);
       renderPhoto(info);
+      renderMobileProfile(info);
       renderNews(info);
       renderStats(info);
       renderPublications(info);
@@ -398,17 +467,8 @@
       var aff = document.getElementById('profile-affil-global'); if (aff && p.affiliation) aff.textContent = p.affiliation;
       var nameRail = document.getElementById('profile-name-global'); if (nameRail && p.name) nameRail.textContent = p.name;
       var owner = document.getElementById('owner-name'); if (owner && p.name) owner.textContent = p.name;
-      
-      // Mobile profile section
-      renderMobileProfile(info);
-      // Rail links
-      var railCv = document.getElementById('rail-cv-global'); if (railCv && p.cv) railCv.href = basePath + '/' + p.cv;
-      var links = (p.links || {});
-      var railSch = document.getElementById('rail-scholar-global'); if (railSch && links.scholar) railSch.href = links.scholar;
-      var railGh = document.getElementById('rail-github-global'); if (railGh && links.github) railGh.href = links.github;
-      var railLi = document.getElementById('rail-linkedin-global'); if (railLi && links.linkedin) railLi.href = links.linkedin;
-    }).catch(function (e) {
-      console.error('Failed to load info.json', e);
+    }).catch(function(error) {
+      console.error('Error loading info:', error);
     });
   }
 
@@ -624,6 +684,9 @@
       navList.appendChild(li);
     });
   }
+  
+  // Make onLoad globally available
+  window.onLoad = onLoad;
   
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', onLoad);

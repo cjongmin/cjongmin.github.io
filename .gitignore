@@ -1,0 +1,30 @@
+# Markdown source files and converted HTML
+/posts/markdown/
+/posts/*.html
+
+# Keep the index.json file
+!/posts/index.json
+
+# Node.js dependencies (if using npm)
+node_modules/
+package-lock.json
+
+# Python cache (if using Python)
+__pycache__/
+*.pyc
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

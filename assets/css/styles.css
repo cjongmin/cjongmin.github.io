@@ -1,4 +1,6 @@
 /* Theme tokens */
+@import url('./post.css');
+@import url('./nav.css');
 /* Light theme (default) */
 :root {
   --bg: #ffffff;

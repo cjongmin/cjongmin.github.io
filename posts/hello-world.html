@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hello, world • Jongmin Choi</title>
+    <meta name="description" content="This is a starter post. Replace with your content." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+  </head>
+  <body class="has-rail">
+    <aside class="profile-rail-global">
+      <div class="profile-card">
+        <img class="profile-photo" id="profile-photo-global" alt="profile photo" />
+        <div class="profile-name" id="profile-name-global">Jongmin Choi</div>
+        <div class="profile-affil" id="profile-affil-global"></div>
+        <div class="profile-divider"></div>
+        <div class="profile-section">
+          <div class="profile-section-title">At a Glance</div>
+          <div class="profile-stats" id="profile-stats-global"></div>
+        </div>
+        <div class="profile-divider"></div>
+        <div class="profile-section">
+          <div class="profile-section-title">Links</div>
+          <div class="profile-links">
+            <a class="chip" id="rail-cv-global" href="#" target="_blank" rel="noopener"><span class="icon">📄</span>CV</a>
+            <a class="chip" href="#" id="rail-scholar-global" target="_blank" rel="noopener"><span class="icon">🎓</span>Scholar</a>
+            <a class="chip" href="#" id="rail-github-global" target="_blank" rel="noopener"><span class="icon">🐙</span>GitHub</a>
+            <a class="chip" href="#" id="rail-linkedin-global" target="_blank" rel="noopener"><span class="icon">🔗</span>LinkedIn</a>
+          </div>
+        </div>
+      </div>
+    </aside>
+    
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href="../index.html">Jongmin Choi</a>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="../index.html" data-nav>About Me</a>
+          <a href="../publications.html" data-nav>Publications</a>
+          <a href="../awards.html" data-nav>Awards</a>
+          <a href="../blog.html" data-nav>Blog</a>
+          <a href="../contact.html" data-nav>Contact</a>
+        </nav>
+        <div class="header-actions">
+          <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+            <span class="icon moon">☾</span>
+            <span class="icon sun">☀</span>
+          </button>
+        </div>
+      </div>
+    </header>
+    
+    <main class="container">
+      <article class="blog-post-content">
+        <header class="post-header">
+          <h1 class="post-title">Hello, world</h1>
+          <div class="post-meta">
+            <span class="post-date">October 4, 2025</span>
+            <span class="dot"></span>
+            <span class="post-category accent">General</span>
+          </div>
+          <div class="post-tags">
+            <a class="tag" href="../blog.html?q=%23intro">#intro</a>
+          </div>
+        </header>
+        <div class="post-content">
+          <img class="post-hero" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2000&q=80" alt="Hello World">
+
+          <p>Welcome to my blog! This is my first post. Here I'll share <span class="accent">research insights</span>, <span class="accent">tutorials</span>, and <span class="accent">personal reflections</span> in AI.</p>
+
+          <div class="callout primary"><span class="bold">Why this blog?</span> To document, share, connect, and grow together in the AI community.</div>
+
+          <div class="grid-2">
+            <div class="quote"><p>“Learning by teaching is the fastest way to deepen understanding.”</p><cite>— Jongmin Choi</cite></div>
+            <div class="video"><iframe src="https://www.youtube.com/embed/M7lc1UVf-VE" title="Intro Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+          </div>
+
+          <div class="gallery grid-3">
+            <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=1200&q=80" alt="Team">
+            <img src="https://images.unsplash.com/photo-1518779578993-ec3579fee39f?auto=format&fit=crop&w=1200&q=80" alt="Code">
+            <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=1200&q=80" alt="Notebook">
+          </div>
+
+          <p><em>Thanks for visiting. Stay tuned!</em></p>
+        </div>
+      </article>
+    </main>
+    
+    <footer class="site-footer">
+      <div class="container">
+        <p>© <span id="year"></span> Jongmin Choi. All rights reserved.</p>
+      </div>
+    </footer>
+    
+    <script src="../assets/js/render.js"></script>
+    <script src="../assets/js/main.js"></script>
+  </body>
+</html>

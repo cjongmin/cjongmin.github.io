@@ -1,10 +1,3 @@
-# Markdown source files and converted HTML
-/posts/markdown/
-/posts/*.html
-
-# Keep the index.json file
-!/posts/index.json
-
 # Node.js dependencies (if using npm)
 node_modules/
 package-lock.json

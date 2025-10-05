@@ -222,10 +222,10 @@
       // Create an anchor tag to make the whole card clickable
       var cardLink = document.createElement('a');
       cardLink.className = 'post-card';
-      // Generate correct path for markdown post link
+      // Generate correct path for HTML post link
       var postPath = (p.filename || p.slug || '');
-      // Use markdown post viewer
-      cardLink.href = 'blog-post.html?file=' + encodeURIComponent(postPath);
+      // Use direct HTML file (filename already includes .html)
+      cardLink.href = './posts/' + postPath;
       cardLink.id = 'post-' + index;
       
       // Force visibility
@@ -287,6 +287,13 @@
           var tagEl = document.createElement('span');
           tagEl.className = 'meta-item meta-tag';
           tagEl.textContent = '#' + tag;
+          tagEl.style.cursor = 'pointer';
+          tagEl.addEventListener('click', function(e) {
+            e.preventDefault();
+            // Navigate back to blog with tag filter
+            var q = encodeURIComponent('#' + tag);
+            window.location.href = './blog.html?q=' + q;
+          });
           meta.appendChild(tagEl);
         });
       }
@@ -385,17 +392,24 @@
       console.log('Apply function called with', posts.length, 'posts');
       console.log('Search query:', q);
       console.log('Selected category:', selectedCategory);
+      var tagQuery = '';
+      if (q && q.trim().charAt(0) === '#') {
+        tagQuery = q.trim().slice(1).toLowerCase();
+      }
       var filtered = posts.filter(function (p) {
         console.log('Filtering post:', p.title, 'category:', p.category);
         console.log('Post tags:', p.tags);
         console.log('Post summary:', p.summary);
-        // Filter by search query
-        if (q) {
+        // Filter by tag (exact match) if query starts with '#'
+        if (tagQuery) {
+          var tags = (p.tags || []).map(function(t){ return String(t).toLowerCase(); });
+          if (tags.indexOf(tagQuery) === -1) {
+            return false;
+          }
+        } else if (q) {
+          // Generic search over title/tags/summary
           var hay = (p.title + ' ' + (p.tags||[]).join(' ') + ' ' + (p.summary||'')).toLowerCase();
-          console.log('Search haystack:', hay);
-          console.log('Search query:', q.toLowerCase());
           if (hay.indexOf(q.toLowerCase()) === -1) {
-            console.log('Post filtered out by search:', p.title);
             return false;
           }
         }
@@ -492,8 +506,15 @@
       }
     });
 
+    // Initialize search from URL (supports tag navigation like ?q=%23Tag)
+    var params = new URLSearchParams(window.location.search);
+    var startQ = params.get('q');
+    if (startQ) { q = startQ; }
     var search = document.getElementById('search');
-    if (search) search.addEventListener('input', function () { q = search.value || ''; apply(); });
+    if (search) {
+      if (startQ) search.value = startQ;
+      search.addEventListener('input', function () { q = search.value || ''; apply(); });
+    }
     var vg = document.getElementById('view-grid'); if (vg) vg.addEventListener('click', function () { mode = 'grid'; localStorage.setItem('blog_view', mode); apply(); });
     var vl = document.getElementById('view-list'); if (vl) vl.addEventListener('click', function () { mode = 'list'; localStorage.setItem('blog_view', mode); apply(); });
   }

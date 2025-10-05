@@ -24,8 +24,8 @@
   ],
   "publications": [
     "publications/2505.20873.json",
-    "publications/2025.another.json",
-    "publications/2024.example.json"
+    "publications/2025.diffusion.json",
+    "publications/2025.csaligner.json"
   ],
   "awards": [
     { "year": "2025", "name": "Best Paper Award", "by": "[Conference]" },
@@ -34,10 +34,8 @@
   "stats": {
     "publications": 3,
     "awards": 2,
-    "citations": 15,
-    "h_index": 2,
-    "research_years": 2,
-    "conferences": ["ICLR", "ICASSP", "ICCV"],
+    "citations": 0,
+    "research_years": 1,
     "languages": ["Python", "PyTorch", "TensorFlow", "C++"],
     "collaborations": 8
   },

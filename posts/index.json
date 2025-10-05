@@ -1,15 +1,32 @@
 [
   {
-    "title": "Test Post",
-    "description": "Test post to verify blog functionality",
-    "date": "January 1, 2025",
+    "filename": "iccv-2025-hawaii.html",
+    "title": "ICCV 2025 Hawaii — A Journey Through Computer Vision",
+    "description": "My experience at ICCV 2025 in Hawaii, exploring the latest advances in computer vision and multimodal learning.",
+    "date": "October 15, 2025",
     "tags": [
-      "Test"
+      "Conference",
+      "Travel",
+      "Multimodal Learning",
+      "Computer Vision",
+      "AI Research"
     ],
-    "category": "Test",
-    "filename": "test-post.md"
+    "category": "Conference",
+    "cover": "./assets/images/blog-default.svg"
   },
   {
+    "filename": "hello-world.html",
+    "title": "Hello, world",
+    "description": "This is a starter post. Replace with your content.",
+    "date": "October 4, 2025",
+    "tags": [
+      "intro"
+    ],
+    "category": "General",
+    "cover": "./assets/images/blog-default.svg"
+  },
+  {
+    "filename": "getting-started.html",
     "title": "Getting Started with Markdown Blogging",
     "description": "A guide to writing blog posts using Markdown format for easy content creation.",
     "date": "January 15, 2025",
@@ -19,9 +36,10 @@
       "Blogging"
     ],
     "category": "Tutorial",
-    "filename": "getting-started.md"
+    "cover": "./assets/images/blog-default.svg"
   },
   {
+    "filename": "research-journey.html",
     "title": "My Research Journey in Multimodal AI",
     "description": "Reflecting on my journey as a master's student researching multimodal learning and computer vision.",
     "date": "January 10, 2025",
@@ -31,28 +49,17 @@
       "Personal"
     ],
     "category": "Research",
-    "filename": "research-journey.md"
+    "cover": "./assets/images/blog-default.svg"
   },
   {
-    "title": "ICCV 2025 Hawaii — A Journey Through Computer Vision",
-    "description": "My experience at ICCV 2025 in Hawaii, exploring the latest advances in computer vision and multimodal learning.",
-    "date": "October 15, 2025",
+    "filename": "test-post.html",
+    "title": "Test Post",
+    "description": "Test post to verify blog functionality",
+    "date": "January 1, 2025",
     "tags": [
-      "Conference",
-      "Travel",
-      "Multimodal Learning"
+      "Test"
     ],
-    "category": "Conference",
-    "filename": "iccv-2025-hawaii.md"
-  },
-  {
-    "title": "Hello, world",
-    "description": "This is a starter post. Replace with your content.",
-    "date": "October 4, 2025",
-    "tags": [
-      "intro"
-    ],
-    "category": "General",
-    "filename": "hello-world.md"
+    "category": "Test",
+    "cover": "./assets/images/blog-default.svg"
   }
 ]

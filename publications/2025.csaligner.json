@@ -1,0 +1,10 @@
+{
+  "title": "LAMB: LLM-Based Audio Captioning with Modality Gap Bridging via Cauchy-Schwarz Divergence",
+  "authors": "Hyeongkeun Lee, Jongmin Choi, KiHyun Nam, Joon Son Chung",
+  "venue": "In ICASSP, 2026",
+  "pdf": "",
+  "code": "",
+  "scholar": "",
+  "citations": 0,
+  "bibtex": "@article{choi2024example,\n title={Example Paper from 2024},\n author={Choi, Jongmin and Author, Example},\n journal={Example Conference},\n year={2024}}"
+}

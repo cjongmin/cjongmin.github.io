@@ -1,0 +1,10 @@
+{
+  "title": "Diffusion-Link: Diffusion Probabilistic Model for Bridging the Audio-Text Modality Gap",
+  "authors": "KiHyun Nam, Jongmin Choi, Hyeongkeun Lee, Jungwoo Heo, Joon Son Chung",
+  "venue": "In ICASSP, 2026",
+  "pdf": "",
+  "code": "",
+  "scholar": "",
+  "citations": 0,
+  "bibtex": "@article{choi2025another,\n title={Another Paper from 2025},\n author={Choi, Jongmin and Author, Another},\n journal={Another Conference},\n year={2025}}"
+}

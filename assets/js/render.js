@@ -830,6 +830,9 @@
       var a = document.createElement('a');
       a.href = '#' + heading.id;
       a.textContent = heading.textContent;
+      // nest level class for styling
+      var level = parseInt(heading.tagName.substring(1), 10);
+      a.classList.add('nav-level-' + level);
       
       // Add smooth scroll with offset for fixed header
       a.addEventListener('click', function(e) {

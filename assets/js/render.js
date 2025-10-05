@@ -12,6 +12,15 @@
     // Brand/name
     var brand = document.querySelector('.brand');
     if (brand && p.name) brand.textContent = p.name;
+    // Brand avatar
+    var brandAvatar = document.getElementById('brand-avatar');
+    if (brandAvatar) {
+      var src = (p && p.photo) ? (basePath + '/' + p.photo) : (basePath + '/assets/images/profile.jpg');
+      brandAvatar.setAttribute('src', src);
+      brandAvatar.setAttribute('alt', p && p.name ? p.name : 'Profile');
+      // Ensure visible after load
+      brandAvatar.style.display = 'block';
+    }
 
     // Title/subtitle on index
     var h1 = document.querySelector('.hero-text h1');
@@ -34,9 +43,31 @@
     var cv = document.getElementById('chip-cv');
     if (cv && p.cv) cv.href = basePath + '/' + p.cv;
     var links = p.links || {};
-    var elScholar = document.getElementById('chip-scholar'); if (elScholar && links.scholar) elScholar.href = links.scholar;
-    var elGithub = document.getElementById('chip-github'); if (elGithub && links.github) elGithub.href = links.github;
-    var elLinkedin = document.getElementById('chip-linkedin'); if (elLinkedin && links.linkedin) elLinkedin.href = links.linkedin;
+    var elScholar = document.getElementById('chip-scholar'); if (elScholar && links.scholar) { elScholar.href = links.scholar; }
+    var elGithub = document.getElementById('chip-github'); if (elGithub && links.github) { elGithub.href = links.github; }
+    var elLinkedin = document.getElementById('chip-linkedin'); if (elLinkedin && links.linkedin) { elLinkedin.href = links.linkedin; }
+
+    // Rail links (icon + label)
+    var railCv = document.getElementById('rail-cv-global');
+    if (railCv && p.cv) {
+      railCv.href = basePath + '/' + p.cv;
+      railCv.innerHTML = '<img class="icon" alt="CV" src="' + (basePath + '/assets/icons/cv_icon.svg') + '"><span class="label">CV</span>';
+    }
+    var railScholar = document.getElementById('rail-scholar-global');
+    if (railScholar && links.scholar) {
+      railScholar.href = links.scholar;
+      railScholar.innerHTML = '<img class="icon" alt="Google Scholar" src="' + (basePath + '/assets/icons/scholar_icon.svg') + '"><span class="label">Scholar</span>';
+    }
+    var railGithub = document.getElementById('rail-github-global');
+    if (railGithub && links.github) {
+      railGithub.href = links.github;
+      railGithub.innerHTML = '<img class="icon" alt="GitHub" src="' + (basePath + '/assets/icons/github_icon.svg') + '"><span class="label">GitHub</span>';
+    }
+    var railLinkedin = document.getElementById('rail-linkedin-global');
+    if (railLinkedin && links.linkedin) {
+      railLinkedin.href = links.linkedin;
+      railLinkedin.innerHTML = '<img class="icon" alt="LinkedIn" src="' + (basePath + '/assets/icons/linkedin_icon.svg') + '"><span class="label">LinkedIn</span>';
+    }
 
     // Interests
     var interestList = document.querySelector('.pill-list');
@@ -128,44 +159,37 @@
       mobileAffil.textContent = p.affiliation;
     }
     
-    // Mobile profile links
+    // Mobile profile links (icon-only)
     var mobileLinks = document.getElementById('mobile-profile-links');
     if (mobileLinks) {
       mobileLinks.innerHTML = '';
-      
-      // CV link
-      if (p.cv) {
-        var cvLink = document.createElement('a');
-        cvLink.href = basePath + '/' + p.cv;
-        cvLink.target = '_blank';
-        cvLink.innerHTML = '📄 CV';
-        mobileLinks.appendChild(cvLink);
+
+      function createIconLink(href, iconPath, alt) {
+        var a = document.createElement('a');
+        a.href = href;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        var img = document.createElement('img');
+        img.src = basePath + '/assets/icons/' + iconPath;
+        img.alt = alt;
+        img.className = 'icon';
+        a.appendChild(img);
+        return a;
       }
-      
-      // External links
+
+      if (p.cv) {
+        mobileLinks.appendChild(createIconLink(basePath + '/' + p.cv, 'cv_icon.svg', 'CV'));
+      }
+
       var links = p.links || {};
       if (links.scholar) {
-        var scholarLink = document.createElement('a');
-        scholarLink.href = links.scholar;
-        scholarLink.target = '_blank';
-        scholarLink.innerHTML = '🎓 Scholar';
-        mobileLinks.appendChild(scholarLink);
+        mobileLinks.appendChild(createIconLink(links.scholar, 'scholar_icon.svg', 'Google Scholar'));
       }
-      
       if (links.github) {
-        var githubLink = document.createElement('a');
-        githubLink.href = links.github;
-        githubLink.target = '_blank';
-        githubLink.innerHTML = '💻 GitHub';
-        mobileLinks.appendChild(githubLink);
+        mobileLinks.appendChild(createIconLink(links.github, 'github_icon.svg', 'GitHub'));
       }
-      
       if (links.linkedin) {
-        var linkedinLink = document.createElement('a');
-        linkedinLink.href = links.linkedin;
-        linkedinLink.target = '_blank';
-        linkedinLink.innerHTML = '💼 LinkedIn';
-        mobileLinks.appendChild(linkedinLink);
+        mobileLinks.appendChild(createIconLink(links.linkedin, 'linkedin_icon.svg', 'LinkedIn'));
       }
     }
   }
@@ -658,14 +682,182 @@
     var panel = document.createElement('div');
     panel.className = 'nav-panel';
     
-    var title = document.createElement('div');
-    title.className = 'sidebar-title';
-    title.textContent = 'Quick Navigation';
-    panel.appendChild(title);
+    var headerRow = document.createElement('div');
+    headerRow.className = 'sidebar-title';
+    headerRow.style.display = 'flex';
+    headerRow.style.alignItems = 'center';
+    headerRow.style.justifyContent = 'space-between';
+    var headerTitle = document.createElement('span');
+    headerTitle.textContent = 'Quick Navigation';
+    headerRow.appendChild(headerTitle);
+    var backBtn = document.createElement('button');
+    backBtn.setAttribute('aria-label', 'Back');
+    backBtn.innerHTML = '↩';
+    backBtn.style.cssText = 'border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:20px;padding:6px 10px;cursor:pointer;font-size:14px;line-height:1;';
+    headerRow.appendChild(backBtn);
+    panel.appendChild(headerRow);
     
     var navList = document.createElement('ul');
     navList.className = 'sidebar-nav';
     
+    // Helper to render blog list into panel (used by post pages back button)
+    var navMode = 'headers'; // headers | posts | categories
+
+    function keepPanelOpen(e) {
+      if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+      panel.classList.add('open');
+      toggle.innerHTML = '✕';
+    }
+
+    function attachScrollSpy(navListEl) {
+      var pageAll = Array.prototype.slice.call(document.querySelectorAll('h1, h2, h3, h4, h5, h6'));
+      var pageHeadings = pageAll.filter(function(h, idx){ return !(h.tagName === 'H1' && idx === 0); });
+      if (pageHeadings.length === 0) return;
+      var links = Array.prototype.slice.call(navListEl.querySelectorAll('a'));
+      function stripNumbering(text) { return String(text).replace(/^\d+(?:\.\d+)*\s+/, '').trim(); }
+      function getCurrentLabel() {
+        var headerHeight = 100;
+        var scrollYWithOffset = window.scrollY + headerHeight + 1;
+        var cur = null;
+        pageHeadings.forEach(function(h){ if (h.offsetTop <= scrollYWithOffset) cur = h; });
+        return cur ? stripNumbering(cur.textContent) : null;
+      }
+      function update() {
+        var current = getCurrentLabel();
+        links.forEach(function(a){
+          var label = stripNumbering(a.textContent);
+          if (current && label === current) a.classList.add('active'); else a.classList.remove('active');
+        });
+      }
+      window.addEventListener('scroll', update, { passive: true });
+      update();
+    }
+
+    function renderBlogListInPanel() {
+      navList.innerHTML = '';
+      fetch(basePath + '/posts/index.json', { cache: 'no-store' })
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          var list = Array.isArray(data) ? data : (data.posts || []);
+          list.sort(function(a,b){ return new Date(b.date || '') - new Date(a.date || ''); });
+          list.forEach(function(p){
+            var li = document.createElement('li');
+            var a = document.createElement('a');
+            var postUrl = (basePath + '/posts/' + (p.filename || (p.slug + '.html')));
+            a.href = postUrl;
+            a.textContent = p.title || (p.filename || 'Post');
+            // Clicking a post shows that post's headings inside panel
+            a.addEventListener('click', function(e){
+              e.preventDefault();
+              keepPanelOpen(e);
+              renderHeadingsForPost(postUrl);
+            });
+            li.appendChild(a);
+            navList.appendChild(li);
+          });
+          navMode = 'posts';
+        }).catch(function(){
+          var li = document.createElement('li'); li.textContent = 'Failed to load posts.'; navList.appendChild(li);
+        });
+      keepPanelOpen();
+    }
+
+    function renderCategoriesListInPanel() {
+      navList.innerHTML = '';
+      fetch(basePath + '/posts/index.json', { cache: 'no-store' })
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          var list = Array.isArray(data) ? data : (data.posts || []);
+          var grouped = {};
+          list.forEach(function(p){
+            var cat = p.category || 'Uncategorized';
+            (grouped[cat] = grouped[cat] || []).push(p);
+          });
+          Object.keys(grouped).sort().forEach(function(cat){
+            var li = document.createElement('li');
+            var strong = document.createElement('div');
+            strong.textContent = cat;
+            strong.style.fontWeight = '700';
+            strong.style.margin = '8px 0 4px';
+            li.appendChild(strong);
+            var ul = document.createElement('ul'); ul.style.listStyle='none'; ul.style.padding='0';
+            grouped[cat].forEach(function(p){
+              var pli = document.createElement('li');
+              var a = document.createElement('a');
+              var postUrl = (basePath + '/posts/' + (p.filename || (p.slug + '.html')));
+              a.href = postUrl;
+              a.textContent = '• ' + (p.title || p.filename);
+              a.addEventListener('click', function(e){ e.preventDefault(); keepPanelOpen(e); renderHeadingsForPost(postUrl); });
+              pli.appendChild(a); ul.appendChild(pli);
+            });
+            li.appendChild(ul); navList.appendChild(li);
+          });
+          navMode = 'categories';
+        }).catch(function(){ var li = document.createElement('li'); li.textContent = 'Failed to load categories.'; navList.appendChild(li); });
+      keepPanelOpen();
+    }
+
+    function renderHeadingsForPost(postUrl) {
+      navList.innerHTML = '';
+      fetch(postUrl, { cache: 'no-store' }).then(function(r){ return r.text(); }).then(function(html){
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(html, 'text/html');
+        var all = Array.prototype.slice.call(doc.querySelectorAll('h1, h2, h3, h4, h5, h6'));
+        // Skip first H1 (post title)
+        var headings = all.filter(function(h, idx){ return !(h.tagName === 'H1' && idx === 0); });
+
+        // Insert a nice clickable post title header in the panel
+        var panelTitle = document.createElement('div');
+        panelTitle.className = 'sidebar-post-title';
+        var titleText = (doc.querySelector('.post-title') ? doc.querySelector('.post-title').textContent : (doc.title || 'Post')).trim();
+        panelTitle.textContent = titleText;
+        panelTitle.addEventListener('click', function(ev){ keepPanelOpen(ev); window.location.href = postUrl; });
+        navList.appendChild(panelTitle);
+
+        if (headings.length === 0) {
+          var li = document.createElement('li'); li.textContent = 'No headings'; navList.appendChild(li); navMode = 'headers'; return;
+        }
+        // Counters for numbering
+        var counters = [0,0,0,0,0,0];
+        headings.forEach(function(h, idx){
+          var li = document.createElement('li');
+          var a = document.createElement('a');
+          var level = parseInt(h.tagName.substring(1), 10);
+          counters[level-1] += 1; for (var i=level;i<6;i++){ counters[i]=0; }
+          var parts=[]; for (var j=0;j<level;j++){ if(counters[j]>0) parts.push(String(counters[j])); }
+          var numbering = parts.join('.') + ' ';
+          a.textContent = numbering + (h.textContent || 'Section');
+          a.addEventListener('click', function(e){
+            e.preventDefault();
+            keepPanelOpen(e);
+            // Try to scroll if already on that page; else save marker and navigate
+            var current = window.location.pathname.replace(/\/+/g,'/');
+            var target = document.createElement('a'); target.href = postUrl; var targetPath = target.pathname;
+            var headingText = (h.textContent || '').trim();
+            if (current === targetPath) {
+              // find heading by text and scroll
+              var pageHeadings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+              var found=null; Array.prototype.forEach.call(pageHeadings, function(ph, k){ if (ph.textContent.trim() === headingText) { found = ph; } });
+              if (found) {
+                var headerHeight = 100;
+                var pos = found.offsetTop - headerHeight;
+                window.scrollTo({ top: pos, behavior: 'smooth' });
+              }
+            } else {
+              try { localStorage.setItem('navScrollHeading', headingText); } catch(e) {}
+              window.location.href = postUrl;
+            }
+          });
+          li.appendChild(a); navList.appendChild(li);
+        });
+        navMode = 'headers';
+        var samePageAnchor = document.createElement('a'); samePageAnchor.href = postUrl; if (samePageAnchor.pathname === window.location.pathname) {
+          attachScrollSpy(navList);
+        }
+        keepPanelOpen();
+      }).catch(function(){ var li = document.createElement('li'); li.textContent = 'Failed to load headings.'; navList.appendChild(li); });
+    }
+
     // Page-specific navigation content
     if (currentPage === 'index.html' || currentPage === '') {
       createAboutNavigation(navList);
@@ -676,7 +868,28 @@
     } else if (currentPage === 'blog.html') {
       createBlogNavigation(navList);
     } else if (currentPage.includes('.html') && window.location.pathname.includes('/posts/')) {
+      backBtn.addEventListener('click', function(){
+        if (navMode === 'headers') {
+          renderBlogListInPanel();
+        } else if (navMode === 'posts') {
+          renderCategoriesListInPanel();
+        } else {
+          renderBlogListInPanel();
+        }
+        keepPanelOpen();
+      });
+      // Add post title above local headings for direct visits
+      var currentTitle = (document.querySelector('.post-title') ? document.querySelector('.post-title').textContent : document.title || 'Post').trim();
+      if (currentTitle) {
+        var panelTitleNow = document.createElement('div');
+        panelTitleNow.className = 'sidebar-post-title';
+        panelTitleNow.textContent = currentTitle;
+        panelTitleNow.addEventListener('click', function(ev){ keepPanelOpen(ev); /* noop on same page */ });
+        navList.appendChild(panelTitleNow);
+      }
       createPostNavigation(navList);
+      // Ensure scroll spy is attached for current page's headings
+      attachScrollSpy(navList);
     }
     
     panel.appendChild(navList);
@@ -819,7 +1032,14 @@
   }
   
   function createPostNavigation(navList) {
-    var headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    // Exclude the main post title by skipping the first H1 if it exists near the top
+    var all = Array.prototype.slice.call(document.querySelectorAll('h1, h2, h3, h4, h5, h6'));
+    var headings = all.filter(function(h, idx){
+      if (h.tagName === 'H1' && idx === 0) return false; // skip first H1
+      return true;
+    });
+    // Maintain hierarchical counters for levels 1..6
+    var counters = [0, 0, 0, 0, 0, 0];
     headings.forEach(function(heading, index) {
       // Add ID to heading if it doesn't have one
       if (!heading.id) {
@@ -829,9 +1049,18 @@
       var li = document.createElement('li');
       var a = document.createElement('a');
       a.href = '#' + heading.id;
-      a.textContent = heading.textContent;
-      // nest level class for styling
       var level = parseInt(heading.tagName.substring(1), 10);
+      // Update counters
+      counters[level - 1] += 1;
+      for (var i = level; i < 6; i++) { counters[i] = 0; }
+      // Build numbering like 1, 1.1, 1.1.1
+      var numberParts = [];
+      for (var j = 0; j < level; j++) {
+        if (counters[j] > 0) numberParts.push(String(counters[j]));
+      }
+      var numbering = numberParts.join('.') + ' ';
+      a.textContent = numbering + heading.textContent;
+      // nest level class for styling
       a.classList.add('nav-level-' + level);
       
       // Add smooth scroll with offset for fixed header
@@ -853,7 +1082,8 @@
     });
   }
   
-  // Make onLoad globally available, but only for non-blog pages
+  // Make onLoad globally available for non-blog pages.
+  // On blog.html, run a lightweight header init so brand/avatar are set without rendering other sections.
   if (!window.location.pathname.includes('blog.html')) {
     window.onLoad = onLoad;
     
@@ -861,6 +1091,16 @@
       document.addEventListener('DOMContentLoaded', onLoad);
     } else {
       onLoad();
+    }
+  } else {
+    // Blog page: ensure brand & avatar load
+    var headerInit = function() {
+      loadInfo().then(function(info){ setProfileCommon(info); renderPhoto(info); });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', headerInit);
+    } else {
+      headerInit();
     }
   }
 })();

@@ -172,6 +172,7 @@ body.has-rail main.container {
 
 .mobile-profile-info {
   flex: 1;
+  text-align: center; /* ensure all text inside is centered */
 }
 
 .mobile-profile-name {
@@ -182,6 +183,15 @@ body.has-rail main.container {
   word-wrap: break-word;
   word-break: break-word;
   max-width: 100%;
+  text-align: center; /* ensure centered under photo */
+}
+
+#mobile-profile-name {
+  text-align: center !important;
+  width: 100%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .mobile-profile-affil {
@@ -205,17 +215,21 @@ body.has-rail main.container {
 .mobile-profile-links a {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 10px 14px;
+  justify-content: center;
+  padding: 10px;
   background: var(--accent-light);
   color: var(--accent);
   text-decoration: none;
   border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
+  width: 44px; /* icon-only button */
+  height: 44px;
   transition: all 0.2s ease;
-  min-width: 80px;
-  justify-content: center;
+}
+
+.mobile-profile-links a .icon {
+  width: 20px;
+  height: 20px;
+  display: block;
 }
 
 .mobile-profile-links a:hover {
@@ -296,8 +310,8 @@ main {
 
 /* Post meta header */
 .post-header { margin-bottom: 16px; }
-.post-title { margin: 0 0 6px 0; font-size: 36px; line-height: 1.2; }
-@media (max-width: 768px) { .post-title { font-size: 30px; } }
+.post-title { margin: 0 0 10px 0; font-size: 44px; line-height: 1.15; font-weight: 800; }
+@media (max-width: 768px) { .post-title { font-size: 34px; } }
 .post-meta { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 14px; }
 .post-meta .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--muted); display: inline-block; }
 .post-tags { margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap; }
@@ -563,8 +577,8 @@ main {
     margin-bottom: 16px !important; /* More spacing between posts */
   }
   
-  .post-title {
-    font-size: 1.1rem !important; /* Larger post titles */
+  .post-card .post-title {
+    font-size: 1.1rem !important; /* Larger card titles on mobile */
     line-height: 1.4 !important;
   }
   
@@ -609,6 +623,22 @@ main {
   top: 32px; /* Half of header height (64px) to center vertically in header */
   transform: translate(-50%, -50%); /* Only center horizontally */
   z-index: 51;
+}
+
+/* Brand avatar (circular profile next to brand) */
+.brand-avatar {
+  position: fixed;
+  left: 48px; /* closer to brand, still left side */
+  top: 32px;
+  transform: translate(-50%, -50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--bg);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  z-index: 200; /* above header/nav */
+  pointer-events: none; /* never block clicks */
 }
 
 .site-nav {
@@ -1831,7 +1861,7 @@ main.container {
   opacity: 1 !important;
   visibility: visible !important;
 }
-.post-title { 
+.post-card .post-title { 
   font-weight: 700; /* Bolder */
   font-size: 17px; /* Larger */
   margin: 0 0 8px; 
@@ -2061,6 +2091,22 @@ main.container {
   margin: 0 0 16px 0;
   padding-bottom: 8px;
   border-bottom: 1px solid var(--border);
+}
+
+.sidebar-post-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 6px 0 10px;
+  padding: 8px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+}
+.sidebar-post-title:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
 }
 
 .sidebar-nav {

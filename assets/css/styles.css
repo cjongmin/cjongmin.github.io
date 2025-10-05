@@ -250,11 +250,115 @@ main {
   width: 720px; /* Fixed width */
 }
 
-/* Mobile padding adjustments */
+/* Mobile responsive adjustments */
 @media (max-width: 768px) {
   .container {
+    width: 100% !important; /* Full width on mobile */
+    max-width: 100% !important; /* No max-width constraint on mobile */
     padding-left: 16px;
     padding-right: 16px;
+  }
+  
+  /* Ensure all content uses full mobile width */
+  body.has-rail main.container {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  /* Mobile typography improvements */
+  h1 {
+    font-size: 2rem !important; /* Larger heading on mobile */
+  }
+  
+  h2 {
+    font-size: 1.5rem !important; /* Larger subheading on mobile */
+  }
+  
+  p, .bio-text {
+    font-size: 1rem !important; /* Readable paragraph text */
+    line-height: 1.6 !important; /* Better line spacing */
+  }
+  
+  .profile-name {
+    font-size: 1.8rem !important; /* Larger profile name */
+  }
+  
+  .profile-affil {
+    font-size: 1rem !important; /* Readable affiliation text */
+  }
+  
+  .news-text {
+    font-size: 0.95rem !important; /* Slightly larger news text */
+  }
+  
+  .pub-title {
+    font-size: 1rem !important; /* Readable publication titles */
+  }
+  
+  .pub-authors {
+    font-size: 0.9rem !important; /* Readable author names */
+  }
+  
+  /* Mobile button and link improvements */
+  .chip {
+    padding: 8px 12px !important; /* Larger touch targets */
+    font-size: 0.9rem !important;
+    min-height: 44px !important; /* iOS recommended touch target size */
+  }
+  
+  .intro-button {
+    padding: 12px 16px !important; /* Larger intro buttons */
+    font-size: 1rem !important;
+    min-height: 48px !important;
+  }
+  
+  .mobile-profile-links a {
+    padding: 8px 12px !important; /* Larger mobile profile links */
+    font-size: 0.9rem !important;
+    min-height: 44px !important;
+  }
+  
+  /* Mobile navigation improvements */
+  .site-nav a {
+    padding: 12px 16px !important; /* Larger nav links */
+    font-size: 1rem !important;
+  }
+  
+  /* Mobile gallery and chart improvements */
+  .gallery-item {
+    width: calc(50% - 8px) !important; /* Two columns on mobile */
+    margin: 4px !important;
+  }
+  
+  .bar-chart {
+    height: 200px !important; /* Taller chart on mobile */
+  }
+  
+  .bar-label {
+    font-size: 0.8rem !important; /* Readable chart labels */
+  }
+  
+  .bar-value {
+    font-size: 0.8rem !important; /* Readable chart values */
+  }
+  
+  /* Mobile blog post improvements */
+  .post-card {
+    margin-bottom: 16px !important; /* More spacing between posts */
+  }
+  
+  .post-title {
+    font-size: 1.1rem !important; /* Larger post titles */
+    line-height: 1.4 !important;
+  }
+  
+  .post-meta {
+    font-size: 0.9rem !important; /* Readable meta information */
+  }
+  
+  .meta-item {
+    padding: 4px 8px !important; /* Larger meta tags */
+    font-size: 0.8rem !important;
   }
   
   main.container {

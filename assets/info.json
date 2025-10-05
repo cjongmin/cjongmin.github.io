@@ -43,10 +43,25 @@
   },
   "gallery": [
     {
-      "src": "assets/images/gallery/conference1.jpg",
-      "alt": "Conference Presentation",
-      "title": "ICLR 2025 Presentation",
-      "description": "Presenting our research on multimodal learning"
+      "type": "folder",
+      "title": "Conference Photos",
+      "items": [
+        {
+          "src": "assets/images/gallery/conference1.jpg",
+          "alt": "Conference Presentation",
+          "type": "image"
+        },
+        {
+          "src": "assets/images/gallery/conference2.jpg",
+          "alt": "Conference Poster",
+          "type": "image"
+        },
+        {
+          "src": "assets/videos/conference-talk.mp4",
+          "alt": "Conference Talk",
+          "type": "video"
+        }
+      ]
     },
     {
       "src": "assets/images/gallery/lab1.jpg", 
@@ -61,10 +76,25 @@
       "description": "Collaborating with fellow researchers"
     },
     {
-      "src": "assets/images/gallery/campus1.jpg",
-      "alt": "KAIST Campus",
-      "title": "KAIST Campus",
-      "description": "Beautiful campus view at KAIST"
+      "type": "folder",
+      "title": "Research Process",
+      "items": [
+        {
+          "src": "assets/images/gallery/research1.jpg",
+          "alt": "Data Analysis",
+          "type": "image"
+        },
+        {
+          "src": "assets/images/gallery/research2.jpg",
+          "alt": "Model Training",
+          "type": "image"
+        },
+        {
+          "src": "assets/videos/experiment-demo.mp4",
+          "alt": "Experiment Demo",
+          "type": "video"
+        }
+      ]
     }
   ]
 }

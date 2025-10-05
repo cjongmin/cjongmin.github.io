@@ -1,15 +1,13 @@
 [
   {
-    "title": "ICCV 2025 Hawaii — A Journey Through Computer Vision",
-    "description": "My experience at ICCV 2025 in Hawaii, exploring the latest advances in computer vision and multimodal learning.",
-    "date": "October 15, 2025",
+    "title": "Test Post",
+    "description": "Test post to verify blog functionality",
+    "date": "January 1, 2025",
     "tags": [
-      "Conference",
-      "Travel",
-      "Multimodal Learning"
+      "Test"
     ],
-    "category": "General",
-    "filename": "iccv-2025-hawaii.html"
+    "category": "Test",
+    "filename": "test-post.md"
   },
   {
     "title": "Getting Started with Markdown Blogging",
@@ -20,8 +18,8 @@
       "Markdown",
       "Blogging"
     ],
-    "category": "General",
-    "filename": "getting-started.html"
+    "category": "Tutorial",
+    "filename": "getting-started.md"
   },
   {
     "title": "My Research Journey in Multimodal AI",
@@ -32,17 +30,29 @@
       "Multimodal AI",
       "Personal"
     ],
-    "category": "General",
-    "filename": "research-journey.html"
+    "category": "Research",
+    "filename": "research-journey.md"
   },
   {
-    "title": "hello-world",
-    "description": "",
-    "date": "2025-10-04",
+    "title": "ICCV 2025 Hawaii — A Journey Through Computer Vision",
+    "description": "My experience at ICCV 2025 in Hawaii, exploring the latest advances in computer vision and multimodal learning.",
+    "date": "October 15, 2025",
+    "tags": [
+      "Conference",
+      "Travel",
+      "Multimodal Learning"
+    ],
+    "category": "Conference",
+    "filename": "iccv-2025-hawaii.md"
+  },
+  {
+    "title": "Hello, world",
+    "description": "This is a starter post. Replace with your content.",
+    "date": "October 4, 2025",
     "tags": [
       "intro"
     ],
     "category": "General",
-    "filename": "hello-world.html"
+    "filename": "hello-world.md"
   }
 ]

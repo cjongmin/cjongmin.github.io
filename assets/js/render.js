@@ -260,35 +260,187 @@
       var galleryItem = document.createElement('div');
       galleryItem.className = 'gallery-item';
       
-      var img = document.createElement('img');
-      img.src = basePath + '/' + item.src;
-      img.alt = item.alt;
-      img.loading = 'lazy';
-      
-      var overlay = document.createElement('div');
-      overlay.className = 'gallery-overlay';
-      
-      var title = document.createElement('h4');
-      title.className = 'gallery-title';
-      title.textContent = item.title;
-      
-      var description = document.createElement('p');
-      description.className = 'gallery-description';
-      description.textContent = item.description;
-      
-      overlay.appendChild(title);
-      overlay.appendChild(description);
-      
-      galleryItem.appendChild(img);
-      galleryItem.appendChild(overlay);
-      
-      // Add click handler for lightbox effect
-      galleryItem.addEventListener('click', function() {
-        showLightbox(item, index, gallery);
-      });
+      if (item.type === 'folder') {
+        // Handle folder type
+        var folderIcon = document.createElement('div');
+        folderIcon.className = 'gallery-folder-icon';
+        folderIcon.innerHTML = '📁';
+        
+        var overlay = document.createElement('div');
+        overlay.className = 'gallery-overlay';
+        
+        var title = document.createElement('h4');
+        title.className = 'gallery-title';
+        title.textContent = item.title || 'Folder';
+        
+        var itemCount = document.createElement('p');
+        itemCount.className = 'gallery-item-count';
+        itemCount.textContent = (item.items || []).length + ' items';
+        
+        overlay.appendChild(title);
+        overlay.appendChild(itemCount);
+        
+        galleryItem.appendChild(folderIcon);
+        galleryItem.appendChild(overlay);
+        
+        // Add click handler for folder
+        galleryItem.addEventListener('click', function() {
+          showFolderLightbox(item, index);
+        });
+      } else {
+        // Handle single image/video
+        var img = document.createElement('img');
+        img.src = basePath + '/' + item.src;
+        img.alt = item.alt;
+        img.loading = 'lazy';
+        
+        var overlay = document.createElement('div');
+        overlay.className = 'gallery-overlay';
+        
+        var title = document.createElement('h4');
+        title.className = 'gallery-title';
+        title.textContent = item.title;
+        
+        var description = document.createElement('p');
+        description.className = 'gallery-description';
+        description.textContent = item.description;
+        
+        overlay.appendChild(title);
+        overlay.appendChild(description);
+        
+        galleryItem.appendChild(img);
+        galleryItem.appendChild(overlay);
+        
+        // Add click handler for lightbox effect
+        galleryItem.addEventListener('click', function() {
+          showLightbox(item, index, gallery);
+        });
+      }
       
       container.appendChild(galleryItem);
     });
+  }
+  
+  function showFolderLightbox(folder, folderIndex) {
+    var lightbox = document.createElement('div');
+    lightbox.className = 'lightbox';
+    lightbox.innerHTML = '';
+    
+    var lightboxContent = document.createElement('div');
+    lightboxContent.className = 'lightbox-content folder-lightbox';
+    
+    var header = document.createElement('div');
+    header.className = 'lightbox-header';
+    
+    var title = document.createElement('h3');
+    title.textContent = folder.title || 'Folder';
+    header.appendChild(title);
+    
+    var closeBtn = document.createElement('button');
+    closeBtn.className = 'lightbox-close';
+    closeBtn.innerHTML = '×';
+    closeBtn.addEventListener('click', function() {
+      document.body.removeChild(lightbox);
+    });
+    header.appendChild(closeBtn);
+    
+    lightboxContent.appendChild(header);
+    
+    var slider = document.createElement('div');
+    slider.className = 'lightbox-slider';
+    
+    var prevBtn = document.createElement('button');
+    prevBtn.className = 'lightbox-nav lightbox-prev';
+    prevBtn.innerHTML = '‹';
+    prevBtn.addEventListener('click', function() {
+      navigateFolder(-1);
+    });
+    
+    var nextBtn = document.createElement('button');
+    nextBtn.className = 'lightbox-nav lightbox-next';
+    nextBtn.innerHTML = '›';
+    nextBtn.addEventListener('click', function() {
+      navigateFolder(1);
+    });
+    
+    var mediaContainer = document.createElement('div');
+    mediaContainer.className = 'lightbox-media-container';
+    
+    var currentIndex = 0;
+    var items = folder.items || [];
+    
+    function showCurrentItem() {
+      mediaContainer.innerHTML = '';
+      
+      if (items.length === 0) {
+        mediaContainer.innerHTML = '<p>No items in this folder.</p>';
+        return;
+      }
+      
+      var currentItem = items[currentIndex];
+      var media;
+      
+      if (currentItem.type === 'video') {
+        media = document.createElement('video');
+        media.src = basePath + '/' + currentItem.src;
+        media.controls = true;
+        media.autoplay = false;
+      } else {
+        media = document.createElement('img');
+        media.src = basePath + '/' + currentItem.src;
+        media.alt = currentItem.alt || '';
+      }
+      
+      media.className = 'lightbox-media';
+      mediaContainer.appendChild(media);
+      
+      // Update navigation buttons
+      prevBtn.style.display = items.length > 1 ? 'block' : 'none';
+      nextBtn.style.display = items.length > 1 ? 'block' : 'none';
+      
+      // Update counter
+      var counter = document.querySelector('.lightbox-counter');
+      if (counter) {
+        counter.textContent = (currentIndex + 1) + ' / ' + items.length;
+      }
+    }
+    
+    function navigateFolder(direction) {
+      currentIndex += direction;
+      if (currentIndex < 0) currentIndex = items.length - 1;
+      if (currentIndex >= items.length) currentIndex = 0;
+      showCurrentItem();
+    }
+    
+    var counter = document.createElement('div');
+    counter.className = 'lightbox-counter';
+    
+    slider.appendChild(prevBtn);
+    slider.appendChild(mediaContainer);
+    slider.appendChild(nextBtn);
+    slider.appendChild(counter);
+    
+    lightboxContent.appendChild(slider);
+    lightbox.appendChild(lightboxContent);
+    
+    // Add keyboard navigation
+    lightbox.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowLeft') navigateFolder(-1);
+      if (e.key === 'ArrowRight') navigateFolder(1);
+      if (e.key === 'Escape') document.body.removeChild(lightbox);
+    });
+    
+    // Close on background click
+    lightbox.addEventListener('click', function(e) {
+      if (e.target === lightbox) {
+        document.body.removeChild(lightbox);
+      }
+    });
+    
+    document.body.appendChild(lightbox);
+    lightbox.focus();
+    
+    showCurrentItem();
   }
   
   function showLightbox(item, currentIndex, allItems) {
@@ -324,7 +476,15 @@
     var listRef = info.publications || [];
     var ol = document.getElementById('pub-list');
     if (!ol) return;
+    
+    // Clear all existing content completely
     ol.innerHTML = '';
+    
+    // Also clear any existing year headers that might be outside the ol
+    var existingHeaders = document.querySelectorAll('.year-header');
+    existingHeaders.forEach(function(header) {
+      header.remove();
+    });
 
     function renderItems(items) {
       // Group publications by year
@@ -447,7 +607,12 @@
     });
   }
 
+  var isLoaded = false; // Prevent duplicate loading
+  
   function onLoad() {
+    if (isLoaded) return; // Prevent duplicate calls
+    isLoaded = true;
+    
     loadInfo().then(function (info) {
       setProfileCommon(info);
       renderPhoto(info);
@@ -539,8 +704,8 @@
     var sections = [
       { text: 'Introduction', href: '#hero' },
       { text: 'Recent News', href: '#news' },
-      { text: 'Research Interests', href: '#interests' },
-      { text: 'Statistics', href: '#stats' }
+      { text: 'Statistics', href: '#statistics' },
+      { text: 'Gallery', href: '#gallery' }
     ];
     
     sections.forEach(function(section) {
@@ -554,7 +719,7 @@
         e.preventDefault();
         var target = document.querySelector(section.href);
         if (target) {
-          var headerHeight = 50; // Account for fixed header
+          var headerHeight = 100; // Increased offset for better visibility
           var targetPosition = target.offsetTop - headerHeight;
           window.scrollTo({
             top: targetPosition,
@@ -582,7 +747,7 @@
         e.preventDefault();
         var target = document.querySelector('#year-' + header.textContent);
         if (target) {
-          var headerHeight = 50; // Account for fixed header
+          var headerHeight = 100; // Increased offset for better visibility
           var targetPosition = target.offsetTop - headerHeight;
           window.scrollTo({
             top: targetPosition,
@@ -611,7 +776,7 @@
         e.preventDefault();
         var target = document.querySelector('#award-' + index);
         if (target) {
-          var headerHeight = 50; // Account for fixed header
+          var headerHeight = 100; // Increased offset for better visibility
           var targetPosition = target.offsetTop - headerHeight;
           window.scrollTo({
             top: targetPosition,
@@ -639,7 +804,7 @@
         e.preventDefault();
         var target = document.querySelector('#post-' + index);
         if (target) {
-          var headerHeight = 50; // Account for fixed header
+          var headerHeight = 100; // Increased offset for better visibility
           var targetPosition = target.offsetTop - headerHeight;
           window.scrollTo({
             top: targetPosition,
@@ -671,7 +836,7 @@
         e.preventDefault();
         var target = document.querySelector('#' + heading.id);
         if (target) {
-          var headerHeight = 50; // Account for fixed header
+          var headerHeight = 100; // Increased offset for better visibility
           var targetPosition = target.offsetTop - headerHeight;
           window.scrollTo({
             top: targetPosition,
@@ -685,13 +850,15 @@
     });
   }
   
-  // Make onLoad globally available
-  window.onLoad = onLoad;
-  
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', onLoad);
-  } else {
-    onLoad();
+  // Make onLoad globally available, but only for non-blog pages
+  if (!window.location.pathname.includes('blog.html')) {
+    window.onLoad = onLoad;
+    
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', onLoad);
+    } else {
+      onLoad();
+    }
   }
 })();
 

@@ -1,3 +1,25 @@
+.intro-mini-wrap { display: grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap: 12px; margin-top: 8px; }
+.mini-card { border:1px solid var(--border); background: var(--surface); border-radius:8px; padding:10px 12px; }
+.mini-title { font-weight:700; font-size: 14px; color: var(--text); margin-bottom:6px; }
+.mini-list { margin:0; padding-left:16px; color: var(--text); font-size: 14px; }
+.about-table { width: 100%; border-collapse: collapse; background: var(--surface); border:1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.about-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text); }
+.about-table tr:last-child td { border-bottom: 0; }
+/* Timeline look for Education/Experience — clean, academic */
+.timeline { position: relative; margin-left: 0; padding-left: 40px; }
+.timeline:before { content: ""; position: absolute; left: 20px; top: 4px; bottom: 4px; width: 2px; background: var(--border); }
+.tl-item { padding-left: 12px; }
+.tl-item:before { left: 14px; }
+.tl-item { position: relative; margin: 18px 0 22px; padding-left: 0; }
+.tl-item:before { content: ""; position: absolute; left: 12px; top: 6px; width: 8px; height: 8px; background: var(--bg); border: 2px solid var(--brand); border-radius: 50%; box-shadow: 0 0 0 2px var(--bg); }
+.tl-title { font-weight: 600; color: var(--text); font-size: 14px; line-height: 1.4; margin: 0 0 6px; }
+.tl-title a { color: var(--text); text-decoration: none; }
+.tl-title a:hover { color: var(--brand); }
+.tl-period { display: inline-block; margin: 6px 0 0; background: var(--surface); color: var(--text); border: 1px solid var(--border); padding: 4px 10px; border-radius: 6px; font-weight: 600; font-size: 12px; font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+.tl-sub { color: var(--muted); font-size: 14px; margin-top: 8px; }
+
+/* subtle group spacing */
+.timeline + .timeline { margin-top: 12px; }
 .author-highlight { color: var(--text); font-weight: 800; }
 .author-normal { color: var(--muted); font-weight: 400; }
 .author-mark { color: var(--muted); font-weight: 400; }

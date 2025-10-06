@@ -121,38 +121,38 @@
   }
 
   function renderIntroButtons(info) {
+    // Hide old buttons container if exists
     var container = document.getElementById('intro-buttons');
-    if (!container) return;
-    
+    if (container) container.style.display = 'none';
+
     var p = info.profile || {};
     var interests = p.interests || [];
     var stats = info.stats || {};
     var languages = stats.languages || [];
-    
-    container.innerHTML = '';
-    
-    // Research Interests button
-    if (interests.length > 0) {
-      var interestsBtn = document.createElement('div');
-      interestsBtn.className = 'intro-button';
-      interestsBtn.innerHTML = '<span class="intro-icon">🔬</span><span class="intro-label">Research Interests</span>';
-      interestsBtn.addEventListener('click', function() {
-        // Show interests in a modal or expand
-        alert('Research Interests:\n• ' + interests.join('\n• '));
-      });
-      container.appendChild(interestsBtn);
-    }
-    
-    // Technical Skills button
-    if (languages.length > 0) {
-      var skillsBtn = document.createElement('div');
-      skillsBtn.className = 'intro-button';
-      skillsBtn.innerHTML = '<span class="intro-icon">💻</span><span class="intro-label">Technical Skills</span>';
-      skillsBtn.addEventListener('click', function() {
-        // Show skills in a modal or expand
-        alert('Technical Skills:\n• ' + languages.join('\n• '));
-      });
-      container.appendChild(skillsBtn);
+
+    // Inline mini tables inside Introduction
+    var mini = document.getElementById('intro-mini');
+    if (mini) {
+      mini.innerHTML = '';
+      var wrap = document.createElement('div');
+      wrap.className = 'intro-mini-wrap';
+      // Interests
+      if (interests.length) {
+        var boxI = document.createElement('div'); boxI.className = 'mini-card';
+        boxI.innerHTML = '<div class="mini-title">Research Interests</div>';
+        var ulI = document.createElement('ul'); ulI.className = 'mini-list';
+        interests.forEach(function(it){ var li=document.createElement('li'); li.textContent = it; ulI.appendChild(li); });
+        boxI.appendChild(ulI); wrap.appendChild(boxI);
+      }
+      // Skills
+      if (languages.length) {
+        var boxS = document.createElement('div'); boxS.className = 'mini-card';
+        boxS.innerHTML = '<div class="mini-title">Technical Skills</div>';
+        var ulS = document.createElement('ul'); ulS.className = 'mini-list';
+        ulS.innerHTML = '<li>Languages: ' + languages.join(', ') + '</li>';
+        boxS.appendChild(ulS); wrap.appendChild(boxS);
+      }
+      mini.appendChild(wrap);
     }
   }
   
@@ -227,6 +227,35 @@
       var val = document.createElement('span'); val.className = 'profile-stat-value'; val.textContent = String(d.value);
       row.appendChild(label); row.appendChild(val);
       wrap.appendChild(row);
+    });
+  }
+
+  function renderEducation(info) {
+    var list = (info.education || []);
+    var root = document.getElementById('education-list');
+    if (!root) return;
+    root.innerHTML = '';
+    list.forEach(function (e) {
+      var item = document.createElement('div'); item.className = 'tl-item';
+      var title = document.createElement('div'); title.className = 'tl-title'; title.textContent = e.degree || '';
+      var period = document.createElement('div'); period.className = 'tl-period'; period.textContent = e.period || '';
+      var sub = document.createElement('div'); sub.className = 'tl-sub'; sub.textContent = e.advisor || '';
+      item.appendChild(title); item.appendChild(period); if (e.advisor) item.appendChild(sub);
+      root.appendChild(item);
+    });
+  }
+
+  function renderExperience(info) {
+    var list = (info.experience || []);
+    var root = document.getElementById('experience-list');
+    if (!root) return;
+    root.innerHTML = '';
+    list.forEach(function (e) {
+      var item = document.createElement('div'); item.className = 'tl-item';
+      var title = document.createElement('div'); title.className = 'tl-title'; title.textContent = e.detail || '';
+      var period = document.createElement('div'); period.className = 'tl-period'; period.textContent = e.period || '';
+      item.appendChild(title); item.appendChild(period);
+      root.appendChild(item);
     });
   }
 
@@ -692,35 +721,36 @@
     });
 
     function renderItems(items) {
-      // Group publications by year
+      // Helpers
+      function normYear(p){
+        if (p.year) return String(p.year);
+        if (p.date){ var d=new Date(p.date); if(!isNaN(d)) return String(d.getFullYear()); }
+        return extractYear(p.venue || '');
+      }
+      function normTs(p){
+        if (p.date){ var t=Date.parse(p.date); if(!isNaN(t)) return t; }
+        var y = parseInt(normYear(p),10);
+        return isNaN(y) ? 0 : Date.parse(y+'-01-01');
+      }
+      var mapped = items.map(function(p){ return Object.assign({}, p, { _year: normYear(p), _ts: normTs(p) }); });
+      // Group by year
       var groupedByYear = {};
-      items.forEach(function (p) {
-        var year = extractYear(p.venue || '');
-        if (!groupedByYear[year]) {
-          groupedByYear[year] = [];
-        }
-        groupedByYear[year].push(p);
-      });
-      
-      // Sort years in descending order (newest first)
-      var years = Object.keys(groupedByYear).sort(function(a, b) { return parseInt(b) - parseInt(a); });
-      
-      years.forEach(function(year) {
-        // Create year header
+      mapped.forEach(function(p){ (groupedByYear[p._year] = groupedByYear[p._year] || []).push(p); });
+      // Sort years desc
+      var years = Object.keys(groupedByYear).sort(function(a,b){ return parseInt(b)-parseInt(a); });
+      years.forEach(function(year){
         var yearHeader = document.createElement('div');
         yearHeader.className = 'year-header';
         yearHeader.id = 'year-' + year;
         yearHeader.innerHTML = '<h2 class="year-title">' + year + '</h2>';
         ol.appendChild(yearHeader);
-        
-        // Create publications list for this year
+
         var yearList = document.createElement('ol');
         yearList.className = 'pub-list-year';
-        
-        groupedByYear[year].forEach(function (p) {
-        var li = document.createElement('li');
+        groupedByYear[year].sort(function(a,b){ return (b._ts||0) - (a._ts||0); });
+        groupedByYear[year].forEach(function(p){
+          var li = document.createElement('li');
           var t = document.createElement('span'); t.className = 'pub-title'; 
-          
           // Bold only "Jongmin Choi"; allow first-author marker using ^*
           var titleText = p.title || '';
           var authorsText = p.authors || '';
@@ -731,12 +761,10 @@
             var m = authorRaw.match(/^(.*?)([¹²³⁴⁵⁶⁷⁸⁹\*]?)$/);
             var base = (m && m[1] ? m[1] : authorRaw).trim();
             var mark = (m && m[2] ? m[2] : '');
-            // Normalize for comparison: if name ends with '*', compare without it
             var baseCompare = base.replace(/\*+$/,'').trim();
             var markOut = '';
             if (mark === '*') { markOut = '*'; } else if (mark) { markOut = '<sup class="author-mark">' + mark + '</sup>'; }
             if (baseCompare === 'Jongmin Choi') {
-              // If the mark is a plain asterisk, include it inside the highlighted span
               if (mark === '*') {
                 return '<span class="author-highlight">' + baseCompare + markOut + '</span>';
               }
@@ -746,23 +774,19 @@
             }
           }).join(', ');
           t.innerHTML = titleText + '<br><span class="pub-authors">' + formattedAuthors + '</span>';
-          
-        var v = document.createElement('span'); v.className = 'pub-venue'; v.textContent = p.venue || '';
-        var links = document.createElement('span'); links.className = 'pub-links';
 
-        function addBtn(label, href, variant, click) {
-          var el = document.createElement('a'); el.className = 'chip ' + (variant || ''); el.textContent = label;
-          if (href) { el.href = href; el.target = '_blank'; el.rel = 'noopener'; }
-          if (click) { el.href = '#'; el.addEventListener('click', function (ev) { ev.preventDefault(); click(); }); }
-          links.appendChild(el);
-        }
-
-        addBtn('PDF', p.pdf, 'chip-primary');
-        addBtn('BibTeX', null, 'chip-secondary', function () { openBibtexModal(p.title || 'BibTeX', p.bibtex || ''); });
+          var v = document.createElement('span'); v.className = 'pub-venue'; v.textContent = p.venue || '';
+          var links = document.createElement('span'); links.className = 'pub-links';
+          function addBtn(label, href, variant, click) {
+            var el = document.createElement('a'); el.className = 'chip ' + (variant || ''); el.textContent = label;
+            if (href) { el.href = href; el.target = '_blank'; el.rel = 'noopener'; }
+            if (click) { el.href = '#'; el.addEventListener('click', function (ev) { ev.preventDefault(); click(); }); }
+            links.appendChild(el);
+          }
+          addBtn('PDF', p.pdf, 'chip-primary');
+          addBtn('BibTeX', null, 'chip-secondary', function () { openBibtexModal(p.title || 'BibTeX', p.bibtex || ''); });
           addBtn('Scholar', p.scholar, 'chip-scholar');
-        addBtn('Code', p.code, 'chip-plain');
-          
-          // Add citation count
+          addBtn('Code', p.code, 'chip-plain');
           if (p.citations && p.citations > 0) {
             var citationEl = document.createElement('span');
             citationEl.className = 'pub-citations';
@@ -772,7 +796,6 @@
           li.appendChild(t); li.appendChild(v); li.appendChild(links);
           yearList.appendChild(li);
         });
-        
         ol.appendChild(yearList);
       });
     }
@@ -837,6 +860,8 @@
       renderPublications(info);
       renderAwards(info);
       renderStatistics(info);
+      renderEducation(info);
+      renderExperience(info);
       
       // Update sidebar after publications are rendered
       setTimeout(function() {
@@ -900,29 +925,42 @@
       toggle.innerHTML = '✕';
     }
 
+    // If About page, hide back button (not applicable)
+    if (currentPage === 'index.html' || currentPage === '') {
+      backBtn.style.display = 'none';
+    }
+
     function attachScrollSpy(navListEl) {
-      var pageAll = Array.prototype.slice.call(document.querySelectorAll('h1, h2, h3, h4, h5, h6'));
-      var pageHeadings = pageAll.filter(function(h, idx){ return !(h.tagName === 'H1' && idx === 0); });
-      if (pageHeadings.length === 0) return;
       var links = Array.prototype.slice.call(navListEl.querySelectorAll('a'));
-      function stripNumbering(text) { return String(text).replace(/^\d+(?:\.\d+)*\s+/, '').trim(); }
-      function getCurrentLabel() {
-        var headerHeight = 100;
-        var scrollYWithOffset = window.scrollY + headerHeight + 1;
-        var cur = null;
-        pageHeadings.forEach(function(h){ if (h.offsetTop <= scrollYWithOffset) cur = h; });
-        return cur ? stripNumbering(cur.textContent) : null;
+      if (!links.length) return;
+      function calcItems() {
+        var arr = links.map(function(a){
+          var id = (a.getAttribute('href') || '').replace('#','');
+          var el = document.getElementById(id);
+          if (!el) return null;
+          var top = el.getBoundingClientRect().top + window.scrollY;
+          return { a: a, id: id, el: el, top: top };
+        }).filter(Boolean).sort(function(x,y){ return x.top - y.top; });
+        return arr;
       }
-      function update() {
-        var current = getCurrentLabel();
-        links.forEach(function(a){
-          var label = stripNumbering(a.textContent);
-          if (current && label === current) a.classList.add('active'); else a.classList.remove('active');
-        });
+      var items = calcItems();
+      window.addEventListener('resize', function(){ items = calcItems(); });
+      function update(){
+        var y = window.scrollY + getHeaderHeight();
+        var eps = getSpyEpsilon();
+        var active = null;
+        for (var i=0;i<items.length;i++) {
+          if (items[i].top - y > eps) { break; }
+          active = items[i];
+        }
+        links.forEach(function(l){ l.classList.remove('active'); });
+        if (active) active.a.classList.add('active');
       }
       window.addEventListener('scroll', update, { passive: true });
       update();
     }
+    // Expose globally so other creators can safely call it
+    window.attachScrollSpy = attachScrollSpy;
 
     function renderBlogListInPanel() {
       navList.innerHTML = '';
@@ -1030,7 +1068,7 @@
               var pageHeadings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
               var found=null; Array.prototype.forEach.call(pageHeadings, function(ph, k){ if (ph.textContent.trim() === headingText) { found = ph; } });
               if (found) {
-                var headerHeight = 100;
+                var headerHeight = getHeaderHeight();
                 var pos = found.offsetTop - headerHeight;
                 window.scrollTo({ top: pos, behavior: 'smooth' });
               }
@@ -1105,36 +1143,47 @@
   }
   
   function createAboutNavigation(navList) {
-    var sections = [
-      { text: 'Introduction', href: '#hero' },
-      { text: 'Recent News', href: '#news' },
-      { text: 'Statistics', href: '#statistics' },
-      { text: 'Gallery', href: '#gallery' }
-    ];
-    
-    sections.forEach(function(section) {
+    // Build from DOM order of headings (h1..h3) so order always matches page
+    var container = document.querySelector('main.container');
+    var heads = Array.prototype.slice.call(container.querySelectorAll('#hero h1, #hero h2, #hero h3, #news h2, #education, #experience, #statistics h2, #gallery h2'));
+    navList.innerHTML = '';
+    heads.forEach(function(h){
+      var text = h.textContent.trim();
+      var id = h.id || (h === document.querySelector('#hero h1') ? 'hero' : '');
+      if (!id) { id = text.toLowerCase().replace(/[^a-z0-9]+/g,'-'); h.id = id; }
       var li = document.createElement('li');
       var a = document.createElement('a');
-      a.href = section.href;
-      a.textContent = section.text;
-      
-      // Add smooth scroll with offset for fixed header
-      a.addEventListener('click', function(e) {
+      a.href = '#' + id;
+      a.textContent = text === 'Introduction' ? 'Introduction' : text;
+      // indent by heading level
+      var tag = h.tagName; var level = parseInt(tag.substring(1),10) || 2;
+      a.classList.add('nav-level-' + level);
+      a.addEventListener('click', function(e){
         e.preventDefault();
-        var target = document.querySelector(section.href);
-        if (target) {
-          var headerHeight = 100; // Increased offset for better visibility
-          var targetPosition = target.offsetTop - headerHeight;
-          window.scrollTo({
-            top: targetPosition,
-            behavior: 'smooth'
-          });
+        var target = document.getElementById(id);
+        if (target){
+          var headerHeight = getHeaderHeight();
+          var rect = target.getBoundingClientRect();
+          var y = rect.top + window.scrollY - headerHeight;
+          window.scrollTo({ top: y, behavior: 'smooth' });
         }
       });
-      
-      li.appendChild(a);
-      navList.appendChild(li);
+      li.appendChild(a); navList.appendChild(li);
     });
+    // attach scroll spy to highlight current section while scrolling
+    // Expose once to avoid ReferenceError when other paths attempt to use it
+    if (!window.attachScrollSpyTop) { window.attachScrollSpyTop = attachScrollSpy; }
+    window.attachScrollSpyTop(navList);
+  }
+
+  function getHeaderHeight(){
+    var sh = document.querySelector('.site-header');
+    var h = sh ? sh.offsetHeight : 0;
+    return h + 8; // small breathing offset
+  }
+  function getSpyEpsilon(){
+    var rootFs = parseInt(getComputedStyle(document.documentElement).fontSize, 10) || 16;
+    return Math.max(12, Math.round(rootFs)); // ~16px on default
   }
   
   function createPublicationsNavigation(navList) {
@@ -1151,7 +1200,7 @@
         e.preventDefault();
         var target = document.querySelector('#year-' + header.textContent);
         if (target) {
-          var headerHeight = 100; // Increased offset for better visibility
+          var headerHeight = getHeaderHeight(); // Increased offset for better visibility
           var targetPosition = target.offsetTop - headerHeight;
           window.scrollTo({
             top: targetPosition,
@@ -1180,7 +1229,7 @@
         e.preventDefault();
         var target = document.querySelector('#award-' + index);
         if (target) {
-          var headerHeight = 100; // Increased offset for better visibility
+          var headerHeight = getHeaderHeight(); // Increased offset for better visibility
           var targetPosition = target.offsetTop - headerHeight;
           window.scrollTo({
             top: targetPosition,
@@ -1208,7 +1257,7 @@
         e.preventDefault();
         var target = document.querySelector('#post-' + index);
         if (target) {
-          var headerHeight = 100; // Increased offset for better visibility
+          var headerHeight = getHeaderHeight(); // Increased offset for better visibility
           var targetPosition = target.offsetTop - headerHeight;
           window.scrollTo({
             top: targetPosition,
@@ -1259,7 +1308,7 @@
         e.preventDefault();
         var target = document.querySelector('#' + heading.id);
         if (target) {
-          var headerHeight = 100; // Increased offset for better visibility
+          var headerHeight = getHeaderHeight(); // Increased offset for better visibility
           var targetPosition = target.offsetTop - headerHeight;
           window.scrollTo({
             top: targetPosition,

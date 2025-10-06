@@ -39,6 +39,13 @@
     "languages": ["Python", "PyTorch", "TensorFlow", "C++"],
     "collaborations": 8
   },
+  "education": [
+    { "period": "2025.03 - Present", "degree": "M.S. in Electrical Engineering, KAIST", "advisor": "Advisor: Prof. Joon Son Chung" },
+    { "period": "2018.03 - 2025.02", "degree": "B.S. in Mathematical Sciences and Electrical Engineering (Double Major)"}
+  ],
+  "experience": [
+    { "period": "2021.07 - 2021.08", "detail": "Intern, SK Hynix" }
+  ],
   "gallery_intro": "Here is a curated collection of my photos and videos. Browse folders and open inline slideshows to explore the moments behind my research and life.",
   "gallery": [
     {

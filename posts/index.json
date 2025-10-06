@@ -2,64 +2,15 @@
   {
     "filename": "iccv-2025-hawaii.html",
     "title": "ICCV 2025 Hawaii — A Journey Through Computer Vision",
-    "description": "My experience at ICCV 2025 in Hawaii, exploring the latest advances in computer vision and multimodal learning.",
-    "date": "October 15, 2025",
+    "description": "I will post it soon!",
+    "date": "October 24, 2025",
     "tags": [
       "Conference",
       "Travel",
       "Multimodal Learning",
-      "Computer Vision",
       "AI Research"
     ],
     "category": "Conference",
-    "cover": "./assets/media/post/iccv-2025-hawaii/cover.jpg"
-  },
-  {
-    "filename": "hello-world.html",
-    "title": "Hello, world",
-    "description": "This is a starter post. Replace with your content.",
-    "date": "October 4, 2025",
-    "tags": [
-      "intro"
-    ],
-    "category": "General",
-    "cover": "./assets/media/post/hello-world/cover.jpg"
-  },
-  {
-    "filename": "getting-started.html",
-    "title": "Getting Started with Markdown Blogging",
-    "description": "A guide to writing blog posts using Markdown format for easy content creation.",
-    "date": "January 15, 2025",
-    "tags": [
-      "Tutorial",
-      "Markdown",
-      "Blogging"
-    ],
-    "category": "Tutorial",
-    "cover": "./assets/media/post/getting-started/cover.jpg"
-  },
-  {
-    "filename": "research-journey.html",
-    "title": "My Research Journey in Multimodal AI",
-    "description": "Reflecting on my journey as a master's student researching multimodal learning and computer vision.",
-    "date": "January 10, 2025",
-    "tags": [
-      "Research",
-      "Multimodal AI",
-      "Personal"
-    ],
-    "category": "Research",
-    "cover": "./assets/media/post/research-journey/cover.jpg"
-  },
-  {
-    "filename": "test-post.html",
-    "title": "Test Post",
-    "description": "Test post to verify blog functionality",
-    "date": "January 1, 2025",
-    "tags": [
-      "Test"
-    ],
-    "category": "Test",
-    "cover": "./assets/media/post/test-post/cover.jpg"
+    "cover": "./assets/media/post/iccv-2025-hawaii/blog-default.svg"
   }
 ]

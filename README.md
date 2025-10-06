@@ -32,7 +32,7 @@ Push to any repo, then Settings → Pages → Source: `Deploy from a branch`, Br
 
 ## Customize
 - Edit `assets/info.json` only — all pages render from it.
-- Put your photo at `assets/images/profile.jpg` and CV at `assets/cv/cv.pdf`.
+- Put your photo at `assets/media/profile/profile.jpeg` and CV at `assets/cv/cv.pdf`.
 - Colors/spacing: `assets/css/styles.css`.
 - Buttons, animations, theme toggle already included.
 
@@ -51,7 +51,7 @@ Publications page aggregates `bibtex` fields from `assets/info.json` into the Bi
     "email": "you@example.com",
     "affiliation": "Your Affiliation",
     "bio": "2–3 sentence intro...",
-    "photo": "assets/images/profile.jpg",
+    "photo": "assets/media/profile/profile.jpeg",
     "cv": "assets/cv/cv.pdf",
     "links": { "scholar": "", "github": "", "linkedin": "" },
     "interests": ["LLMs", "Multimodal", "…"]

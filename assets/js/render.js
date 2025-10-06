@@ -15,7 +15,7 @@
     // Brand avatar
     var brandAvatar = document.getElementById('brand-avatar');
     if (brandAvatar) {
-      var src = (p && p.photo) ? (basePath + '/' + p.photo) : (basePath + '/assets/images/profile.jpg');
+      var src = (p && p.photo) ? (basePath + '/' + p.photo) : (basePath + '/assets/media/profile/profile.jpeg');
       brandAvatar.setAttribute('src', src);
       brandAvatar.setAttribute('alt', p && p.name ? p.name : 'Profile');
       // Ensure visible after load
@@ -94,10 +94,26 @@
     if (!wrap) return;
     var ul = document.createElement('ul');
     ul.className = 'news-list';
+    // Helper: allow minimal rich markup in news text
+    function renderRichText(text) {
+      if (typeof text !== 'string') return '';
+      // Convert custom color tags: <color:red>...</color>
+      var html = text.replace(/<color:([^>]+)>([\s\S]*?)<\/color>/gi, function(_, color, inner){
+        var safeColor = String(color).trim();
+        return '<span style="color:' + safeColor + '">' + inner + '</span>';
+      });
+      // Bold/italic basic replacements
+      html = html.replace(/<b>/gi, '<strong>')
+                 .replace(/<\/b>/gi, '</strong>')
+                 .replace(/<i>/gi, '<em>')
+                 .replace(/<\/i>/gi, '</em>');
+      return html;
+    }
+
     list.forEach(function (n) {
       var li = document.createElement('li');
       var date = document.createElement('span'); date.className = 'news-date'; date.textContent = n.date || '';
-      var text = document.createElement('span'); text.className = 'news-text'; text.textContent = n.text || '';
+      var text = document.createElement('span'); text.className = 'news-text'; text.innerHTML = renderRichText(n.text || '');
       li.appendChild(date); li.appendChild(text); ul.appendChild(li);
     });
     wrap.innerHTML = '';
@@ -268,6 +284,51 @@
     container.innerHTML = chartHtml;
   }
   
+  // Media path normalization helpers for gallery/post assets
+  function isAbsoluteUrl(url) {
+    return /^https?:\/\//i.test(url);
+  }
+
+  function buildPath(path) {
+    return basePath + '/' + path.replace(/^\/+/, '');
+  }
+
+  // Normalize gallery media to assets/media/gallery, with fallback to legacy paths
+  function resolveGallerySrc(src) {
+    if (!src) return { primary: '', fallback: '' };
+    if (isAbsoluteUrl(src)) {
+      return { primary: src, fallback: '' };
+    }
+    // Already standardized
+    if (src.indexOf('assets/media/gallery/') === 0) {
+      return { primary: buildPath(src), fallback: '' };
+    }
+    var filename = src.split('/').pop();
+    // Legacy images -> assets/images/gallery/*
+    if (src.indexOf('assets/images/gallery/') === 0) {
+      return { primary: buildPath('assets/media/gallery/' + filename), fallback: buildPath(src) };
+    }
+    // Legacy videos -> assets/videos/* (move into media/gallery)
+    if (src.indexOf('assets/videos/') === 0) {
+      return { primary: buildPath('assets/media/gallery/' + filename), fallback: buildPath(src) };
+    }
+    // Unknown relative path: try as-is
+    return { primary: buildPath(src), fallback: '' };
+  }
+
+  function setMediaSrcWithFallback(el, primary, fallback) {
+    if (!el) return;
+    el.src = primary;
+    if (fallback) {
+      el.onerror = function() {
+        // Switch to fallback only once
+        if (el.src !== fallback) {
+          el.src = fallback;
+        }
+      };
+    }
+  }
+
   function renderGallery(info) {
     var container = document.getElementById('gallery-container');
     if (!container) return;
@@ -278,72 +339,192 @@
       return;
     }
     
+    // Intro text is now fully managed from info.json (gallery_intro)
     container.innerHTML = '';
+    if (typeof info.gallery_intro === 'string' && info.gallery_intro.trim().length > 0) {
+      var intro = document.createElement('div');
+      intro.className = 'gallery-intro';
+      intro.style.cssText = 'margin: 8px 0 16px;';
+      intro.textContent = info.gallery_intro;
+      container.appendChild(intro);
+    }
     
     gallery.forEach(function(item, index) {
-      var galleryItem = document.createElement('div');
-      galleryItem.className = 'gallery-item';
+      // Row wrapper: single-column list, each row has optional media and text columns
+      var row = document.createElement('div');
+      row.className = 'gallery-row';
+      row.style.cssText = 'display:flex; flex-wrap:nowrap; align-items:flex-start; gap:16px; margin:12px 0;';
+      // Per-item side preference from info.json: layout/align/side -> 'left' | 'right'
+      var sidePref = String((item.layout || item.align || item.side || item.position || item.order || '')).toLowerCase();
       
+      var mediaCol = document.createElement('div');
+      mediaCol.className = 'media-col';
+      mediaCol.style.cssText = 'flex:0 0 50%; min-width:260px; position:relative;';
+      var textCol = document.createElement('div');
+      textCol.className = 'text-col';
+      textCol.style.cssText = 'flex:0 0 50%; min-width:260px;';
+
       if (item.type === 'folder') {
-        // Handle folder type
-        var folderIcon = document.createElement('div');
-        folderIcon.className = 'gallery-folder-icon';
-        folderIcon.innerHTML = '📁';
-        
-        var overlay = document.createElement('div');
-        overlay.className = 'gallery-overlay';
-        
-        var title = document.createElement('h4');
-        title.className = 'gallery-title';
+        // Folder card with representative cover (first item)
+        var items = item.items || [];
+        var coverWrap = document.createElement('div');
+        coverWrap.className = 'gallery-frame';
+        coverWrap.style.cssText = 'width:100%; display:flex; align-items:center; justify-content:center;';
+        if (items.length > 0) {
+          var first = items[0];
+          var resolvedFirst = resolveGallerySrc(first.src);
+          if (first.type === 'video') {
+            var v = document.createElement('video');
+            v.muted = true; v.autoplay = true; v.loop = true; v.playsInline = true;
+            v.style.cssText = 'max-width:100%; border-radius:8px;';
+            setMediaSrcWithFallback(v, resolvedFirst.primary, resolvedFirst.fallback);
+            coverWrap.appendChild(v);
+          } else {
+            var im = document.createElement('img');
+            im.style.cssText = 'max-width:100%; border-radius:8px;';
+            setMediaSrcWithFallback(im, resolvedFirst.primary, resolvedFirst.fallback);
+            im.alt = first.alt || '';
+            coverWrap.appendChild(im);
+          }
+          // folder item count badge {+XX}
+          var restCount = Math.max(items.length - 1, 0);
+          if (restCount > 0) {
+            var badge = document.createElement('div');
+            badge.className = 'folder-badge';
+            badge.textContent = '{+' + restCount + '}';
+            mediaCol.appendChild(badge);
+          }
+        } else {
+          var fallbackIcon = document.createElement('div');
+          fallbackIcon.className = 'gallery-folder-icon';
+          fallbackIcon.innerHTML = '📁';
+          coverWrap.appendChild(fallbackIcon);
+        }
+
+        var labelWrap = document.createElement('div');
+        labelWrap.style.cssText = 'margin-top: 0;';
+        var title = document.createElement('div');
+        title.className = 'gallery-title-visible';
         title.textContent = item.title || 'Folder';
-        
-        var itemCount = document.createElement('p');
-        itemCount.className = 'gallery-item-count';
-        itemCount.textContent = (item.items || []).length + ' items';
-        
-        overlay.appendChild(title);
-        overlay.appendChild(itemCount);
-        
-        galleryItem.appendChild(folderIcon);
-        galleryItem.appendChild(overlay);
-        
-        // Add click handler for folder
-        galleryItem.addEventListener('click', function() {
-          showFolderLightbox(item, index);
-        });
+        title.style.cssText = 'font-weight:800; color: var(--text);';
+        var metaLine = document.createElement('div');
+        metaLine.className = 'gallery-item-count-meta';
+        metaLine.style.cssText = 'margin-top: 2px;';
+        metaLine.textContent = (items.length) + ' items';
+        var desc = document.createElement('div');
+        if (item.description) { desc.className = 'gallery-item-desc'; desc.innerHTML = String(item.description).replace(/\n/g, '<br>'); }
+        labelWrap.appendChild(title);
+        labelWrap.appendChild(metaLine);
+        if (item.description) labelWrap.appendChild(desc);
+
+        mediaCol.appendChild(coverWrap);
+
+        var hasDesc = typeof item.description === 'string' && item.description.trim().length > 0;
+        var twoCol = hasDesc && (sidePref === 'left' || sidePref === 'right');
+        if (twoCol) {
+          // Prose-like layout: image floated to the side, text flows around then spans full width
+          row.style.display = 'block';
+          var wrap = document.createElement('div');
+          wrap.className = 'gallery-wrap';
+          var mediaBox = document.createElement('div');
+          mediaBox.className = (sidePref === 'left') ? 'float-left' : 'float-right';
+          mediaBox.style.position = 'relative';
+          mediaBox.appendChild(coverWrap);
+          // add badge on media
+          var restCount = Math.max(items.length - 1, 0);
+          if (restCount > 0) {
+            var badge = document.createElement('div');
+            badge.className = 'folder-badge';
+            badge.textContent = '{+' + restCount + '}';
+            mediaBox.appendChild(badge);
+          }
+          wrap.appendChild(mediaBox);
+          wrap.appendChild(labelWrap);
+          // click on media opens lightbox
+          mediaBox.style.cursor = 'pointer';
+          mediaBox.addEventListener('click', function(){ showFolderLightbox(item, index); });
+          row.appendChild(wrap);
+        } else {
+          // Single column full-width media with label below
+          mediaCol.style.flex = '1 1 100%';
+          row.appendChild(mediaCol);
+          if (labelWrap.children.length) {
+            var below = document.createElement('div');
+            below.style.cssText = 'margin-top:10px;';
+            below.appendChild(title.cloneNode(true));
+            below.appendChild(metaLine.cloneNode(true));
+            if (item.description) {
+              var d2 = document.createElement('div');
+              d2.className = 'gallery-item-desc';
+              d2.innerHTML = String(item.description).replace(/\n/g,'<br>');
+              below.appendChild(d2);
+            }
+            row.appendChild(below);
+          }
+        }
+
+        // Click to open popup lightbox (bind on media only)
+        mediaCol.style.cursor = 'pointer';
+        mediaCol.addEventListener('click', function() { showFolderLightbox(item, index); });
       } else {
         // Handle single image/video
         var img = document.createElement('img');
-        img.src = basePath + '/' + item.src;
+        var resolved = resolveGallerySrc(item.src);
+        setMediaSrcWithFallback(img, resolved.primary, resolved.fallback);
         img.alt = item.alt;
         img.loading = 'lazy';
-        
-        var overlay = document.createElement('div');
-        overlay.className = 'gallery-overlay';
-        
-        var title = document.createElement('h4');
-        title.className = 'gallery-title';
-        title.textContent = item.title;
-        
-        var description = document.createElement('p');
-        description.className = 'gallery-description';
-        description.textContent = item.description;
-        
-        overlay.appendChild(title);
-        overlay.appendChild(description);
-        
-        galleryItem.appendChild(img);
-        galleryItem.appendChild(overlay);
-        
-        // Add click handler for lightbox effect
-        galleryItem.addEventListener('click', function() {
-          showLightbox(item, index, gallery);
-        });
+        img.style.cssText = 'max-width:100%; border-radius:8px;';
+
+        var label = document.createElement('div');
+        var displayName = item.title || (String(item.src).split('/').pop());
+        var titleEl = document.createElement('div');
+        titleEl.className = 'gallery-item-title';
+        titleEl.textContent = displayName;
+        label.appendChild(titleEl);
+        if (item.description) {
+          var descEl = document.createElement('div');
+          descEl.className = 'gallery-item-desc';
+          descEl.innerHTML = String(item.description).replace(/\n/g,'<br>');
+          label.appendChild(descEl);
+        }
+
+        mediaCol.appendChild(img);
+
+        var hasDescFile = typeof item.description === 'string' && item.description.trim().length > 0;
+        var twoColFile = hasDescFile && (sidePref === 'left' || sidePref === 'right');
+        if (twoColFile) {
+          // Prose-like layout for single media item
+          row.style.display = 'block';
+          var wrap2 = document.createElement('div'); wrap2.className = 'gallery-wrap';
+          var mediaBox2 = document.createElement('div'); mediaBox2.className = (sidePref === 'left') ? 'float-left' : 'float-right';
+          mediaBox2.style.position = 'relative'; mediaBox2.appendChild(img);
+          wrap2.appendChild(mediaBox2);
+          wrap2.appendChild(label);
+          // Click opens lightbox
+          mediaBox2.style.cursor = 'pointer';
+          mediaBox2.addEventListener('click', function(){ showLightbox(item, index, gallery); });
+          row.appendChild(wrap2);
+        } else {
+          mediaCol.style.flex = '1 1 100%';
+          row.appendChild(mediaCol);
+          var belowText = document.createElement('div');
+          belowText.style.cssText = 'margin-top:8px;';
+          belowText.appendChild(label);
+          row.appendChild(belowText);
+        }
+
+        // For single-column case above, click handler on mediaCol already attached separately
       }
       
-      container.appendChild(galleryItem);
+      container.appendChild(row);
+      // Short separator between rows
+      var sep = document.createElement('div');
+      sep.style.cssText = 'margin:6px auto; width:80px; height:1px; background:var(--border); border-radius:1px;';
+      container.appendChild(sep);
     });
   }
+
+  // (Inline slider removed; using popup lightbox for folders)
   
   function showFolderLightbox(folder, folderIndex) {
     var lightbox = document.createElement('div');
@@ -403,16 +584,16 @@
       
       var currentItem = items[currentIndex];
       var media;
-      
+      var resolved = resolveGallerySrc(currentItem.src);
       if (currentItem.type === 'video') {
         media = document.createElement('video');
-        media.src = basePath + '/' + currentItem.src;
         media.controls = true;
         media.autoplay = false;
+        setMediaSrcWithFallback(media, resolved.primary, resolved.fallback);
       } else {
         media = document.createElement('img');
-        media.src = basePath + '/' + currentItem.src;
         media.alt = currentItem.alt || '';
+        setMediaSrcWithFallback(media, resolved.primary, resolved.fallback);
       }
       
       media.className = 'lightbox-media';
@@ -537,39 +718,49 @@
         yearList.className = 'pub-list-year';
         
         groupedByYear[year].forEach(function (p) {
-          var li = document.createElement('li');
+        var li = document.createElement('li');
           var t = document.createElement('span'); t.className = 'pub-title'; 
           
-          // Bold the author's name in the title
+          // Bold only "Jongmin Choi"; allow first-author marker using ^*
           var titleText = p.title || '';
           var authorsText = p.authors || '';
-          if (authorsText.includes('Jongmin Choi')) {
-            // Split authors by comma and bold only Jongmin Choi
-            var authors = authorsText.split(', ');
-            var formattedAuthors = authors.map(function(author) {
-              return author.trim() === 'Jongmin Choi' ? 
-                '<strong style="color: #000000;">Jongmin Choi</strong>' : 
-                '<span style="color: #666666; font-weight: normal;">' + author.trim() + '</span>';
-            }).join(', ');
-            t.innerHTML = titleText + '<br><span class="pub-authors">' + formattedAuthors + '</span>';
-          } else {
-            t.textContent = titleText;
-          }
+          // Convert '^*' immediately following a name into a literal '*'
+          authorsText = (authorsText || '').replace(/\^\*/g, '*');
+          var authors = (authorsText || '').split(', ');
+          var formattedAuthors = authors.map(function(authorRaw){
+            var m = authorRaw.match(/^(.*?)([¹²³⁴⁵⁶⁷⁸⁹\*]?)$/);
+            var base = (m && m[1] ? m[1] : authorRaw).trim();
+            var mark = (m && m[2] ? m[2] : '');
+            // Normalize for comparison: if name ends with '*', compare without it
+            var baseCompare = base.replace(/\*+$/,'').trim();
+            var markOut = '';
+            if (mark === '*') { markOut = '*'; } else if (mark) { markOut = '<sup class="author-mark">' + mark + '</sup>'; }
+            if (baseCompare === 'Jongmin Choi') {
+              // If the mark is a plain asterisk, include it inside the highlighted span
+              if (mark === '*') {
+                return '<span class="author-highlight">' + baseCompare + markOut + '</span>';
+              }
+              return '<span class="author-highlight">' + baseCompare + '</span>' + markOut;
+            } else {
+              return '<span class="author-normal">' + baseCompare + '</span>' + markOut;
+            }
+          }).join(', ');
+          t.innerHTML = titleText + '<br><span class="pub-authors">' + formattedAuthors + '</span>';
           
-          var v = document.createElement('span'); v.className = 'pub-venue'; v.textContent = p.venue || '';
-          var links = document.createElement('span'); links.className = 'pub-links';
+        var v = document.createElement('span'); v.className = 'pub-venue'; v.textContent = p.venue || '';
+        var links = document.createElement('span'); links.className = 'pub-links';
 
-          function addBtn(label, href, variant, click) {
-            var el = document.createElement('a'); el.className = 'chip ' + (variant || ''); el.textContent = label;
-            if (href) { el.href = href; el.target = '_blank'; el.rel = 'noopener'; }
-            if (click) { el.href = '#'; el.addEventListener('click', function (ev) { ev.preventDefault(); click(); }); }
-            links.appendChild(el);
-          }
+        function addBtn(label, href, variant, click) {
+          var el = document.createElement('a'); el.className = 'chip ' + (variant || ''); el.textContent = label;
+          if (href) { el.href = href; el.target = '_blank'; el.rel = 'noopener'; }
+          if (click) { el.href = '#'; el.addEventListener('click', function (ev) { ev.preventDefault(); click(); }); }
+          links.appendChild(el);
+        }
 
-          addBtn('PDF', p.pdf, 'chip-primary');
-          addBtn('BibTeX', null, 'chip-secondary', function () { openBibtexModal(p.title || 'BibTeX', p.bibtex || ''); });
+        addBtn('PDF', p.pdf, 'chip-primary');
+        addBtn('BibTeX', null, 'chip-secondary', function () { openBibtexModal(p.title || 'BibTeX', p.bibtex || ''); });
           addBtn('Scholar', p.scholar, 'chip-scholar');
-          addBtn('Code', p.code, 'chip-plain');
+        addBtn('Code', p.code, 'chip-plain');
           
           // Add citation count
           if (p.citations && p.citations > 0) {
@@ -632,7 +823,7 @@
   }
 
   var isLoaded = false; // Prevent duplicate loading
-  
+
   function onLoad() {
     if (isLoaded) return; // Prevent duplicate calls
     isLoaded = true;
@@ -1086,11 +1277,11 @@
   // On blog.html, run a lightweight header init so brand/avatar are set without rendering other sections.
   if (!window.location.pathname.includes('blog.html')) {
     window.onLoad = onLoad;
-    
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', onLoad);
-    } else {
-      onLoad();
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', onLoad);
+  } else {
+    onLoad();
     }
   } else {
     // Blog page: ensure brand & avatar load

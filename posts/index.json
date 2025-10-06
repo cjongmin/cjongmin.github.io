@@ -12,7 +12,7 @@
       "AI Research"
     ],
     "category": "Conference",
-    "cover": "./assets/images/blog-default.svg"
+    "cover": "./assets/media/post/iccv-2025-hawaii/cover.jpg"
   },
   {
     "filename": "hello-world.html",
@@ -23,7 +23,7 @@
       "intro"
     ],
     "category": "General",
-    "cover": "./assets/images/blog-default.svg"
+    "cover": "./assets/media/post/hello-world/cover.jpg"
   },
   {
     "filename": "getting-started.html",
@@ -36,7 +36,7 @@
       "Blogging"
     ],
     "category": "Tutorial",
-    "cover": "./assets/images/blog-default.svg"
+    "cover": "./assets/media/post/getting-started/cover.jpg"
   },
   {
     "filename": "research-journey.html",
@@ -49,7 +49,7 @@
       "Personal"
     ],
     "category": "Research",
-    "cover": "./assets/images/blog-default.svg"
+    "cover": "./assets/media/post/research-journey/cover.jpg"
   },
   {
     "filename": "test-post.html",
@@ -60,6 +60,6 @@
       "Test"
     ],
     "category": "Test",
-    "cover": "./assets/images/blog-default.svg"
+    "cover": "./assets/media/post/test-post/cover.jpg"
   }
 ]

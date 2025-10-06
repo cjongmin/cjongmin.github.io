@@ -5,7 +5,7 @@
     "email": "jongmin@mmai.io",
     "affiliation": "M.S. Student, Multimodal AI (MMAI) Laboratory, KAIST, Daejeon, Republic of Korea",
     "bio": "Hello! I am Jongmin Choi, a master's student in the Multimodal AI (MMAI) Laboratory at KAIST.\n My research focuses on understanding and mitigating the modality gap observed in multimodal models, aiming to leverage cross-modal synergy more effectively.\n\n I have explored approaches to reduce distributional gaps through embedding-level diffusion in audio captioning tasks, and through CS-divergence and alignment-based loss functions that improve consistency between modalities. In particular, my work involves guiding large language models (LLMs) using logit-level aligned embeddings to enhance multimodal representation learning.\n\n Currently, I am also interested in spiking neural networks (SNNs) that better reflect the behavior of biological neurons. My ongoing research focuses on modeling Generalized Leaky Integrate-and-Fire (GLIF) neurons and developing spiking neural architectures based on them.",
-    "photo": "assets/images/profile.jpeg",
+    "photo": "assets/media/profile/profile.jpeg",
     "cv": "assets/cv/cv.pdf",
     "links": {
       "scholar": "https://scholar.google.com/citations?user=example",
@@ -19,8 +19,8 @@
     ]
   },
   "news": [
-    { "date": "2025-09-25", "text": "Served as the second author on a paper submitted to ICLR 2026."},
-    { "date": "2025-09-17", "text": "Served as a co-first author on two papers submitted to ICASSP 2026."}
+    { "date": "2025-09-25", "text": "Served as the <color:green><b>second author</b></color> on a paper submitted to ICLR 2026!"},
+    { "date": "2025-09-17", "text": "Served as a <color:green><b>co-first author</b></color> on two papers submitted to ICASSP 2026!"}
   ],
   "publications": [
     "publications/2505.20873.json",
@@ -39,58 +39,187 @@
     "languages": ["Python", "PyTorch", "TensorFlow", "C++"],
     "collaborations": 8
   },
+  "gallery_intro": "Here is a curated collection of my photos and videos. Browse folders and open inline slideshows to explore the moments behind my research and life.",
   "gallery": [
     {
       "type": "folder",
-      "title": "Conference Photos",
+      "title": "KAIST Campus",
+      "layout": "left",
+      "description": "I sometimes capture the serene beauty of the KAIST campus through my lens.\n Each photograph is a quiet fragment of time — a reflection of moments I've witnessed and wished to preserve.",
       "items": [
         {
-          "src": "assets/images/gallery/conference1.jpg",
-          "alt": "Conference Presentation",
+          "src": "assets/media/gallery/KAIST_campus/01.jpg",
+          "alt": "01",
           "type": "image"
         },
         {
-          "src": "assets/images/gallery/conference2.jpg",
-          "alt": "Conference Poster",
+          "src": "assets/media/gallery/KAIST_campus/02.jpg",
+          "alt": "02",
           "type": "image"
         },
         {
-          "src": "assets/videos/conference-talk.mp4",
-          "alt": "Conference Talk",
-          "type": "video"
+          "src": "assets/media/gallery/KAIST_campus/03.jpg",
+          "alt": "03",
+          "type": "image"
+        },
+        {
+          "src": "assets/media/gallery/KAIST_campus/04.jpg",
+          "alt": "04",
+          "type": "image"
+        },
+        {
+          "src": "assets/media/gallery/KAIST_campus/05.jpg",
+          "alt": "05",
+          "type": "image"
+        },        
+        {
+          "src": "assets/media/gallery/KAIST_campus/06.jpg",
+          "alt": "06",
+          "type": "image"
+        },
+        {
+          "src": "assets/media/gallery/KAIST_campus/07.jpg",
+          "alt": "07",
+          "type": "image"
+        },
+        {
+          "src": "assets/media/gallery/KAIST_campus/08.jpg",
+          "alt": "08",
+          "type": "image"
+        },
+        {
+          "src": "assets/media/gallery/KAIST_campus/09.jpg",
+          "alt": "09",
+          "type": "image"
+        },
+        {
+          "src": "assets/media/gallery/KAIST_campus/10.jpg",
+          "alt": "10",
+          "type": "image"
+        },
+        {
+          "src": "assets/media/gallery/KAIST_campus/11.jpg",
+          "alt": "11",
+          "type": "image"
+        },
+        {
+          "src": "assets/media/gallery/KAIST_campus/12.jpg",
+          "alt": "12",
+          "type": "image"
+        },
+        {
+          "src": "assets/media/gallery/KAIST_campus/13.jpg",
+          "alt": "13",
+          "type": "image"
+        },
+        {
+          "src": "assets/media/gallery/KAIST_campus/14.jpg",
+          "alt": "14",
+          "type": "image"
+        },
+        {
+          "src": "assets/media/gallery/KAIST_campus/15.jpg",
+          "alt": "15",
+          "type": "image"
+        },
+        {
+          "src": "assets/media/gallery/KAIST_campus/16.jpg",
+          "alt": "16",
+          "type": "image"
         }
       ]
     },
     {
-      "src": "assets/images/gallery/lab1.jpg", 
-      "alt": "Lab Work",
-      "title": "Research Lab",
-      "description": "Working in the Multimodal AI Laboratory"
-    },
-    {
-      "src": "assets/images/gallery/team1.jpg",
-      "alt": "Research Team",
-      "title": "Research Collaboration",
-      "description": "Collaborating with fellow researchers"
+      "type": "folder",
+      "title": "Undergratuate Graduation",
+      "layout": "right",
+      "description": "I completed my undergraduate studies at KAIST, where I double-majored in the Department of Mathematical Sciences and the School of Electrical Engineering.\n The following photos were taken on Feb 14, 2025, during undergraduate commencement ceremony at KAIST.",
+      "items": [
+        {
+          "src": "assets/media/gallery/graduation/01.jpg",
+          "alt": "01",
+          "type": "image"
+        },
+        {
+          "src": "assets/media/gallery/graduation/02.jpg",
+          "alt": "02",
+          "type": "image"
+        },
+        {
+          "src": "assets/media/gallery/graduation/03.jpg",
+          "alt": "03",
+          "type": "image"
+        },
+        {
+          "src": "assets/media/gallery/graduation/04.jpg",
+          "alt": "04",
+          "type": "image"
+        }
+      ]
     },
     {
       "type": "folder",
-      "title": "Research Process",
+      "title": "Hiking in the Mountains",
+      "layout": "left",
+      "description": "I enjoy spending time in the mountains, where I can clear my mind and reconnect with nature.\n These photos capture moments of tranquility and beauty from my hiking journeys!",
       "items": [
         {
-          "src": "assets/images/gallery/research1.jpg",
-          "alt": "Data Analysis",
+          "src": "assets/media/gallery/mountain/01.jpg",
+          "alt": "01",
           "type": "image"
         },
         {
-          "src": "assets/images/gallery/research2.jpg",
-          "alt": "Model Training",
+          "src": "assets/media/gallery/mountain/02.jpg",
+          "alt": "02",
           "type": "image"
         },
         {
-          "src": "assets/videos/experiment-demo.mp4",
-          "alt": "Experiment Demo",
-          "type": "video"
+          "src": "assets/media/gallery/mountain/03.jpg",
+          "alt": "03",
+          "type": "image"
+        },
+        {
+          "src": "assets/media/gallery/mountain/04.jpg",
+          "alt": "04",
+          "type": "image"
+        },
+        {
+          "src": "assets/media/gallery/mountain/05.jpg",
+          "alt": "05",
+          "type": "image"
+        },
+        {
+          "src": "assets/media/gallery/mountain/06.jpg",
+          "alt": "06",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "title": "Reading Books",
+      "layout": "right",
+      "description": "Reading is one of my favorite hobby. I enjoy visiting independent bookstores and exploring not only novels, but also essays and poetry that offer new perspectives and quiet inspiration.",
+      "items": [
+        {
+          "src": "assets/media/gallery/book/01.jpg",
+          "alt": "01",
+          "type": "image"
+        },
+        {
+          "src": "assets/media/gallery/book/02.jpg",
+          "alt": "02",
+          "type": "image"
+        },
+        {
+          "src": "assets/media/gallery/book/03.jpg",
+          "alt": "03",
+          "type": "image"
+        },
+        {
+          "src": "assets/media/gallery/book/04.jpg",
+          "alt": "04",
+          "type": "image"
         }
       ]
     }

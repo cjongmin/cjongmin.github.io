@@ -1,3 +1,6 @@
+.author-highlight { color: var(--text); font-weight: 800; }
+.author-normal { color: var(--muted); font-weight: 400; }
+.author-mark { color: var(--muted); font-weight: 400; }
 /* Theme tokens */
 @import url('./post.css');
 @import url('./nav.css');
@@ -43,6 +46,26 @@
     --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
     --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
   }
+}
+
+/* Dark theme chip base background */
+:root[data-theme="dark"] .chip { background: #111418; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme]) .chip { background: #111418; } }
+
+/* Override Code chip border in dark theme to white for visibility */
+:root[data-theme="dark"] .chip-plain { border-color: #ffffff; color: #ffffff; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme]) .chip-plain { border-color: #ffffff; color: #ffffff; } }
+
+/* Dark theme hover behaviors */
+:root[data-theme="dark"] .chip-primary:hover { background: #dc3545; color: #ffffff; border-color: #dc3545; }
+:root[data-theme="dark"] .chip-secondary:hover { background: #28a745; color: #ffffff; border-color: #28a745; }
+:root[data-theme="dark"] .chip-scholar:hover { background: #4285f4; color: #ffffff; border-color: #4285f4; }
+:root[data-theme="dark"] .chip-plain:hover { background: #ffffff; color: #000000; border-color: #ffffff; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .chip-primary:hover { background: #dc3545; color: #ffffff; border-color: #dc3545; }
+  :root:not([data-theme]) .chip-secondary:hover { background: #28a745; color: #ffffff; border-color: #28a745; }
+  :root:not([data-theme]) .chip-scholar:hover { background: #4285f4; color: #ffffff; border-color: #4285f4; }
+  :root:not([data-theme]) .chip-plain:hover { background: #ffffff; color: #000000; border-color: #ffffff; }
 }
 
 html, body {
@@ -536,7 +559,7 @@ main {
   
   /* Mobile gallery and chart improvements */
   .gallery-item {
-    width: calc(50% - 8px) !important; /* Two columns on mobile */
+    width: 100% !important; /* Single column */
     margin: 4px !important;
   }
   
@@ -1000,6 +1023,8 @@ main.container {
   font-size: 14px;
   line-height: 1.5;
 }
+/* Ensure highlighted author (bold) follows theme color */
+.pub-authors strong { color: var(--text); }
 .pub-links { 
   display: flex;
   gap: 8px;
@@ -1020,7 +1045,7 @@ main.container {
 /* Publication buttons as chips */
 .chip-primary { 
   border-color: #dc3545; 
-  background: #ffffff; 
+  background: transparent; 
   color: #dc3545; 
   font-weight: 600;
 }
@@ -1031,7 +1056,7 @@ main.container {
 }
 .chip-secondary { 
   border-color: #28a745; 
-  background: #ffffff; 
+  background: transparent; 
   color: #28a745; 
   font-weight: 600;
 }
@@ -1042,7 +1067,7 @@ main.container {
 }
 .chip-scholar { 
   border-color: #4285f4; 
-  background: #ffffff; 
+  background: transparent; 
   color: #4285f4; 
   font-weight: 600;
 }
@@ -1053,7 +1078,7 @@ main.container {
 }
 .chip-plain { 
   border-color: #000000; 
-  background: #ffffff; 
+  background: transparent; 
   color: #000000; 
   font-weight: 600;
 }
@@ -1087,7 +1112,7 @@ main.container {
 /* Gallery styles */
 .gallery-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: 1fr; /* Force single column */
   gap: 20px;
   margin-top: 24px;
 }
@@ -1108,7 +1133,8 @@ main.container {
 
 .gallery-item img {
   width: 100%;
-  height: 200px;
+  max-width: 720px; /* card-like width */
+  height: auto;
   object-fit: cover;
   transition: transform 0.3s ease;
 }
@@ -1137,6 +1163,41 @@ main.container {
   font-size: 16px;
   font-weight: 600;
   margin: 0 0 8px 0;
+}
+
+/* Larger titles for gallery cards */
+.gallery-title-visible,
+.gallery-item-title {
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.3;
+  margin-bottom: 6px;
+}
+
+.gallery-item-desc {
+  color: var(--text);
+  margin-top: 8px;
+  line-height: 1.8;
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.gallery-intro {
+  color: var(--text);
+  line-height: 1.8;
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Gallery meta (items count/date-like chips) match news-date font */
+.gallery-item-meta,
+.gallery-item-count-meta {
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: #000000;
 }
 
 .gallery-description {
@@ -1197,6 +1258,65 @@ main.container {
   border-radius: 8px;
   margin-bottom: 10px;
 }
+
+/* Row layout helpers */
+.gallery-row { width: 100%; }
+.media-col { max-width: 720px; }
+.text-col { line-height: 1.6; text-align: justify; text-justify: inter-word; }
+
+/* Text wrapping behavior for long descriptions */
+.gallery-wrap { display: flow-root; text-align: justify; text-justify: inter-word; }
+.float-left { float: left; margin: 0 16px 10px 0; max-width: 45%; }
+.float-right { float: right; margin: 0 0 10px 16px; max-width: 45%; }
+.gallery-wrap img { border-radius: 10px; }
+/* Height clamp for floated media (prose layout) */
+.gallery-wrap .float-left img,
+.gallery-wrap .float-right img,
+.gallery-wrap .float-left video,
+.gallery-wrap .float-right video {
+  width: 100%;
+  height: 9.1em;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Constrain media height to ~7 lines of text; fill column width */
+.media-col img,
+.media-col video {
+  width: 100%;
+  height: 9.1em;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Folder item count badge */
+.folder-badge {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  background: rgba(0,0,0,0.65);
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+/* Picture frame effect for gallery albums */
+.gallery-frame {
+  position: relative;
+  background: #ffffff;
+  padding: 10px; /* mat */
+  border: 2px solid #e6e6e6; /* frame */
+  border-radius: 14px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+.gallery-frame img,
+.gallery-frame video {
+  border-radius: 10px;
+  width: 100%;
+  display: block;
+}
+.gallery-frame .folder-badge { right: 14px; bottom: 14px; }
 
 .gallery-item-count {
   font-size: 0.9rem;

@@ -236,7 +236,10 @@
       var cover = document.createElement('img');
       cover.className = 'post-cover';
       cover.alt = p.title || 'cover';
-      cover.src = p.cover || './assets/images/blog-default.svg';
+      // Preferred: assets/media/post/{slug}/cover.jpg
+      var inferredSlug = (p.slug) ? p.slug : ((p.filename || '').replace(/\.html$/,'') || '');
+      var preferredCover = inferredSlug ? ('./assets/media/post/' + inferredSlug + '/cover.jpg') : '';
+      cover.src = p.cover || preferredCover || './assets/images/blog-default.svg';
       // Force image visibility
       cover.style.display = 'block';
       cover.style.opacity = '1';

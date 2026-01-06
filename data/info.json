@@ -1,0 +1,474 @@
+{
+    "site": {
+        "title": "Dr. Jane Researcher - AI Researcher",
+        "description": "AI researcher specializing in computer vision and machine learning. Ph.D. from Stanford University.",
+        "locale": "en",
+        "theme": {
+            "defaultMode": "light",
+            "allowToggle": true
+        },
+        "ogImage": "/assets/og.png",
+        "favicon": "/assets/favicon.ico",
+        "lastUpdated": "auto"
+    },
+    "nav": {
+        "items": [
+            {
+                "id": "about",
+                "label": "About",
+                "href": "#about",
+                "type": "anchor",
+                "enabled": true
+            },
+            {
+                "id": "publications",
+                "label": "Publications",
+                "href": "#publications",
+                "type": "anchor",
+                "enabled": true
+            },
+            {
+                "id": "projects",
+                "label": "Projects",
+                "href": "#projects",
+                "type": "anchor",
+                "enabled": true
+            },
+            {
+                "id": "experience",
+                "label": "Experience",
+                "href": "#experience",
+                "type": "anchor",
+                "enabled": true
+            },
+            {
+                "id": "contact",
+                "label": "Contact",
+                "href": "#contact",
+                "type": "anchor",
+                "enabled": true
+            }
+        ]
+    },
+    "sections": {
+        "about": {
+            "enabled": true,
+            "label": "About"
+        },
+        "publications": {
+            "enabled": true,
+            "label": "Publications"
+        },
+        "projects": {
+            "enabled": true,
+            "label": "Projects"
+        },
+        "experience": {
+            "enabled": true,
+            "label": "Experience"
+        },
+        "cv": {
+            "enabled": true,
+            "label": "CV"
+        },
+        "contact": {
+            "enabled": true,
+            "label": "Contact"
+        }
+    },
+    "profile": {
+        "name": {
+            "full": "Dr. Jane Researcher",
+            "preferred": "Jane Researcher"
+        },
+        "tagline": "AI Researcher | Computer Vision & Machine Learning",
+        "affiliation": "Research Scientist at AI Lab, Tech University",
+        "location": "San Francisco, CA",
+        "email": {
+            "address": "jane.researcher@example.edu",
+            "display": "plain",
+            "showCopyButton": true
+        },
+        "headshot": {
+            "src": "/assets/headshot.jpg",
+            "alt": "Photo of Jane Researcher",
+            "shape": "circle"
+        },
+        "links": [
+            {
+                "type": "scholar",
+                "label": "Google Scholar",
+                "url": "https://scholar.google.com/citations?user=XXXXX"
+            },
+            {
+                "type": "github",
+                "label": "GitHub",
+                "url": "https://github.com/janeresearcher"
+            },
+            {
+                "type": "orcid",
+                "label": "ORCID",
+                "url": "https://orcid.org/0000-0000-0000-0000"
+            },
+            {
+                "type": "x",
+                "label": "X",
+                "url": "https://x.com/janeresearcher"
+            },
+            {
+                "type": "linkedin",
+                "label": "LinkedIn",
+                "url": "https://linkedin.com/in/janeresearcher"
+            }
+        ],
+        "bio": [
+            "I am a research scientist at AI Lab, Tech University, where I work on computer vision and machine learning. My research focuses on developing efficient deep learning models for visual understanding and generative AI.",
+            "Previously, I completed my Ph.D. at Stanford University, where I was advised by Prof. John Doe. My dissertation explored novel architectures for few-shot learning in computer vision tasks."
+        ],
+        "interests": [
+            "Computer Vision",
+            "Deep Learning",
+            "Few-Shot Learning",
+            "Generative Models",
+            "Visual Understanding"
+        ],
+        "highlights": [
+            {
+                "label": "Citations",
+                "value": "2,500+",
+                "url": "https://scholar.google.com/citations?user=XXXXX"
+            },
+            {
+                "label": "h-index",
+                "value": "18"
+            },
+            {
+                "label": "Years in Research",
+                "value": "8"
+            }
+        ]
+    },
+    "publications": {
+        "settings": {
+            "authorEmphasis": {
+                "myNameVariants": [
+                    "Jane Researcher",
+                    "J. Researcher",
+                    "J. R."
+                ],
+                "style": "bold"
+            },
+            "equalContributionMarker": "*",
+            "correspondingAuthorMarker": "†",
+            "groupBy": "year",
+            "defaultSort": "year_desc",
+            "showMetrics": true,
+            "collapseYears": {
+                "enabled": true,
+                "expandedYearsCount": 2
+            }
+        },
+        "items": [
+            {
+                "id": "researcher2024efficient",
+                "title": "Efficient Vision Transformers for Real-Time Object Detection",
+                "authorsList": [
+                    "Jane Researcher",
+                    "Alice Smith",
+                    "Bob Johnson"
+                ],
+                "venue": {
+                    "name": "IEEE Conference on Computer Vision and Pattern Recognition",
+                    "short": "CVPR"
+                },
+                "year": 2024,
+                "month": 6,
+                "type": "conference",
+                "status": "published",
+                "featured": true,
+                "awards": [
+                    "Best Paper Award"
+                ],
+                "keywords": [
+                    "computer vision",
+                    "transformers",
+                    "object detection",
+                    "efficiency"
+                ],
+                "abstract": "We propose a novel efficient vision transformer architecture that achieves state-of-the-art performance on object detection tasks while maintaining real-time inference speeds.",
+                "links": {
+                    "pdf": "/pdfs/researcher2024efficient.pdf",
+                    "arxiv": "https://arxiv.org/abs/2401.12345",
+                    "code": "https://github.com/janeresearcher/efficient-vit",
+                    "project": "https://efficient-vit.github.io"
+                },
+                "bibtex": "@inproceedings{researcher2024efficient,\n  title={Efficient Vision Transformers for Real-Time Object Detection},\n  author={Researcher, Jane and Smith, Alice and Johnson, Bob},\n  booktitle={IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},\n  year={2024}\n}",
+                "media": {
+                    "thumbnail": "/assets/publications/researcher2024efficient.png"
+                },
+                "metrics": {
+                    "citations": 45
+                }
+            },
+            {
+                "id": "researcher2023fewshot",
+                "title": "Few-Shot Learning via Meta-Learning with Visual Priors",
+                "authorsList": [
+                    "Jane Researcher",
+                    "Charlie Davis"
+                ],
+                "venue": {
+                    "name": "International Conference on Machine Learning",
+                    "short": "ICML"
+                },
+                "year": 2023,
+                "month": 7,
+                "type": "conference",
+                "status": "published",
+                "featured": true,
+                "keywords": [
+                    "few-shot learning",
+                    "meta-learning",
+                    "computer vision"
+                ],
+                "abstract": "This paper presents a meta-learning approach for few-shot image classification that leverages visual priors learned from large-scale pre-training.",
+                "links": {
+                    "pdf": "/pdfs/researcher2023fewshot.pdf",
+                    "arxiv": "https://arxiv.org/abs/2307.54321",
+                    "code": "https://github.com/janeresearcher/fewshot-meta"
+                },
+                "bibtex": "@inproceedings{researcher2023fewshot,\n  title={Few-Shot Learning via Meta-Learning with Visual Priors},\n  author={Researcher, Jane and Davis, Charlie},\n  booktitle={International Conference on Machine Learning (ICML)},\n  year={2023}\n}",
+                "metrics": {
+                    "citations": 128
+                }
+            },
+            {
+                "id": "researcher2023generative",
+                "title": "Controllable Image Generation with Diffusion Models",
+                "authorsList": [
+                    "Eve Wilson",
+                    "Jane Researcher",
+                    "Frank Miller"
+                ],
+                "venue": {
+                    "name": "Neural Information Processing Systems",
+                    "short": "NeurIPS"
+                },
+                "year": 2023,
+                "month": 12,
+                "type": "conference",
+                "status": "published",
+                "featured": false,
+                "keywords": [
+                    "generative models",
+                    "diffusion models",
+                    "image synthesis"
+                ],
+                "links": {
+                    "pdf": "/pdfs/researcher2023generative.pdf",
+                    "arxiv": "https://arxiv.org/abs/2312.98765"
+                },
+                "bibtex": "@inproceedings{wilson2023controllable,\n  title={Controllable Image Generation with Diffusion Models},\n  author={Wilson, Eve and Researcher, Jane and Miller, Frank},\n  booktitle={Neural Information Processing Systems (NeurIPS)},\n  year={2023}\n}",
+                "metrics": {
+                    "citations": 87
+                }
+            },
+            {
+                "id": "researcher2022transfer",
+                "title": "Transfer Learning for Low-Resource Visual Tasks",
+                "authorsList": [
+                    "Jane Researcher",
+                    "Grace Lee"
+                ],
+                "venue": {
+                    "name": "European Conference on Computer Vision",
+                    "short": "ECCV"
+                },
+                "year": 2022,
+                "month": 10,
+                "type": "conference",
+                "status": "published",
+                "featured": false,
+                "keywords": [
+                    "transfer learning",
+                    "low-resource",
+                    "computer vision"
+                ],
+                "links": {
+                    "pdf": "/pdfs/researcher2022transfer.pdf",
+                    "arxiv": "https://arxiv.org/abs/2210.11111"
+                },
+                "bibtex": "@inproceedings{researcher2022transfer,\n  title={Transfer Learning for Low-Resource Visual Tasks},\n  author={Researcher, Jane and Lee, Grace},\n  booktitle={European Conference on Computer Vision (ECCV)},\n  year={2022}\n}",
+                "metrics": {
+                    "citations": 203
+                }
+            },
+            {
+                "id": "researcher2024preprint",
+                "title": "Scaling Vision-Language Models with Efficient Architectures",
+                "authorsList": [
+                    "Jane Researcher",
+                    "Henry Zhang",
+                    "Isabel Chen"
+                ],
+                "venue": {
+                    "name": "arXiv preprint"
+                },
+                "year": 2024,
+                "month": 12,
+                "type": "preprint",
+                "status": "under_review",
+                "featured": false,
+                "keywords": [
+                    "vision-language models",
+                    "efficiency",
+                    "scaling"
+                ],
+                "abstract": "We investigate efficient architectures for scaling vision-language models to billions of parameters while maintaining practical inference speeds.",
+                "links": {
+                    "arxiv": "https://arxiv.org/abs/2412.99999"
+                },
+                "bibtex": "@article{researcher2024scaling,\n  title={Scaling Vision-Language Models with Efficient Architectures},\n  author={Researcher, Jane and Zhang, Henry and Chen, Isabel},\n  journal={arXiv preprint arXiv:2412.99999},\n  year={2024}\n}"
+            }
+        ]
+    },
+    "projects": {
+        "settings": {
+            "featuredFirst": true
+        },
+        "items": [
+            {
+                "id": "efficient-vit-toolkit",
+                "title": "Efficient Vision Transformer Toolkit",
+                "summary": "An open-source PyTorch library for training and deploying efficient vision transformers. Includes pre-trained models, training scripts, and optimization tools.",
+                "tags": [
+                    "computer vision",
+                    "deep learning",
+                    "pytorch",
+                    "open source"
+                ],
+                "featured": true,
+                "links": {
+                    "code": "https://github.com/janeresearcher/efficient-vit-toolkit",
+                    "demo": "https://huggingface.co/spaces/janeresearcher/efficient-vit-demo"
+                },
+                "media": {
+                    "thumbnail": "/assets/projects/efficient-vit.png"
+                }
+            },
+            {
+                "id": "fewshot-benchmark",
+                "title": "Few-Shot Learning Benchmark Suite",
+                "summary": "A comprehensive benchmark suite for evaluating few-shot learning algorithms across diverse visual domains. Includes datasets, evaluation protocols, and baseline implementations.",
+                "tags": [
+                    "few-shot learning",
+                    "benchmark",
+                    "evaluation"
+                ],
+                "featured": true,
+                "links": {
+                    "code": "https://github.com/janeresearcher/fewshot-benchmark",
+                    "project": "https://fewshot-benchmark.github.io"
+                }
+            },
+            {
+                "id": "vision-tutorials",
+                "title": "Computer Vision Tutorials",
+                "summary": "Educational materials and interactive tutorials for learning computer vision and deep learning. Covers fundamentals to advanced topics with hands-on exercises.",
+                "tags": [
+                    "education",
+                    "tutorials",
+                    "computer vision"
+                ],
+                "featured": false,
+                "links": {
+                    "project": "https://janeresearcher.github.io/vision-tutorials"
+                }
+            }
+        ]
+    },
+    "experience": {
+        "items": [
+            {
+                "id": "ailab-postdoc",
+                "category": "position",
+                "org": "AI Lab, Tech University",
+                "role": "Research Scientist",
+                "location": "San Francisco, CA",
+                "start": "2021-09",
+                "end": "present",
+                "bullets": [
+                    "Leading research on efficient deep learning architectures for computer vision",
+                    "Published 5+ papers at top-tier conferences (CVPR, ICCV, NeurIPS)",
+                    "Mentoring Ph.D. students and interns on research projects",
+                    "Collaborated with industry partners on real-world applications of vision models"
+                ],
+                "links": {
+                    "org": "https://ailab.techuniversity.edu"
+                }
+            },
+            {
+                "id": "stanford-phd",
+                "category": "education",
+                "org": "Stanford University",
+                "role": "Ph.D. in Computer Science",
+                "location": "Stanford, CA",
+                "start": "2016-09",
+                "end": "2021-06",
+                "bullets": [
+                    "Dissertation: \"Meta-Learning Approaches for Few-Shot Visual Recognition\"",
+                    "Advised by Prof. John Doe",
+                    "Teaching assistant for CS231n: Convolutional Neural Networks for Visual Recognition",
+                    "Received Stanford Graduate Fellowship"
+                ],
+                "links": {
+                    "org": "https://cs.stanford.edu",
+                    "advisor": "https://example.stanford.edu/~johndoe"
+                }
+            },
+            {
+                "id": "google-intern",
+                "category": "internship",
+                "org": "Google Research",
+                "role": "Research Intern",
+                "location": "Mountain View, CA",
+                "start": "2019-06",
+                "end": "2019-09",
+                "bullets": [
+                    "Worked on vision-language models for zero-shot classification",
+                    "Implemented and evaluated novel architectures on large-scale datasets",
+                    "Contributed to internal tools for model evaluation and analysis"
+                ]
+            },
+            {
+                "id": "mit-bs",
+                "category": "education",
+                "org": "Massachusetts Institute of Technology",
+                "role": "B.S. in Computer Science",
+                "location": "Cambridge, MA",
+                "start": "2012-09",
+                "end": "2016-06",
+                "bullets": [
+                    "GPA: 3.95/4.0",
+                    "Undergraduate thesis on deep reinforcement learning",
+                    "President of MIT AI/ML Club"
+                ]
+            }
+        ]
+    },
+    "cv": {
+        "enabled": true,
+        "label": "Curriculum Vitae",
+        "pdfPath": "/pdfs/cv.pdf",
+        "buttonLabel": "Download CV (PDF)",
+        "alsoInLinks": false
+    },
+    "contact": {
+        "enabled": true,
+        "label": "Get in Touch",
+        "showEmail": true,
+        "showForm": false,
+        "showSocialLinks": true,
+        "availability": "I'm always interested in collaborations on computer vision and machine learning research. Feel free to reach out!"
+    }
+}

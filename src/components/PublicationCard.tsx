@@ -1,262 +1,208 @@
 'use client';
 
 import { useState } from 'react';
-import {
-    HiDocumentText,
-    HiCode,
-    HiExternalLink,
-    HiVideoCamera,
-    HiDocument
-} from 'react-icons/hi';
-import type { Publication } from '@/lib/schema';
-import { highlightAuthor, cn } from '@/lib/utils';
+import { HiExternalLink, HiCode, HiDocumentText, HiVideoCamera } from 'react-icons/hi';
 import { BibTeXModal } from './BibTeXModal';
+import type { Publication } from '@/lib/schema';
+import type { InfoData } from '@/lib/schema';
+import { withBasePath, highlightAuthor } from '@/lib/utils';
 
 interface PublicationCardProps {
     publication: Publication;
-    settings: {
-        authorEmphasis: {
-            myNameVariants: string[];
-            style: 'bold' | 'underline' | 'highlight';
-        };
-        showMetrics?: boolean;
-    };
+    settings: NonNullable<InfoData['publications']>['settings'];
 }
-
-const typeColors: Record<Publication['type'], string> = {
-    conference: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
-    journal: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
-    workshop: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-    preprint: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
-    thesis: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
-    demo: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200',
-};
-
-const statusLabels: Record<NonNullable<Publication['status']>, string> = {
-    published: 'Published',
-    accepted: 'Accepted',
-    under_review: 'Under Review',
-    in_preparation: 'In Preparation',
-};
 
 export function PublicationCard({ publication, settings }: PublicationCardProps) {
     const [showBibTeX, setShowBibTeX] = useState(false);
 
-    const highlightedAuthors = publication.authorsList
-        ? highlightAuthor(
-            publication.authorsList,
-            settings.authorEmphasis.myNameVariants,
-            settings.authorEmphasis.style
-        )
-        : [];
+    const typeColors: Record<string, string> = {
+        conference: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
+        journal: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
+        workshop: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300',
+        preprint: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300',
+        thesis: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300',
+        demo: 'bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-300',
+    };
 
-    const mainLink = publication.links?.pdf || publication.links?.arxiv || publication.links?.doi;
+    const authorHtml = highlightAuthor(
+        publication.authorsList || [],
+        settings.authorEmphasis.myNameVariants,
+        settings.authorEmphasis.style
+    );
 
     return (
         <>
-            <div className="bg-card border border-border rounded-lg p-5 hover:shadow-md transition-shadow">
-                <div className="flex gap-4">
-                    {/* Main content */}
-                    <div className="flex-1 min-w-0">
-                        {/* Title */}
-                        <h4 className="text-lg font-semibold mb-2 leading-tight">
-                            {mainLink ? (
-                                <a
-                                    href={mainLink}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="hover:text-primary transition-colors"
-                                >
-                                    {publication.title}
-                                </a>
-                            ) : (
-                                publication.title
-                            )}
-                        </h4>
+            <article className="modern-card group gradient-overlay">
+                {/* Featured badge */}
+                {publication.featured && (
+                    <div className="absolute top-4 right-4 z-10">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 gradient-bg text-primary-foreground rounded-full text-xs font-bold shadow-lg">
+                            ⭐ Featured
+                        </span>
+                    </div>
+                )}
 
-                        {/* Authors */}
-                        <p className="text-sm text-muted-foreground mb-2">
-                            {highlightedAuthors.map(({ author, isHighlighted }, i) => (
-                                <span key={i}>
-                                    {i > 0 && ', '}
-                                    <span
-                                        className={cn(
-                                            isHighlighted &&
-                                            settings.authorEmphasis.style === 'bold' &&
-                                            'font-bold text-foreground',
-                                            isHighlighted &&
-                                            settings.authorEmphasis.style === 'underline' &&
-                                            'underline text-foreground',
-                                            isHighlighted &&
-                                            settings.authorEmphasis.style === 'highlight' &&
-                                            'bg-primary/20 px-1 rounded text-foreground'
-                                        )}
-                                    >
-                                        {author}
-                                    </span>
-                                </span>
-                            ))}
-                        </p>
+                <div className="space-y-4">
+                    {/* Title */}
+                    <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors pr-20">
+                        {publication.links?.project || publication.links?.pdf ? (
+                            <a
+                                href={publication.links.project || withBasePath(publication.links.pdf!)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="hover:underline"
+                            >
+                                {publication.title}
+                            </a>
+                        ) : (
+                            publication.title
+                        )}
+                    </h3>
 
-                        {/* Venue and Year */}
-                        <p className="text-sm text-muted-foreground mb-3">
-                            <span className="font-medium">
-                                {publication.venue.short || publication.venue.name}
+                    {/* Authors */}
+                    <div
+                        className="text-sm text-muted-foreground"
+                        dangerouslySetInnerHTML={{ __html: authorHtml }}
+                    />
+
+                    {/* Venue & Year */}
+                    <div className="flex flex-wrap items-center gap-3 text-sm">
+                        <span className="font-semibold text-foreground">
+                            {publication.venue.short || publication.venue.name}
+                        </span>
+                        <span className="text-muted-foreground">•</span>
+                        <span className="text-muted-foreground">{publication.year}</span>
+
+                        {/* Type badge */}
+                        <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${typeColors[publication.type]}`}>
+                            {publication.type.toUpperCase()}
+                        </span>
+
+                        {/* Status badge */}
+                        {publication.status && publication.status !== 'published' && (
+                            <span className="px-2.5 py-1 bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300 rounded-full text-xs font-semibold">
+                                {publication.status.replace('_', ' ').toUpperCase()}
                             </span>
-                            {' '}
-                            {publication.year}
-                            {publication.month && ` (${new Date(publication.year, publication.month - 1).toLocaleString('default', { month: 'short' })})`}
-                        </p>
+                        )}
+                    </div>
 
-                        {/* Badges */}
-                        <div className="flex flex-wrap gap-2 mb-3">
-                            {/* Type badge */}
-                            <span className={cn('px-2 py-1 rounded text-xs font-medium capitalize', typeColors[publication.type])}>
-                                {publication.type}
-                            </span>
-
-                            {/* Status badge */}
-                            {publication.status && publication.status !== 'published' && (
-                                <span className="px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200">
-                                    {statusLabels[publication.status]}
-                                </span>
-                            )}
-
-                            {/* Featured */}
-                            {publication.featured && (
-                                <span className="px-2 py-1 rounded text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200">
-                                    ⭐ Featured
-                                </span>
-                            )}
-
-                            {/* Awards */}
-                            {publication.awards?.map((award) => (
+                    {/* Awards */}
+                    {publication.awards && publication.awards.length > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                            {publication.awards.map((award, index) => (
                                 <span
-                                    key={award}
-                                    className="px-2 py-1 rounded text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                                    key={index}
+                                    className="inline-flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-yellow-100 to-amber-100 dark:from-yellow-900/30 dark:to-amber-900/30 text-yellow-900 dark:text-yellow-200 rounded-full text-xs font-bold"
                                 >
                                     🏆 {award}
                                 </span>
                             ))}
-
-                            {/* Metrics */}
-                            {settings.showMetrics && publication.metrics?.citations !== undefined && (
-                                <span className="px-2 py-1 rounded text-xs font-medium bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200">
-                                    {publication.metrics.citations} citations
-                                </span>
-                            )}
                         </div>
+                    )}
 
-                        {/* Links */}
+                    {/* Metrics */}
+                    {settings.showMetrics && publication.metrics?.citations !== undefined && (
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-secondary rounded-lg text-sm">
+                            <span className="font-semibold text-foreground">{publication.metrics.citations}</span>
+                            <span className="text-muted-foreground">citations</span>
+                        </div>
+                    )}
+
+                    {/* Keywords */}
+                    {publication.keywords && publication.keywords.length > 0 && (
                         <div className="flex flex-wrap gap-2">
-                            {publication.links?.pdf && (
-                                <a
-                                    href={publication.links.pdf}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1 px-3 py-1 bg-secondary hover:bg-secondary/80 rounded text-xs font-medium transition-colors"
-                                    aria-label="PDF"
+                            {publication.keywords.map((keyword) => (
+                                <span
+                                    key={keyword}
+                                    className="badge badge-secondary text-xs"
                                 >
-                                    <HiDocumentText className="h-3 w-3" />
-                                    PDF
-                                </a>
-                            )}
+                                    {keyword}
+                                </span>
+                            ))}
+                        </div>
+                    )}
 
-                            {publication.links?.arxiv && (
-                                <a
-                                    href={publication.links.arxiv}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1 px-3 py-1 bg-secondary hover:bg-secondary/80 rounded text-xs font-medium transition-colors"
-                                    aria-label="arXiv"
-                                >
-                                    <HiDocument className="h-3 w-3" />
-                                    arXiv
-                                </a>
-                            )}
+                    {/* Links */}
+                    <div className="flex flex-wrap gap-2 pt-2">
+                        {publication.links?.pdf && (
+                            <a
+                                href={withBasePath(publication.links.pdf)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 px-4 py-2 bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-800 dark:text-red-300 rounded-lg text-sm  font-semibold transition-all hover:scale-105"
+                            >
+                                <HiDocumentText className="h-4 w-4" />
+                                PDF
+                            </a>
+                        )}
 
-                            {publication.links?.code && (
-                                <a
-                                    href={publication.links.code}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1 px-3 py-1 bg-secondary hover:bg-secondary/80 rounded text-xs font-medium transition-colors"
-                                    aria-label="Code"
-                                >
-                                    <HiCode className="h-3 w-3" />
-                                    Code
-                                </a>
-                            )}
+                        {publication.links?.arxiv && (
+                            <a
+                                href={publication.links.arxiv}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 px-4 py-2 bg-secondary hover:bg-secondary/80 text-secondary-foreground rounded-lg text-sm font-semibold transition-all hover:scale-105"
+                            >
+                                <HiExternalLink className="h-4 w-4" />
+                                arXiv
+                            </a>
+                        )}
 
-                            {publication.links?.project && (
-                                <a
-                                    href={publication.links.project}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1 px-3 py-1 bg-secondary hover:bg-secondary/80 rounded text-xs font-medium transition-colors"
-                                    aria-label="Project"
-                                >
-                                    <HiExternalLink className="h-3 w-3" />
-                                    Project
-                                </a>
-                            )}
+                        {publication.links?.code && (
+                            <a
+                                href={publication.links.code}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg text-sm font-semibold transition-all hover:scale-105"
+                            >
+                                <HiCode className="h-4 w-4" />
+                                Code
+                            </a>
+                        )}
 
-                            {publication.links?.video && (
-                                <a
-                                    href={publication.links.video}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1 px-3 py-1 bg-secondary hover:bg-secondary/80 rounded text-xs font-medium transition-colors"
-                                    aria-label="Video"
-                                >
-                                    <HiVideoCamera className="h-3 w-3" />
-                                    Video
-                                </a>
-                            )}
+                        {publication.links?.project && (
+                            <a
+                                href={publication.links.project}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 px-4 py-2 bg-secondary hover:bg-secondary/80 text-secondary-foreground rounded-lg text-sm font-semibold transition-all hover:scale-105"
+                            >
+                                <HiExternalLink className="h-4 w-4" />
+                                Project
+                            </a>
+                        )}
 
-                            {publication.links?.slides && (
-                                <a
-                                    href={publication.links.slides}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1 px-3 py-1 bg-secondary hover:bg-secondary/80 rounded text-xs font-medium transition-colors"
-                                    aria-label="Slides"
-                                >
-                                    <HiDocumentText className="h-3 w-3" />
-                                    Slides
-                                </a>
-                            )}
+                        {publication.links?.video && (
+                            <a
+                                href={publication.links.video}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 px-4 py-2 bg-purple-100 hover:bg-purple-200 dark:bg-purple-900/30 dark:hover:bg-purple-900/50 text-purple-800 dark:text-purple-300 rounded-lg text-sm font-semibold transition-all hover:scale-105"
+                            >
+                                <HiVideoCamera className="h-4 w-4" />
+                                Video
+                            </a>
+                        )}
 
-                            {publication.links?.poster && (
-                                <a
-                                    href={publication.links.poster}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1 px-3 py-1 bg-secondary hover:bg-secondary/80 rounded text-xs font-medium transition-colors"
-                                    aria-label="Poster"
-                                >
-                                    <HiDocumentText className="h-3 w-3" />
-                                    Poster
-                                </a>
-                            )}
-
+                        {publication.bibtex && (
                             <button
                                 onClick={() => setShowBibTeX(true)}
-                                className="inline-flex items-center gap-1 px-3 py-1 bg-primary/10 hover:bg-primary/20 text-primary rounded text-xs font-medium transition-colors"
-                                aria-label="BibTeX"
+                                className="inline-flex items-center gap-2 px-4 py-2 border-2 border-border hover:border-primary hover:bg-primary/5 rounded-lg text-sm font-semibold transition-all hover:scale-105"
                             >
-                                BibTeX
+                                📄 BibTeX
                             </button>
-                        </div>
+                        )}
                     </div>
                 </div>
-            </div>
+            </article>
 
-            <BibTeXModal
-                isOpen={showBibTeX}
-                onClose={() => setShowBibTeX(false)}
-                publication={publication}
-            />
+            {/* BibTeX Modal */}
+      {/* BibTeX Modal */}
+      <BibTeXModal
+        isOpen={showBibTeX}
+        onClose={() => setShowBibTeX(false)}
+        publication={publication}
+      />
         </>
     );
 }

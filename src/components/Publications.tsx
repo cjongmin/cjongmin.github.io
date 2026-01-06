@@ -1,11 +1,9 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { HiSearch, HiX, HiChevronDown, HiChevronUp } from 'react-icons/hi';
-import type { InfoData, Publication } from '@/lib/schema';
-import { groupByYear, highlightAuthor } from '@/lib/utils';
+import { HiSearch, HiX, HiFilter } from 'react-icons/hi';
 import { PublicationCard } from './PublicationCard';
-import { cn } from '@/lib/utils';
+import type { InfoData } from '@/lib/schema';
 
 interface PublicationsProps {
     publications: NonNullable<InfoData['publications']>;
@@ -13,284 +11,238 @@ interface PublicationsProps {
 
 export function Publications({ publications }: PublicationsProps) {
     const [searchQuery, setSearchQuery] = useState('');
-    const [selectedYears, setSelectedYears] = useState<number[]>([]);
-    const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-    const [showFeatured, setShowFeatured] = useState(false);
-    const [sortBy, setSortBy] = useState(publications.settings.defaultSort);
-    const [expandedYears, setExpandedYears] = useState<Set<number>>(new Set());
+    const [selectedYears, setSelectedYears] = useState<Set<number>>(new Set());
+    const [selectedType, setSelectedType] = useState<string>('all');
+    const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
+    const [sortBy, setSortBy] = useState('year_desc');
+    const [collapsedYears, setCollapsedYears] = useState<Set<number>>(new Set());
 
     const { items, settings } = publications;
 
-    // Initialize expanded years (show most recent N years by default if collapse is enabled)
-    useMemo(() => {
-        if (settings.collapseYears?.enabled && expandedYears.size === 0) {
-            const years = [...new Set(items.map(p => p.year))].sort((a, b) => b - a);
-            const yearsToExpand = years.slice(0, settings.collapseYears.expandedYearsCount || 2);
-            setExpandedYears(new Set(yearsToExpand));
-        }
-    }, [items, settings.collapseYears, expandedYears.size]);
-
     // Get unique years and types
-    const allYears = useMemo(
-        () => [...new Set(items.map((p) => p.year))].sort((a, b) => b - a),
-        [items]
-    );
-    const allTypes = useMemo(
-        () => [...new Set(items.map((p) => p.type))],
-        [items]
-    );
+    const years = useMemo(() => {
+        return Array.from(new Set(items.map((p) => p.year))).sort((a, b) => b - a);
+    }, [items]);
 
-    // Filter publications
+    const types = useMemo(() => {
+        return Array.from(new Set(items.map((p) => p.type)));
+    }, [items]);
+
+    // Initialize collapsed years
+    useMemo(() => {
+        if (settings.collapseYears?.enabled && collapsedYears.size === 0) {
+            const yearsToCollapse = years.slice(settings.collapseYears.expandedYearsCount);
+            setCollapsedYears(new Set(yearsToCollapse));
+        }
+    }, [years, settings.collapseYears, collapsedYears.size]);
+
+    // Filter and sort publications
     const filteredPubs = useMemo(() => {
-        let filtered = items;
+        let filtered = items.filter((pub) => {
+            // Search filter
+            if (searchQuery) {
+                const query = searchQuery.toLowerCase();
+                const searchText = `${pub.title} ${pub.authorsList?.join(' ')} ${pub.venue.name} ${pub.keywords?.join(' ') || ''}`.toLowerCase();
+                if (!searchText.includes(query)) return false;
+            }
 
-        // Search
-        if (searchQuery) {
-            const query = searchQuery.toLowerCase();
-            filtered = filtered.filter((pub) => {
-                const searchFields = [
-                    pub.title,
-                    pub.authorsList?.join(' ') || '',
-                    pub.venue.name,
-                    pub.venue.short || '',
-                    ...(pub.keywords || []),
-                ].join(' ').toLowerCase();
+            // Year filter
+            if (selectedYears.size > 0 && !selectedYears.has(pub.year)) return false;
 
-                return searchFields.includes(query);
-            });
-        }
+            // Type filter
+            if (selectedType !== 'all' && pub.type !== selectedType) return false;
 
-        // Year filter
-        if (selectedYears.length > 0) {
-            filtered = filtered.filter((pub) => selectedYears.includes(pub.year));
-        }
+            // Featured filter
+            if (showFeaturedOnly && !pub.featured) return false;
 
-        // Type filter
-        if (selectedTypes.length > 0) {
-            filtered = filtered.filter((pub) => selectedTypes.includes(pub.type));
-        }
-
-        // Featured filter
-        if (showFeatured) {
-            filtered = filtered.filter((pub) => pub.featured);
-        }
+            return true;
+        });
 
         // Sort
-        if (sortBy === 'year_desc') {
-            filtered = filtered.sort((a, b) => {
-                if (b.year !== a.year) return b.year - a.year;
-                if (b.month && a.month) return b.month - a.month;
-                return 0;
-            });
-        } else if (sortBy === 'year_asc') {
-            filtered = filtered.sort((a, b) => {
-                if (a.year !== b.year) return a.year - b.year;
-                if (a.month && b.month) return a.month - b.month;
-                return 0;
-            });
-        } else if (sortBy === 'title_az') {
-            filtered = filtered.sort((a, b) => a.title.localeCompare(b.title));
-        }
+        filtered.sort((a, b) => {
+            if (sortBy === 'year_desc') return b.year - a.year;
+            if (sortBy === 'year_asc') return a.year - b.year;
+            if (sortBy === 'title_az') return a.title.localeCompare(b.title);
+            return 0;
+        });
 
         return filtered;
-    }, [items, searchQuery, selectedYears, selectedTypes, showFeatured, sortBy]);
+    }, [items, searchQuery, selectedYears, selectedType, showFeaturedOnly, sortBy]);
 
     // Group by year
     const groupedPubs = useMemo(() => {
-        return groupByYear(filteredPubs);
+        const groups = new Map<number, typeof items>();
+        filteredPubs.forEach((pub) => {
+            if (!groups.has(pub.year)) groups.set(pub.year, []);
+            groups.get(pub.year)!.push(pub);
+        });
+        return Array.from(groups.entries()).sort((a, b) => b[0] - a[0]);
     }, [filteredPubs]);
 
     const toggleYear = (year: number) => {
-        setSelectedYears((prev) =>
-            prev.includes(year) ? prev.filter((y) => y !== year) : [...prev, year]
-        );
-    };
-
-    const toggleType = (type: string) => {
-        setSelectedTypes((prev) =>
-            prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
-        );
-    };
-
-    const clearFilters = () => {
-        setSearchQuery('');
-        setSelectedYears([]);
-        setSelectedTypes([]);
-        setShowFeatured(false);
-    };
-
-    const toggleYearExpanded = (year: number) => {
-        setExpandedYears((prev) => {
+        setSelectedYears((prev) => {
             const next = new Set(prev);
-            if (next.has(year)) {
-                next.delete(year);
-            } else {
-                next.add(year);
-            }
+            if (next.has(year)) next.delete(year);
+            else next.add(year);
             return next;
         });
     };
 
-    const hasActiveFilters = searchQuery || selectedYears.length > 0 || selectedTypes.length > 0 || showFeatured;
+    const toggleYearCollapse = (year: number) => {
+        setCollapsedYears((prev) => {
+            const next = new Set(prev);
+            if (next.has(year)) next.delete(year);
+            else next.add(year);
+            return next;
+        });
+    };
 
     return (
-        <section id="publications" className="py-16 bg-accent/30">
-            <div className="container mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-                <h2 className="text-3xl font-bold mb-8">Publications</h2>
+        <section id="publications" className="py-20 relative overflow-hidden">
+            {/* Gradient background */}
+            <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/[0.02] to-background -z-10" />
 
-                {/* Search and Filters */}
-                <div className="mb-8 space-y-4">
-                    {/* Search */}
-                    <div className="relative">
-                        <HiSearch className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+                {/* Header */}
+                <div className="text-center mb-12">
+                    <h2 className="text-4xl sm:text-5xl font-bold gradient-text mb-4">
+                        Publications
+                    </h2>
+                    <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                        {filteredPubs.length} publication{filteredPubs.length !== 1 ? 's' : ''}
+                    </p>
+                </div>
+
+                {/* Modern Search Bar */}
+                <div className="mb-8">
+                    <div className="relative max-w-2xl mx-auto">
+                        <HiSearch className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                         <input
                             type="text"
-                            placeholder="Search titles, authors, venues, keywords..."
+                            placeholder="Search by title, author, venue, or keywords..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full pl-10 pr-10 py-2 bg-background border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
+                            className="w-full pl-12 pr-12 py-4 bg-card border-2 border-border rounded-2xl focus:border-primary focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all text-foreground placeholder:text-muted-foreground"
                         />
                         {searchQuery && (
                             <button
                                 onClick={() => setSearchQuery('')}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-accent rounded"
-                                aria-label="Clear search"
+                                className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-accent rounded-lg transition-colors"
                             >
-                                <HiX className="h-4 w-4" />
-                            </button>
-                        )}
-                    </div>
-
-                    {/* Filters */}
-                    <div className="flex flex-wrap gap-4 items-center">
-                        {/* Year filter */}
-                        <div className="flex flex-wrap gap-2">
-                            <span className="text-sm font-medium text-muted-foreground">Year:</span>
-                            {allYears.map((year) => (
-                                <button
-                                    key={year}
-                                    onClick={() => toggleYear(year)}
-                                    className={cn(
-                                        'px-3 py-1 rounded-md text-sm transition-colors',
-                                        selectedYears.includes(year)
-                                            ? 'bg-primary text-primary-foreground'
-                                            : 'bg-secondary hover:bg-secondary/80'
-                                    )}
-                                >
-                                    {year}
-                                </button>
-                            ))}
-                        </div>
-
-                        {/* Type filter */}
-                        <div className="flex flex-wrap gap-2">
-                            <span className="text-sm font-medium text-muted-foreground">Type:</span>
-                            {allTypes.map((type) => (
-                                <button
-                                    key={type}
-                                    onClick={() => toggleType(type)}
-                                    className={cn(
-                                        'px-3 py-1 rounded-md text-sm capitalize transition-colors',
-                                        selectedTypes.includes(type)
-                                            ? 'bg-primary text-primary-foreground'
-                                            : 'bg-secondary hover:bg-secondary/80'
-                                    )}
-                                >
-                                    {type}
-                                </button>
-                            ))}
-                        </div>
-
-                        {/* Featured toggle */}
-                        <button
-                            onClick={() => setShowFeatured(!showFeatured)}
-                            className={cn(
-                                'px-3 py-1 rounded-md text-sm transition-colors',
-                                showFeatured
-                                    ? 'bg-primary text-primary-foreground'
-                                    : 'bg-secondary hover:bg-secondary/80'
-                            )}
-                        >
-                            ⭐ Featured
-                        </button>
-
-                        {/* Sort */}
-                        <div className="flex items-center gap-2">
-                            <span className="text-sm font-medium text-muted-foreground">Sort:</span>
-                            <select
-                                value={sortBy}
-                                onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-                                className="px-3 py-1 bg-background border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                            >
-                                <option value="year_desc">Year (newest)</option>
-                                <option value="year_asc">Year (oldest)</option>
-                                <option value="title_az">Title (A-Z)</option>
-                            </select>
-                        </div>
-
-                        {/* Clear filters */}
-                        {hasActiveFilters && (
-                            <button
-                                onClick={clearFilters}
-                                className="text-sm text-muted-foreground hover:text-foreground underline"
-                            >
-                                Clear all
+                                <HiX className="h-5 w-5 text-muted-foreground" />
                             </button>
                         )}
                     </div>
                 </div>
 
-                {/* Publications List */}
-                {filteredPubs.length === 0 ? (
-                    <div className="text-center py-12 text-muted-foreground">
-                        No publications found matching your filters.
+                {/* Filters */}
+                <div className="flex flex-wrap gap-4 mb-10 items-center justify-center">
+                    {/* Year filters */}
+                    <div className="flex flex-wrap gap-2">
+                        {years.map((year) => (
+                            <button
+                                key={year}
+                                onClick={() => toggleYear(year)}
+                                className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${selectedYears.has(year)
+                                    ? 'gradient-bg text-primary-foreground shadow-lg shadow-primary/30'
+                                    : 'bg-secondary hover:bg-secondary/80 text-secondary-foreground'
+                                    }`}
+                            >
+                                {year}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Type filter */}
+                    <select
+                        value={selectedType}
+                        onChange={(e) => setSelectedType(e.target.value)}
+                        className="px-4 py-2 bg-card border-2 border-border rounded-xl focus:border-primary focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all text-foreground font-medium"
+                    >
+                        <option value="all">All Types</option>
+                        {types.map((type) => (
+                            <option key={type} value={type}>
+                                {type.charAt(0).toUpperCase() + type.slice(1)}
+                            </option>
+                        ))}
+                    </select>
+
+                    {/* Featured toggle */}
+                    <button
+                        onClick={() => setShowFeaturedOnly(!showFeaturedOnly)}
+                        className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 ${showFeaturedOnly
+                            ? 'gradient-bg text-primary-foreground shadow-lg shadow-primary/30'
+                            : 'bg-secondary hover:bg-secondary/80 text-secondary-foreground'
+                            }`}
+                    >
+                        ⭐ Featured
+                    </button>
+
+                    {/* Sort */}
+                    <select
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value)}
+                        className="px-4 py-2 bg-card border-2 border-border rounded-xl focus:border-primary focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all text-foreground font-medium"
+                    >
+                        <option value="year_desc">Latest First</option>
+                        <option value="year_asc">Oldest First</option>
+                        <option value="title_az">Title (A-Z)</option>
+                    </select>
+
+                    {/* Clear filters */}
+                    {(selectedYears.size > 0 || selectedType !== 'all' || showFeaturedOnly) && (
+                        <button
+                            onClick={() => {
+                                setSelectedYears(new Set());
+                                setSelectedType('all');
+                                setShowFeaturedOnly(false);
+                            }}
+                            className="text-sm text-primary hover:text-primary/80 underline font-medium"
+                        >
+                            Clear filters
+                        </button>
+                    )}
+                </div>
+
+                {/* Publications by year */}
+                {groupedPubs.length === 0 ? (
+                    <div className="text-center py-20">
+                        <div className="text-6xl mb-4">📚</div>
+                        <p className="text-xl text-muted-foreground">No publications found</p>
                     </div>
                 ) : (
-                    <div className="space-y-8">
-                        {Array.from(groupedPubs.entries())
-                            .sort(([yearA], [yearB]) => yearB - yearA)
-                            .map(([year, pubs]) => {
-                                const isExpanded = !settings.collapseYears?.enabled || expandedYears.has(year);
+                    <div className="space-y-12">
+                        {groupedPubs.map(([year, pubs]) => (
+                            <div key={year} className="space-y-6">
+                                {/* Year header */}
+                                <button
+                                    onClick={() => toggleYearCollapse(year)}
+                                    className="flex items-center gap-3 group w-full"
+                                >
+                                    <h3 className="text-3xl font-bold gradient-text">{year}</h3>
+                                    <div className="flex-1 h-0.5 bg-gradient-to-r from-primary/50 to-transparent" />
+                                    <span className="text-sm font-semibold text-muted-foreground bg-secondary px-3 py-1 rounded-full">
+                                        {pubs.length} paper{pubs.length !== 1 ? 's' : ''}
+                                    </span>
+                                    <span className="text-muted-foreground group-hover:text-foreground transition-colors">
+                                        {collapsedYears.has(year) ? '▼' : '▲'}
+                                    </span>
+                                </button>
 
-                                return (
-                                    <div key={year}>
-                                        <div className="flex items-center justify-between mb-4">
-                                            <h3 className="text-2xl font-semibold">{year}</h3>
-
-                                            {settings.collapseYears?.enabled && (
-                                                <button
-                                                    onClick={() => toggleYearExpanded(year)}
-                                                    className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                                                >
-                                                    {isExpanded ? (
-                                                        <>
-                                                            <HiChevronUp className="h-4 w-4" />
-                                                            Collapse
-                                                        </>
-                                                    ) : (
-                                                        <>
-                                                            <HiChevronDown className="h-4 w-4" />
-                                                            Expand ({pubs.length})
-                                                        </>
-                                                    )}
-                                                </button>
-                                            )}
-                                        </div>
-
-                                        {isExpanded && (
-                                            <div className="space-y-4">
-                                                {pubs.map((pub) => (
-                                                    <PublicationCard
-                                                        key={pub.id}
-                                                        publication={pub}
-                                                        settings={settings}
-                                                    />
-                                                ))}
-                                            </div>
-                                        )}
+                                {/* Publications */}
+                                {!collapsedYears.has(year) && (
+                                    <div className="grid gap-6">
+                                        {pubs.map((pub) => (
+                                            <PublicationCard
+                                                key={pub.id}
+                                                publication={pub}
+                                                settings={settings}
+                                            />
+                                        ))}
                                     </div>
-                                );
-                            })}
+                                )}
+                            </div>
+                        ))}
                     </div>
                 )}
             </div>

@@ -74,11 +74,6 @@ document.addEventListener('DOMContentLoaded', function () {
   } else {
     reveals.forEach(function (el) { el.classList.add('reveal-visible'); });
   }
-  
-  // Load and render content (skip for blog page as it has its own onLoad)
-  if (typeof onLoad === 'function' && !window.location.pathname.includes('blog.html')) {
-    onLoad();
-  }
 });
 
  

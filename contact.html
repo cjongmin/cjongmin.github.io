@@ -1,86 +1,78 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Contact • Jongmin Choi</title>
-    <meta name="description" content="Contact — Jongmin Choi" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./assets/css/styles.css" />
-  </head>
-  <body class="has-rail">
-    <aside class="profile-rail-global">
-      <div class="profile-card">
-        <img class="profile-photo" id="profile-photo-global" alt="profile photo" />
-        <div class="profile-name" id="profile-name-global">Jongmin Choi</div>
-        <div class="profile-affil" id="profile-affil-global"></div>
-        
-        <div class="profile-divider"></div>
-        
-        <div class="profile-section">
-          <div class="profile-section-title">At a Glance</div>
-          <div class="profile-stats" id="profile-stats-global"></div>
-        </div>
-        
-        <div class="profile-divider"></div>
-        
-        <div class="profile-section">
-          <div class="profile-section-title">Links</div>
-          <div class="profile-links">
-            <a class="chip" id="rail-cv-global" href="#" target="_blank" rel="noopener"><span class="icon">📄</span>CV</a>
-            <a class="chip" href="#" id="rail-scholar-global" target="_blank" rel="noopener"><span class="icon">🎓</span>Scholar</a>
-            <a class="chip" href="#" id="rail-github-global" target="_blank" rel="noopener"><span class="icon">🐙</span>GitHub</a>
-            <a class="chip" href="#" id="rail-linkedin-global" target="_blank" rel="noopener"><span class="icon">🔗</span>LinkedIn</a>
-          </div>
-        </div>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact • Jongmin Choi</title>
+  <meta name="description" content="Contact — Jongmin Choi" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="./assets/css/styles.css" />
+</head>
+
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="./index.html">Jongmin Choi</a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="./index.html" data-nav>About</a>
+        <a href="./publications.html" data-nav>Publications</a>
+        <a href="./awards.html" data-nav>Awards</a>
+        <a href="./blog.html" data-nav>Blog</a>
+        <a href="./contact.html" class="active" data-nav>Contact</a>
+      </nav>
+      <div>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+          <span class="icon moon">☾</span>
+          <span class="icon sun">☀</span>
+        </button>
+        <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
       </div>
-    </aside>
-    
-    <header class="site-header">
-      <div class="container">
-        <img id="brand-avatar" class="brand-avatar" alt="Profile" />
-        <a class="brand" href="./index.html">Jongmin Choi</a>
-        <nav class="site-nav" aria-label="Primary">
-          <a href="./index.html" data-nav>About Me</a>
-          <a href="./publications.html" data-nav>Publications</a>
-          <a href="./awards.html" data-nav>Awards</a>
-          <a href="./blog.html" data-nav>Blog</a>
-          <a href="./contact.html" data-nav>Contact</a>
-        </nav>
-        <div class="header-actions">
-          <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
-            <span class="icon moon">☾</span>
-            <span class="icon sun">☀</span>
-          </button>
-          <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
-        </div>
+    </div>
+  </header>
+
+  <main class="container profile-single-col">
+    <h1>Contact</h1>
+    <section class="reveal">
+      <p>
+        Email: <a id="email-link" href="mailto:jongmin@mmai.io">jongmin@mmai.io</a>
+        <button id="copy-email" data-email="jongmin@mmai.io" class="button small">Copy</button>
+      </p>
+      <h2>Links</h2>
+      <div class="link-row">
+        <a class="chip" href="assets/cv/cv.pdf" target="_blank" rel="noopener"><span class="icon">📄</span>CV</a>
+        <a class="chip" href="#" target="_blank" rel="noopener"><span class="icon">🎓</span>Google Scholar</a>
+        <a class="chip" href="#" target="_blank" rel="noopener"><span class="icon">🐙</span>GitHub</a>
+        <a class="chip" href="#" target="_blank" rel="noopener"><span class="icon">🔗</span>LinkedIn</a>
+        <a class="chip" href="mailto:jongmin@mmai.io"><span class="icon">✉️</span>Mail</a>
       </div>
-    </header>
-    <main class="container">
-      <h1>Contact</h1>
-      <section class="reveal">
-        <p>
-          Email: <a id="email-link" href="mailto:your.name@example.com">your.name@example.com</a>
-          <button id="copy-email" data-email="your.name@example.com" class="button small">Copy</button>
-        </p>
-        <h2>Links</h2>
-        <div class="link-row">
-          <a class="chip" id="chip-cv" href="./assets/cv/cv.pdf" target="_blank" rel="noopener"><span class="icon">📄</span>CV</a>
-          <a class="chip" href="#" id="chip-scholar" target="_blank" rel="noopener"><span class="icon">🎓</span>Google Scholar</a>
-          <a class="chip" href="#" id="chip-github" target="_blank" rel="noopener"><span class="icon">🐙</span>GitHub</a>
-          <a class="chip" href="#" id="chip-linkedin" target="_blank" rel="noopener"><span class="icon">🔗</span>LinkedIn</a>
-          <a class="chip" href="mailto:your.name@example.com" id="chip-mail"><span class="icon">✉️</span>Mail</a>
-        </div>
-      </section>
-    </main>
-    <footer class="site-footer">
-      <div class="container">
-        <p>© <span id="year"></span> Jongmin Choi. All rights reserved.</p>
-      </div>
-    </footer>
-    <script src="./assets/js/render.js"></script>
-    <script src="./assets/js/main.js"></script>
-  </body>
-  </html>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© <span id="year"></span> Jongmin Choi. All rights reserved.</p>
+    </div>
+  </footer>
+  <script src="./assets/js/main.js"></script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const copyBtn = document.getElementById('copy-email');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(copyBtn.getAttribute('data-email'));
+        const original = copyBtn.textContent;
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => copyBtn.textContent = original, 2000);
+      });
+    }
+  </script>
+</body>
+
+</html>

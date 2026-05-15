@@ -8,18 +8,18 @@ export default function Experience() {
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
   return (
-    <section id="experience" ref={ref} className="py-28">
+    <section id="experience" ref={ref} className="py-16 sm:py-24">
       <div className="section-container">
         <motion.div
-          initial={{ opacity: 0, y: 32 }}
+          initial={{ opacity: 0, y: 28 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="mb-12"
+          className="mb-8"
         >
-          <p className="text-sm font-medium text-[#0071E3] dark:text-[#2997FF] uppercase tracking-widest mb-4">
+          <p className="text-xs font-semibold text-[#6E6E73] dark:text-[#86868B] uppercase tracking-widest mb-3">
             Experience
           </p>
-          <h2 className="section-title">Background</h2>
+          <h2 className="section-title">Research Experience</h2>
         </motion.div>
 
         {/* Timeline */}
@@ -41,9 +41,9 @@ export default function Experience() {
                 <div className="relative shrink-0 flex flex-col items-center">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full
                                   bg-white dark:bg-[#1C1C1E]
-                                  border-2 border-[#0071E3] dark:border-[#2997FF]
+                                  border border-black/[0.12] dark:border-white/[0.12]
                                   flex items-center justify-center z-10 shadow-sm">
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#0071E3] dark:bg-[#2997FF]" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#6E6E73] dark:bg-[#86868B]" />
                   </div>
                 </div>
 
@@ -74,7 +74,7 @@ export default function Experience() {
                     </div>
 
                     {/* Organization */}
-                    <p className="text-sm font-medium text-[#0071E3] dark:text-[#2997FF] mb-1">
+                    <p className="text-sm font-medium text-secondary mb-1">
                       {exp.organization}
                     </p>
 

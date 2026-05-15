@@ -7,7 +7,11 @@
     "startDate": "Mar 2025",
     "endDate": "Present",
     "description": "Pursuing a Master's degree in Electrical Engineering at KAIST. Affiliated with the Multimodal AI (MMAI) Lab, conducting research on vision-language models and multimodal representation learning.",
-    "tags": ["Multimodal AI", "Vision-Language Models", "MMAI Lab"],
+    "tags": [
+      "Multimodal AI",
+      "Vision-Language Models",
+      "MMAI Lab"
+    ],
     "link": "https://your-lab-website.com"
   },
   {
@@ -18,6 +22,11 @@
     "startDate": "Mar 2018",
     "endDate": "Feb 2025",
     "description": "Graduated with a double major in Mathematical Sciences and Electrical Engineering from KAIST.",
-    "tags": ["B.S. Mathematics", "B.S. Electrical Engineering", "KAIST"]
+    "tags": [
+      "B.S. Mathematics",
+      "B.S. Electrical Engineering",
+      "KAIST"
+    ],
+    "link": "https://mmai.io"
   }
 ]

@@ -41,15 +41,15 @@ export default function Contact() {
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
   return (
-    <section id="contact" ref={ref} className="py-28 bg-[#F5F5F7]/50 dark:bg-[#1C1C1E]/40">
+    <section id="contact" ref={ref} className="py-16 sm:py-24 bg-[#F5F5F7]/50 dark:bg-[#1C1C1E]/40">
       <div className="section-container">
         <motion.div
-          initial={{ opacity: 0, y: 32 }}
+          initial={{ opacity: 0, y: 28 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="mb-12"
+          className="mb-8"
         >
-          <p className="text-sm font-medium text-[#0071E3] dark:text-[#2997FF] uppercase tracking-widest mb-4">
+          <p className="text-xs font-semibold text-[#6E6E73] dark:text-[#86868B] uppercase tracking-widest mb-3">
             Contact
           </p>
           <h2 className="section-title">Get In Touch</h2>
@@ -85,9 +85,9 @@ export default function Contact() {
             <div className="space-y-4">
               {contactItems.map(({ icon: Icon, label, value, href }) => (
                 <div key={label} className="flex items-center gap-4">
-                  <div className="w-9 h-9 rounded-xl bg-[#0071E3]/10 dark:bg-[#2997FF]/15
+                  <div className="w-9 h-9 rounded-xl bg-black/[0.05] dark:bg-white/[0.07]
                                   flex items-center justify-center shrink-0">
-                    <Icon size={16} className="text-[#0071E3] dark:text-[#2997FF]" />
+                    <Icon size={16} className="text-secondary" />
                   </div>
                   <div className="min-w-0">
                     <p className="text-xs text-secondary mb-0.5">{label}</p>

@@ -12,6 +12,23 @@ interface PublicationCardProps {
 
 const PREPRINT_VENUES = ['arXiv', 'Preprint']
 
+const BASE_BTN = 'inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors duration-150 border'
+
+function linkButtonClass(label: string): string {
+  switch (label) {
+    case 'Paper':
+      return `${BASE_BTN} bg-red-50 text-red-700 border-red-200 hover:bg-red-100 dark:bg-red-950/30 dark:text-red-400 dark:border-red-800/60 dark:hover:bg-red-950/50`
+    case 'Scholar':
+      return `${BASE_BTN} bg-green-50 text-green-700 border-green-200 hover:bg-green-100 dark:bg-green-950/30 dark:text-green-400 dark:border-green-800/60 dark:hover:bg-green-950/50`
+    case 'Code':
+      return `${BASE_BTN} bg-[#1D1D1F] text-white border-[#1D1D1F] hover:bg-[#2c2c2e] dark:bg-[#F5F5F7] dark:text-[#1D1D1F] dark:border-[#F5F5F7] dark:hover:bg-white`
+    case 'BibTeX':
+      return `${BASE_BTN} bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 dark:bg-blue-950/30 dark:text-blue-400 dark:border-blue-800/60 dark:hover:bg-blue-950/50`
+    default:
+      return `${BASE_BTN} bg-black/[0.05] text-secondary border-black/[0.08] hover:bg-black/[0.08] dark:bg-white/[0.07] dark:border-white/[0.1] dark:hover:bg-white/[0.1]`
+  }
+}
+
 export default function PublicationCard({ pub, index }: PublicationCardProps) {
   const [bibtexOpen, setBibtexOpen] = useState(false)
   const [imgError, setImgError] = useState(false)
@@ -38,16 +55,16 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
         <div className="flex flex-col sm:flex-row gap-0">
           {/* Representative image */}
           {pub.image && !imgError ? (
-            <div className="sm:w-44 sm:shrink-0 bg-black/[0.03] dark:bg-white/[0.03] flex items-center justify-center overflow-hidden">
+            <div className="sm:w-44 sm:shrink-0 bg-white dark:bg-[#2C2C2E] flex items-center justify-center overflow-hidden">
               <img
                 src={pub.image}
                 alt={pub.title}
                 onError={() => setImgError(true)}
-                className="w-full sm:h-full object-cover max-h-40 sm:max-h-none"
+                className="w-full h-full object-contain max-h-48 sm:max-h-none"
               />
             </div>
           ) : pub.image && imgError ? (
-            <div className="sm:w-44 sm:shrink-0 bg-black/[0.03] dark:bg-white/[0.03] flex items-center justify-center min-h-[80px]">
+            <div className="sm:w-44 sm:shrink-0 bg-white dark:bg-[#2C2C2E] flex items-center justify-center min-h-[80px]">
               <ImageOff size={20} className="text-secondary opacity-40" />
             </div>
           ) : null}
@@ -61,7 +78,7 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
                   ? 'bg-amber-500/10 dark:bg-amber-400/15 text-amber-700 dark:text-amber-400'
                   : 'bg-[#0071E3]/10 dark:bg-[#2997FF]/15 text-[#0071E3] dark:text-[#2997FF]'
               }`}>
-                {pub.venue} {pub.year}
+                {pub.displayVenue ?? `${pub.venue} ${pub.year}`}
               </span>
               {isPreprint && (
                 <span className="text-[11px] text-amber-600 dark:text-amber-400 font-medium">
@@ -129,7 +146,7 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={label === 'Paper' ? 'btn-primary' : 'btn-secondary'}
+                    className={linkButtonClass(label)}
                     aria-label={`${label} for ${pub.title}`}
                   >
                     <Icon size={13} />
@@ -139,7 +156,7 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
                 {pub.bibtex && (
                   <button
                     onClick={() => setBibtexOpen(true)}
-                    className="btn-secondary"
+                    className={linkButtonClass('BibTeX')}
                     aria-label={`Show BibTeX for ${pub.title}`}
                   >
                     <Quote size={13} />

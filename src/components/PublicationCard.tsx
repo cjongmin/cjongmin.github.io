@@ -55,17 +55,17 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
         <div className="flex flex-col sm:flex-row gap-0">
           {/* Representative image */}
           {pub.image && !imgError ? (
-            <div className="sm:w-44 sm:shrink-0 bg-white dark:bg-[#2C2C2E] flex items-center justify-center overflow-hidden">
+            <div className="sm:w-44 sm:shrink-0 bg-neutral-50 dark:bg-zinc-900/60 flex items-center justify-center overflow-hidden p-2 rounded-l-2xl">
               <img
                 src={pub.image}
                 alt={pub.title}
                 onError={() => setImgError(true)}
-                className="w-full h-full object-contain max-h-48 sm:max-h-none"
+                className="w-full h-full object-contain max-h-44 sm:max-h-none rounded"
               />
             </div>
           ) : pub.image && imgError ? (
-            <div className="sm:w-44 sm:shrink-0 bg-white dark:bg-[#2C2C2E] flex items-center justify-center min-h-[80px]">
-              <ImageOff size={20} className="text-secondary opacity-40" />
+            <div className="sm:w-44 sm:shrink-0 bg-neutral-50 dark:bg-zinc-900/60 flex items-center justify-center min-h-[80px] rounded-l-2xl">
+              <ImageOff size={20} className="text-secondary opacity-30" />
             </div>
           ) : null}
 

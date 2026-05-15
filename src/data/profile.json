@@ -4,16 +4,17 @@
   "affiliation": "MMAI Lab",
   "university": "Korea Advanced Institute of Science and Technology (KAIST)",
   "email": "jongmin@mmai.io",
-  "location": "Seoul, South Korea",
+  "location": "Daejeon, South Korea",
   "links": {
     "github": "https://github.com/cjongmin",
     "linkedin": "https://www.linkedin.com/in/cjongmin",
     "scholar": "https://scholar.google.com/citations?user=sPvkgm8AAAAJ&hl=ko"
   },
-  "bio": "I am an MS student working on multimodal artificial intelligence, with interests in vision-language models, representation learning, and human-centered AI systems. My research explores how multimodal models can better understand, reason, and interact across visual and textual information.\n\nMy goal is to build AI systems that are not only capable, but also interpretable and aligned with human values.",
+  "bio": "I am an MS student at KAIST, working in the Multimodal AI Lab. My research focuses on multimodal representation learning, with a particular interest in audio-visual language models, modality gap mitigation, and interpretable neural computation.\n\nI aim to build multimodal systems that are not only capable, but also more interpretable, efficient, and aligned with human understanding.",
   "interests": [
-    "Spiking Neural Networks",
-    "Modality Gap"
+    "Audio-Visual Language Models",
+    "Modality Gap Mitigation",
+    "Interpretable Spiking Neural Networks"
   ],
   "profileImage": "/profile.jpg"
 }

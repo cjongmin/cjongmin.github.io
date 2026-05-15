@@ -17,20 +17,17 @@ export default function Hero() {
       id="home"
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-16"
     >
-      {/* Subtle background blobs */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-blue-100/30 dark:bg-blue-900/8 blur-[140px]" />
-        <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] rounded-full bg-purple-100/20 dark:bg-purple-900/8 blur-[120px]" />
-      </div>
-
-      <div className="section-container relative z-10 flex flex-col items-center text-center gap-7 py-24">
-        {/* Monogram / profile photo */}
+      <div className="section-container relative z-10 flex flex-col items-center text-center gap-6 pt-16 pb-28">
+        {/* Profile photo / monogram */}
         {profile.profileImage ? (
           <motion.div
-            initial={{ opacity: 0, scale: 0.92 }}
+            initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="w-24 h-24 rounded-full overflow-hidden ring-1 ring-black/[0.08] dark:ring-white/[0.1] shadow-lg"
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.35 }}
+            className="w-[88px] h-[88px] rounded-full overflow-hidden
+                       ring-1 ring-black/[0.1] dark:ring-white/[0.12]
+                       shadow-xl cursor-pointer"
           >
             <img src={profile.profileImage} alt={profile.name} className="w-full h-full object-cover" />
           </motion.div>
@@ -51,7 +48,7 @@ export default function Hero() {
         )}
 
         {/* Name + title */}
-        <div className="flex flex-col gap-2.5">
+        <div className="flex flex-col gap-2">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -100,7 +97,7 @@ export default function Hero() {
           </a>
         </motion.div>
 
-        {/* Keyword chips — 3 only */}
+        {/* Keyword chips */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -128,7 +125,7 @@ export default function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.1 }}
-          className="mt-4 text-secondary hover:text-[#0071E3] dark:hover:text-[#2997FF] transition-colors flex flex-col items-center gap-1.5 text-xs"
+          className="mt-2 text-secondary hover:text-[#0071E3] dark:hover:text-[#2997FF] transition-colors flex flex-col items-center gap-1.5 text-xs"
           aria-label="Scroll to About section"
         >
           <span>Explore</span>

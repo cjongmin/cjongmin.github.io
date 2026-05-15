@@ -5,6 +5,7 @@ import About from './components/About'
 import Publications from './components/Publications'
 import Experience from './components/Experience'
 import Contact from './components/Contact'
+import BackgroundGlow from './components/BackgroundGlow'
 
 export default function App() {
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
@@ -26,7 +27,8 @@ export default function App() {
   const toggleTheme = () => setTheme(t => (t === 'dark' ? 'light' : 'dark'))
 
   return (
-    <div className="min-h-screen">
+    <div className="relative min-h-screen overflow-x-hidden">
+      <BackgroundGlow />
       <Navbar theme={theme} toggleTheme={toggleTheme} />
       <main>
         <Hero />

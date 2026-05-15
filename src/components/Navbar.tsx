@@ -48,29 +48,29 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
     <header
       className={`fixed top-0 left-0 right-0 z-50 h-16 transition-all duration-300
         ${scrolled
-          ? 'bg-white/80 dark:bg-black/80 backdrop-blur-xl border-b border-black/[0.06] dark:border-white/[0.08] shadow-sm'
-          : 'bg-transparent'
+          ? 'bg-white/88 dark:bg-black/88 backdrop-blur-2xl border-b border-black/[0.07] dark:border-white/[0.07]'
+          : 'bg-white/55 dark:bg-black/50 backdrop-blur-xl border-b border-black/[0.04] dark:border-white/[0.04]'
         }`}
     >
       <div className="section-container h-full flex items-center justify-between">
         {/* Logo */}
         <button
           onClick={() => handleNav('home')}
-          className="font-semibold text-[15px] tracking-tight text-[#1D1D1F] dark:text-[#F5F5F7] hover:opacity-70 transition-opacity"
+          className="font-semibold text-[15px] tracking-tight text-[#1D1D1F] dark:text-[#F5F5F7] hover:opacity-60 transition-opacity duration-150"
         >
           Jongmin Choi
         </button>
 
         {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-1">
+        <nav className="hidden md:flex items-center gap-0.5">
           {NAV_ITEMS.map(item => (
             <button
               key={item.id}
               onClick={() => handleNav(item.id)}
               className={`px-3.5 py-1.5 rounded-full text-sm font-medium transition-all duration-150
                 ${activeSection === item.id
-                  ? 'bg-black/[0.08] dark:bg-white/[0.12] text-[#1D1D1F] dark:text-[#F5F5F7]'
-                  : 'text-secondary hover:text-[#1D1D1F] dark:hover:text-[#F5F5F7]'
+                  ? 'bg-black/[0.07] dark:bg-white/[0.1] text-[#1D1D1F] dark:text-[#F5F5F7]'
+                  : 'text-secondary hover:text-[#1D1D1F] dark:hover:text-[#F5F5F7] hover:bg-black/[0.04] dark:hover:bg-white/[0.06]'
                 }`}
             >
               {item.label}
@@ -84,8 +84,8 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
           {/* Mobile hamburger */}
           <button
             className="md:hidden w-9 h-9 flex items-center justify-center rounded-full
-                       bg-black/[0.06] dark:bg-white/10
-                       hover:bg-black/[0.1] dark:hover:bg-white/[0.15]
+                       bg-black/[0.05] dark:bg-white/[0.08]
+                       hover:bg-black/[0.09] dark:hover:bg-white/[0.13]
                        transition-colors duration-150"
             onClick={() => setMenuOpen(o => !o)}
             aria-label="Toggle menu"
@@ -97,14 +97,14 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden absolute top-16 left-0 right-0 bg-white/95 dark:bg-[#1C1C1E]/95 backdrop-blur-xl border-b border-black/[0.06] dark:border-white/[0.08] shadow-lg py-2">
+        <div className="md:hidden absolute top-16 left-0 right-0 bg-white/95 dark:bg-[#111]/95 backdrop-blur-2xl border-b border-black/[0.06] dark:border-white/[0.07] py-2">
           {NAV_ITEMS.map(item => (
             <button
               key={item.id}
               onClick={() => handleNav(item.id)}
               className={`w-full text-left px-6 py-3 text-sm font-medium transition-colors
                 ${activeSection === item.id
-                  ? 'text-[#0071E3] dark:text-[#2997FF]'
+                  ? 'text-[#1D1D1F] dark:text-[#F5F5F7]'
                   : 'text-secondary hover:text-[#1D1D1F] dark:hover:text-[#F5F5F7]'
                 }`}
             >

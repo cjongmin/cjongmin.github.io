@@ -91,6 +91,36 @@ def profile_save(name, title, affiliation, university, email, location,
     return "✅ Profile saved!"
 
 
+def cv_get_status():
+    p = rjson("profile.json")
+    cv = p.get("cvFile", "")
+    if cv:
+        fpath = PUBLIC / cv.lstrip("/")
+        size = f" ({fpath.stat().st_size // 1024} KB)" if fpath.exists() else " (file missing)"
+        return f"✅ CV uploaded: {cv}{size}"
+    return "No CV uploaded"
+
+def cv_upload(file_path):
+    if not file_path:
+        return "⚠️ No file selected."
+    dest = PUBLIC / "cv.pdf"
+    shutil.copy(file_path, dest)
+    p = rjson("profile.json")
+    p["cvFile"] = "/cv.pdf"
+    wjson("profile.json", p)
+    size = dest.stat().st_size // 1024
+    return f"✅ CV uploaded: /cv.pdf ({size} KB)"
+
+def cv_remove():
+    cv_path = PUBLIC / "cv.pdf"
+    if cv_path.exists():
+        cv_path.unlink()
+    p = rjson("profile.json")
+    p["cvFile"] = ""
+    wjson("profile.json", p)
+    return "✅ CV removed. Button will be hidden on the site."
+
+
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # TAB 2 — PUBLICATIONS
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -334,6 +364,14 @@ with gr.Blocks(title="Profile Admin") as demo:
                 p_save_btn = gr.Button("💾 Save Profile", variant="primary")
             p_status = gr.Textbox(label="Status", interactive=False)
 
+            gr.Markdown("---")
+            gr.Markdown("### 📄 CV / Resume")
+            p_cv_status  = gr.Textbox(label="Current CV", interactive=False)
+            p_cv_file    = gr.File(label="Upload CV (PDF only)", file_types=[".pdf"], type="filepath")
+            with gr.Row():
+                p_cv_upload_btn = gr.Button("📤 Upload CV", variant="primary")
+                p_cv_remove_btn = gr.Button("🗑️ Remove CV", variant="stop")
+
             p_load_btn.click(
                 profile_load,
                 outputs=[p_name, p_title, p_aff, p_uni, p_email, p_loc,
@@ -345,9 +383,13 @@ with gr.Blocks(title="Profile Admin") as demo:
                         p_gh, p_li, p_sc, p_bio, p_int, p_kw, p_img],
                 outputs=p_status,
             )
+            p_cv_upload_btn.click(cv_upload, inputs=p_cv_file, outputs=p_cv_status)
+            p_cv_remove_btn.click(cv_remove, outputs=p_cv_status)
+
             demo.load(profile_load,
                       outputs=[p_name, p_title, p_aff, p_uni, p_email, p_loc,
                                 p_gh, p_li, p_sc, p_bio, p_int, p_kw, p_img])
+            demo.load(cv_get_status, outputs=p_cv_status)
 
         # ── Publications ───────────────────────────────────────────────────────
         with gr.Tab("📄 Publications"):

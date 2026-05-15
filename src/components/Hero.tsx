@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Github, Linkedin, BookOpen, Mail } from 'lucide-react'
+import { Github, Linkedin, BookOpen, Download } from 'lucide-react'
 import { profile } from '../data/profile'
 import { scrollToSection } from '../lib/utils'
 
@@ -92,10 +92,23 @@ export default function Hero() {
               {label}
             </a>
           ))}
-          <a href={`mailto:${profile.email}`} className="btn-secondary">
-            <Mail size={14} />
-            Email
-          </a>
+          {profile.cvFile ? (
+            <a
+              href={profile.cvFile}
+              target="_blank"
+              rel="noopener noreferrer"
+              download
+              className="btn-secondary"
+            >
+              <Download size={14} />
+              CV
+            </a>
+          ) : (
+            <span className="btn-secondary opacity-40 cursor-default pointer-events-none">
+              <Download size={14} />
+              CV
+            </span>
+          )}
         </motion.div>
 
         {/* Keyword chips */}

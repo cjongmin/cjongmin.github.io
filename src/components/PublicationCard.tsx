@@ -49,12 +49,9 @@ function toHashtag(tag: string): string {
   return '#' + tag.toLowerCase().replace(/[\s/]+/g, '-')
 }
 
-// Action buttons — clearly distinct from hashtag metadata
-const BTN_BASE = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[12px] font-medium transition-colors duration-150 border cursor-pointer select-none'
-// Paper: subtle fill to signal primary action
-const BTN_PRIMARY = `${BTN_BASE} bg-neutral-100 border-neutral-300 text-neutral-900 hover:bg-neutral-200 dark:bg-white/[0.11] dark:border-white/[0.28] dark:text-[#F0F0F2] dark:hover:bg-white/[0.18]`
-// Others: outlined
-const BTN_SECONDARY = `${BTN_BASE} bg-transparent border-neutral-300 text-neutral-700 hover:bg-neutral-100 dark:border-white/[0.2] dark:text-[#C7C7CB] dark:hover:bg-white/[0.08]`
+// Action buttons — all identical style, responsive sizing
+const BTN_BASE = 'inline-flex items-center gap-1.5 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[11px] sm:text-[12px] font-medium transition-colors duration-150 border cursor-pointer select-none'
+const BTN = `${BTN_BASE} bg-transparent border-neutral-300 text-neutral-700 hover:bg-neutral-100 dark:border-white/[0.2] dark:text-[#C7C7CB] dark:hover:bg-white/[0.08]`
 
 export default function PublicationCard({ pub, index }: PublicationCardProps) {
   const [bibtexOpen, setBibtexOpen] = useState(false)
@@ -125,15 +122,13 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
               {/* Preprint + Oral/Poster/Spotlight — same pill style, consistent emphasis */}
               {isPreprint && (
                 <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full leading-none
-                  bg-neutral-100 text-neutral-500
-                  dark:bg-white/[0.08] dark:text-neutral-400">
+                  bg-amber-50 text-amber-800 dark:bg-amber-950/40 dark:text-amber-400">
                   Preprint
                 </span>
               )}
               {pub.presentationType && (
                 <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full leading-none
-                  bg-neutral-100 text-neutral-500
-                  dark:bg-white/[0.08] dark:text-neutral-400">
+                  bg-amber-50 text-amber-800 dark:bg-amber-950/40 dark:text-amber-400">
                   {pub.presentationType}
                 </span>
               )}
@@ -198,7 +193,7 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`${label} for ${pub.title}`}
-                    className={label === 'Paper' ? BTN_PRIMARY : BTN_SECONDARY}
+                    className={BTN}
                   >
                     <Icon size={12} />
                     {label}
@@ -208,7 +203,7 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
                   <button
                     onClick={() => setBibtexOpen(true)}
                     aria-label={`Show BibTeX for ${pub.title}`}
-                    className={BTN_SECONDARY}
+                    className={BTN}
                   >
                     <Quote size={12} />
                     BibTeX

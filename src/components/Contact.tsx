@@ -9,35 +9,30 @@ const contactItems = [
     label: 'Email',
     value: profile.email,
     href: `mailto:${profile.email}`,
-    primary: true,
   },
   {
     icon: Github,
     label: 'GitHub',
     value: '@cjongmin',
     href: profile.links.github,
-    primary: false,
   },
   {
     icon: Linkedin,
     label: 'LinkedIn',
     value: 'LinkedIn Profile',
     href: profile.links.linkedin,
-    primary: false,
   },
   {
     icon: BookOpen,
     label: 'Google Scholar',
     value: 'Scholar Profile',
     href: profile.links.scholar,
-    primary: false,
   },
   {
     icon: MapPin,
     label: 'Location',
     value: 'Daejeon, South Korea',
     href: undefined,
-    primary: false,
   },
 ]
 
@@ -77,23 +72,18 @@ export default function Contact() {
           transition={{ duration: 0.6, delay: 0.18 }}
           className="grid grid-cols-2 sm:grid-cols-5 gap-3"
         >
-          {contactItems.map(({ icon: Icon, label, value, href, primary }, i) => {
+          {contactItems.map(({ icon: Icon, label, value, href }, i) => {
             const cardClass = `glass-card p-4 flex flex-col items-center gap-2.5 text-center
               ${href ? 'hover:shadow-md transition-shadow duration-200 cursor-pointer' : ''}`
 
             const inner = (
               <>
-                <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0
-                  ${primary
-                    ? 'bg-[#0071E3]/10 dark:bg-[#2997FF]/15'
-                    : 'bg-black/[0.05] dark:bg-white/[0.07]'
-                  }`}>
-                  <Icon size={16} className={primary ? 'text-[#0071E3] dark:text-[#2997FF]' : 'text-secondary'} />
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 bg-black/[0.05] dark:bg-white/[0.07]">
+                  <Icon size={16} className="text-secondary" />
                 </div>
                 <div>
                   <p className="text-[10px] font-medium text-secondary mb-0.5">{label}</p>
-                  <p className={`text-[13px] font-medium leading-snug
-                    ${primary ? 'text-[#0071E3] dark:text-[#2997FF]' : 'text-[#1D1D1F] dark:text-[#F5F5F7]'}`}>
+                  <p className="text-[13px] font-medium leading-snug text-[#1D1D1F] dark:text-[#F5F5F7]">
                     {value}
                   </p>
                 </div>

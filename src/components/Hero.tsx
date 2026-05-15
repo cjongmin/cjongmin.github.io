@@ -72,7 +72,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.28 }}
-            className="text-sm text-secondary"
+            className="text-[11px] sm:text-sm text-secondary"
           >
             {profile.affiliation} · {profile.university}
           </motion.p>
@@ -83,7 +83,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.34 }}
-          className="flex items-center gap-2.5 flex-wrap justify-center"
+          className="flex items-center gap-2 sm:gap-2.5 flex-wrap justify-center"
         >
           {socialLinks.map(({ key, icon: Icon, label, href }) => (
             <a key={key} href={href} target="_blank" rel="noopener noreferrer"

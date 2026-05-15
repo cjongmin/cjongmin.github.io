@@ -29,12 +29,16 @@ function linkButtonClass(label: string): string {
   }
 }
 
+function parseAuthor(raw: string): { name: string; sup: string | null } {
+  const match = raw.match(/^(.+?)\^(.+)$/)
+  return match ? { name: match[1].trim(), sup: match[2] } : { name: raw, sup: null }
+}
+
 export default function PublicationCard({ pub, index }: PublicationCardProps) {
   const [bibtexOpen, setBibtexOpen] = useState(false)
   const [imgError, setImgError] = useState(false)
 
   const isPreprint = PREPRINT_VENUES.includes(pub.venue)
-  const hasEqualContrib = pub.equalContribution && pub.equalContribution.length > 0
 
   const links = [
     pub.links?.paper && { label: 'Paper', icon: FileText, href: pub.links.paper },
@@ -55,7 +59,7 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
         <div className="flex flex-col sm:flex-row gap-0">
           {/* Representative image */}
           {pub.image && !imgError ? (
-            <div className="sm:w-44 sm:shrink-0 bg-neutral-50 dark:bg-zinc-900/60 flex items-center justify-center overflow-hidden p-2 rounded-l-2xl">
+            <div className="sm:w-[264px] sm:shrink-0 bg-neutral-50 dark:bg-zinc-900/60 flex items-center justify-center overflow-hidden p-2 rounded-l-2xl">
               <img
                 src={pub.image}
                 alt={pub.title}
@@ -64,14 +68,14 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
               />
             </div>
           ) : pub.image && imgError ? (
-            <div className="sm:w-44 sm:shrink-0 bg-neutral-50 dark:bg-zinc-900/60 flex items-center justify-center min-h-[80px] rounded-l-2xl">
+            <div className="sm:w-[264px] sm:shrink-0 bg-neutral-50 dark:bg-zinc-900/60 flex items-center justify-center min-h-[80px] rounded-l-2xl">
               <ImageOff size={20} className="text-secondary opacity-30" />
             </div>
           ) : null}
 
           {/* Content */}
           <div className="flex-1 p-5 flex flex-col gap-3">
-            {/* Venue + year badge */}
+            {/* Venue badge + presentation type */}
             <div className="flex items-center gap-2 flex-wrap">
               <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${
                 isPreprint
@@ -85,6 +89,13 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
                   Preprint
                 </span>
               )}
+              {pub.presentationType && (
+                <span className="text-[11px] font-medium px-2 py-0.5 rounded-full
+                                  bg-emerald-50 text-emerald-700 border border-emerald-200
+                                  dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-800/60">
+                  {pub.presentationType}
+                </span>
+              )}
             </div>
 
             {/* Title */}
@@ -92,33 +103,26 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
               {pub.title}
             </h3>
 
-            {/* Authors */}
+            {/* Authors — ^number parsed as superscript */}
             <p className="text-sm text-secondary leading-relaxed">
-              {pub.authors.map((author, i) => {
-                const isMe = author === profile.name
-                const isEqual = hasEqualContrib && pub.equalContribution!.includes(author)
+              {pub.authors.map((raw, i) => {
+                const { name, sup } = parseAuthor(raw)
+                const isMe = name === profile.name
                 return (
                   <span key={i}>
                     {isMe ? (
                       <strong className="font-semibold text-[#1D1D1F] dark:text-[#F5F5F7]">
-                        {author}
-                        {isEqual && <sup className="ml-0.5 text-[10px]">*</sup>}
+                        {name}{sup && <sup className="text-[9px] ml-0.5">{sup}</sup>}
                       </strong>
                     ) : (
                       <span>
-                        {author}
-                        {isEqual && <sup className="ml-0.5 text-[10px]">*</sup>}
+                        {name}{sup && <sup className="text-[9px] ml-0.5">{sup}</sup>}
                       </span>
                     )}
                     {i < pub.authors.length - 1 && ', '}
                   </span>
                 )
               })}
-              {hasEqualContrib && (
-                <span className="block mt-1 text-[11px] text-secondary/70 italic">
-                  * Equal contribution
-                </span>
-              )}
             </p>
 
             {/* Tags */}

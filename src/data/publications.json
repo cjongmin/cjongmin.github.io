@@ -3,8 +3,8 @@
     "id": "fork-merge-decoding-enhancing-multimodal",
     "title": "Fork-Merge Decoding: Enhancing Multimodal Understanding in Audio-Visual Large Language Models",
     "authors": [
-      "Chaeyoung Jung",
-      "Youngjoon Jang",
+      "Chaeyoung Jung^1",
+      "Youngjoon Jang^1",
       "Jongmin Choi",
       "Joon Son Chung"
     ],
@@ -13,22 +13,18 @@
     "order": 1,
     "tags": [],
     "links": {
-      "paper": "https://arxiv.org/abs/2505.20873",
+      "paper": "https://arxiv.org/pdf/2505.20873",
       "scholar": "https://scholar.google.com/scholar_lookup?arxiv_id=2505.20873"
     },
     "bibtex": "@article{jung2025fork,\n  title={Fork-merge decoding: Enhancing multimodal understanding in audio-visual large language models},\n  author={Jung, Chaeyoung and Jang, Youngjoon and Choi, Jongmin and Chung, Joon Son},\n  journal={arXiv preprint arXiv:2505.20873},\n  year={2025}\n}",
-    "image": "/publications/fork-merge-decoding-enhancing-multimodal.jpg",
-    "equalContribution": [
-      "Chaeyoung Jung",
-      "Youngjoon Jang"
-    ]
+    "image": "/publications/fork-merge-decoding-enhancing-multimodal.jpg"
   },
   {
     "id": "diffusion-link-diffusion-probabilistic-m",
     "title": "Diffusion-Link: Diffusion Probabilistic Model for Bridging the Audio-Text Modality Gap",
     "authors": [
-      "KiHyun Nam",
-      "Jongmin Choi",
+      "KiHyun Nam^1",
+      "Jongmin Choi^1",
       "Hyeongkeun Lee",
       "Jungwoo Heo",
       "Joon Son Chung"
@@ -42,23 +38,20 @@
       "Diffusion"
     ],
     "links": {
-      "paper": "https://arxiv.org/abs/2510.11330",
+      "paper": "https://arxiv.org/pdf/2510.11330",
       "scholar": "https://scholar.google.com/scholar_lookup?arxiv_id=2510.11330",
       "code": "https://github.com/DevKiHyun/Diffusion-Link"
     },
     "bibtex": "@INPROCEEDINGS{11460544,\n  author={Nam, KiHyun and Choi, Jongmin and Lee, Hyeongkeun and Heo, Jungwoo and Chung, Joon Son},\n  booktitle={ICASSP 2026 - 2026 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)}, \n  title={Diffusion-Link: Diffusion Probabilistic Model for Bridging the Audio-Text Modality Gap}, \n  year={2026},\n  volume={},\n  number={},\n  pages={19112-19116},\n  keywords={Feeds;LoRa;Radio access networks;Regional area networks;Protocols;HTTP;Data communication;Radio communication;Communication systems;Telecommunications;diffusion probabilistic model;modality gap;large language model;audio captioning;multimodal representation learning},\n  doi={10.1109/ICASSP55912.2026.11460544}}",
     "image": "/publications/diffusion-link-diffusion-probabilistic-m.png",
-    "equalContribution": [
-      "KiHyun Nam",
-      "Jongmin Choi"
-    ]
+    "presentationType": "Poster"
   },
   {
     "id": "lamb-llm-based-audio-captioning-with-mod",
     "title": "LAMB: LLM-based Audio Captioning with Modality Gap Bridging via Cauchy-Schwarz Divergence",
     "authors": [
-      "Hyeongkeun Lee",
-      "Jongmin Choi",
+      "Hyeongkeun Lee^1",
+      "Jongmin Choi^1",
       "KiHyun Nam",
       "Joon Son Chung"
     ],
@@ -71,16 +64,13 @@
       "Cauchy-Schwarz Divergence"
     ],
     "links": {
-      "paper": "https://arxiv.org/abs/2601.04658",
+      "paper": "https://arxiv.org/pdf/2601.04658",
       "scholar": "https://scholar.google.com/scholar_lookup?arxiv_id=2601.04658",
       "code": "https://github.com/Hyeongkeun/LAMB"
     },
     "bibtex": "@INPROCEEDINGS{11462125,\n  author={Lee, Hyeongkeun and Choi, Jongmin and Nam, KiHyun and Chung, Joon Son},\n  booktitle={ICASSP 2026 - 2026 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)}, \n  title={LAMB: LLM-Based Audio Captioning with Modality Gap Bridging Via Cauchy-Schwarz Divergence}, \n  year={2026},\n  volume={},\n  number={},\n  pages={14502-14506},\n  keywords={Very large scale integration;Communications technology;Information and communication technology;LoRa;Protocols;HTTP;Data communication;Media Access Control;Videos;Video equipment;automated audio captioning;large language model;modality gap;Cauchy-Schwarz divergence},\n  doi={10.1109/ICASSP55912.2026.11462125}}",
     "image": "/publications/lamb-llm-based-audio-captioning-with-mod.jpg",
-    "equalContribution": [
-      "Hyeongkeun Lee",
-      "Jongmin Choi"
-    ]
+    "presentationType": "Oral"
   },
   {
     "id": "fits-interpretable-spiking-neurons-via-f",
@@ -98,12 +88,9 @@
       "Delay"
     ],
     "links": {
-      "paper": "https://arxiv.org/abs/2605.13071"
+      "paper": "https://arxiv.org/pdf/2605.13071"
     },
     "bibtex": "@misc{choi2026fitsinterpretablespikingneurons,\n      title={FiTS: Interpretable Spiking Neurons via Frequency Selectivity and Temporal Shaping}, \n      author={Jongmin Choi and Joon Son Chung},\n      year={2026},\n      eprint={2605.13071},\n      archivePrefix={arXiv},\n      primaryClass={cs.NE},\n      url={https://arxiv.org/abs/2605.13071}, \n}",
-    "image": "/publications/fits-interpretable-spiking-neurons-via-f.jpg",
-    "equalContribution": [
-      "Jongmin Choi"
-    ]
+    "image": "/publications/fits-interpretable-spiking-neurons-via-f.jpg"
   }
 ]

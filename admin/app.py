@@ -122,16 +122,16 @@ def pub_load(choice):
         li.get("code", ""),
         li.get("project", ""),
         p.get("bibtex", ""),
-        ", ".join(p.get("equalContribution", [])),
+        p.get("presentationType", "None") or "None",
         img_str,
         preview,
     )
 
 def pub_new():
-    return (-1, "", "", "", "", 2025, 1, "", "", "", "", "", "", "", "", None)
+    return (-1, "", "", "", "", 2025, 1, "", "", "", "", "", "", "None", "", None)
 
 def pub_save(state_idx, pub_id, title, authors_str, venue, year, order,
-             tags_str, paper, scholar, code, project, bibtex, equal_contrib_str,
+             tags_str, paper, scholar, code, project, bibtex, present_type,
              current_img_str, new_img_path):
     pubs = rjson("publications.json")
 
@@ -164,9 +164,8 @@ def pub_save(state_idx, pub_id, title, authors_str, venue, year, order,
         entry["bibtex"] = bibtex.strip()
     if image_val:
         entry["image"] = image_val
-    equal_contrib = [a.strip() for a in equal_contrib_str.split(",") if a.strip()]
-    if equal_contrib:
-        entry["equalContribution"] = equal_contrib
+    if present_type and present_type != "None":
+        entry["presentationType"] = present_type
 
     if 0 <= int(state_idx) < len(pubs):
         pubs[int(state_idx)] = entry
@@ -372,9 +371,10 @@ with gr.Blocks(title="Profile Admin") as demo:
                     pub_scholar      = gr.Textbox(label="Google Scholar URL")
                     pub_code         = gr.Textbox(label="Code URL")
                     pub_project      = gr.Textbox(label="Project Page URL")
-                    pub_equal_contrib = gr.Textbox(
-                        label="Equal Contribution — author names, comma-separated (shown as *)",
-                        placeholder="e.g. Jongmin Choi, Author Two",
+                    pub_present_type = gr.Dropdown(
+                        label="Presentation Type",
+                        choices=["None", "Oral", "Poster", "Spotlight"],
+                        value="None",
                     )
                     pub_bibtex  = gr.Textbox(label="BibTeX", lines=5)
                     pub_img     = gr.Image(label="Representative Image", type="filepath", height=160)
@@ -387,7 +387,7 @@ with gr.Blocks(title="Profile Admin") as demo:
             def _pub_load(choice):
                 vals = pub_load(choice)
                 # vals: (idx, id, title, authors, venue, year, order, tags,
-                #        paper, scholar, code, project, bibtex, equal_contrib, img_str, img_preview)
+                #        paper, scholar, code, project, bibtex, present_type, img_str, img_preview)
                 return (vals[0], vals[14],   # state_idx, cur_img_str
                         vals[1], vals[2], vals[3], vals[4],
                         vals[5], vals[6], vals[7], vals[8],
@@ -399,21 +399,21 @@ with gr.Blocks(title="Profile Admin") as demo:
                 outputs=[pub_state_idx, pub_cur_img,
                          pub_id, pub_title, pub_authors, pub_venue,
                          pub_year, pub_order, pub_tags, pub_paper,
-                         pub_scholar, pub_code, pub_project, pub_equal_contrib, pub_bibtex, pub_img],
+                         pub_scholar, pub_code, pub_project, pub_present_type, pub_bibtex, pub_img],
             )
             pub_new_btn.click(
                 pub_new,
                 outputs=[pub_state_idx, pub_id, pub_title, pub_authors,
                          pub_venue, pub_year, pub_order, pub_tags,
                          pub_paper, pub_scholar, pub_code, pub_project,
-                         pub_bibtex, pub_equal_contrib, pub_cur_img, pub_img],
+                         pub_bibtex, pub_present_type, pub_cur_img, pub_img],
             )
             pub_save_btn.click(
                 pub_save,
                 inputs=[pub_state_idx, pub_id, pub_title, pub_authors,
                         pub_venue, pub_year, pub_order, pub_tags,
                         pub_paper, pub_scholar, pub_code, pub_project,
-                        pub_bibtex, pub_equal_contrib, pub_cur_img, pub_img],
+                        pub_bibtex, pub_present_type, pub_cur_img, pub_img],
                 outputs=[pub_status, pub_dd, pub_state_idx],
             )
             pub_delete_btn.click(

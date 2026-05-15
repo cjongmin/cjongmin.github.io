@@ -34,7 +34,7 @@ export default function Hero() {
 
       <div className="section-container relative z-10 flex flex-col items-center text-center gap-8 py-24">
         {/* Avatar placeholder */}
-        {'profileImage' in profile ? (
+        {profile.profileImage ? (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -42,7 +42,7 @@ export default function Hero() {
             className="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden ring-2 ring-black/[0.06] dark:ring-white/[0.1] shadow-xl"
           >
             <img
-              src={(profile as { profileImage: string }).profileImage}
+              src={profile.profileImage}
               alt={profile.name}
               className="w-full h-full object-cover"
             />

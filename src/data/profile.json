@@ -1,0 +1,22 @@
+{
+  "name": "Jongmin Choi",
+  "title": "MS Student in Multimodal AI",
+  "affiliation": "MMAI Lab",
+  "university": "Your University",
+  "email": "jongmin.choi@example.com",
+  "location": "Seoul, South Korea",
+  "links": {
+    "github": "https://github.com/YOUR_GITHUB_USERNAME",
+    "linkedin": "https://www.linkedin.com/in/YOUR_LINKEDIN_PROFILE",
+    "scholar": "https://scholar.google.com/citations?user=YOUR_SCHOLAR_ID"
+  },
+  "bio": "I am an MS student working on multimodal artificial intelligence, with interests in vision-language models, representation learning, and human-centered AI systems. My research explores how multimodal models can better understand, reason, and interact across visual and textual information.\n\nMy goal is to build AI systems that are not only capable, but also interpretable and aligned with human values.",
+  "interests": [
+    "Vision-Language Models",
+    "Representation Learning",
+    "Multimodal AI",
+    "Human-Centered AI",
+    "Foundation Models"
+  ],
+  "profileImage": ""
+}

@@ -26,7 +26,7 @@ export default function Hero() {
             animate={{ opacity: 1, scale: 1 }}
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.35 }}
-            className="w-[88px] h-[88px] rounded-full overflow-hidden
+            className="w-[114px] h-[114px] rounded-full overflow-hidden
                        ring-1 ring-black/[0.1] dark:ring-white/[0.12]
                        shadow-xl cursor-pointer"
           >

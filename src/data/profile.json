@@ -10,11 +10,11 @@
     "linkedin": "https://www.linkedin.com/in/cjongmin",
     "scholar": "https://scholar.google.com/citations?user=sPvkgm8AAAAJ&hl=ko"
   },
-  "bio": "I am an MS student at KAIST, working in the Multimodal AI Lab. My research focuses on multimodal representation learning, with a particular interest in audio-visual language models, modality gap mitigation, and interpretable neural computation.\n\nI aim to build multimodal systems that are not only capable, but also more interpretable, efficient, and aligned with human understanding.",
+  "bio": "I am an MS student at KAIST, working in the Multimodal AI Lab. My research focuses on multimodal representation learning, with particular interests in audio-visual LLMs, modality gap mitigation, and biologically inspired AI models such as Spiking Neural Networks (SNN).\n\nMy current work explores improved optimization algorithms, Audio Deepfake Detection (ADD), and methods for addressing key limitations of audio-centric LLMs. I am always open to discussing research ideas and potential collaborations, so please feel free to reach out!",
   "interests": [
-    "Audio-Visual Language Models",
+    "Audio-Visual LLM",
     "Modality Gap Mitigation",
-    "Interpretable Spiking Neural Networks"
+    "Spiking Neural Networks"
   ],
   "profileImage": "/profile.jpg"
 }

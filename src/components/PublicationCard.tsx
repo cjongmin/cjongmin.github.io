@@ -21,7 +21,7 @@ function linkButtonClass(label: string): string {
     case 'Scholar':
       return `${BASE_BTN} bg-green-50 text-green-700 border-green-200 hover:bg-green-100 dark:bg-green-950/30 dark:text-green-400 dark:border-green-800/60 dark:hover:bg-green-950/50`
     case 'Code':
-      return `${BASE_BTN} bg-[#1D1D1F] text-white border-[#1D1D1F] hover:bg-[#2c2c2e] dark:bg-[#3A3A3C] dark:text-[#F5F5F7] dark:border-[#48484A] dark:hover:bg-[#48484A]`
+      return `${BASE_BTN} bg-[#1D1D1F] text-white border-[#1D1D1F] hover:bg-[#2c2c2e] dark:bg-zinc-700 dark:text-zinc-100 dark:border-zinc-600 dark:hover:bg-zinc-600`
     case 'BibTeX':
       return `${BASE_BTN} bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 dark:bg-blue-950/30 dark:text-blue-400 dark:border-blue-800/60 dark:hover:bg-blue-950/50`
     default:

@@ -14,19 +14,8 @@ const PREPRINT_VENUES = ['arXiv', 'Preprint']
 
 const BASE_BTN = 'inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors duration-150 border'
 
-function linkButtonClass(label: string): string {
-  switch (label) {
-    case 'Paper':
-      return `${BASE_BTN} bg-red-50 text-red-700 border-red-200 hover:bg-red-100 dark:bg-red-950/30 dark:text-red-400 dark:border-red-800/60 dark:hover:bg-red-950/50`
-    case 'Scholar':
-      return `${BASE_BTN} bg-green-50 text-green-700 border-green-200 hover:bg-green-100 dark:bg-green-950/30 dark:text-green-400 dark:border-green-800/60 dark:hover:bg-green-950/50`
-    case 'Code':
-      return `${BASE_BTN} bg-neutral-600 text-white border-neutral-600 hover:bg-neutral-500 dark:bg-zinc-700 dark:text-zinc-100 dark:border-zinc-600 dark:hover:bg-zinc-600`
-    case 'BibTeX':
-      return `${BASE_BTN} bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 dark:bg-blue-950/30 dark:text-blue-400 dark:border-blue-800/60 dark:hover:bg-blue-950/50`
-    default:
-      return `${BASE_BTN} bg-black/[0.05] text-secondary border-black/[0.08] hover:bg-black/[0.08] dark:bg-white/[0.07] dark:border-white/[0.1] dark:hover:bg-white/[0.1]`
-  }
+function linkButtonClass(_label: string): string {
+  return `${BASE_BTN} bg-black/[0.05] text-[#1D1D1F] border-black/[0.08] hover:bg-black/[0.09] dark:bg-white/[0.08] dark:text-[#F5F5F7] dark:border-white/[0.1] dark:hover:bg-white/[0.13]`
 }
 
 function parseAuthor(raw: string): { name: string; sup: string | null } {
@@ -56,7 +45,7 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
         transition={{ duration: 0.5, delay: index * 0.07 }}
         className="glass-card overflow-hidden hover:shadow-md transition-shadow duration-200"
       >
-        <div className="flex flex-col sm:flex-row gap-0">
+        <div className="flex flex-col sm:flex-row sm:h-[240px] gap-0">
           {/* Representative image */}
           {pub.image && !imgError ? (
             <div className="sm:w-[264px] sm:shrink-0 bg-neutral-50 dark:bg-zinc-900/60 flex items-center justify-center overflow-hidden p-2 rounded-l-2xl">
@@ -64,7 +53,7 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
                 src={pub.image}
                 alt={pub.title}
                 onError={() => setImgError(true)}
-                className="w-full h-full object-contain max-h-44 sm:max-h-none rounded"
+                className="w-full h-full object-contain max-h-44 sm:max-h-full rounded"
               />
             </div>
           ) : pub.image && imgError ? (

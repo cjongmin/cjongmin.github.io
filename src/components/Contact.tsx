@@ -75,7 +75,7 @@ export default function Contact() {
           initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.18 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+          className="grid grid-cols-2 sm:grid-cols-5 gap-3"
         >
           {contactItems.map(({ icon: Icon, label, value, href, primary }, i) => {
             const inner = (

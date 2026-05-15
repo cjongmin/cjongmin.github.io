@@ -9,7 +9,7 @@ const socialLinks = [
   { key: 'scholar', icon: BookOpen, label: 'Scholar', href: profile.links.scholar },
 ]
 
-const keywords = ['Multimodal AI', 'Vision-Language Models', 'Representation Learning']
+const keywords = profile.keywords ?? []
 
 export default function Hero() {
   return (

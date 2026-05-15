@@ -60,11 +60,12 @@ def profile_load():
         li.get("scholar", ""),
         p.get("bio", ""),
         ", ".join(p.get("interests", [])),
+        ", ".join(p.get("keywords", [])),
         preview,
     )
 
 def profile_save(name, title, affiliation, university, email, location,
-                 github, linkedin, scholar, bio, interests_str, img_path):
+                 github, linkedin, scholar, bio, interests_str, keywords_str, img_path):
     p = rjson("profile.json")
     p.update({
         "name": name.strip(),
@@ -80,6 +81,7 @@ def profile_save(name, title, affiliation, university, email, location,
         },
         "bio": bio.strip(),
         "interests": [x.strip() for x in interests_str.split(",") if x.strip()],
+        "keywords": [x.strip() for x in keywords_str.split(",") if x.strip()],
     })
     if img_path:
         dest = PUBLIC / "profile.jpg"
@@ -325,6 +327,7 @@ with gr.Blocks(title="Profile Admin") as demo:
                     p_img = gr.Image(label="Profile Photo", type="filepath", height=200)
             p_bio = gr.Textbox(label="Bio (separate paragraphs with blank line)", lines=5)
             p_int = gr.Textbox(label="Research Interests (comma-separated)")
+            p_kw  = gr.Textbox(label="Hero Keywords (comma-separated)")
 
             with gr.Row():
                 p_load_btn = gr.Button("🔄 Load Current", variant="secondary")
@@ -334,17 +337,17 @@ with gr.Blocks(title="Profile Admin") as demo:
             p_load_btn.click(
                 profile_load,
                 outputs=[p_name, p_title, p_aff, p_uni, p_email, p_loc,
-                         p_gh, p_li, p_sc, p_bio, p_int, p_img],
+                         p_gh, p_li, p_sc, p_bio, p_int, p_kw, p_img],
             )
             p_save_btn.click(
                 profile_save,
                 inputs=[p_name, p_title, p_aff, p_uni, p_email, p_loc,
-                        p_gh, p_li, p_sc, p_bio, p_int, p_img],
+                        p_gh, p_li, p_sc, p_bio, p_int, p_kw, p_img],
                 outputs=p_status,
             )
             demo.load(profile_load,
                       outputs=[p_name, p_title, p_aff, p_uni, p_email, p_loc,
-                                p_gh, p_li, p_sc, p_bio, p_int, p_img])
+                                p_gh, p_li, p_sc, p_bio, p_int, p_kw, p_img])
 
         # ── Publications ───────────────────────────────────────────────────────
         with gr.Tab("📄 Publications"):

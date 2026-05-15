@@ -38,7 +38,7 @@ export default function App() {
         <Contact />
       </main>
       <footer className="py-6 text-center text-secondary text-xs border-t border-black/[0.06] dark:border-white/[0.06]">
-        <p>© {new Date().getFullYear()} Jongmin Choi · Built with React + Vite</p>
+        <p>© {new Date().getFullYear()} Jongmin Choi</p>
       </footer>
     </div>
   )

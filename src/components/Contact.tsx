@@ -64,7 +64,7 @@ export default function Contact() {
           initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-[17px] leading-relaxed text-secondary mb-10 max-w-2xl"
+          className="text-[17px] leading-relaxed text-secondary mb-10 text-justify"
         >
           I'm always happy to chat about research, collaborations, or just to connect.
           Feel free to reach out through any of the channels below.

@@ -26,7 +26,7 @@ export default function Hero() {
             animate={{ opacity: 1, scale: 1 }}
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.35 }}
-            className="w-[96px] h-[96px] sm:w-[114px] sm:h-[114px] rounded-full overflow-hidden
+            className="w-[96px] h-[96px] sm:w-[172px] sm:h-[172px] rounded-full overflow-hidden
                        ring-1 ring-black/[0.1] dark:ring-white/[0.12]
                        shadow-lg sm:shadow-xl cursor-pointer"
           >
@@ -49,7 +49,7 @@ export default function Hero() {
         )}
 
         {/* Name + title */}
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 sm:gap-4">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

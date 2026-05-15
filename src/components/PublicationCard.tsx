@@ -93,7 +93,7 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
             so the card height is always driven by content, not image aspect ratio.
           */}
           {pub.image && !imgError ? (
-            <div className="h-[160px] sm:h-[172px] sm:w-[188px] sm:shrink-0
+            <div className="h-[160px] sm:h-[172px] sm:w-[240px] sm:shrink-0
                             bg-neutral-50 dark:bg-zinc-900/50
                             flex items-center justify-center overflow-hidden p-2">
               <img
@@ -104,7 +104,7 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
               />
             </div>
           ) : pub.image && imgError ? (
-            <div className="h-[160px] sm:h-[172px] sm:w-[188px] sm:shrink-0
+            <div className="h-[160px] sm:h-[172px] sm:w-[240px] sm:shrink-0
                             bg-neutral-50 dark:bg-zinc-900/50
                             flex items-center justify-center">
               <ImageOff size={18} className="text-secondary opacity-25" />

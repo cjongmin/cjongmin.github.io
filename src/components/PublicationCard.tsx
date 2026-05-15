@@ -31,24 +31,13 @@ function getVenueType(pub: Publication): 'conference' | 'journal' | 'preprint' {
 function venueBadgeClass(type: 'conference' | 'journal' | 'preprint'): string {
   switch (type) {
     case 'conference':
-      return 'bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300'
+      // Muted sky-blue — softer than pure blue, harmonises with warm tones
+      return 'bg-sky-50 text-sky-700 dark:bg-sky-950/40 dark:text-sky-400'
     case 'journal':
-      return 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-300'
+      return 'bg-violet-50 text-violet-700 dark:bg-violet-950/35 dark:text-violet-400'
     case 'preprint':
-      return 'bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300'
-  }
-}
-
-function statusBadgeClass(status: string): string {
-  switch (status) {
-    case 'Oral':
-      return 'bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-800/40'
-    case 'Poster':
-      return 'bg-teal-50 text-teal-700 border border-teal-200 dark:bg-teal-950/30 dark:text-teal-400 dark:border-teal-800/40'
-    case 'Spotlight':
-      return 'bg-purple-50 text-purple-700 border border-purple-200 dark:bg-purple-950/30 dark:text-purple-400 dark:border-purple-800/40'
-    default:
-      return 'bg-neutral-100 text-neutral-500 border border-neutral-200 dark:bg-white/[0.06] dark:text-neutral-400 dark:border-white/[0.1]'
+      // Warm orange-red closer to arXiv brand, less yellow-amber
+      return 'bg-orange-50 text-orange-700 dark:bg-orange-950/30 dark:text-orange-400'
   }
 }
 
@@ -101,9 +90,14 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
         */}
         <div className="flex flex-col sm:flex-row">
 
-          {/* Image frame — 120px on mobile, self-stretches to content height on desktop */}
+          {/*
+            Image frame.
+            Mobile: fixed 116px tall container, image contained within.
+            Desktop: fixed 172px tall — caps portrait images (like FiTS PDF)
+            so the card height is always driven by content, not image aspect ratio.
+          */}
           {pub.image && !imgError ? (
-            <div className="h-[120px] sm:h-auto sm:self-stretch sm:w-[192px] sm:shrink-0
+            <div className="h-[116px] sm:h-[172px] sm:w-[188px] sm:shrink-0
                             bg-neutral-50 dark:bg-zinc-900/50
                             flex items-center justify-center overflow-hidden p-2.5">
               <img
@@ -114,7 +108,7 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
               />
             </div>
           ) : pub.image && imgError ? (
-            <div className="h-[120px] sm:h-auto sm:self-stretch sm:w-[192px] sm:shrink-0
+            <div className="h-[116px] sm:h-[172px] sm:w-[188px] sm:shrink-0
                             bg-neutral-50 dark:bg-zinc-900/50
                             flex items-center justify-center">
               <ImageOff size={18} className="text-secondary opacity-25" />
@@ -134,8 +128,9 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
                   Preprint
                 </span>
               )}
+              {/* Presentation type — plain text, same treatment as "Preprint" */}
               {pub.presentationType && (
-                <span className={`text-[11px] font-medium px-2 py-0.5 rounded-full leading-none ${statusBadgeClass(pub.presentationType)}`}>
+                <span className="text-[10px] font-medium text-[#6E6E73] dark:text-[#8E8E93] leading-none">
                   {pub.presentationType}
                 </span>
               )}

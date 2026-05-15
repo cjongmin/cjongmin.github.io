@@ -59,7 +59,7 @@ export default function Publications() {
                     aria-pressed={activeFilter === f}
                     className={`px-3.5 py-1 rounded-full text-sm font-medium transition-all duration-150
                       ${activeFilter === f
-                        ? 'bg-[#1D1D1F] dark:bg-[#F5F5F7] text-white dark:text-[#1D1D1F]'
+                        ? 'bg-neutral-600 dark:bg-[#F5F5F7] text-white dark:text-[#1D1D1F]'
                         : 'bg-black/[0.06] dark:bg-white/10 text-secondary hover:bg-black/[0.1] dark:hover:bg-white/[0.15]'
                       }`}
                   >

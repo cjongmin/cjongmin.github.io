@@ -99,7 +99,8 @@ def pub_choices():
 
 def pub_load(choice):
     if not choice:
-        return (-1,) + ("",) * 13 + (None,)
+        # year and order must be numbers, not "" — gr.Number rejects strings
+        return (-1, "", "", "", "", 2025, 1, "", "", "", "", "", "", "", None)
     pubs = rjson("publications.json")
     idx = int(choice.split("]")[0].lstrip("["))
     p = pubs[idx]
@@ -170,19 +171,20 @@ def pub_save(state_idx, pub_id, title, authors_str, venue, year, order,
         msg = f"✅ Added: {title[:50]}"
 
     wjson("publications.json", pubs)
-    return msg, gr.update(choices=pub_choices(), value=None)
+    # Return 3 values: status, updated dropdown, reset state index
+    return msg, gr.update(choices=pub_choices(), value=None), -1
 
 def pub_delete(state_idx):
     if int(state_idx) < 0:
-        return "⚠️ Nothing selected.", gr.update()
+        return "⚠️ Nothing selected.", gr.update(), -1
     pubs = rjson("publications.json")
     idx = int(state_idx)
     if idx >= len(pubs):
-        return "⚠️ Index out of range.", gr.update()
+        return "⚠️ Index out of range.", gr.update(), -1
     name = pubs[idx]["title"][:50]
     pubs.pop(idx)
     wjson("publications.json", pubs)
-    return f"🗑️ Deleted: {name}", gr.update(choices=pub_choices(), value=None)
+    return f"🗑️ Deleted: {name}", gr.update(choices=pub_choices(), value=None), -1
 
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -240,19 +242,19 @@ def exp_save(state_idx, exp_id, title, organization, location,
         msg = f"✅ Added: {title}"
 
     wjson("experiences.json", exps)
-    return msg, gr.update(choices=exp_choices(), value=None)
+    return msg, gr.update(choices=exp_choices(), value=None), -1
 
 def exp_delete(state_idx):
     if int(state_idx) < 0:
-        return "⚠️ Nothing selected.", gr.update()
+        return "⚠️ Nothing selected.", gr.update(), -1
     exps = rjson("experiences.json")
     idx = int(state_idx)
     if idx >= len(exps):
-        return "⚠️ Index out of range.", gr.update()
+        return "⚠️ Index out of range.", gr.update(), -1
     name = exps[idx]["title"]
     exps.pop(idx)
     wjson("experiences.json", exps)
-    return f"🗑️ Deleted: {name}", gr.update(choices=exp_choices(), value=None)
+    return f"🗑️ Deleted: {name}", gr.update(choices=exp_choices(), value=None), -1
 
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -395,12 +397,12 @@ with gr.Blocks(title="Profile Admin") as demo:
                         pub_venue, pub_year, pub_order, pub_tags,
                         pub_paper, pub_scholar, pub_code, pub_project,
                         pub_bibtex, pub_cur_img, pub_img],
-                outputs=[pub_status, pub_dd],
+                outputs=[pub_status, pub_dd, pub_state_idx],
             )
             pub_delete_btn.click(
                 pub_delete,
                 inputs=[pub_state_idx],
-                outputs=[pub_status, pub_dd],
+                outputs=[pub_status, pub_dd, pub_state_idx],
             )
 
         # ── Experience ─────────────────────────────────────────────────────────
@@ -448,12 +450,12 @@ with gr.Blocks(title="Profile Admin") as demo:
                 exp_save,
                 inputs=[exp_state_idx, exp_id, exp_title, exp_org, exp_loc,
                         exp_start, exp_end, exp_desc, exp_tags, exp_link],
-                outputs=[exp_status, exp_dd],
+                outputs=[exp_status, exp_dd, exp_state_idx],
             )
             exp_delete_btn.click(
                 exp_delete,
                 inputs=[exp_state_idx],
-                outputs=[exp_status, exp_dd],
+                outputs=[exp_status, exp_dd, exp_state_idx],
             )
 
         # ── Git Deploy ─────────────────────────────────────────────────────────

@@ -30,7 +30,7 @@ export default function About() {
           className="space-y-4 mb-10"
         >
           {paragraphs.map((para, i) => (
-            <p key={i} className="text-[17px] leading-relaxed text-body text-justify">
+            <p key={i} className="text-[15px] sm:text-[17px] leading-relaxed text-body text-justify">
               {para}
             </p>
           ))}

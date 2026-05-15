@@ -31,13 +31,12 @@ function getVenueType(pub: Publication): 'conference' | 'journal' | 'preprint' {
 function venueBadgeClass(type: 'conference' | 'journal' | 'preprint'): string {
   switch (type) {
     case 'conference':
-      // Muted sky-blue — softer than pure blue, harmonises with warm tones
-      return 'bg-sky-50 text-sky-700 dark:bg-sky-950/40 dark:text-sky-400'
     case 'journal':
-      return 'bg-violet-50 text-violet-700 dark:bg-violet-950/35 dark:text-violet-400'
+      // Deep green for all peer-reviewed venues (conference + journal)
+      return 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/45 dark:text-emerald-400'
     case 'preprint':
-      // Warm orange-red closer to arXiv brand, less yellow-amber
-      return 'bg-orange-50 text-orange-700 dark:bg-orange-950/30 dark:text-orange-400'
+      // Deep red for arXiv / preprint
+      return 'bg-red-50 text-red-800 dark:bg-red-950/40 dark:text-red-400'
   }
 }
 
@@ -123,14 +122,18 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
               <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full leading-none ${venueBadgeClass(venueType)}`}>
                 {pub.displayVenue ?? `${pub.venue} ${pub.year}`}
               </span>
+              {/* Preprint + Oral/Poster/Spotlight — same pill style, consistent emphasis */}
               {isPreprint && (
-                <span className="text-[10px] font-medium text-amber-600/70 dark:text-amber-400/60 leading-none">
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full leading-none
+                  bg-neutral-100 text-neutral-500
+                  dark:bg-white/[0.08] dark:text-neutral-400">
                   Preprint
                 </span>
               )}
-              {/* Presentation type — plain text, same treatment as "Preprint" */}
               {pub.presentationType && (
-                <span className="text-[10px] font-medium text-[#6E6E73] dark:text-[#8E8E93] leading-none">
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full leading-none
+                  bg-neutral-100 text-neutral-500
+                  dark:bg-white/[0.08] dark:text-neutral-400">
                   {pub.presentationType}
                 </span>
               )}

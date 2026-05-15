@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white dark:bg-[#000000] text-[#1D1D1F] dark:text-[#F5F5F7] antialiased;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  ::selection {
+    @apply bg-blue-500/20 text-blue-900 dark:text-blue-100;
+  }
+}
+
+@layer components {
+  .section-container {
+    @apply max-w-5xl mx-auto px-6 sm:px-8;
+  }
+
+  .section-title {
+    @apply text-3xl sm:text-4xl font-semibold tracking-tight text-[#1D1D1F] dark:text-[#F5F5F7];
+  }
+
+  .glass-card {
+    @apply bg-white/80 dark:bg-white/5 backdrop-blur-md border border-black/[0.06] dark:border-white/[0.08] rounded-2xl shadow-sm;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium
+           bg-[#0071E3] dark:bg-[#2997FF] text-white
+           hover:bg-[#0077ED] dark:hover:bg-[#3aa3ff]
+           transition-colors duration-150;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium
+           bg-black/[0.06] dark:bg-white/10 text-[#1D1D1F] dark:text-[#F5F5F7]
+           hover:bg-black/[0.1] dark:hover:bg-white/[0.15]
+           transition-colors duration-150;
+  }
+}
+
+@layer utilities {
+  .text-secondary {
+    @apply text-[#6E6E73] dark:text-[#86868B];
+  }
+
+  .divider {
+    @apply border-t border-black/[0.06] dark:border-white/[0.08];
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-black/10 dark:bg-white/10 rounded-full;
+}

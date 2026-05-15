@@ -1,76 +1,116 @@
-# AI Researcher Profile (GitHub Pages)
+# Jongmin Choi — Research Profile Website
 
-Minimal academic profile site in English with responsive layout and clean design.
+A modern, Apple-inspired research profile page built with React + Vite + TypeScript + Tailwind CSS.
 
-Pages: `About (index)`, `Publications`, `Awards`, `Contact`.
-
-Includes prominent buttons for CV (PDF), Google Scholar, GitHub, LinkedIn, and Mail.
-
-## Local preview
-Open `index.html` directly or run a static server:
+## Quick Start
 
 ```bash
-python3 -m http.server 8000
-# Then open http://localhost:8000
+# Node.js v18 is available via nvm
+export PATH="$HOME/.nvm/versions/node/v18.20.8/bin:$PATH"
+
+npm install
+npm run dev        # development server → http://localhost:5173
+npm run build      # production build  → dist/
+npm run preview    # preview the production build locally
 ```
 
-## Deploy (two options)
+---
 
-### A) User site: `USERNAME.github.io`
+## Where to Edit Your Content
+
+| What to change | File |
+|---|---|
+| Name, bio, email, links | `src/data/profile.ts` |
+| Publications | `src/data/publications.ts` |
+| Experience / Timeline | `src/data/experiences.ts` |
+| Accent color, fonts | `tailwind.config.js` |
+| GitHub Pages base path | `vite.config.ts` |
+
+### Add a profile photo
+
+1. Place your photo at `public/profile.jpg`
+2. In `src/data/profile.ts`, uncomment:
+   ```ts
+   profileImage: '/profile.jpg',
+   ```
+
+### Add a publication
+
+Open `src/data/publications.ts` and add a new entry to the `publications` array:
+
+```ts
+{
+  id: 'unique-id-2026',
+  title: 'Your Paper Title',
+  authors: ['Jongmin Choi', 'Co-Author'],
+  venue: 'CVPR',            // short name — used for filtering
+  year: 2026,
+  order: 1,                 // sort order within the same year (lower = first)
+  image: '/publications/paper.jpg',   // optional; place file in public/publications/
+  tags: ['Topic 1', 'Topic 2'],
+  links: {
+    paper: 'https://arxiv.org/...',
+    scholar: 'https://scholar.google.com/...',
+    code: 'https://github.com/...',
+    project: 'https://...',
+  },
+  bibtex: `@inproceedings{...}`,
+},
+```
+
+Omit any `links` keys that don't exist — the buttons won't be rendered.
+
+---
+
+## GitHub Pages Deployment
+
+### Case 1 — User site (`YOUR_USERNAME.github.io`)
+
+In `vite.config.ts` set:
+```ts
+base: '/'
+```
+
+Then push to a repo named **`YOUR_USERNAME.github.io`** on the `main` branch and enable GitHub Pages (Settings → Pages → Deploy from branch → `main` → `/ (root)`).
+
+Or use the automated deploy script:
 ```bash
-git init
+npm run deploy     # builds + pushes dist/ to gh-pages branch
+```
+Then in GitHub Pages settings select **gh-pages** branch.
+
+### Case 2 — Project site (`github.com/USER/profilepage`)
+
+In `vite.config.ts` set:
+```ts
+base: '/profilepage/'   // replace with your actual repo name
+```
+
+```bash
+npm run deploy
+```
+
+---
+
+## First Git Push (run these yourself)
+
+```bash
 git add .
-git commit -m "init: profile site"
+git commit -m "Initial research profile website"
 git branch -M main
-git remote add origin git@github.com:USERNAME/USERNAME.github.io.git
+git remote add origin https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME.git
 git push -u origin main
 ```
-Then open `https://USERNAME.github.io`.
 
-### B) Project site via Pages
-Push to any repo, then Settings → Pages → Source: `Deploy from a branch`, Branch: `main`, Folder: `/ (root)`.
+Replace `YOUR_GITHUB_USERNAME` and `YOUR_REPO_NAME` with your actual values.
 
-## Customize
-- Edit `assets/info.json` only — all pages render from it.
-- Put your photo at `assets/images/profile.jpg` and CV at `assets/cv/cv.pdf`.
-- Colors/spacing: `assets/css/styles.css`.
-- Buttons, animations, theme toggle already included.
+---
 
-### Theme toggle
-The site respects system preference by default. Use the toggle (☾/☀) to switch and it persists in `localStorage`.
+## Tech Stack
 
-### BibTeX (optional)
-Publications page aggregates `bibtex` fields from `assets/info.json` into the BibTeX block automatically.
-
-## `assets/info.json` schema
-```json
-{
-  "profile": {
-    "name": "Your Name",
-    "title": "AI Researcher — ...",
-    "email": "you@example.com",
-    "affiliation": "Your Affiliation",
-    "bio": "2–3 sentence intro...",
-    "photo": "assets/images/profile.jpg",
-    "cv": "assets/cv/cv.pdf",
-    "links": { "scholar": "", "github": "", "linkedin": "" },
-    "interests": ["LLMs", "Multimodal", "…"]
-  },
-  "news": [{ "date": "YYYY-MM-DD", "text": "Update…" }],
-  "publications": [{
-    "title": "...",
-    "authors": "...",
-    "venue": "In Conf/Journal, Year",
-    "pdf": "https://...",
-    "doi": "https://doi.org/...",
-    "code": "https://github.com/...",
-    "bibtex": "@inproceedings{...}"
-  }],
-  "awards": [{ "year": "2025", "name": "Best Paper", "by": "Conf" }],
-  "stats": { "publications": 0, "awards": 0 }
-}
-```
-
-## License
-MIT (replace if needed)
-
+- [React 18](https://react.dev/)
+- [Vite 5](https://vitejs.dev/)
+- [TypeScript 5](https://www.typescriptlang.org/)
+- [Tailwind CSS 3](https://tailwindcss.com/)
+- [Framer Motion](https://www.framer.com/motion/)
+- [Lucide React](https://lucide.dev/)

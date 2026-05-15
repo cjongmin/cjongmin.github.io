@@ -1,0 +1,43 @@
+import { useState, useEffect } from 'react'
+import Navbar from './components/Navbar'
+import Hero from './components/Hero'
+import About from './components/About'
+import Publications from './components/Publications'
+import Experience from './components/Experience'
+import Contact from './components/Contact'
+
+export default function App() {
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    const stored = localStorage.getItem('theme')
+    if (stored === 'dark' || stored === 'light') return stored
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  })
+
+  useEffect(() => {
+    const root = document.documentElement
+    if (theme === 'dark') {
+      root.classList.add('dark')
+    } else {
+      root.classList.remove('dark')
+    }
+    localStorage.setItem('theme', theme)
+  }, [theme])
+
+  const toggleTheme = () => setTheme(t => (t === 'dark' ? 'light' : 'dark'))
+
+  return (
+    <div className="min-h-screen">
+      <Navbar theme={theme} toggleTheme={toggleTheme} />
+      <main>
+        <Hero />
+        <About />
+        <Publications />
+        <Experience />
+        <Contact />
+      </main>
+      <footer className="py-10 text-center text-secondary text-sm divider mt-0">
+        <p>© {new Date().getFullYear()} Jongmin Choi. Built with React + Vite.</p>
+      </footer>
+    </div>
+  )
+}

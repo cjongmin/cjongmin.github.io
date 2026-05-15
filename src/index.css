@@ -50,6 +50,11 @@
     @apply text-[#6E6E73] dark:text-[#86868B];
   }
 
+  /* Body text — slightly brighter than secondary for long-form readability */
+  .text-body {
+    @apply text-[#4B4B4F] dark:text-[#ADADB0];
+  }
+
   .divider {
     @apply border-t border-black/[0.06] dark:border-white/[0.08];
   }

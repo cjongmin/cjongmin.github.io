@@ -9,6 +9,7 @@ Then open http://localhost:7860 in your browser.
 """
 
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -265,8 +266,16 @@ def exp_delete(state_idx):
 # TAB 4 — GIT DEPLOY
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+def _clean_env():
+    """Return env without VSCode's GIT_ASKPASS, which breaks git push in subprocesses."""
+    env = os.environ.copy()
+    for key in ("GIT_ASKPASS", "SSH_ASKPASS", "VSCODE_GIT_ASKPASS_NODE",
+                "VSCODE_GIT_ASKPASS_EXTRA_ARGS", "VSCODE_GIT_IPC_HANDLE"):
+        env.pop(key, None)
+    return env
+
 def git_run(*args):
-    r = subprocess.run(list(args), cwd=ROOT, capture_output=True, text=True)
+    r = subprocess.run(list(args), cwd=ROOT, capture_output=True, text=True, env=_clean_env())
     out = (r.stdout + r.stderr).strip()
     return f"$ {' '.join(args)}\n{out}"
 
@@ -279,14 +288,14 @@ def git_commit_push(msg):
     log = []
     log.append(git_run("git", "add", "."))
     log.append(git_run("git", "commit", "-m", msg.strip()))
-    r = subprocess.run(["git", "push"], cwd=ROOT, capture_output=True, text=True)
+    r = subprocess.run(["git", "push"], cwd=ROOT, capture_output=True, text=True, env=_clean_env())
     push_out = (r.stdout + r.stderr).strip()
     log.append(f"$ git push\n{push_out}")
     if r.returncode == 0:
         log.append("\n✅ Pushed! GitHub Actions will build & deploy in ~1–2 minutes.")
         log.append("   → https://cjongmin.github.io")
     else:
-        log.append("\n⚠️  Push failed. If credentials are needed, run 'git push' in the terminal.")
+        log.append("\n⚠️  Push failed. Run  GIT_ASKPASS= git push  in the terminal once to save credentials.")
     return "\n\n".join(log)
 
 

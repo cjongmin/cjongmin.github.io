@@ -1,43 +1,23 @@
 [
   {
-    "id": "ms-mmai",
-    "title": "MS Student in Multimodal AI",
-    "organization": "MMAI Lab, Your University",
-    "location": "Seoul, South Korea",
-    "startDate": "Sep 2023",
+    "id": "ms-kaist-ee",
+    "title": "MS Student in Electrical Engineering",
+    "organization": "School of Electrical Engineering (EE), KAIST",
+    "location": "Daejeon, South Korea",
+    "startDate": "Mar 2025",
     "endDate": "Present",
-    "description": "Conducting research on vision-language models and multimodal representation learning. Advised by Prof. [Advisor Name]. Working on improving cross-modal reasoning and alignment in large foundation models.",
-    "tags": ["Vision-Language Models", "Multimodal AI", "Research"],
+    "description": "Pursuing a Master's degree in Electrical Engineering at KAIST. Affiliated with the Multimodal AI (MMAI) Lab, conducting research on vision-language models and multimodal representation learning.",
+    "tags": ["Multimodal AI", "Vision-Language Models", "MMAI Lab"],
     "link": "https://your-lab-website.com"
   },
   {
-    "id": "intern-kaist",
-    "title": "Research Intern",
-    "organization": "AI Research Institute",
-    "location": "Seoul, South Korea",
-    "startDate": "Jun 2023",
-    "endDate": "Aug 2023",
-    "description": "Worked on parameter-efficient fine-tuning of large language models for domain adaptation. Contributed to internal benchmarking infrastructure and model evaluation pipelines.",
-    "tags": ["LLM", "Fine-Tuning", "NLP"]
-  },
-  {
-    "id": "undergrad-ra",
-    "title": "Undergraduate Research Assistant",
-    "organization": "Computer Vision Lab, Your University",
-    "location": "Seoul, South Korea",
-    "startDate": "Mar 2022",
-    "endDate": "Aug 2023",
-    "description": "Assisted with experiments on image-text contrastive learning and dataset curation. Implemented baseline models and reproduced results from recent CLIP-based papers.",
-    "tags": ["CLIP", "Contrastive Learning", "Computer Vision"]
-  },
-  {
-    "id": "bs",
-    "title": "Bachelor of Science in Computer Science",
-    "organization": "Your University",
-    "location": "Seoul, South Korea",
-    "startDate": "Mar 2019",
-    "endDate": "Aug 2023",
-    "description": "Graduated with honors. Coursework in machine learning, computer vision, and natural language processing.",
-    "tags": ["B.S. Computer Science"]
+    "id": "bs-kaist-mas-ee",
+    "title": "Bachelor of Science — Double Major",
+    "organization": "Dept. of Mathematical Sciences (MAS) & School of Electrical Engineering (EE), KAIST",
+    "location": "Daejeon, South Korea",
+    "startDate": "Mar 2018",
+    "endDate": "Feb 2025",
+    "description": "Graduated with a double major in Mathematical Sciences and Electrical Engineering from KAIST.",
+    "tags": ["B.S. Mathematics", "B.S. Electrical Engineering", "KAIST"]
   }
 ]

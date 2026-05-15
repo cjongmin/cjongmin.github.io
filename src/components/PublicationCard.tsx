@@ -10,9 +10,14 @@ interface PublicationCardProps {
   index: number
 }
 
+const PREPRINT_VENUES = ['arXiv', 'Preprint']
+
 export default function PublicationCard({ pub, index }: PublicationCardProps) {
   const [bibtexOpen, setBibtexOpen] = useState(false)
   const [imgError, setImgError] = useState(false)
+
+  const isPreprint = PREPRINT_VENUES.includes(pub.venue)
+  const hasEqualContrib = pub.equalContribution && pub.equalContribution.length > 0
 
   const links = [
     pub.links?.paper && { label: 'Paper', icon: FileText, href: pub.links.paper },
@@ -31,7 +36,7 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
         className="glass-card overflow-hidden hover:shadow-md transition-shadow duration-200"
       >
         <div className="flex flex-col sm:flex-row gap-0">
-          {/* Image */}
+          {/* Representative image */}
           {pub.image && !imgError ? (
             <div className="sm:w-44 sm:shrink-0 bg-black/[0.03] dark:bg-white/[0.03] flex items-center justify-center overflow-hidden">
               <img
@@ -49,13 +54,20 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
 
           {/* Content */}
           <div className="flex-1 p-5 flex flex-col gap-3">
-            {/* Venue + year */}
+            {/* Venue + year badge */}
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full
-                               bg-[#0071E3]/10 dark:bg-[#2997FF]/15
-                               text-[#0071E3] dark:text-[#2997FF]">
+              <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${
+                isPreprint
+                  ? 'bg-amber-500/10 dark:bg-amber-400/15 text-amber-700 dark:text-amber-400'
+                  : 'bg-[#0071E3]/10 dark:bg-[#2997FF]/15 text-[#0071E3] dark:text-[#2997FF]'
+              }`}>
                 {pub.venue} {pub.year}
               </span>
+              {isPreprint && (
+                <span className="text-[11px] text-amber-600 dark:text-amber-400 font-medium">
+                  Preprint
+                </span>
+              )}
             </div>
 
             {/* Title */}
@@ -65,16 +77,31 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
 
             {/* Authors */}
             <p className="text-sm text-secondary leading-relaxed">
-              {pub.authors.map((author, i) => (
-                <span key={i}>
-                  {author === profile.name ? (
-                    <strong className="font-semibold text-[#1D1D1F] dark:text-[#F5F5F7]">{author}</strong>
-                  ) : (
-                    author
-                  )}
-                  {i < pub.authors.length - 1 && ', '}
+              {pub.authors.map((author, i) => {
+                const isMe = author === profile.name
+                const isEqual = hasEqualContrib && pub.equalContribution!.includes(author)
+                return (
+                  <span key={i}>
+                    {isMe ? (
+                      <strong className="font-semibold text-[#1D1D1F] dark:text-[#F5F5F7]">
+                        {author}
+                        {isEqual && <sup className="ml-0.5 text-[10px]">*</sup>}
+                      </strong>
+                    ) : (
+                      <span>
+                        {author}
+                        {isEqual && <sup className="ml-0.5 text-[10px]">*</sup>}
+                      </span>
+                    )}
+                    {i < pub.authors.length - 1 && ', '}
+                  </span>
+                )
+              })}
+              {hasEqualContrib && (
+                <span className="block mt-1 text-[11px] text-secondary/70 italic">
+                  * Equal contribution
                 </span>
-              ))}
+              )}
             </p>
 
             {/* Tags */}

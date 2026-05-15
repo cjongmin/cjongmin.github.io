@@ -27,10 +27,10 @@ export default function About() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.12 }}
-          className="max-w-2xl space-y-4 mb-10"
+          className="space-y-4 mb-10"
         >
           {paragraphs.map((para, i) => (
-            <p key={i} className="text-[17px] leading-relaxed text-secondary">
+            <p key={i} className="text-[17px] leading-relaxed text-secondary text-justify">
               {para}
             </p>
           ))}

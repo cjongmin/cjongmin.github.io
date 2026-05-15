@@ -10,7 +10,6 @@ interface PublicationCardProps {
   index: number
 }
 
-// Known conference venue prefixes (case-insensitive matching)
 const CONFERENCE_PREFIXES = [
   'ICASSP', 'NeurIPS', 'NIPS', 'ICML', 'ICLR', 'CVPR', 'ICCV', 'ECCV',
   'ACL', 'EMNLP', 'NAACL', 'COLING', 'Interspeech', 'AISTATS', 'UAI',
@@ -58,9 +57,16 @@ function parseAuthor(raw: string): { name: string; sup: string | null } {
   return match ? { name: match[1].trim(), sup: match[2] } : { name: raw, sup: null }
 }
 
-const BTN_BASE = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[12px] font-medium transition-colors duration-150 border cursor-pointer'
-const BTN_PRIMARY = `${BTN_BASE} bg-[#1D1D1F]/[0.07] text-[#1D1D1F] border-[#1D1D1F]/[0.2] hover:bg-[#1D1D1F]/[0.13] dark:bg-white/[0.1] dark:text-[#F5F5F7] dark:border-white/[0.25] dark:hover:bg-white/[0.16]`
-const BTN_SECONDARY = `${BTN_BASE} bg-transparent text-[#3A3A3C] border-black/[0.14] hover:bg-black/[0.05] dark:text-[#E5E5EA] dark:border-white/[0.18] dark:hover:bg-white/[0.08]`
+function toHashtag(tag: string): string {
+  return '#' + tag.toLowerCase().replace(/[\s/]+/g, '-')
+}
+
+// Action buttons — clearly distinct from hashtag metadata
+const BTN_BASE = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[12px] font-medium transition-colors duration-150 border cursor-pointer select-none'
+// Paper: subtle fill to signal primary action
+const BTN_PRIMARY = `${BTN_BASE} bg-neutral-100 border-neutral-300 text-neutral-900 hover:bg-neutral-200 dark:bg-white/[0.11] dark:border-white/[0.28] dark:text-[#F0F0F2] dark:hover:bg-white/[0.18]`
+// Others: outlined
+const BTN_SECONDARY = `${BTN_BASE} bg-transparent border-neutral-300 text-neutral-700 hover:bg-neutral-100 dark:border-white/[0.2] dark:text-[#C7C7CB] dark:hover:bg-white/[0.08]`
 
 export default function PublicationCard({ pub, index }: PublicationCardProps) {
   const [bibtexOpen, setBibtexOpen] = useState(false)
@@ -70,13 +76,13 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
   const isPreprint = venueType === 'preprint'
 
   const links = [
-    pub.links?.paper && { label: 'Paper', icon: FileText, href: pub.links.paper },
-    pub.links?.scholar && { label: 'Scholar', icon: BookOpen, href: pub.links.scholar },
-    pub.links?.code && { label: 'Code', icon: Code2, href: pub.links.code },
-    pub.links?.project && { label: 'Project', icon: Globe, href: pub.links.project },
+    pub.links?.paper   && { label: 'Paper',   icon: FileText, href: pub.links.paper },
+    pub.links?.scholar && { label: 'Scholar',  icon: BookOpen, href: pub.links.scholar },
+    pub.links?.code    && { label: 'Code',     icon: Code2,    href: pub.links.code },
+    pub.links?.project && { label: 'Project',  icon: Globe,    href: pub.links.project },
   ].filter(Boolean) as { label: string; icon: React.ElementType; href: string }[]
 
-  const hasTags = !!pub.tags && pub.tags.length > 0
+  const hasTags    = !!pub.tags && pub.tags.length > 0
   const hasActions = links.length > 0 || !!pub.bibtex
 
   return (
@@ -88,41 +94,46 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
         transition={{ duration: 0.5, delay: index * 0.07 }}
         className="glass-card overflow-hidden hover:shadow-md transition-shadow duration-200"
       >
-        <div className="flex flex-col sm:flex-row sm:h-[240px] gap-0">
+        {/*
+          No fixed card height — card sizes to content.
+          Image container uses self-stretch on desktop to fill whatever
+          height the content side naturally occupies.
+        */}
+        <div className="flex flex-col sm:flex-row">
 
-          {/* Representative image — fixed frame */}
+          {/* Image frame — 120px on mobile, self-stretches to content height on desktop */}
           {pub.image && !imgError ? (
-            <div className="sm:w-[248px] sm:shrink-0 bg-neutral-50 dark:bg-zinc-900/50
-                            flex items-center justify-center overflow-hidden p-3 rounded-l-2xl">
+            <div className="h-[120px] sm:h-auto sm:self-stretch sm:w-[192px] sm:shrink-0
+                            bg-neutral-50 dark:bg-zinc-900/50
+                            flex items-center justify-center overflow-hidden p-2.5">
               <img
                 src={pub.image}
                 alt={pub.title}
                 onError={() => setImgError(true)}
-                className="w-full h-full object-contain max-h-40 sm:max-h-full rounded"
+                className="w-full h-full object-contain rounded-sm"
               />
             </div>
           ) : pub.image && imgError ? (
-            <div className="sm:w-[248px] sm:shrink-0 bg-neutral-50 dark:bg-zinc-900/50
-                            flex items-center justify-center min-h-[80px] rounded-l-2xl">
-              <ImageOff size={20} className="text-secondary opacity-30" />
+            <div className="h-[120px] sm:h-auto sm:self-stretch sm:w-[192px] sm:shrink-0
+                            bg-neutral-50 dark:bg-zinc-900/50
+                            flex items-center justify-center">
+              <ImageOff size={18} className="text-secondary opacity-25" />
             </div>
           ) : null}
 
-          {/* Content area */}
-          <div className="flex-1 p-5 flex flex-col gap-2.5 min-w-0 overflow-hidden">
+          {/* Content — natural vertical flow, no spacers, no fixed heights */}
+          <div className="flex-1 px-5 py-4 flex flex-col gap-2 min-w-0">
 
-            {/* Row 1: Venue badge + status badge */}
+            {/* 1. Venue badge + status badge */}
             <div className="flex items-center gap-2 flex-wrap">
               <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full leading-none ${venueBadgeClass(venueType)}`}>
                 {pub.displayVenue ?? `${pub.venue} ${pub.year}`}
               </span>
-              {/* Preprint label — plain text when arXiv is already shown */}
               {isPreprint && (
-                <span className="text-[10px] font-medium text-amber-600/75 dark:text-amber-400/65 leading-none">
+                <span className="text-[10px] font-medium text-amber-600/70 dark:text-amber-400/60 leading-none">
                   Preprint
                 </span>
               )}
-              {/* Presentation type badge */}
               {pub.presentationType && (
                 <span className={`text-[11px] font-medium px-2 py-0.5 rounded-full leading-none ${statusBadgeClass(pub.presentationType)}`}>
                   {pub.presentationType}
@@ -130,12 +141,12 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
               )}
             </div>
 
-            {/* Row 2: Paper title */}
+            {/* 2. Title — strongest hierarchy element */}
             <h3 className="text-[15px] font-semibold leading-snug text-[#1D1D1F] dark:text-[#F5F5F7]">
               {pub.title}
             </h3>
 
-            {/* Row 3: Authors */}
+            {/* 3. Authors */}
             <p className="text-[13px] leading-relaxed text-[#6E6E73] dark:text-[#8E8E93]">
               {pub.authors.map((raw, i) => {
                 const { name, sup } = parseAuthor(raw)
@@ -157,26 +168,31 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
               })}
             </p>
 
-            {/* Row 4: Keyword tags — quiet, non-interactive appearance */}
+            {/*
+              4. Hashtag metadata — only rendered if tags exist.
+              When absent, action buttons flow directly after authors
+              with no reserved empty space.
+            */}
             {hasTags && (
-              <div className="flex flex-wrap gap-1">
+              <div className="flex flex-wrap gap-x-3 gap-y-0.5">
                 {pub.tags!.map(tag => (
                   <span
                     key={tag}
-                    className="text-[10px] px-2 py-0.5 rounded-full font-medium select-none
-                               bg-black/[0.04] dark:bg-white/[0.05]
-                               text-[#6E6E73] dark:text-[#8E8E93]
-                               border border-black/[0.05] dark:border-white/[0.07]"
+                    className="text-[11px] font-normal text-[#8E8E93] dark:text-[#636366] select-none"
                   >
-                    {tag}
+                    {toHashtag(tag)}
                   </span>
                 ))}
               </div>
             )}
 
-            {/* Row 5: Action buttons — clearly clickable, distinct from tags */}
+            {/*
+              5. Action buttons — clearly larger and bordered vs. hashtags.
+              pt-0.5 adds modest extra separation from hashtags when present.
+              No mt-auto — buttons follow the last rendered row naturally.
+            */}
             {hasActions && (
-              <div className={`flex flex-wrap gap-1.5 ${hasTags ? 'pt-0.5' : 'mt-auto'}`}>
+              <div className={`flex flex-wrap gap-1.5${hasTags ? ' pt-0.5' : ''}`}>
                 {links.map(({ label, icon: Icon, href }) => (
                   <a
                     key={label}

@@ -27,7 +27,7 @@ export default function Publications() {
       byYear[pub.year].push(pub)
     }
     for (const year in byYear) {
-      byYear[Number(year)].sort((a, b) => a.order - b.order)
+      byYear[Number(year)].sort((a, b) => b.order - a.order)
     }
     return Object.entries(byYear)
       .sort(([a], [b]) => Number(b) - Number(a))

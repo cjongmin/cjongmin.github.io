@@ -15,9 +15,10 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-16"
+      className="relative min-h-screen flex flex-col items-center overflow-hidden pt-16"
     >
-      <div className="section-container relative z-10 flex flex-col items-center text-center gap-6 pt-16 pb-28">
+      <div className="flex-1" />
+      <div className="section-container relative z-10 flex flex-col items-center text-center gap-6">
         {/* Profile photo / monogram */}
         {profile.profileImage ? (
           <motion.div
@@ -119,27 +120,30 @@ export default function Hero() {
           ))}
         </motion.div>
 
-        {/* Scroll cue */}
-        <motion.button
-          onClick={() => scrollToSection('about')}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.1 }}
-          className="mt-2 text-secondary hover:text-[#0071E3] dark:hover:text-[#2997FF] transition-colors flex flex-col items-center gap-1.5 text-xs"
-          aria-label="Scroll to About section"
-        >
-          <span>Explore</span>
-          <svg width="14" height="20" viewBox="0 0 14 20" fill="none">
-            <motion.path
-              d="M7 1 L7 19 M1 13 L7 19 L13 13"
-              stroke="currentColor" strokeWidth="1.5"
-              strokeLinecap="round" strokeLinejoin="round"
-              animate={{ y: [0, 4, 0] }}
-              transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-            />
-          </svg>
-        </motion.button>
       </div>
+
+      <div className="flex-1" />
+
+      {/* Scroll cue — floats between content and bottom of hero */}
+      <motion.button
+        onClick={() => scrollToSection('about')}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.1 }}
+        className="relative z-10 mb-12 text-secondary hover:text-[#0071E3] dark:hover:text-[#2997FF] transition-colors flex flex-col items-center gap-1.5 text-xs"
+        aria-label="Scroll to About section"
+      >
+        <span>Explore</span>
+        <svg width="14" height="20" viewBox="0 0 14 20" fill="none">
+          <motion.path
+            d="M7 1 L7 19 M1 13 L7 19 L13 13"
+            stroke="currentColor" strokeWidth="1.5"
+            strokeLinecap="round" strokeLinejoin="round"
+            animate={{ y: [0, 4, 0] }}
+            transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+          />
+        </svg>
+      </motion.button>
     </section>
   )
 }

@@ -1,5 +1,58 @@
 [
   {
+    "id": "nureumkkot",
+    "name": "Nureum · 누름꽃",
+    "tagline": "Press flowers, keep moments",
+    "description": "Nureum (누름꽃, meaning “pressed flower”) is a quiet, offline-first iOS app that turns flowers found in everyday life into digital pressed-flower keepsakes.\n\nPhotograph a flower in the camera tab—or choose one from Photos—and Nureum gently separates it from its surroundings. You can refine the cutout, adjust its pressed texture, fading, warmth, grain, and edges, then preserve it in My Flower Collection with the date, location, notes, and tags attached to the moment.\n\nThe collection can be searched and revisited by flower, season, date, or place. A fully localized Guide introduces 355 flowers across eight languages, including their blooming seasons, habitats, characteristics, and traditional flower meanings.\n\nIn the decoration tab, saved flowers become creative materials. Arrange them over photographs, move, resize, and rotate them like stickers, then finish the composition with frames, handwriting, and other decorative elements before saving or sharing it.\n\nNureum also keeps its social layer intentionally small. Pair with one Flower Friend and send a single flower to their private flower inbox through CloudKit. A home-screen widget brings flowers from your collection back into view, while the share extension lets you preserve photographs directly from the Photos app.\n\nThere is no separate account to create, no advertising, and no subscription.\n\nNureum is built for iOS 17 and later with SwiftUI and SwiftData. Its core collection and image-editing experience works offline and processes photographs directly on the device. VNGenerateForegroundInstanceMaskRequest performs foreground segmentation, while Core Image renders the pressed-flower treatment. SwiftData manages structured metadata, and original photographs and derived assets are stored separately in a file-backed media store to preserve image quality and keep the database lightweight.\n\nCloudKit powers the one-to-one Flower Friend connection and flower delivery. WidgetKit, App Groups, and the share extension allow saved flowers and incoming photographs to move naturally between the app, the home screen, and Photos.",
+    "icon": "/projects/nureumkkot/icon.webp",
+    "accentColor": "#848859",
+    "screenshots": [
+      "/projects/nureumkkot/screenshot-1.webp",
+      "/projects/nureumkkot/screenshot-2.webp",
+      "/projects/nureumkkot/screenshot-3.webp",
+      "/projects/nureumkkot/screenshot-4.webp"
+    ],
+    "platforms": ["iOS", "iPadOS"],
+    "status": "In Development",
+    "year": 2026,
+    "features": [
+      "Photograph a flower or import one directly from Photos",
+      "Create an on-device foreground cutout with Apple Vision",
+      "Fine-tune the cutout and pressed-flower treatment non-destructively",
+      "Preserve each flower with its date, location, notes, and tags",
+      "Search and revisit flowers by season, date, name, or place",
+      "Explore a fully localized Guide containing 355 flowers in eight languages",
+      "Arrange saved flowers into cards and photographs with frames and decorative elements",
+      "Pair with one Flower Friend and send a flower to their private inbox",
+      "Revisit flowers through a home-screen widget",
+      "Import photographs using the system share extension"
+    ],
+    "techStack": [
+      "Swift",
+      "SwiftUI",
+      "SwiftData",
+      "Swift Concurrency",
+      "Observation",
+      "XcodeGen"
+    ],
+    "apis": [
+      "Vision",
+      "Core Image",
+      "Core Graphics",
+      "ImageIO",
+      "CloudKit",
+      "WidgetKit",
+      "PhotosUI",
+      "PencilKit",
+      "AVFoundation",
+      "MapKit",
+      "Core Location",
+      "UserNotifications",
+      "App Groups",
+      "Uniform Type Identifiers"
+    ]
+  },
+  {
     "id": "pickcam",
     "name": "PickCam",
     "tagline": "Auto-reframe any group video around one person",
@@ -49,53 +102,5 @@
     "links": {
       "website": "https://cjongmin.github.io/pickcam-site/"
     }
-  },
-  {
-    "id": "nureumkkot",
-    "name": "Nureumkkot",
-    "tagline": "Turn flowers you meet into digital pressed keepsakes",
-    "description": "Nureumkkot (누름꽃, \"pressed flower\") is a quiet, offline-first keepsake app for people who notice flowers on a walk. Photograph a bloom and the app lifts it from its background, presses it flat with a paper-grain finish, and files it into a personal collection alongside where and when you found it — no account, no ads, no subscription.\n\nEverything runs on-device: Vision's foreground-instance segmentation cuts the subject out, Core Image renders the pressing, and SwiftData plus a file-backed store keep the originals at full quality while derived images are encoded as alpha-preserving HEIC to keep the library roughly 38% smaller. A 355-entry field guide covers bloom months, habitats, and flower meanings, fully localized across 8 languages.\n\nThe social layer is deliberately small: CloudKit sharing lets you bind a \"flower bookmark\" with one friend and mail a single bloom to their inbox, delivered by silent push. A home-screen widget surfaces one flower from your collection, and a share extension lets you send photos in from Photos.app.",
-    "icon": "/projects/nureumkkot/icon.webp",
-    "accentColor": "#848859",
-    "screenshots": [
-      "/projects/nureumkkot/screenshot-1.webp",
-      "/projects/nureumkkot/screenshot-2.webp",
-      "/projects/nureumkkot/screenshot-3.webp",
-      "/projects/nureumkkot/screenshot-4.webp"
-    ],
-    "platforms": ["iOS", "iPadOS"],
-    "status": "In Development",
-    "year": 2026,
-    "features": [
-      "Photograph a flower and have it cut out and pressed into a keepsake on-device",
-      "Browse your collection with the map, date, and notes of where each flower was found",
-      "Look up 355 species for bloom months, habitats, and flower meanings",
-      "Decorate pressed flowers into framed cards with handwriting, stickers, and a signature",
-      "Share a single flower with one bound friend, delivered to their inbox by push"
-    ],
-    "techStack": [
-      "Swift",
-      "SwiftUI",
-      "SwiftData",
-      "Swift Concurrency (async/await, actors)",
-      "@Observable (Observation)",
-      "XcodeGen"
-    ],
-    "apis": [
-      "Vision (VNGenerateForegroundInstanceMaskRequest)",
-      "Core Image",
-      "Core Graphics / ImageIO (HEIC encoding)",
-      "CloudKit (CKShare, silent push)",
-      "WidgetKit",
-      "Share Extension",
-      "PencilKit",
-      "PhotosUI",
-      "AVFoundation",
-      "MapKit",
-      "Core Location",
-      "UserNotifications",
-      "App Groups",
-      "Uniform Type Identifiers (custom document types)"
-    ]
   }
 ]

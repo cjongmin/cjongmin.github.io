@@ -71,7 +71,7 @@ export default function Publications() {
           </div>
         </motion.div>
 
-        <motion.div layout className="space-y-10">
+        <div className="space-y-10">
           {filtered.length === 0 && (
             <p className="text-secondary text-center py-12">No publications found for this filter.</p>
           )}
@@ -89,7 +89,7 @@ export default function Publications() {
               </div>
             </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   )

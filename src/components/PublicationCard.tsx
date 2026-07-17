@@ -99,6 +99,8 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
               <img
                 src={pub.image}
                 alt={pub.title}
+                loading="lazy"
+                decoding="async"
                 onError={() => setImgError(true)}
                 className="max-w-[95%] max-h-full object-contain rounded-sm"
               />

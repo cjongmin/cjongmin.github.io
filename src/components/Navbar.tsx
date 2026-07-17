@@ -13,6 +13,7 @@ const NAV_ITEMS = [
   { label: 'About', id: 'about' },
   { label: 'Publications', id: 'publications' },
   { label: 'Experience', id: 'experience' },
+  { label: 'Projects', id: 'projects' },
   { label: 'Contact', id: 'contact' },
 ]
 
@@ -22,19 +23,28 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => {
+    // Throttle with rAF: at most one layout read + state update per frame,
+    // instead of one per scroll event (which forces reflows and jank).
+    let ticking = false
+    const update = () => {
+      ticking = false
       setScrolled(window.scrollY > 20)
 
-      const sections = NAV_ITEMS.map(i => document.getElementById(i.id)).filter(Boolean) as HTMLElement[]
-      const navH = 64
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const top = sections[i].getBoundingClientRect().top
-        if (top <= navH + 40) {
-          setActiveSection(NAV_ITEMS[i].id)
-          break
-        }
+      const threshold = 64 + 40 // nav height + margin
+      let current = NAV_ITEMS[0].id
+      for (const item of NAV_ITEMS) {
+        const el = document.getElementById(item.id)
+        if (el && el.getBoundingClientRect().top <= threshold) current = item.id
+      }
+      setActiveSection(current)
+    }
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true
+        requestAnimationFrame(update)
       }
     }
+    update()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])

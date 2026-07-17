@@ -58,6 +58,20 @@
   .divider {
     @apply border-t border-black/[0.06] dark:border-white/[0.08];
   }
+
+  /* Background glow orbs — cheap radial gradients, no blur filter */
+  .glow-orb {
+    @apply absolute rounded-full;
+    background: radial-gradient(circle closest-side, var(--glow) 0%, transparent 100%);
+  }
+  .glow-blue       { --glow: rgba(147, 197, 253, 0.26); }
+  .dark .glow-blue { --glow: rgba(255, 255, 255, 0.13); }
+  .glow-violet       { --glow: rgba(196, 181, 253, 0.20); }
+  .dark .glow-violet { --glow: rgba(255, 255, 255, 0.09); }
+  .glow-sky       { --glow: rgba(186, 230, 253, 0.18); }
+  .dark .glow-sky { --glow: rgba(255, 255, 255, 0.07); }
+  .glow-indigo       { --glow: rgba(199, 210, 254, 0.18); }
+  .dark .glow-indigo { --glow: rgba(255, 255, 255, 0.07); }
 }
 
 /* Scrollbar */

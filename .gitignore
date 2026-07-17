@@ -7,3 +7,4 @@ dist-ssr
 .env.local
 admin/.venv
 admin/__pycache__
+*.zip

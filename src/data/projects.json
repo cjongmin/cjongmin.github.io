@@ -1,0 +1,101 @@
+[
+  {
+    "id": "pickcam",
+    "name": "PickCam",
+    "tagline": "Auto-reframe any group video around one person",
+    "description": "Group dance videos, concerts, school recitals — the moment you actually want is one person, but the frame is everyone. PickCam turns any multi-person video into a fancam of whoever you pick: tap a person once and the app follows them to the end of the clip, reframing every frame around them for 9:16, 1:1, or 16:9.\n\nEverything runs on-device. A Core ML detector (YOLOX-Tiny) works alongside Apple's Vision framework to detect, segment, and track people frame by frame, while a face-embedding model re-identifies the chosen subject after occlusions and re-entries — the hard part of this problem is not finding people, it's not losing the *right* one. A path optimizer then smooths the crop trajectory so the output reads like a camera operator followed the subject rather than a bounding box snapping around them. There is no server and no account; video never leaves the device.\n\nThe tracking is editable rather than take-it-or-leave-it: split the timeline into segments to switch subjects mid-video, or drop keyframes and drag/pinch the crop when a detection is missed. Export runs through AVFoundation with Metal-based upscaling for 4K output, and monetization is built in — StoreKit 2 subscriptions for Pro, with a rewarded-ad and daily-quota gate on the free tier.",
+    "icon": "/projects/pickcam/icon.webp",
+    "accentColor": "#1E86FD",
+    "screenshots": [
+      "/projects/pickcam/screenshot-1.webp",
+      "/projects/pickcam/screenshot-2.webp",
+      "/projects/pickcam/screenshot-3.webp",
+      "/projects/pickcam/screenshot-4.webp",
+      "/projects/pickcam/screenshot-5.webp"
+    ],
+    "platforms": ["iOS"],
+    "status": "TestFlight",
+    "year": 2026,
+    "features": [
+      "Tap one person in a group video and get a fancam — AI follows them to the end",
+      "On-device person detection and face re-identification that survives occlusion and re-entry",
+      "Reframe to 9:16, 1:1, or 16:9 for Reels, Shorts, and TikTok",
+      "Switch the tracked subject per timeline segment, or correct framing with keyframes",
+      "Export up to 4K (HEVC/H.264) with Metal-based quality upscaling"
+    ],
+    "techStack": [
+      "Swift",
+      "SwiftUI",
+      "Swift Concurrency (async/await)",
+      "Observation (@Observable)",
+      "MVVM + protocol-based service layer",
+      "XcodeGen"
+    ],
+    "apis": [
+      "Vision",
+      "Core ML",
+      "AVFoundation",
+      "Core Image",
+      "Metal / MetalFX",
+      "StoreKit 2",
+      "WidgetKit",
+      "ActivityKit (Live Activities)",
+      "PhotosUI",
+      "UserNotifications",
+      "AppTrackingTransparency",
+      "Google Mobile Ads SDK",
+      "User Messaging Platform (UMP)"
+    ],
+    "links": {
+      "website": "https://cjongmin.github.io/pickcam-site/"
+    }
+  },
+  {
+    "id": "nureumkkot",
+    "name": "Nureumkkot",
+    "tagline": "Turn flowers you meet into digital pressed keepsakes",
+    "description": "Nureumkkot (누름꽃, \"pressed flower\") is a quiet, offline-first keepsake app for people who notice flowers on a walk. Photograph a bloom and the app lifts it from its background, presses it flat with a paper-grain finish, and files it into a personal collection alongside where and when you found it — no account, no ads, no subscription.\n\nEverything runs on-device: Vision's foreground-instance segmentation cuts the subject out, Core Image renders the pressing, and SwiftData plus a file-backed store keep the originals at full quality while derived images are encoded as alpha-preserving HEIC to keep the library roughly 38% smaller. A 355-entry field guide covers bloom months, habitats, and flower meanings, fully localized across 8 languages.\n\nThe social layer is deliberately small: CloudKit sharing lets you bind a \"flower bookmark\" with one friend and mail a single bloom to their inbox, delivered by silent push. A home-screen widget surfaces one flower from your collection, and a share extension lets you send photos in from Photos.app.",
+    "icon": "/projects/nureumkkot/icon.webp",
+    "accentColor": "#848859",
+    "screenshots": [
+      "/projects/nureumkkot/screenshot-1.webp",
+      "/projects/nureumkkot/screenshot-2.webp",
+      "/projects/nureumkkot/screenshot-3.webp",
+      "/projects/nureumkkot/screenshot-4.webp"
+    ],
+    "platforms": ["iOS", "iPadOS"],
+    "status": "In Development",
+    "year": 2026,
+    "features": [
+      "Photograph a flower and have it cut out and pressed into a keepsake on-device",
+      "Browse your collection with the map, date, and notes of where each flower was found",
+      "Look up 355 species for bloom months, habitats, and flower meanings",
+      "Decorate pressed flowers into framed cards with handwriting, stickers, and a signature",
+      "Share a single flower with one bound friend, delivered to their inbox by push"
+    ],
+    "techStack": [
+      "Swift",
+      "SwiftUI",
+      "SwiftData",
+      "Swift Concurrency (async/await, actors)",
+      "@Observable (Observation)",
+      "XcodeGen"
+    ],
+    "apis": [
+      "Vision (VNGenerateForegroundInstanceMaskRequest)",
+      "Core Image",
+      "Core Graphics / ImageIO (HEIC encoding)",
+      "CloudKit (CKShare, silent push)",
+      "WidgetKit",
+      "Share Extension",
+      "PencilKit",
+      "PhotosUI",
+      "AVFoundation",
+      "MapKit",
+      "Core Location",
+      "UserNotifications",
+      "App Groups",
+      "Uniform Type Identifiers (custom document types)"
+    ]
+  }
+]

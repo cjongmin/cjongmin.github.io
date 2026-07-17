@@ -23,6 +23,7 @@ npm run preview    # preview the production build locally
 | Name, bio, email, links | `src/data/profile.ts` |
 | Publications | `src/data/publications.ts` |
 | Experience / Timeline | `src/data/experiences.ts` |
+| iOS app projects | `src/data/projects.json` — generate entries with `prompts/extract-app-info.md` |
 | Accent color, fonts | `tailwind.config.js` |
 | GitHub Pages base path | `vite.config.ts` |
 

@@ -4,8 +4,10 @@ import Hero from './components/Hero'
 import About from './components/About'
 import Publications from './components/Publications'
 import Experience from './components/Experience'
+import Projects from './components/Projects'
 import Contact from './components/Contact'
 import BackgroundGlow from './components/BackgroundGlow'
+import ErrorBoundary from './components/ErrorBoundary'
 
 export default function App() {
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
@@ -31,11 +33,14 @@ export default function App() {
       <BackgroundGlow />
       <Navbar theme={theme} toggleTheme={toggleTheme} />
       <main>
-        <Hero />
-        <About />
-        <Publications />
-        <Experience />
-        <Contact />
+        <ErrorBoundary>
+          <Hero />
+          <About />
+          <Publications />
+          <Experience />
+          <Projects />
+          <Contact />
+        </ErrorBoundary>
       </main>
       <footer className="py-6 text-center text-secondary text-xs border-t border-black/[0.06] dark:border-white/[0.06]">
         <p>© {new Date().getFullYear()} Jongmin Choi</p>

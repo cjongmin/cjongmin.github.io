@@ -30,7 +30,13 @@ export default function Hero() {
                        ring-1 ring-black/[0.1] dark:ring-white/[0.12]
                        shadow-lg sm:shadow-xl cursor-pointer"
           >
-            <img src={profile.profileImage} alt={profile.name} className="w-full h-full object-cover" />
+            <img
+              src={profile.profileImage}
+              alt={profile.name}
+              decoding="async"
+              fetchPriority="high"
+              className="w-full h-full object-cover"
+            />
           </motion.div>
         ) : (
           <motion.div

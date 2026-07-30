@@ -6,3 +6,4 @@ dist-ssr
 .env
 .env.local
 *.zip
+/[0-9]_*.png

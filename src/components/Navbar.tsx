@@ -10,9 +10,10 @@ interface NavbarProps {
 
 const NAV_ITEMS = [
   { label: 'Home', id: 'home' },
+  { label: 'News', id: 'news' },
   { label: 'About', id: 'about' },
   { label: 'Publications', id: 'publications' },
-  { label: 'Experience', id: 'experience' },
+  { label: 'Education', id: 'education' },
   { label: 'Projects', id: 'projects' },
   { label: 'Contact', id: 'contact' },
 ]

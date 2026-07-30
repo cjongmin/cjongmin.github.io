@@ -40,6 +40,18 @@ function venueBadgeClass(type: 'conference' | 'journal' | 'preprint'): string {
   }
 }
 
+// Distinct color per presentation tier; amber stays reserved for Preprint.
+function presentationBadgeClass(type: NonNullable<Publication['presentationType']>): string {
+  switch (type) {
+    case 'Oral':
+      return 'bg-rose-50 text-rose-800 dark:bg-rose-950/40 dark:text-rose-400'
+    case 'Spotlight':
+      return 'bg-violet-50 text-violet-800 dark:bg-violet-950/40 dark:text-violet-400'
+    case 'Poster':
+      return 'bg-sky-50 text-sky-800 dark:bg-sky-950/45 dark:text-sky-400'
+  }
+}
+
 function parseAuthor(raw: string): { name: string; sup: string | null } {
   const match = raw.match(/^(.+?)\^(.+)$/)
   return match ? { name: match[1].trim(), sup: match[2] } : { name: raw, sup: null }
@@ -129,8 +141,7 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
                 </span>
               )}
               {pub.presentationType && (
-                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full leading-none
-                  bg-amber-50 text-amber-800 dark:bg-amber-950/40 dark:text-amber-400">
+                <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full leading-none ${presentationBadgeClass(pub.presentationType)}`}>
                   {pub.presentationType}
                 </span>
               )}

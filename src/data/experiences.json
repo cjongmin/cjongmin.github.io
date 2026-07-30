@@ -1,31 +1,22 @@
 [
   {
     "id": "ms-kaist-ee",
-    "title": "MS Student in Electrical Engineering",
-    "organization": "School of Electrical Engineering (EE), KAIST",
+    "title": "M.S. in Electrical Engineering",
+    "organization": "KAIST",
+    "department": "School of Electrical Engineering · Multimodal AI (MMAI) Lab",
+    "advisor": "Prof. Joon Son Chung",
     "location": "Daejeon, South Korea",
     "startDate": "Mar 2025",
     "endDate": "Present",
-    "description": "Pursuing a Master's degree in Electrical Engineering at KAIST. Affiliated with the Multimodal AI (MMAI) Lab, conducting research on vision-language models and multimodal representation learning.",
-    "tags": [
-      "Multimodal AI",
-      "Vision-Language Models",
-      "MMAI Lab"
-    ],
     "link": "https://mmai.io"
   },
   {
     "id": "bs-kaist-mas-ee",
-    "title": "Bachelor of Science — Double Major",
-    "organization": "Dept. of Mathematical Sciences (MAS) & School of Electrical Engineering (EE), KAIST",
+    "title": "B.S. in Electrical Engineering & Mathematical Sciences",
+    "organization": "KAIST",
+    "department": "School of Electrical Engineering · Dept. of Mathematical Sciences (Double Major)",
     "location": "Daejeon, South Korea",
     "startDate": "Mar 2018",
-    "endDate": "Feb 2025",
-    "description": "Graduated with a double major in Mathematical Sciences and Electrical Engineering from KAIST.",
-    "tags": [
-      "B.S. Mathematics",
-      "B.S. Electrical Engineering",
-      "KAIST"
-    ]
+    "endDate": "Feb 2025"
   }
 ]

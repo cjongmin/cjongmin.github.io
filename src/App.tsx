@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
+import News from './components/News'
 import About from './components/About'
 import Publications from './components/Publications'
-import Experience from './components/Experience'
+import Education from './components/Education'
 import Projects from './components/Projects'
 import Contact from './components/Contact'
 import BackgroundGlow from './components/BackgroundGlow'
@@ -35,9 +36,10 @@ export default function App() {
       <main>
         <ErrorBoundary>
           <Hero />
+          <News />
           <About />
           <Publications />
-          <Experience />
+          <Education />
           <Projects />
           <Contact />
         </ErrorBoundary>

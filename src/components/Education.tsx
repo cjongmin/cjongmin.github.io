@@ -1,14 +1,14 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { MapPin, ExternalLink } from 'lucide-react'
-import { experiences } from '../data/experiences'
+import { ExternalLink, GraduationCap } from 'lucide-react'
+import { education } from '../data/experiences'
 
-export default function Experience() {
+export default function Education() {
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
   return (
-    <section id="experience" ref={ref} className="py-16 sm:py-24">
+    <section id="education" ref={ref} className="py-16 sm:py-24">
       <div className="section-container">
         <motion.div
           initial={{ opacity: 0, y: 28 }}
@@ -17,20 +17,19 @@ export default function Experience() {
           className="mb-8"
         >
           <p className="text-xs font-semibold text-[#6E6E73] dark:text-[#86868B] uppercase tracking-widest mb-3">
-            Experience
+            Education
           </p>
-          <h2 className="section-title">Research Experience</h2>
+          <h2 className="section-title">Education</h2>
         </motion.div>
 
         {/* Timeline */}
         <div className="relative">
-          {/* Vertical line */}
           <div className="absolute left-4 sm:left-5 top-3 bottom-3 w-px bg-black/[0.08] dark:bg-white/[0.08]" />
 
-          <div className="space-y-8">
-            {experiences.map((exp, i) => (
+          <div className="space-y-6">
+            {education.map((edu, i) => (
               <motion.div
-                key={exp.id}
+                key={edu.id}
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
@@ -43,29 +42,27 @@ export default function Experience() {
                                   bg-white dark:bg-[#1C1C1E]
                                   border border-black/[0.12] dark:border-white/[0.12]
                                   flex items-center justify-center z-10 shadow-sm">
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#6E6E73] dark:bg-[#86868B]" />
+                    <GraduationCap size={16} className="text-[#6E6E73] dark:text-[#86868B]" />
                   </div>
                 </div>
 
-                {/* Card */}
+                {/* Card — degree / institution / department / advisor, nothing more */}
                 <div className="flex-1 pb-2">
                   <div className="glass-card p-5 hover:shadow-md transition-shadow duration-200">
-                    {/* Date badge */}
-                    <span className="inline-block text-xs font-medium text-secondary mb-3">
-                      {exp.startDate} — {exp.endDate}
+                    <span className="inline-block text-xs font-medium text-secondary mb-2">
+                      {edu.startDate} — {edu.endDate}
                     </span>
 
-                    {/* Title */}
-                    <div className="flex items-start justify-between gap-3 mb-1">
+                    <div className="flex items-start justify-between gap-3">
                       <h3 className="text-[15px] font-semibold text-[#1D1D1F] dark:text-[#F5F5F7] leading-snug">
-                        {exp.title}
+                        {edu.title}
                       </h3>
-                      {exp.link && (
+                      {edu.link && (
                         <a
-                          href={exp.link}
+                          href={edu.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          aria-label={`Link to ${exp.organization}`}
+                          aria-label={`Link for ${edu.title}`}
                           className="shrink-0 text-secondary hover:text-[#0071E3] dark:hover:text-[#2997FF] transition-colors"
                         >
                           <ExternalLink size={14} />
@@ -73,36 +70,18 @@ export default function Experience() {
                       )}
                     </div>
 
-                    {/* Organization */}
-                    <p className="text-sm font-medium text-secondary mb-1">
-                      {exp.organization}
+                    <p className="text-sm font-medium text-secondary mt-1">
+                      {edu.organization}
                     </p>
-
-                    {/* Location */}
-                    <div className="flex items-center gap-1 text-xs text-secondary mb-3">
-                      <MapPin size={11} />
-                      {exp.location}
-                    </div>
-
-                    {/* Description */}
-                    <p className="text-sm text-body leading-relaxed">
-                      {exp.description}
-                    </p>
-
-                    {/* Tags */}
-                    {exp.tags && exp.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5 mt-3">
-                        {exp.tags.map(tag => (
-                          <span
-                            key={tag}
-                            className="text-[11px] px-2 py-0.5 rounded-full font-medium
-                                       bg-black/[0.04] dark:bg-white/[0.06]
-                                       text-secondary border border-black/[0.06] dark:border-white/[0.08]"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
+                    {edu.department && (
+                      <p className="text-[13px] text-secondary mt-0.5 leading-snug">
+                        {edu.department}
+                      </p>
+                    )}
+                    {edu.advisor && (
+                      <p className="text-[13px] text-body mt-1.5">
+                        Advisor: <span className="font-medium text-[#1D1D1F] dark:text-[#F5F5F7]">{edu.advisor}</span>
+                      </p>
                     )}
                   </div>
                 </div>

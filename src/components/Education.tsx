@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { ExternalLink, GraduationCap } from 'lucide-react'
-import { education } from '../data/experiences'
+import { education } from '../data/education'
 
 export default function Education() {
   const ref = useRef<HTMLElement>(null)

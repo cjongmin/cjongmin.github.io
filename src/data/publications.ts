@@ -1,4 +1,4 @@
-// Source of truth: publications.json (edit via Gradio admin or directly)
+// Source of truth: publications.json
 import data from './publications.json'
 
 export interface PublicationLink {

@@ -3,12 +3,12 @@
   "title": "MS Student in Multimodal AI",
   "affiliation": "MMAI Lab",
   "university": "Korea Advanced Institute of Science and Technology (KAIST)",
-  "email": "jongmin@mmai.io",
+  "email": "cjmin2925@gmail.com",
   "location": "Daejeon, South Korea",
   "links": {
     "github": "https://github.com/cjongmin",
     "linkedin": "https://www.linkedin.com/in/cjongmin",
-    "scholar": "https://scholar.google.com/citations?user=sPvkgm8AAAAJ&hl=ko"
+    "scholar": "https://scholar.google.com/citations?user=sPvkgm8AAAAJ"
   },
   "bio": "I am an MS student in the Multimodal AI (MMAI) Lab at KAIST, advised by Professor Joon Son Chung. My research asks two questions: how neural networks should compute, and how different modalities should meet inside a single model.\n\nAlong these lines, I have worked on interpretable spiking neurons for Spiking Neural Networks and on mitigating the audio–text modality gap in multimodal representation learning (both completed). I am currently designing connectors that effectively bridge audio encoders and language-model decoders in Audio Language Models, and exploring optimization algorithms for training deep networks. I am always open to discussing research ideas and potential collaborations — feel free to reach out!",
   "interests": [

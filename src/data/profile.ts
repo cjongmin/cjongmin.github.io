@@ -1,4 +1,4 @@
-// Source of truth: profile.json (edit via Gradio admin or directly)
+// Source of truth: profile.json
 import data from './profile.json'
 
 export const profile = data

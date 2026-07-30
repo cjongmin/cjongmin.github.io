@@ -5,6 +5,4 @@ dist-ssr
 .DS_Store
 .env
 .env.local
-admin/.venv
-admin/__pycache__
 *.zip

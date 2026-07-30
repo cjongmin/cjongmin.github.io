@@ -10,17 +10,5 @@
     "date": "Jan 2026",
     "text": "Two co-first-author papers accepted to ICASSP 2026 — LAMB (Oral) and Diffusion-Link (Poster)! 🎉",
     "highlight": true
-  },
-  {
-    "id": "fork-merge-arxiv",
-    "date": "May 2025",
-    "text": "Fork-Merge Decoding — enhancing multimodal understanding in audio-visual LLMs — released on arXiv.",
-    "highlight": false
-  },
-  {
-    "id": "ms-kaist-start",
-    "date": "Mar 2025",
-    "text": "Started my M.S. at KAIST, joining the Multimodal AI (MMAI) Lab 🎓",
-    "highlight": false
   }
 ]

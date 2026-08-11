@@ -217,6 +217,7 @@
   }
   .badge.oral   { color: #8d2437; background: #f7e9ec; }
   .badge.poster { color: #1b5478; background: #e8f2f8; }
+  .badge.review { color: #5d5d68; background: #eeeef1; }
 
   /* ============================================================
      Projects
@@ -283,11 +284,16 @@
   <section>
     <h2>Research Interests</h2>
     <p class="lede">
-      My research asks two questions: how neural networks should compute, and how different modalities should
-      meet inside a single model. Along these lines, I have worked on interpretable spiking neurons for Spiking
-      Neural Networks and on mitigating the audio&ndash;text modality gap. I am currently designing connectors
-      that bridge audio encoders and language-model decoders in Audio Language Models, and exploring
-      optimization algorithms for training deep networks.
+      Biological intelligence is the one existence proof we have of a general and efficient learner. I believe
+      that networks shaped by its mechanisms rather than by scale alone will prove both stronger and more
+      efficient. My master's work followed this belief along two lines. The first asks how one model should
+      hold several modalities at once, where I studied the gap between audio and text and how to narrow it
+      without flattening what makes each modality distinct. The second asks what the unit of computation should
+      be. A biological neuron is not a perceptron. It fires and resets and carries the imprint of its membrane
+      channels, and I designed spiking neuron algorithms that place these mechanisms inside the unit rather than
+      around it. I am now working on the connector that joins an audio encoder to a language model decoder,
+      where much of the information bottleneck forms, and on the mathematics of optimization for training deep
+      networks.
     </p>
   </section>
 
@@ -326,7 +332,9 @@
       <span class="idx">[P]</span>
       <div class="title">FiTS: Interpretable Spiking Neurons via Frequency Selectivity and Temporal Shaping</div>
       <div class="authors"><span class="me">Jongmin Choi</span>, Joon Son Chung</div>
-      <div class="where-line"><span class="venue">arXiv preprint</span><span class="dot">·</span>2026</div>
+      <div class="where-line">
+        Submitted to <span class="venue">Conference on Neural Information Processing Systems (NeurIPS)</span><span class="dot">·</span>2026<span class="badge review">Under Review</span>
+      </div>
     </div>
 
     <div class="pub">
@@ -376,37 +384,11 @@
   </section>
 
   <section>
-    <h2>Independent Software Projects</h2>
-
-    <div class="proj">
-      <div class="head">
-        <span class="pname">PickCam</span>
-        <span class="plat">iOS · App Store</span>
-      </div>
-      <div class="desc">
-        Sole developer of an iOS app that reframes multi-person video around a chosen subject, using on-device
-        person detection, segmentation, and face re-identification (Vision, Core ML, AVFoundation, Metal).
-      </div>
-    </div>
-
-    <div class="proj">
-      <div class="head">
-        <span class="pname">Nureum (누름꽃)</span>
-        <span class="plat">iOS / iPadOS · App Store</span>
-      </div>
-      <div class="desc">
-        Sole developer of an offline-first iOS app that turns photographed flowers into digital pressed-flower
-        keepsakes via on-device segmentation, with a 355-entry guide localized in eight languages
-        (Vision, Core Image, SwiftData, CloudKit).
-      </div>
-    </div>
-  </section>
-
-  <section>
     <h2>Skills</h2>
     <div class="skills">
       <b>Research &amp; ML:</b> Python, PyTorch<span class="dot">·</span><b>iOS Development:</b> Swift, SwiftUI,
-      SwiftData<span class="dot">·</span><b>Languages:</b> Korean (native), English (fluent)
+      SwiftData<span class="dot">·</span><b>Languages:</b> Korean (native), English (professional working
+      proficiency)
     </div>
   </section>
 

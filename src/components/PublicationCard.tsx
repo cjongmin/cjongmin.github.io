@@ -18,7 +18,11 @@ const CONFERENCE_PREFIXES = [
 ]
 const PREPRINT_VENUES = new Set(['arXiv', 'Preprint', 'arxiv'])
 
-function getVenueType(pub: Publication): 'conference' | 'journal' | 'preprint' {
+type VenueType = 'conference' | 'journal' | 'preprint' | 'review'
+
+function getVenueType(pub: Publication): VenueType {
+  // Submitted but undecided — never colored like an accepted venue.
+  if (pub.status === 'Under Review') return 'review'
   if (pub.status === 'Journal') return 'journal'
   if (pub.status === 'Preprint' || PREPRINT_VENUES.has(pub.venue)) return 'preprint'
   if (pub.status === 'Conference' || pub.status === 'Workshop') return 'conference'
@@ -28,7 +32,7 @@ function getVenueType(pub: Publication): 'conference' | 'journal' | 'preprint' {
   return 'journal'
 }
 
-function venueBadgeClass(type: 'conference' | 'journal' | 'preprint'): string {
+function venueBadgeClass(type: VenueType): string {
   switch (type) {
     case 'conference':
     case 'journal':
@@ -37,6 +41,9 @@ function venueBadgeClass(type: 'conference' | 'journal' | 'preprint'): string {
     case 'preprint':
       // Deep red for arXiv / preprint
       return 'bg-red-50 text-red-800 dark:bg-red-950/40 dark:text-red-400'
+    case 'review':
+      // Neutral grey — submitted, outcome not yet known
+      return 'bg-neutral-100 text-neutral-700 dark:bg-white/[0.1] dark:text-[#C7C7CB]'
   }
 }
 

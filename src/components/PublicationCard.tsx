@@ -18,11 +18,9 @@ const CONFERENCE_PREFIXES = [
 ]
 const PREPRINT_VENUES = new Set(['arXiv', 'Preprint', 'arxiv'])
 
-type VenueType = 'conference' | 'journal' | 'preprint' | 'review'
+type VenueType = 'conference' | 'journal' | 'preprint'
 
 function getVenueType(pub: Publication): VenueType {
-  // Submitted but undecided — never colored like an accepted venue.
-  if (pub.status === 'Under Review') return 'review'
   if (pub.status === 'Journal') return 'journal'
   if (pub.status === 'Preprint' || PREPRINT_VENUES.has(pub.venue)) return 'preprint'
   if (pub.status === 'Conference' || pub.status === 'Workshop') return 'conference'
@@ -41,9 +39,6 @@ function venueBadgeClass(type: VenueType): string {
     case 'preprint':
       // Deep red for arXiv / preprint
       return 'bg-red-50 text-red-800 dark:bg-red-950/40 dark:text-red-400'
-    case 'review':
-      // Neutral grey — submitted, outcome not yet known
-      return 'bg-neutral-100 text-neutral-700 dark:bg-white/[0.1] dark:text-[#C7C7CB]'
   }
 }
 
@@ -145,6 +140,13 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
                 <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full leading-none
                   bg-amber-50 text-amber-800 dark:bg-amber-950/40 dark:text-amber-400">
                   Preprint
+                </span>
+              )}
+              {/* Submitted but undecided — neutral grey, never colored like an accepted venue */}
+              {pub.submittedTo && (
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full leading-none
+                  bg-neutral-100 text-neutral-700 dark:bg-white/[0.1] dark:text-[#C7C7CB]">
+                  Submitted to {pub.submittedTo}
                 </span>
               )}
               {pub.presentationType && (

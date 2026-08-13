@@ -16,7 +16,8 @@ export interface Publication {
   displayVenue?: string     // Display override, e.g. "ICASSP 2026" (fallback: "venue year")
   year: number
   order: number
-  status?: 'Conference' | 'Workshop' | 'Preprint' | 'Journal' | 'Under Review'
+  status?: 'Conference' | 'Workshop' | 'Preprint' | 'Journal'
+  submittedTo?: string      // Venue a preprint is under review at, e.g. "NeurIPS 2026"
   presentationType?: 'Oral' | 'Poster' | 'Spotlight'
   image?: string
   tags?: string[]

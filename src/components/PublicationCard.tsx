@@ -59,10 +59,6 @@ function parseAuthor(raw: string): { name: string; sup: string | null } {
   return match ? { name: match[1].trim(), sup: match[2] } : { name: raw, sup: null }
 }
 
-function toHashtag(tag: string): string {
-  return '#' + tag.toLowerCase().replace(/[\s/]+/g, '-')
-}
-
 // Action buttons — all identical style, responsive sizing
 const BTN_BASE = 'inline-flex items-center gap-1.5 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[11px] sm:text-[12px] font-medium transition-colors duration-150 border cursor-pointer select-none'
 const BTN = `${BTN_BASE} bg-transparent border-neutral-300 text-neutral-700 hover:bg-neutral-100 dark:border-white/[0.2] dark:text-[#C7C7CB] dark:hover:bg-white/[0.08]`
@@ -81,7 +77,6 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
     pub.links?.project && { label: 'Project',  icon: Globe,    href: pub.links.project },
   ].filter(Boolean) as { label: string; icon: React.ElementType; href: string }[]
 
-  const hasTags    = !!pub.tags && pub.tags.length > 0
   const hasActions = links.length > 0 || !!pub.bibtex
 
   return (
@@ -184,30 +179,21 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
             </p>
 
             {/*
-              4. Hashtag metadata — only rendered if tags exist.
-              When absent, action buttons flow directly after authors
-              with no reserved empty space.
+              4. Spelled-out venue — the badge above carries the short form,
+              this line gives the full conference name.
             */}
-            {hasTags && (
-              <div className="flex flex-wrap gap-x-3 gap-y-0.5">
-                {pub.tags!.map(tag => (
-                  <span
-                    key={tag}
-                    className="text-[11px] font-normal text-[#8E8E93] dark:text-[#636366] select-none"
-                  >
-                    {toHashtag(tag)}
-                  </span>
-                ))}
-              </div>
+            {pub.venueFull && (
+              <p className="text-[12px] italic leading-snug text-[#8E8E93] dark:text-[#7C7C82]">
+                {pub.venueFull}
+              </p>
             )}
 
             {/*
-              5. Action buttons — clearly larger and bordered vs. hashtags.
-              pt-0.5 adds modest extra separation from hashtags when present.
-              No mt-auto — buttons follow the last rendered row naturally.
+              5. Action buttons — bordered pills, visually heavier than the
+              venue line above. No mt-auto: buttons follow the last row naturally.
             */}
             {hasActions && (
-              <div className={`flex flex-wrap gap-1.5${hasTags ? ' pt-0.5' : ''}`}>
+              <div className="flex flex-wrap gap-1.5 pt-0.5">
                 {links.map(({ label, icon: Icon, href }) => (
                   <a
                     key={label}

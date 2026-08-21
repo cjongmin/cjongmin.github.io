@@ -8,16 +8,18 @@
       "Jongmin Choi",
       "Joon Son Chung"
     ],
-    "venue": "arXiv",
-    "year": 2025,
-    "order": 1,
-    "tags": [],
+    "venue": "EMNLP",
+    "year": 2026,
+    "order": 0,
     "links": {
       "paper": "https://arxiv.org/pdf/2505.20873",
       "scholar": "https://scholar.google.com/scholar_lookup?arxiv_id=2505.20873"
     },
-    "bibtex": "@article{jung2025fork,\n  title={Fork-merge decoding: Enhancing multimodal understanding in audio-visual large language models},\n  author={Jung, Chaeyoung and Jang, Youngjoon and Choi, Jongmin and Chung, Joon Son},\n  journal={arXiv preprint arXiv:2505.20873},\n  year={2025}\n}",
-    "image": "/publications/fork-merge-decoding-enhancing-multimodal.jpg"
+    "bibtex": "@inproceedings{jung2026fork,\n  title={Fork-Merge Decoding: Enhancing Multimodal Understanding in Audio-Visual Large Language Models},\n  author={Jung, Chaeyoung and Jang, Youngjoon and Choi, Jongmin and Chung, Joon Son},\n  booktitle={Findings of the Association for Computational Linguistics: EMNLP 2026},\n  year={2026}\n}",
+    "image": "/publications/fork-merge-decoding-enhancing-multimodal.jpg",
+    "displayVenue": "EMNLP 2026 Findings",
+    "venueFull": "Empirical Methods in Natural Language Processing (EMNLP)",
+    "status": "Conference"
   },
   {
     "id": "diffusion-link-diffusion-probabilistic-m",
@@ -32,11 +34,6 @@
     "venue": "ICASSP",
     "year": 2026,
     "order": 1,
-    "tags": [
-      "Modality Gap",
-      "Audio Captioning",
-      "Diffusion"
-    ],
     "links": {
       "paper": "https://arxiv.org/pdf/2510.11330",
       "scholar": "https://scholar.google.com/scholar_lookup?arxiv_id=2510.11330",
@@ -44,7 +41,8 @@
     },
     "bibtex": "@INPROCEEDINGS{11460544,\n  author={Nam, KiHyun and Choi, Jongmin and Lee, Hyeongkeun and Heo, Jungwoo and Chung, Joon Son},\n  booktitle={ICASSP 2026 - 2026 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)}, \n  title={Diffusion-Link: Diffusion Probabilistic Model for Bridging the Audio-Text Modality Gap}, \n  year={2026},\n  volume={},\n  number={},\n  pages={19112-19116},\n  keywords={Feeds;LoRa;Radio access networks;Regional area networks;Protocols;HTTP;Data communication;Radio communication;Communication systems;Telecommunications;diffusion probabilistic model;modality gap;large language model;audio captioning;multimodal representation learning},\n  doi={10.1109/ICASSP55912.2026.11460544}}",
     "image": "/publications/diffusion-link-diffusion-probabilistic-m.png",
-    "presentationType": "Poster"
+    "presentationType": "Poster",
+    "venueFull": "IEEE International Conference on Acoustics, Speech, and Signal Processing (ICASSP)"
   },
   {
     "id": "lamb-llm-based-audio-captioning-with-mod",
@@ -58,11 +56,6 @@
     "venue": "ICASSP",
     "year": 2026,
     "order": 2,
-    "tags": [
-      "Modality Gap",
-      "Audio Captioning",
-      "Cauchy-Schwarz Divergence"
-    ],
     "links": {
       "paper": "https://arxiv.org/pdf/2601.04658",
       "scholar": "https://scholar.google.com/scholar_lookup?arxiv_id=2601.04658",
@@ -70,7 +63,8 @@
     },
     "bibtex": "@INPROCEEDINGS{11462125,\n  author={Lee, Hyeongkeun and Choi, Jongmin and Nam, KiHyun and Chung, Joon Son},\n  booktitle={ICASSP 2026 - 2026 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)}, \n  title={LAMB: LLM-Based Audio Captioning with Modality Gap Bridging Via Cauchy-Schwarz Divergence}, \n  year={2026},\n  volume={},\n  number={},\n  pages={14502-14506},\n  keywords={Very large scale integration;Communications technology;Information and communication technology;LoRa;Protocols;HTTP;Data communication;Media Access Control;Videos;Video equipment;automated audio captioning;large language model;modality gap;Cauchy-Schwarz divergence},\n  doi={10.1109/ICASSP55912.2026.11462125}}",
     "image": "/publications/lamb-llm-based-audio-captioning-with-mod.jpg",
-    "presentationType": "Oral"
+    "presentationType": "Oral",
+    "venueFull": "IEEE International Conference on Acoustics, Speech, and Signal Processing (ICASSP)"
   },
   {
     "id": "fits-interpretable-spiking-neurons-via-f",
@@ -83,15 +77,11 @@
     "submittedTo": "NeurIPS 2026",
     "year": 2026,
     "order": 3,
-    "tags": [
-      "Spiking Neural Network",
-      "Spiking Neuron",
-      "Delay"
-    ],
     "links": {
       "paper": "https://arxiv.org/pdf/2605.13071"
     },
     "bibtex": "@misc{choi2026fitsinterpretablespikingneurons,\n      title={FiTS: Interpretable Spiking Neurons via Frequency Selectivity and Temporal Shaping}, \n      author={Jongmin Choi and Joon Son Chung},\n      year={2026},\n      eprint={2605.13071},\n      archivePrefix={arXiv},\n      primaryClass={cs.NE},\n      url={https://arxiv.org/abs/2605.13071}, \n}",
-    "image": "/publications/fits-interpretable-spiking-neurons-via-f.jpg"
+    "image": "/publications/fits-interpretable-spiking-neurons-via-f.jpg",
+    "venueFull": "Neural Information Processing Systems (NeurIPS)"
   }
 ]

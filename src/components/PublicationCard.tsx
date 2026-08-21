@@ -34,23 +34,24 @@ function venueBadgeClass(type: VenueType): string {
   switch (type) {
     case 'conference':
     case 'journal':
-      // Deep green for all peer-reviewed venues (conference + journal)
-      return 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/45 dark:text-emerald-400'
+      // Solid deep green — accepted work is the strongest signal on the card
+      return 'bg-emerald-700 text-white dark:bg-emerald-500 dark:text-emerald-950'
     case 'preprint':
-      // Deep red for arXiv / preprint
-      return 'bg-red-50 text-red-800 dark:bg-red-950/40 dark:text-red-400'
+      // Tinted red, deliberately quieter than an accepted venue
+      return 'bg-red-50 text-red-800 dark:bg-red-950/50 dark:text-red-300'
   }
 }
 
-// Distinct color per presentation tier; amber stays reserved for Preprint.
+// Distinct hue per presentation tier, but outlined rather than filled so the
+// solid venue badge stays dominant.
 function presentationBadgeClass(type: NonNullable<Publication['presentationType']>): string {
   switch (type) {
     case 'Oral':
-      return 'bg-rose-50 text-rose-800 dark:bg-rose-950/40 dark:text-rose-400'
+      return 'text-rose-700 ring-1 ring-inset ring-rose-300/70 dark:text-rose-400 dark:ring-rose-400/30'
     case 'Spotlight':
-      return 'bg-violet-50 text-violet-800 dark:bg-violet-950/40 dark:text-violet-400'
+      return 'text-violet-700 ring-1 ring-inset ring-violet-300/70 dark:text-violet-400 dark:ring-violet-400/30'
     case 'Poster':
-      return 'bg-sky-50 text-sky-800 dark:bg-sky-950/45 dark:text-sky-400'
+      return 'text-sky-700 ring-1 ring-inset ring-sky-300/70 dark:text-sky-400 dark:ring-sky-400/30'
   }
 }
 
@@ -133,14 +134,16 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
               {/* Preprint + Oral/Poster/Spotlight — same pill style, consistent emphasis */}
               {isPreprint && (
                 <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full leading-none
-                  bg-amber-50 text-amber-800 dark:bg-amber-950/40 dark:text-amber-400">
+                  bg-red-50/70 text-red-700 ring-1 ring-inset ring-red-200/70
+                  dark:bg-transparent dark:text-red-400 dark:ring-red-400/30">
                   Preprint
                 </span>
               )}
               {/* Submitted but undecided — neutral grey, never colored like an accepted venue */}
               {pub.submittedTo && (
                 <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full leading-none
-                  bg-neutral-100 text-neutral-700 dark:bg-white/[0.1] dark:text-[#C7C7CB]">
+                  text-neutral-600 ring-1 ring-inset ring-neutral-300
+                  dark:text-[#C7C7CB] dark:ring-white/20">
                   Submitted to {pub.submittedTo}
                 </span>
               )}

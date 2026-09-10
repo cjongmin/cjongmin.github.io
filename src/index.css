@@ -84,3 +84,39 @@
 ::-webkit-scrollbar-thumb {
   @apply bg-black/10 dark:bg-white/10 rounded-full;
 }
+
+/* ------------------------------------------------------------------
+   Talk banner: progressive blur.
+   The photo stays sharp; two translucent layers blur what is behind them
+   and are masked so the blur fades in toward the text panel. Stacking a
+   soft and a strong layer gives a gradual ramp instead of a hard edge.
+   Phone: fades in from the bottom. sm+: fades in from the left edge of
+   the right-hand panel.
+   ------------------------------------------------------------------ */
+@layer components {
+  .talk-blur {
+    @apply absolute inset-0 pointer-events-none;
+  }
+  .talk-blur-soft {
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    -webkit-mask-image: linear-gradient(to top, black 0%, black 30%, transparent 65%);
+    mask-image: linear-gradient(to top, black 0%, black 30%, transparent 65%);
+  }
+  .talk-blur-strong {
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    -webkit-mask-image: linear-gradient(to top, black 0%, black 12%, transparent 42%);
+    mask-image: linear-gradient(to top, black 0%, black 12%, transparent 42%);
+  }
+  @screen sm {
+    .talk-blur-soft {
+      -webkit-mask-image: linear-gradient(to right, transparent 38%, black 68%);
+      mask-image: linear-gradient(to right, transparent 38%, black 68%);
+    }
+    .talk-blur-strong {
+      -webkit-mask-image: linear-gradient(to right, transparent 55%, black 82%);
+      mask-image: linear-gradient(to right, transparent 55%, black 82%);
+    }
+  }
+}

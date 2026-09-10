@@ -121,35 +121,32 @@ export default function Talks() {
                 {/* 16:9 banner, height-capped on wide screens so it never becomes a hero */}
                 <div className="relative w-full aspect-video max-h-[480px]">
 
-                  {/* Backdrop: the venue photo, or the paper figure blurred until one exists */}
-                  {t.cover ? (
+                  {/* Backdrop: the venue photo (or the paper figure until one exists), kept sharp */}
+                  {(t.cover ?? t.image) && (
                     <img
-                      src={t.cover}
+                      src={t.cover ?? t.image}
                       alt=""
                       loading="lazy"
                       decoding="async"
                       className="absolute inset-0 w-full h-full object-cover
                                  transition-transform duration-700 group-hover:scale-[1.03]"
                     />
-                  ) : t.image ? (
-                    <img
-                      src={t.image}
-                      alt=""
-                      loading="lazy"
-                      decoding="async"
-                      className="absolute inset-0 w-full h-full object-cover scale-110 blur-lg opacity-80 dark:opacity-60"
-                    />
-                  ) : null}
+                  )}
+
+                  {/* Progressive blur: fades in toward the text side (see index.css) */}
+                  <div className="talk-blur talk-blur-soft" />
+                  <div className="talk-blur talk-blur-strong" />
 
                   {/*
-                    Translucent black panel. Mobile: bottom gradient across the
-                    full width. Desktop: right-hand panel fading in from the left.
+                    Light translucent darkening so white text reads over any photo.
+                    Phone: bottom gradient across the full width.
+                    Desktop: right-hand panel fading in from the left.
                   */}
                   <div
                     className="absolute inset-0
-                               bg-gradient-to-t from-black/85 via-black/55 via-45% to-black/10
+                               bg-gradient-to-t from-black/70 via-black/40 via-45% to-black/0
                                sm:left-auto sm:w-[60%]
-                               sm:bg-gradient-to-r sm:from-black/0 sm:via-black/70 sm:via-25% sm:to-black/80"
+                               sm:bg-gradient-to-r sm:from-black/0 sm:via-black/45 sm:via-30% sm:to-black/60"
                   />
 
                   {/* Text lives inside the dark area only */}

@@ -6,6 +6,7 @@ export interface PublicationLink {
   scholar?: string
   code?: string
   project?: string
+  poster?: string           // PDF of the conference poster
 }
 
 export interface Publication {

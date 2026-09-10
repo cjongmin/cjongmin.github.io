@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { FileText, BookOpen, Code2, Globe, Quote, ImageOff } from 'lucide-react'
+import { FileText, BookOpen, Code2, Globe, Quote, ImageOff, Presentation } from 'lucide-react'
 import { Publication } from '../data/publications'
 import { profile } from '../data/profile'
 import BibtexModal from './BibtexModal'
@@ -76,6 +76,7 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
     pub.links?.scholar && { label: 'Scholar',  icon: BookOpen, href: pub.links.scholar },
     pub.links?.code    && { label: 'Code',     icon: Code2,    href: pub.links.code },
     pub.links?.project && { label: 'Project',  icon: Globe,    href: pub.links.project },
+    pub.links?.poster  && { label: 'Poster',   icon: Presentation, href: pub.links.poster },
   ].filter(Boolean) as { label: string; icon: React.ElementType; href: string }[]
 
   const hasActions = links.length > 0 || !!pub.bibtex

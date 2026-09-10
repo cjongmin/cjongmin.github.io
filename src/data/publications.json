@@ -37,10 +37,11 @@
     "links": {
       "paper": "https://arxiv.org/pdf/2510.11330",
       "scholar": "https://scholar.google.com/scholar_lookup?arxiv_id=2510.11330",
-      "code": "https://github.com/DevKiHyun/Diffusion-Link"
+      "code": "https://github.com/DevKiHyun/Diffusion-Link",
+      "poster": "/publications/diffusion-link-poster.pdf"
     },
     "bibtex": "@INPROCEEDINGS{11460544,\n  author={Nam, KiHyun and Choi, Jongmin and Lee, Hyeongkeun and Heo, Jungwoo and Chung, Joon Son},\n  booktitle={ICASSP 2026 - 2026 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)}, \n  title={Diffusion-Link: Diffusion Probabilistic Model for Bridging the Audio-Text Modality Gap}, \n  year={2026},\n  volume={},\n  number={},\n  pages={19112-19116},\n  keywords={Feeds;LoRa;Radio access networks;Regional area networks;Protocols;HTTP;Data communication;Radio communication;Communication systems;Telecommunications;diffusion probabilistic model;modality gap;large language model;audio captioning;multimodal representation learning},\n  doi={10.1109/ICASSP55912.2026.11460544}}",
-    "image": "/publications/diffusion-link-diffusion-probabilistic-m.png",
+    "image": "/publications/diffusion-link-poster.webp",
     "presentationType": "Poster",
     "venueFull": "IEEE International Conference on Acoustics, Speech, and Signal Processing (ICASSP)"
   },

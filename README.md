@@ -23,6 +23,7 @@ npm run preview    # preview the production build locally
 | Name, bio, email, links | `src/data/profile.json` |
 | Recent news | `src/data/news.json` |
 | Publications | `src/data/publications.json` |
+| Talks & presentations | `src/data/talks.json` — `published: false` keeps a draft hidden |
 | Education | `src/data/education.json` |
 | iOS app projects | `src/data/projects.json` — generate entries with `prompts/extract-app-info.md` |
 | Accent color, fonts | `tailwind.config.js` |

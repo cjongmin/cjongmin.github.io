@@ -13,6 +13,7 @@ const NAV_ITEMS = [
   { label: 'News', id: 'news' },
   { label: 'About', id: 'about' },
   { label: 'Publications', id: 'publications' },
+  { label: 'Talks', id: 'talks' },
   { label: 'Education', id: 'education' },
   { label: 'Projects', id: 'projects' },
   { label: 'Contact', id: 'contact' },

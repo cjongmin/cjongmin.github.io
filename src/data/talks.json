@@ -1,0 +1,36 @@
+[
+  {
+    "id": "emnlp-2026-fork-merge",
+    "title": "Fork-Merge Decoding: Enhancing Multimodal Understanding in Audio-Visual Large Language Models",
+    "event": "EMNLP 2026",
+    "eventFull": "Findings of Empirical Methods in Natural Language Processing (EMNLP)",
+    "type": "Poster",
+    "role": "Presenter",
+    "date": "2026",
+    "image": "/publications/fork-merge-decoding-enhancing-multimodal.jpg",
+    "paperId": "fork-merge-decoding-enhancing-multimodal",
+    "summary": "Presenting Fork-Merge Decoding on behalf of the authors. The questions raised at the session, the paper's key points, and what I took away from the discussion will be written up here afterwards.",
+    "published": true,
+    "upcoming": true,
+    "keyPoints": [],
+    "questions": [],
+    "takeaways": []
+  },
+  {
+    "id": "neurips-2026-fits",
+    "title": "FiTS: Interpretable Spiking Neurons via Frequency Selectivity and Temporal Shaping",
+    "event": "NeurIPS 2026",
+    "eventFull": "Neural Information Processing Systems (NeurIPS)",
+    "type": "Poster",
+    "role": "Presenter",
+    "date": "Dec 2026",
+    "image": "/publications/fits-interpretable-spiking-neurons-via-f.jpg",
+    "paperId": "fits-interpretable-spiking-neurons-via-f",
+    "summary": "Poster presentation of FiTS. Audience questions, key points, and takeaways will be posted after the session.",
+    "published": false,
+    "upcoming": true,
+    "keyPoints": [],
+    "questions": [],
+    "takeaways": []
+  }
+]

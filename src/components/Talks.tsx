@@ -84,7 +84,7 @@ export default function Talks() {
             Talks &amp; Presentations
           </p>
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
-            <h2 className="section-title">Notes from the Podium</h2>
+            <h2 className="section-title">Conference · Presentation Notes</h2>
             <p className="text-sm text-secondary">
               What was asked, what mattered, what I took home.
             </p>

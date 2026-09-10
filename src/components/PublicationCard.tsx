@@ -37,23 +37,28 @@ function venueBadgeClass(type: VenueType): string {
       // Solid deep green — accepted work is the strongest signal on the card
       return 'bg-emerald-700 text-white dark:bg-emerald-500 dark:text-emerald-950'
     case 'preprint':
-      // Tinted red, deliberately quieter than an accepted venue
-      return 'bg-red-50 text-red-800 dark:bg-red-950/50 dark:text-red-300'
+      // Solid neutral: arXiv is where the paper lives, not an achievement.
+      // The red "Preprint" chip next to it carries the status colour.
+      return 'bg-neutral-700 text-white dark:bg-neutral-300 dark:text-neutral-900'
   }
 }
 
-// Distinct hue per presentation tier, but outlined rather than filled so the
-// solid venue badge stays dominant.
+// Distinct hue per presentation tier: tinted fill, dark text, thin border.
+// Legible at a glance, yet still a tier below the solid venue badge.
 function presentationBadgeClass(type: NonNullable<Publication['presentationType']>): string {
   switch (type) {
     case 'Oral':
-      return 'text-rose-700 ring-1 ring-inset ring-rose-300/70 dark:text-rose-400 dark:ring-rose-400/30'
+      return 'bg-rose-100 text-rose-800 border-rose-300 dark:bg-rose-950/50 dark:text-rose-300 dark:border-rose-400/40'
     case 'Spotlight':
-      return 'text-violet-700 ring-1 ring-inset ring-violet-300/70 dark:text-violet-400 dark:ring-violet-400/30'
+      return 'bg-violet-100 text-violet-800 border-violet-300 dark:bg-violet-950/50 dark:text-violet-300 dark:border-violet-400/40'
     case 'Poster':
-      return 'text-sky-700 ring-1 ring-inset ring-sky-300/70 dark:text-sky-400 dark:ring-sky-400/30'
+      return 'bg-sky-100 text-sky-800 border-sky-300 dark:bg-sky-950/50 dark:text-sky-300 dark:border-sky-400/40'
   }
 }
+
+// Shared chip geometry: slightly larger type, gently rounded corners (not pills).
+const VENUE_CHIP = 'text-[13px] font-semibold px-2.5 py-1 rounded-md leading-none'
+const CHIP = 'text-[12px] font-semibold px-2 py-[3px] rounded-md leading-none border'
 
 function parseAuthor(raw: string): { name: string; sup: string | null } {
   const match = raw.match(/^(.+?)\^(.+)$/)
@@ -61,7 +66,7 @@ function parseAuthor(raw: string): { name: string; sup: string | null } {
 }
 
 // Action buttons — all identical style, responsive sizing
-const BTN_BASE = 'inline-flex items-center gap-1.5 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[11px] sm:text-[12px] font-medium transition-colors duration-150 border cursor-pointer select-none'
+const BTN_BASE = 'inline-flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-lg text-[13px] sm:text-[14px] font-medium transition-colors duration-150 border cursor-pointer select-none'
 const BTN = `${BTN_BASE} bg-transparent border-neutral-300 text-neutral-700 hover:bg-neutral-100 dark:border-white/[0.2] dark:text-[#C7C7CB] dark:hover:bg-white/[0.08]`
 
 export default function PublicationCard({ pub, index }: PublicationCardProps) {
@@ -129,27 +134,25 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
 
             {/* 1. Venue badge + status badge */}
             <div className="flex items-center gap-2 flex-wrap">
-              <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full leading-none ${venueBadgeClass(venueType)}`}>
+              <span className={`${VENUE_CHIP} ${venueBadgeClass(venueType)}`}>
                 {pub.displayVenue ?? `${pub.venue} ${pub.year}`}
               </span>
               {/* Preprint + Oral/Poster/Spotlight — same pill style, consistent emphasis */}
               {isPreprint && (
-                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full leading-none
-                  bg-red-50/70 text-red-700 ring-1 ring-inset ring-red-200/70
-                  dark:bg-transparent dark:text-red-400 dark:ring-red-400/30">
+                <span className={`${CHIP} bg-red-100 text-red-800 border-red-300
+                  dark:bg-red-950/50 dark:text-red-300 dark:border-red-400/40`}>
                   Preprint
                 </span>
               )}
               {/* Submitted but undecided — neutral grey, never colored like an accepted venue */}
               {pub.submittedTo && (
-                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full leading-none
-                  text-neutral-600 ring-1 ring-inset ring-neutral-300
-                  dark:text-[#C7C7CB] dark:ring-white/20">
+                <span className={`${CHIP} bg-neutral-100 text-neutral-700 border-neutral-300
+                  dark:bg-white/[0.08] dark:text-[#D5D5DA] dark:border-white/20`}>
                   Submitted to {pub.submittedTo}
                 </span>
               )}
               {pub.presentationType && (
-                <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full leading-none ${presentationBadgeClass(pub.presentationType)}`}>
+                <span className={`${CHIP} ${presentationBadgeClass(pub.presentationType)}`}>
                   {pub.presentationType}
                 </span>
               )}
@@ -169,11 +172,11 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
                   <span key={i}>
                     {isMe ? (
                       <strong className="font-semibold text-[#1D1D1F] dark:text-[#E8E8ED]">
-                        {name}{sup && <sup className="text-[9px] ml-0.5">{sup}</sup>}
+                        {name}{sup && <sup className="text-[10px] ml-0.5">{sup}</sup>}
                       </strong>
                     ) : (
                       <span>
-                        {name}{sup && <sup className="text-[9px] ml-0.5">{sup}</sup>}
+                        {name}{sup && <sup className="text-[10px] ml-0.5">{sup}</sup>}
                       </span>
                     )}
                     {i < pub.authors.length - 1 && ', '}
@@ -187,7 +190,7 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
               this line gives the full conference name.
             */}
             {pub.venueFull && (
-              <p className="text-[12px] italic leading-snug text-[#8E8E93] dark:text-[#7C7C82]">
+              <p className="text-[13px] italic leading-snug text-[#8E8E93] dark:text-[#7C7C82]">
                 {pub.venueFull}
               </p>
             )}

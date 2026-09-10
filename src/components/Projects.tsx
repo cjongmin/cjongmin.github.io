@@ -20,7 +20,7 @@ export default function Projects() {
           transition={{ duration: 0.6 }}
           className="mb-8"
         >
-          <p className="text-xs font-semibold text-[#6E6E73] dark:text-[#86868B] uppercase tracking-widest mb-3">
+          <p className="text-[13px] font-semibold text-[#6E6E73] dark:text-[#86868B] uppercase tracking-widest mb-3">
             Projects
           </p>
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
@@ -50,12 +50,12 @@ export default function Projects() {
                 <p className="text-[14px] font-semibold text-[#1D1D1F] dark:text-[#F5F5F7] truncate">
                   {project.name}
                 </p>
-                <p className="text-[11.5px] text-secondary leading-snug mt-0.5 line-clamp-2">
+                <p className="text-[12.5px] text-secondary leading-snug mt-0.5 line-clamp-2">
                   {project.tagline}
                 </p>
               </div>
               {project.status && (
-                <span className="text-[10px] font-medium px-2 py-0.5 rounded-full leading-none
+                <span className="text-[11px] font-medium px-2 py-0.5 rounded-full leading-none
                                  bg-black/[0.04] dark:bg-white/[0.06] text-secondary
                                  border border-black/[0.05] dark:border-white/[0.07]">
                   {project.status}

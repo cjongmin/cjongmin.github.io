@@ -49,7 +49,7 @@ export default function Contact() {
           transition={{ duration: 0.6 }}
           className="mb-8"
         >
-          <p className="text-xs font-semibold text-[#6E6E73] dark:text-[#86868B] uppercase tracking-widest mb-3">
+          <p className="text-[13px] font-semibold text-[#6E6E73] dark:text-[#86868B] uppercase tracking-widest mb-3">
             Contact
           </p>
           <h2 className="section-title">Get In Touch</h2>
@@ -72,7 +72,7 @@ export default function Contact() {
                   <Icon size={16} className="text-secondary" />
                 </div>
                 <div>
-                  <p className="text-[10px] font-medium text-secondary mb-0.5">{label}</p>
+                  <p className="text-[11px] font-medium text-secondary mb-0.5">{label}</p>
                   <p className="text-[13px] font-medium leading-snug text-[#1D1D1F] dark:text-[#F5F5F7]">
                     {value}
                   </p>

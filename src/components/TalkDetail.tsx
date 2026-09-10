@@ -9,7 +9,7 @@ interface TalkDetailProps {
   onClose: () => void
 }
 
-const PILL = 'text-[11px] font-semibold px-2.5 py-0.5 rounded-full leading-none'
+const PILL = 'text-[13px] font-semibold px-2.5 py-1 rounded-md leading-none'
 
 /**
  * Full-screen "page" for one talk. Opens over the site (no router needed),
@@ -63,7 +63,7 @@ export default function TalkDetail({ talk, onClose }: TalkDetailProps) {
               <ArrowLeft size={14} />
               Back
             </button>
-            <span className="text-xs font-semibold text-secondary uppercase tracking-widest">
+            <span className="text-[13px] font-semibold text-secondary uppercase tracking-widest">
               Talks &amp; Presentations
             </span>
           </div>
@@ -171,7 +171,7 @@ function Section({
   if (empty && !upcoming) return null
   return (
     <section className="mt-10">
-      <h2 className="text-xs font-semibold text-secondary uppercase tracking-widest mb-3">{title}</h2>
+      <h2 className="text-[13px] font-semibold text-secondary uppercase tracking-widest mb-3">{title}</h2>
       {empty
         ? <p className="text-sm italic text-secondary/70">Will be posted after the session.</p>
         : children}

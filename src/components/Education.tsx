@@ -16,7 +16,7 @@ export default function Education() {
           transition={{ duration: 0.6 }}
           className="mb-8"
         >
-          <p className="text-xs font-semibold text-[#6E6E73] dark:text-[#86868B] uppercase tracking-widest mb-3">
+          <p className="text-[13px] font-semibold text-[#6E6E73] dark:text-[#86868B] uppercase tracking-widest mb-3">
             Education
           </p>
           <h2 className="section-title">Education</h2>
@@ -49,7 +49,7 @@ export default function Education() {
                 {/* Card — degree / institution / department / advisor, nothing more */}
                 <div className="flex-1 pb-2">
                   <div className="glass-card p-5 hover:shadow-md transition-shadow duration-200">
-                    <span className="inline-block text-xs font-medium text-secondary mb-2">
+                    <span className="inline-block text-[13px] font-medium text-secondary mb-2">
                       {edu.startDate} — {edu.endDate}
                     </span>
 

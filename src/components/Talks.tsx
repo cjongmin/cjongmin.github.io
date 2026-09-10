@@ -12,7 +12,7 @@ function talkIdFromHash(): string | null {
 }
 
 // Pills sit on a dark overlay, so they are white-on-dark here.
-const PILL = 'text-[10px] font-semibold px-2 py-0.5 rounded-full leading-none'
+const PILL = 'text-[12px] font-semibold px-2 py-[3px] rounded-md leading-none'
 
 export default function Talks() {
   const ref = useRef<HTMLElement>(null)
@@ -80,7 +80,7 @@ export default function Talks() {
           transition={{ duration: 0.6 }}
           className="mb-8"
         >
-          <p className="text-xs font-semibold text-[#6E6E73] dark:text-[#86868B] uppercase tracking-widest mb-3">
+          <p className="text-[13px] font-semibold text-[#6E6E73] dark:text-[#86868B] uppercase tracking-widest mb-3">
             Talks &amp; Presentations
           </p>
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
@@ -171,7 +171,7 @@ export default function Talks() {
                       {t.summary}
                     </p>
 
-                    <div className="mt-3 sm:mt-4 flex items-center justify-between gap-3 text-[12px]">
+                    <div className="mt-3 sm:mt-4 flex items-center justify-between gap-3 text-[13px]">
                       <span className="inline-flex items-center gap-1.5 text-white/70">
                         <CalendarDays size={12} />
                         {t.date}

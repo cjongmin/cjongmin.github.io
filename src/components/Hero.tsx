@@ -78,7 +78,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.28 }}
-            className="text-[11px] sm:text-sm text-secondary"
+            className="text-[12px] sm:text-sm text-secondary"
           >
             {profile.affiliation} · {profile.university}
           </motion.p>
@@ -130,7 +130,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.48 + i * 0.06 }}
-              className="px-3 py-1 text-xs font-medium rounded-full
+              className="px-3 py-1 text-[13px] font-medium rounded-full
                          bg-black/[0.04] dark:bg-white/[0.06]
                          text-secondary border border-black/[0.05] dark:border-white/[0.07]"
             >
@@ -149,7 +149,7 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.1 }}
-        className="relative z-10 mb-12 text-secondary hover:text-[#0071E3] dark:hover:text-[#2997FF] transition-colors flex flex-col items-center gap-1.5 text-xs"
+        className="relative z-10 mb-12 text-secondary hover:text-[#0071E3] dark:hover:text-[#2997FF] transition-colors flex flex-col items-center gap-1.5 text-[13px]"
         aria-label="Scroll to About section"
       >
         <span>Explore</span>

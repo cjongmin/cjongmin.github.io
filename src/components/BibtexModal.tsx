@@ -65,7 +65,7 @@ export default function BibtexModal({ bibtex, title, onClose }: BibtexModalProps
           {/* Header */}
           <div className="flex items-start justify-between gap-4 mb-4">
             <div>
-              <p className="text-xs font-medium uppercase tracking-widest text-[#0071E3] dark:text-[#2997FF] mb-1">
+              <p className="text-[13px] font-medium uppercase tracking-widest text-[#0071E3] dark:text-[#2997FF] mb-1">
                 BibTeX
               </p>
               <h3 className="text-sm font-semibold text-[#1D1D1F] dark:text-[#F5F5F7] line-clamp-2">
@@ -86,7 +86,7 @@ export default function BibtexModal({ bibtex, title, onClose }: BibtexModalProps
           </div>
 
           {/* Bibtex code */}
-          <pre className="text-xs font-mono leading-relaxed overflow-x-auto
+          <pre className="text-[13px] font-mono leading-relaxed overflow-x-auto
                           bg-black/[0.03] dark:bg-white/[0.04]
                           border border-black/[0.06] dark:border-white/[0.08]
                           rounded-xl p-4 text-[#1D1D1F] dark:text-[#F5F5F7]

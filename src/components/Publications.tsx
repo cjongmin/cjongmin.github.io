@@ -43,7 +43,7 @@ export default function Publications() {
           transition={{ duration: 0.6 }}
           className="mb-8"
         >
-          <p className="text-xs font-semibold text-[#6E6E73] dark:text-[#86868B] uppercase tracking-widest mb-3">
+          <p className="text-[13px] font-semibold text-[#6E6E73] dark:text-[#86868B] uppercase tracking-widest mb-3">
             Publications
           </p>
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5">
@@ -57,7 +57,7 @@ export default function Publications() {
                     key={f}
                     onClick={() => setActiveFilter(f)}
                     aria-pressed={activeFilter === f}
-                    className={`px-3.5 py-1 rounded-full text-sm font-medium transition-all duration-150
+                    className={`px-3.5 py-1.5 rounded-lg text-sm font-medium transition-all duration-150
                       ${activeFilter === f
                         ? 'bg-neutral-600 dark:bg-[#F5F5F7] text-white dark:text-[#1D1D1F]'
                         : 'bg-black/[0.06] dark:bg-white/10 text-secondary hover:bg-black/[0.1] dark:hover:bg-white/[0.15]'

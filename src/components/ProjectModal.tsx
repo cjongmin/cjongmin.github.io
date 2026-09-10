@@ -9,7 +9,7 @@ interface ProjectModalProps {
   onClose: () => void
 }
 
-const CHIP = 'text-[11px] font-medium px-2.5 py-1 rounded-full bg-black/[0.05] dark:bg-white/[0.07] text-secondary border border-black/[0.05] dark:border-white/[0.07]'
+const CHIP = 'text-[12px] font-medium px-2.5 py-1 rounded-full bg-black/[0.05] dark:bg-white/[0.07] text-secondary border border-black/[0.05] dark:border-white/[0.07]'
 
 function statusBadgeClass(status?: Project['status']): string {
   switch (status) {
@@ -97,18 +97,18 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               </p>
               <div className="flex items-center gap-1.5 flex-wrap mt-2">
                 {project.status && (
-                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full leading-none ${statusBadgeClass(project.status)}`}>
+                  <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full leading-none ${statusBadgeClass(project.status)}`}>
                     {project.status}
                   </span>
                 )}
                 {project.platforms.map(p => (
-                  <span key={p} className="text-[10px] font-semibold px-2 py-0.5 rounded-full leading-none
+                  <span key={p} className="text-[11px] font-semibold px-2 py-0.5 rounded-full leading-none
                     bg-black/[0.05] dark:bg-white/[0.08] text-secondary">
                     {p}
                   </span>
                 ))}
                 {project.year && (
-                  <span className="text-[10px] font-medium text-secondary">{project.year}</span>
+                  <span className="text-[11px] font-medium text-secondary">{project.year}</span>
                 )}
               </div>
             </div>
@@ -135,7 +135,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
           {/* Features */}
           {project.features && project.features.length > 0 && (
             <div className="mb-5">
-              <p className="text-[10px] font-semibold text-secondary uppercase tracking-widest mb-2">
+              <p className="text-[11px] font-semibold text-secondary uppercase tracking-widest mb-2">
                 Key Features
               </p>
               <ul className="space-y-1.5">
@@ -154,7 +154,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
               {project.techStack && project.techStack.length > 0 && (
                 <div>
-                  <p className="flex items-center gap-1.5 text-[10px] font-semibold text-secondary uppercase tracking-widest mb-2">
+                  <p className="flex items-center gap-1.5 text-[11px] font-semibold text-secondary uppercase tracking-widest mb-2">
                     <Cpu size={11} /> Tech Stack
                   </p>
                   <div className="flex flex-wrap gap-1.5">
@@ -164,7 +164,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               )}
               {project.apis && project.apis.length > 0 && (
                 <div>
-                  <p className="flex items-center gap-1.5 text-[10px] font-semibold text-secondary uppercase tracking-widest mb-2">
+                  <p className="flex items-center gap-1.5 text-[11px] font-semibold text-secondary uppercase tracking-widest mb-2">
                     <Layers size={11} /> Frameworks & APIs
                   </p>
                   <div className="flex flex-wrap gap-1.5">

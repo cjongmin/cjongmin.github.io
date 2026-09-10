@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ArrowRight, CalendarDays, ChevronLeft, ChevronRight } from 'lucide-react'
 import { talks, Talk } from '../data/talks'
 import TalkDetail from './TalkDetail'
 
@@ -11,6 +11,7 @@ function talkIdFromHash(): string | null {
   return h.startsWith(HASH_PREFIX) ? decodeURIComponent(h.slice(HASH_PREFIX.length)) : null
 }
 
+// Pills sit on a dark overlay, so they are white-on-dark here.
 const PILL = 'text-[10px] font-semibold px-2 py-0.5 rounded-full leading-none'
 
 export default function Talks() {
@@ -35,7 +36,7 @@ export default function Talks() {
     return () => window.removeEventListener('popstate', sync)
   }, [])
 
-  // Arrows only make sense when the track actually overflows.
+  // Arrows only make sense when there is more than one banner to scroll to.
   useEffect(() => {
     const el = trackRef.current
     if (!el) return
@@ -65,9 +66,7 @@ export default function Talks() {
   const scrollByCard = (dir: 1 | -1) => {
     const el = trackRef.current
     if (!el) return
-    const card = el.querySelector<HTMLElement>('[data-card]')
-    const step = card ? card.offsetWidth + 16 : 320
-    el.scrollBy({ left: dir * step, behavior: 'smooth' })
+    el.scrollBy({ left: dir * el.clientWidth, behavior: 'smooth' })
   }
 
   if (talks.length === 0) return null
@@ -92,7 +91,10 @@ export default function Talks() {
           </div>
         </motion.div>
 
-        {/* Horizontal, swipeable track. Bleeds to the screen edge on mobile. */}
+        {/*
+          One full-width banner per talk. Swipe / arrows move between them.
+          The track bleeds to the screen edge on mobile.
+        */}
         <div className="relative">
           <div
             ref={trackRef}
@@ -108,47 +110,81 @@ export default function Talks() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
-                transition={{ duration: 0.4, delay: i * 0.06 }}
+                transition={{ duration: 0.45, delay: i * 0.06 }}
                 aria-label={`Open notes for ${t.title}`}
-                className="snap-start shrink-0 w-[280px] sm:w-[340px] glass-card overflow-hidden text-left
-                           flex flex-col hover:shadow-md transition-shadow duration-200 group"
+                className="snap-center shrink-0 w-full text-left group
+                           relative overflow-hidden rounded-[22px]
+                           bg-neutral-200 dark:bg-zinc-900
+                           ring-1 ring-black/[0.06] dark:ring-white/[0.08]
+                           shadow-sm hover:shadow-lg transition-shadow duration-300"
               >
-                {t.image && (
-                  <div className="h-[128px] bg-neutral-50 dark:bg-zinc-900/50 flex items-center justify-center p-2 overflow-hidden">
+                {/* 16:9 banner, height-capped on wide screens so it never becomes a hero */}
+                <div className="relative w-full aspect-video max-h-[480px]">
+
+                  {/* Backdrop: the venue photo, or the paper figure blurred until one exists */}
+                  {t.cover ? (
+                    <img
+                      src={t.cover}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                      className="absolute inset-0 w-full h-full object-cover
+                                 transition-transform duration-700 group-hover:scale-[1.03]"
+                    />
+                  ) : t.image ? (
                     <img
                       src={t.image}
                       alt=""
                       loading="lazy"
                       decoding="async"
-                      className="max-w-full max-h-full object-contain rounded-sm"
+                      className="absolute inset-0 w-full h-full object-cover scale-110 blur-lg opacity-80 dark:opacity-60"
                     />
-                  </div>
-                )}
-                <div className="p-4 flex flex-col gap-2 flex-1">
-                  <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className={`${PILL} bg-[#1D1D1F] text-white dark:bg-[#F5F5F7] dark:text-[#1D1D1F]`}>
-                      {t.event}
-                    </span>
-                    <span className={`${PILL} text-secondary ring-1 ring-inset ring-black/10 dark:ring-white/20`}>
-                      {t.type}
-                    </span>
-                    {t.upcoming && (
-                      <span className={`${PILL} text-[#0071E3] dark:text-[#2997FF] ring-1 ring-inset ring-[#0071E3]/30 dark:ring-[#2997FF]/30`}>
-                        Coming soon
+                  ) : null}
+
+                  {/*
+                    Translucent black panel. Mobile: bottom gradient across the
+                    full width. Desktop: right-hand panel fading in from the left.
+                  */}
+                  <div
+                    className="absolute inset-0
+                               bg-gradient-to-t from-black/85 via-black/55 via-45% to-black/10
+                               sm:left-auto sm:w-[60%]
+                               sm:bg-gradient-to-r sm:from-black/0 sm:via-black/70 sm:via-25% sm:to-black/80"
+                  />
+
+                  {/* Text lives inside the dark area only */}
+                  <div
+                    className="absolute inset-0 flex flex-col justify-end p-5
+                               sm:left-auto sm:w-[45%] sm:justify-center sm:p-8 sm:pr-10
+                               text-white"
+                  >
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className={`${PILL} bg-white text-[#1D1D1F]`}>{t.event}</span>
+                      <span className={`${PILL} text-white/90 ring-1 ring-inset ring-white/40`}>{t.type}</span>
+                      {t.upcoming && (
+                        <span className={`${PILL} text-white/90 ring-1 ring-inset ring-white/40`}>Coming soon</span>
+                      )}
+                    </div>
+
+                    <h3 className="mt-3 text-[17px] sm:text-[22px] font-semibold leading-snug tracking-tight line-clamp-2 sm:line-clamp-3">
+                      {t.title}
+                    </h3>
+
+                    <p className="hidden sm:block mt-2 text-[13px] leading-relaxed text-white/75 line-clamp-2">
+                      {t.summary}
+                    </p>
+
+                    <div className="mt-3 sm:mt-4 flex items-center justify-between gap-3 text-[12px]">
+                      <span className="inline-flex items-center gap-1.5 text-white/70">
+                        <CalendarDays size={12} />
+                        {t.date}
                       </span>
-                    )}
+                      <span className="inline-flex items-center gap-1 font-medium text-white group-hover:gap-2 transition-all">
+                        {t.upcoming ? 'Preview' : 'Read notes'}
+                        <ArrowRight size={12} />
+                      </span>
+                    </div>
                   </div>
-                  <h3 className="text-[14px] font-semibold leading-snug text-[#1D1D1F] dark:text-[#F5F5F7] line-clamp-2">
-                    {t.title}
-                  </h3>
-                  <p className="text-[12px] leading-relaxed text-secondary line-clamp-2">
-                    {t.summary}
-                  </p>
-                  <span className="mt-auto pt-1 inline-flex items-center gap-1 text-[12px] font-medium
-                                   text-[#0071E3] dark:text-[#2997FF] group-hover:gap-2 transition-all">
-                    {t.upcoming ? 'Preview' : 'Read notes'}
-                    <ArrowRight size={12} />
-                  </span>
                 </div>
               </motion.button>
             ))}

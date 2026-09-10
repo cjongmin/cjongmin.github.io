@@ -22,7 +22,8 @@ export interface Talk {
   role: string                      // e.g. "Presenter"
   date: string                      // e.g. "Nov 2026"
   location?: string
-  image?: string                    // card thumbnail
+  cover?: string                    // 16:9 photo for the card banner (e.g. taken at the venue)
+  image?: string                    // paper figure; used blurred as a backdrop until a cover exists
   paperId?: string                  // id in publications.json
   summary: string                   // one or two sentences for the card
   published: boolean                // false = hidden draft

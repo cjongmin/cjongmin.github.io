@@ -11,6 +11,12 @@ function talkIdFromHash(): string | null {
   return h.startsWith(HASH_PREFIX) ? decodeURIComponent(h.slice(HASH_PREFIX.length)) : null
 }
 
+// One slide = card width + the track's gap-4.
+function stepSize(el: HTMLDivElement): number {
+  const card = el.querySelector<HTMLElement>('[data-card]')
+  return (card?.offsetWidth ?? el.clientWidth) + 16
+}
+
 // Pills sit on a dark overlay, so they are white-on-dark here.
 const PILL = 'text-[12px] font-semibold px-2 py-[3px] rounded-md leading-none'
 
@@ -20,6 +26,9 @@ export default function Talks() {
   const trackRef = useRef<HTMLDivElement>(null)
   const [selected, setSelected] = useState<Talk | null>(null)
   const [canScroll, setCanScroll] = useState(false)
+  const [active, setActive] = useState(0)
+  const [scrolling, setScrolling] = useState(false)
+  const scrollTimer = useRef<number>()
   const pushedRef = useRef(false)
 
   // Detail view is addressable (#talk=<id>): deep links work and the
@@ -47,6 +56,29 @@ export default function Talks() {
     return () => ro.disconnect()
   }, [])
 
+  useEffect(() => {
+    const el = trackRef.current
+    if (!el) return
+    let ticking = false
+    const onScroll = () => {
+      // Dots stay visible for a moment after a swipe, so touch users see them too.
+      setScrolling(true)
+      window.clearTimeout(scrollTimer.current)
+      scrollTimer.current = window.setTimeout(() => setScrolling(false), 900)
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(() => {
+        ticking = false
+        setActive(Math.round(el.scrollLeft / stepSize(el)))
+      })
+    }
+    el.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      el.removeEventListener('scroll', onScroll)
+      window.clearTimeout(scrollTimer.current)
+    }
+  }, [])
+
   const open = (t: Talk) => {
     history.pushState(null, '', HASH_PREFIX + t.id)
     pushedRef.current = true
@@ -63,11 +95,13 @@ export default function Talks() {
     }
   }, [])
 
-  const scrollByCard = (dir: 1 | -1) => {
+  const goTo = (i: number) => {
     const el = trackRef.current
     if (!el) return
-    el.scrollBy({ left: dir * el.clientWidth, behavior: 'smooth' })
+    const clamped = Math.max(0, Math.min(talks.length - 1, i))
+    el.scrollTo({ left: clamped * stepSize(el), behavior: 'smooth' })
   }
+  const scrollByCard = (dir: 1 | -1) => goTo(active + dir)
 
   if (talks.length === 0) return null
 
@@ -95,7 +129,7 @@ export default function Talks() {
           One full-width banner per talk. Swipe / arrows move between them.
           The track bleeds to the screen edge on mobile.
         */}
-        <div className="relative">
+        <div className="relative group/track">
           <div
             ref={trackRef}
             className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2
@@ -208,6 +242,30 @@ export default function Talks() {
                 <ChevronRight size={16} />
               </button>
             </>
+          )}
+
+          {/* Slide dots: invisible until the pointer is over the track (or a swipe is in progress) */}
+          {talks.length > 1 && (
+            <div
+              role="tablist"
+              aria-label="Slides"
+              className={`pointer-events-none absolute bottom-5 left-0 right-0 flex justify-center gap-2
+                          transition-opacity duration-300 group-hover/track:opacity-100
+                          ${scrolling ? 'opacity-100' : 'opacity-0'}`}
+            >
+              {talks.map((t, i) => (
+                <button
+                  key={t.id}
+                  role="tab"
+                  aria-selected={i === active}
+                  aria-label={`Go to slide ${i + 1}`}
+                  onClick={() => goTo(i)}
+                  className={`pointer-events-auto w-2.5 h-2.5 rounded-full ring-1 ring-white/90 drop-shadow
+                              transition-colors duration-200
+                              ${i === active ? 'bg-white' : 'bg-transparent hover:bg-white/50'}`}
+                />
+              ))}
+            </div>
           )}
         </div>
       </div>

@@ -9,12 +9,14 @@
     "date": "Oct 2026",
     "image": "/publications/fork-merge-decoding-enhancing-multimodal.jpg",
     "paperId": "fork-merge-decoding-enhancing-multimodal",
-    "summary": "Presenting Fork-Merge Decoding on behalf of the authors. The questions raised at the session, the paper's key points, and what I took away from the discussion will be written up here afterwards.",
+    "summary": "As a co-author, I will be attending EMNLP 2026 in Budapest to present our work, Fork-Merge Decoding. After the presentation, I will update this page with questions from the session, key discussion points, and personal takeaways.",
     "published": true,
     "upcoming": true,
     "keyPoints": [],
     "questions": [],
-    "takeaways": []
+    "takeaways": [],
+    "location": "Budapest, Hungary",
+    "cover": "/talks/emnlp-2026-budapest.webp"
   },
   {
     "id": "neurips-2026-fits",

@@ -83,7 +83,7 @@ export default function TalkDetail({ talk, onClose }: TalkDetailProps) {
               <span className={`${PILL} text-secondary ring-1 ring-inset ring-black/10 dark:ring-white/20`}>{talk.role}</span>
               {talk.upcoming && (
                 <span className={`${PILL} text-[#0071E3] dark:text-[#2997FF] ring-1 ring-inset ring-[#0071E3]/30 dark:ring-[#2997FF]/30`}>
-                  Coming soon
+                  Upcoming
                 </span>
               )}
             </div>

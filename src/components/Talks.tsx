@@ -193,7 +193,7 @@ export default function Talks() {
                       <span className={`${PILL} bg-white text-[#1D1D1F]`}>{t.event}</span>
                       <span className={`${PILL} text-white/90 ring-1 ring-inset ring-white/40`}>{t.type}</span>
                       {t.upcoming && (
-                        <span className={`${PILL} text-white/90 ring-1 ring-inset ring-white/40`}>Coming soon</span>
+                        <span className={`${PILL} text-white/90 ring-1 ring-inset ring-white/40`}>Upcoming</span>
                       )}
                     </div>
 
@@ -209,9 +209,10 @@ export default function Talks() {
                       <span className="inline-flex items-center gap-1.5 text-white/70">
                         <CalendarDays size={12} />
                         {t.date}
+                        {t.location && <><span className="text-white/40">·</span>{t.location}</>}
                       </span>
                       <span className="inline-flex items-center gap-1 font-medium text-white group-hover:gap-2 transition-all">
-                        {t.upcoming ? 'Preview' : 'Read notes'}
+                        {t.upcoming ? 'View details' : 'Read notes'}
                         <ArrowRight size={12} />
                       </span>
                     </div>

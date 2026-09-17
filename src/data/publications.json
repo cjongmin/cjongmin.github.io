@@ -1,5 +1,27 @@
 [
   {
+    "id": "omnikvquant-kv-cache-quantization",
+    "title": "OmniKVQuant: KV Cache Quantization for Omni-LLMs",
+    "authors": [
+      "Suho Yoo^1",
+      "Hyunjong Ok^1",
+      "Jongmin Choi",
+      "Jihoo Jung",
+      "Joon Son Chung"
+    ],
+    "venue": "arXiv",
+    "submittedTo": "ICASSP 2027",
+    "year": 2026,
+    "order": 4,
+    "links": {
+      "paper": "https://arxiv.org/pdf/2609.11582",
+      "code": "https://github.com/kaistmm/OmniKVQuant"
+    },
+    "bibtex": "@misc{yoo2026omnikvquant,\n      title={OmniKVQuant: KV Cache Quantization for Omni-LLMs},\n      author={Suho Yoo and Hyunjong Ok and Jongmin Choi and Jihoo Jung and Joon Son Chung},\n      year={2026},\n      eprint={2609.11582},\n      archivePrefix={arXiv},\n      primaryClass={cs.CV},\n      url={https://arxiv.org/abs/2609.11582},\n}",
+    "image": "/publications/omnikvquant-kv-cache-quantization.webp",
+    "venueFull": "IEEE International Conference on Acoustics, Speech, and Signal Processing (ICASSP)"
+  },
+  {
     "id": "fork-merge-decoding-enhancing-multimodal",
     "title": "Fork-Merge Decoding: Enhancing Multimodal Understanding in Audio-Visual Large Language Models",
     "authors": [

@@ -1,5 +1,11 @@
 [
   {
+    "id": "omnikvquant-arxiv",
+    "date": "Sep 2026",
+    "text": "New preprint — OmniKVQuant: KV Cache Quantization for Omni-LLMs is now on arXiv.",
+    "highlight": false
+  },
+  {
     "id": "emnlp-2026-findings",
     "date": "Aug 2026",
     "text": "Fork-Merge Decoding accepted to Findings of EMNLP 2026! 🎉",

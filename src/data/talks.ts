@@ -18,12 +18,12 @@ export interface Talk {
   title: string                     // usually the paper title
   event: string                     // short, e.g. "EMNLP 2026"
   eventFull?: string                // spelled-out venue
-  type: 'Poster' | 'Oral' | 'Talk'
+  type: 'Poster' | 'Spotlight' | 'Oral' | 'Talk'
   role: string                      // e.g. "Presenter"
   date: string                      // e.g. "Nov 2026"
   location?: string
   cover?: string                    // 16:9 photo for the card banner (e.g. taken at the venue)
-  image?: string                    // paper figure; used blurred as a backdrop until a cover exists
+  image?: string                    // paper figure; used as the backdrop until a cover exists
   paperId?: string                  // id in publications.json
   summary: string                   // one or two sentences for the card
   published: boolean                // false = hidden draft

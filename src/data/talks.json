@@ -17,22 +17,5 @@
     "takeaways": [],
     "location": "Budapest, Hungary",
     "cover": "/talks/emnlp-2026-budapest.webp"
-  },
-  {
-    "id": "neurips-2026-fits",
-    "title": "FiTS: Interpretable Spiking Neurons via Frequency Selectivity and Temporal Shaping",
-    "event": "NeurIPS 2026",
-    "eventFull": "Neural Information Processing Systems (NeurIPS)",
-    "type": "Poster",
-    "role": "Presenter",
-    "date": "Dec 2026",
-    "image": "/publications/fits-interpretable-spiking-neurons-via-f.jpg",
-    "paperId": "fits-interpretable-spiking-neurons-via-f",
-    "summary": "Poster presentation of FiTS. Audience questions, key points, and takeaways will be posted after the session.",
-    "published": false,
-    "upcoming": true,
-    "keyPoints": [],
-    "questions": [],
-    "takeaways": []
   }
 ]

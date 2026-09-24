@@ -96,15 +96,16 @@
       "Jongmin Choi",
       "Joon Son Chung"
     ],
-    "venue": "arXiv",
-    "submittedTo": "NeurIPS 2026",
+    "venue": "NeurIPS",
     "year": 2026,
     "order": 3,
     "links": {
       "paper": "https://arxiv.org/pdf/2605.13071"
     },
-    "bibtex": "@misc{choi2026fitsinterpretablespikingneurons,\n      title={FiTS: Interpretable Spiking Neurons via Frequency Selectivity and Temporal Shaping}, \n      author={Jongmin Choi and Joon Son Chung},\n      year={2026},\n      eprint={2605.13071},\n      archivePrefix={arXiv},\n      primaryClass={cs.NE},\n      url={https://arxiv.org/abs/2605.13071}, \n}",
+    "bibtex": "@inproceedings{choi2026fits,\n  title={FiTS: Interpretable Spiking Neurons via Frequency Selectivity and Temporal Shaping},\n  author={Choi, Jongmin and Chung, Joon Son},\n  booktitle={Advances in Neural Information Processing Systems (NeurIPS)},\n  year={2026}\n}",
     "image": "/publications/fits-interpretable-spiking-neurons-via-f.jpg",
-    "venueFull": "Neural Information Processing Systems (NeurIPS)"
+    "venueFull": "Neural Information Processing Systems (NeurIPS)",
+    "status": "Conference",
+    "presentationType": "Spotlight"
   }
 ]

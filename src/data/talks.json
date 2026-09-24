@@ -1,5 +1,24 @@
 [
   {
+    "id": "neurips-2026-fits",
+    "title": "FiTS: Interpretable Spiking Neurons via Frequency Selectivity and Temporal Shaping",
+    "event": "NeurIPS 2026",
+    "eventFull": "Neural Information Processing Systems (NeurIPS)",
+    "type": "Spotlight",
+    "role": "Presenter",
+    "date": "Dec 2026",
+    "location": "Sydney, Australia",
+    "cover": "/talks/neurips-2026-sydney.webp",
+    "image": "/publications/fits-interpretable-spiking-neurons-via-f.jpg",
+    "paperId": "fits-interpretable-spiking-neurons-via-f",
+    "summary": "FiTS has been accepted to NeurIPS 2026 as a Spotlight paper, and as the first author I will be in Sydney in early December to present it at the poster session. If you are attending, please come say hello. I would love to talk about spiking neurons, frequency selectivity, and what biology can still teach us about network design. After the conference, I will update this page with questions from the session, key discussion points, and personal takeaways. See you in Sydney!",
+    "published": true,
+    "upcoming": true,
+    "keyPoints": [],
+    "questions": [],
+    "takeaways": []
+  },
+  {
     "id": "emnlp-2026-fork-merge",
     "title": "Fork-Merge Decoding: Enhancing Multimodal Understanding in Audio-Visual Large Language Models",
     "event": "EMNLP 2026",

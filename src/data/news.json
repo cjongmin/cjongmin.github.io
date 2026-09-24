@@ -1,5 +1,11 @@
 [
   {
+    "id": "fits-neurips-2026",
+    "date": "Sep 2026",
+    "text": "FiTS accepted to NeurIPS 2026 as a Spotlight paper! See you in Sydney 🎉",
+    "highlight": true
+  },
+  {
     "id": "omnikvquant-arxiv",
     "date": "Sep 2026",
     "text": "New preprint — OmniKVQuant: KV Cache Quantization for Omni-LLMs is now on arXiv.",

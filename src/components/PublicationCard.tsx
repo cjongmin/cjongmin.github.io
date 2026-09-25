@@ -30,30 +30,28 @@ function getVenueType(pub: Publication): VenueType {
   return 'journal'
 }
 
-function venueBadgeClass(type: VenueType): string {
-  switch (type) {
-    case 'conference':
-    case 'journal':
-      // Solid deep green — accepted work is the strongest signal on the card
-      return 'bg-emerald-700 text-white dark:bg-emerald-500 dark:text-emerald-950'
-    case 'preprint':
-      // Solid neutral: arXiv is where the paper lives, not an achievement.
-      // The red "Preprint" chip next to it carries the status colour.
-      return 'bg-neutral-700 text-white dark:bg-neutral-300 dark:text-neutral-900'
-  }
-}
+/*
+  Colour hierarchy: colour is reserved for honours. Everything else is neutral.
+    1. Oral / Spotlight   solid rose (+ selectivity in rose text)  — the only colour on the list
+    2. Accepted venue     solid near-black
+    3. Poster             white chip, grey outline
+    4. Preprint           light grey chip, grey text
+*/
+const ACCEPTED_VENUE = 'bg-neutral-800 text-white dark:bg-neutral-200 dark:text-neutral-900'
+const PREPRINT = 'bg-neutral-100 text-neutral-600 border-neutral-200 dark:bg-white/[0.06] dark:text-neutral-300 dark:border-white/10'
 
-// Distinct hue per presentation tier: tinted fill, dark text, thin border.
-// Legible at a glance, yet still a tier below the solid venue badge.
 function presentationBadgeClass(type: NonNullable<Publication['presentationType']>): string {
   switch (type) {
     case 'Oral':
-      return 'bg-rose-100 text-rose-800 border-rose-300 dark:bg-rose-950/50 dark:text-rose-300 dark:border-rose-400/40'
     case 'Spotlight':
-      return 'bg-violet-100 text-violet-800 border-violet-300 dark:bg-violet-950/50 dark:text-violet-300 dark:border-violet-400/40'
+      return 'bg-rose-700 text-white border-rose-700 dark:bg-rose-600 dark:border-rose-600'
     case 'Poster':
-      return 'bg-sky-100 text-sky-800 border-sky-300 dark:bg-sky-950/50 dark:text-sky-300 dark:border-sky-400/40'
+      return 'bg-transparent text-neutral-600 border-neutral-300 dark:text-neutral-300 dark:border-white/20'
   }
+}
+
+function topPercent(sel: NonNullable<Publication['selection']>): string {
+  return ((sel.selected / sel.submissions) * 100).toFixed(1)
 }
 
 // Shared chip geometry: slightly larger type, gently rounded corners (not pills).
@@ -132,28 +130,32 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
           {/* Content — natural vertical flow, no spacers, no fixed heights */}
           <div className="flex-1 px-5 py-4 flex flex-col gap-2 min-w-0">
 
-            {/* 1. Venue badge + status badge */}
+            {/* 1. Venue / status / presentation tier / selectivity */}
             <div className="flex items-center gap-2 flex-wrap">
-              <span className={`${VENUE_CHIP} ${venueBadgeClass(venueType)}`}>
-                {pub.displayVenue ?? `${pub.venue} ${pub.year}`}
-              </span>
-              {/* Preprint + Oral/Poster/Spotlight — same pill style, consistent emphasis */}
-              {isPreprint && (
-                <span className={`${CHIP} bg-red-100 text-red-800 border-red-300
-                  dark:bg-red-950/50 dark:text-red-300 dark:border-red-400/40`}>
-                  Preprint
+              {isPreprint ? (
+                // One light chip for preprints: status and where it is under review
+                <span className={`${CHIP} ${PREPRINT}`}>
+                  {pub.submittedTo ? `Preprint: Submitted to ${pub.submittedTo}` : 'Preprint'}
                 </span>
-              )}
-              {/* Submitted but undecided — neutral grey, never colored like an accepted venue */}
-              {pub.submittedTo && (
-                <span className={`${CHIP} bg-neutral-100 text-neutral-700 border-neutral-300
-                  dark:bg-white/[0.08] dark:text-[#D5D5DA] dark:border-white/20`}>
-                  Submitted to {pub.submittedTo}
+              ) : (
+                <span className={`${VENUE_CHIP} ${ACCEPTED_VENUE}`}>
+                  {pub.displayVenue ?? `${pub.venue} ${pub.year}`}
                 </span>
               )}
               {pub.presentationType && (
                 <span className={`${CHIP} ${presentationBadgeClass(pub.presentationType)}`}>
                   {pub.presentationType}
+                </span>
+              )}
+              {pub.selection && (
+                <span
+                  className="text-[13px] font-semibold text-rose-700 dark:text-rose-400"
+                  title={`${pub.selection.basis}: ${pub.selection.selected.toLocaleString('en-US')} of ${pub.selection.submissions.toLocaleString('en-US')} submissions`}
+                >
+                  Top {topPercent(pub.selection)}%
+                  <span className="ml-1 font-normal text-neutral-500 dark:text-neutral-400">
+                    ({pub.selection.selected.toLocaleString('en-US')} / {pub.selection.submissions.toLocaleString('en-US')})
+                  </span>
                 </span>
               )}
             </div>

@@ -3,10 +3,12 @@ import { motion, useInView } from 'framer-motion'
 import { publications } from '../data/publications'
 import PublicationCard from './PublicationCard'
 
-// Auto-generate filters directly from venue field values in the data
-function buildFilters(pubs: typeof publications): string[] {
-  const venues = [...new Set(pubs.map(p => p.venue))].sort()
-  return ['All', ...venues]
+// Auto-generate filters (with paper counts) directly from the venue field
+function buildFilters(pubs: typeof publications): { name: string; count: number }[] {
+  const counts = new Map<string, number>()
+  for (const p of pubs) counts.set(p.venue, (counts.get(p.venue) ?? 0) + 1)
+  const venues = [...counts.keys()].sort()
+  return [{ name: 'All', count: pubs.length }, ...venues.map(v => ({ name: v, count: counts.get(v)! }))]
 }
 
 export default function Publications() {
@@ -52,7 +54,7 @@ export default function Publications() {
             {/* Filter pills — auto-generated from venue field */}
             {filters.length > 1 && (
               <div className="flex flex-wrap gap-2" role="group" aria-label="Filter publications">
-                {filters.map(f => (
+                {filters.map(({ name: f, count }) => (
                   <button
                     key={f}
                     onClick={() => setActiveFilter(f)}
@@ -63,7 +65,7 @@ export default function Publications() {
                         : 'bg-black/[0.06] dark:bg-white/10 text-secondary hover:bg-black/[0.1] dark:hover:bg-white/[0.15]'
                       }`}
                   >
-                    {f}
+                    {f} <span className="opacity-60">({count})</span>
                   </button>
                 ))}
               </div>

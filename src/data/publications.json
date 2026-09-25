@@ -41,7 +41,8 @@
     "image": "/publications/fork-merge-decoding-enhancing-multimodal.jpg",
     "displayVenue": "EMNLP 2026 Findings",
     "venueFull": "Empirical Methods in Natural Language Processing (EMNLP)",
-    "status": "Conference"
+    "status": "Conference",
+    "presentationType": "Poster"
   },
   {
     "id": "diffusion-link-diffusion-probabilistic-m",
@@ -106,6 +107,11 @@
     "image": "/publications/fits-interpretable-spiking-neurons-via-f.jpg",
     "venueFull": "Neural Information Processing Systems (NeurIPS)",
     "status": "Conference",
-    "presentationType": "Spotlight"
+    "presentationType": "Spotlight",
+    "selection": {
+      "selected": 404,
+      "submissions": 30709,
+      "basis": "Oral + Spotlight"
+    }
   }
 ]

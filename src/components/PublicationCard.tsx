@@ -58,9 +58,10 @@ function topPercent(sel: NonNullable<Publication['selection']>): string {
 const VENUE_CHIP = 'text-[13px] font-semibold px-2.5 py-1 rounded-md leading-none'
 const CHIP = 'text-[12px] font-semibold px-2 py-[3px] rounded-md leading-none border'
 
-function parseAuthor(raw: string): { name: string; sup: string | null } {
+// "Name^1" in the data marks equal contribution; shown as a trailing "*".
+function parseAuthor(raw: string): { name: string; equal: boolean } {
   const match = raw.match(/^(.+?)\^(.+)$/)
-  return match ? { name: match[1].trim(), sup: match[2] } : { name: raw, sup: null }
+  return match ? { name: match[1].trim(), equal: true } : { name: raw, equal: false }
 }
 
 // Action buttons — all identical style, responsive sizing
@@ -168,17 +169,17 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
             {/* 3. Authors */}
             <p className="text-[13px] leading-relaxed text-[#6E6E73] dark:text-[#8E8E93]">
               {pub.authors.map((raw, i) => {
-                const { name, sup } = parseAuthor(raw)
+                const { name, equal } = parseAuthor(raw)
                 const isMe = name === profile.name
                 return (
                   <span key={i}>
                     {isMe ? (
                       <strong className="font-semibold text-[#1D1D1F] dark:text-[#E8E8ED]">
-                        {name}{sup && <sup className="text-[10px] ml-0.5">{sup}</sup>}
+                        {name}{equal && '*'}
                       </strong>
                     ) : (
                       <span>
-                        {name}{sup && <sup className="text-[10px] ml-0.5">{sup}</sup>}
+                        {name}{equal && '*'}
                       </span>
                     )}
                     {i < pub.authors.length - 1 && ', '}

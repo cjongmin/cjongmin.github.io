@@ -73,7 +73,7 @@ export default function TalkDetail({ talk, onClose }: TalkDetailProps) {
         {/* Sticky top bar */}
         <div className="sticky top-0 z-10 h-14 bg-white/85 dark:bg-black/85 backdrop-blur-xl
                         border-b border-black/[0.06] dark:border-white/[0.07]">
-          <div className="mx-auto max-w-[760px] px-5 sm:px-8 h-full flex items-center justify-between">
+          <div className="section-container h-full flex items-center justify-between">
             <button ref={backRef} onClick={onClose} className="btn-secondary">
               <ArrowLeft size={14} />
               Back
@@ -91,7 +91,7 @@ export default function TalkDetail({ talk, onClose }: TalkDetailProps) {
           className="pb-24"
         >
           {/* ---------- Header ---------- */}
-          <header className="mx-auto max-w-[760px] px-5 sm:px-8 pt-10 sm:pt-16">
+          <header className="section-container pt-10 sm:pt-16">
             <p className="text-[13px] font-semibold uppercase tracking-[0.14em] text-secondary">
               <span className="text-[#1D1D1F] dark:text-[#F5F5F7]">{talk.event}</span>
               <span className="mx-2 text-neutral-300 dark:text-neutral-600">·</span>
@@ -104,7 +104,7 @@ export default function TalkDetail({ talk, onClose }: TalkDetailProps) {
               )}
             </p>
 
-            <h1 className="mt-4 text-[30px] sm:text-[44px] font-semibold tracking-tight leading-[1.12]
+            <h1 className="mt-4 max-w-[900px] text-[30px] sm:text-[44px] font-semibold tracking-tight leading-[1.12]
                            text-[#1D1D1F] dark:text-[#F5F5F7]">
               {talk.title}
             </h1>
@@ -129,7 +129,7 @@ export default function TalkDetail({ talk, onClose }: TalkDetailProps) {
 
           {/* ---------- Cover (wider than the text column) ---------- */}
           {talk.cover && (
-            <figure className="mx-auto max-w-[1040px] mt-10 sm:mt-12 sm:px-8">
+            <figure className="section-container mt-10 sm:mt-12 !px-0 sm:!px-8">
               <img
                 src={talk.cover}
                 alt=""
@@ -140,7 +140,7 @@ export default function TalkDetail({ talk, onClose }: TalkDetailProps) {
           )}
 
           {/* ---------- Body ---------- */}
-          <article className="mx-auto max-w-[680px] px-5 sm:px-8">
+          <article className="section-container">
             <p className="mt-10 sm:mt-12 text-[19px] sm:text-[21px] leading-[1.6] text-[#3A3A3C] dark:text-[#D1D1D6]">
               {talk.summary}
             </p>

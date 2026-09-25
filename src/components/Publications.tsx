@@ -73,6 +73,8 @@ export default function Publications() {
           </div>
         </motion.div>
 
+        <p className="-mt-3 mb-6 text-[13px] text-secondary">* Equal contribution</p>
+
         <div className="space-y-10">
           {filtered.length === 0 && (
             <p className="text-secondary text-center py-12">No publications found for this filter.</p>

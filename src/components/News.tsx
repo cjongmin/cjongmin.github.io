@@ -2,6 +2,15 @@ import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { news } from '../data/news'
 
+// "**text**" in a news item becomes a red emphasis span.
+function renderEmphasis(text: string) {
+  return text.split(/(\*\*[^*]+\*\*)/).map((part, i) =>
+    part.startsWith('**') && part.endsWith('**')
+      ? <strong key={i} className="font-semibold text-rose-700 dark:text-rose-400">{part.slice(2, -2)}</strong>
+      : part
+  )
+}
+
 export default function News() {
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
@@ -41,7 +50,7 @@ export default function News() {
                     : 'text-body'
                 }`}
               >
-                {item.text}
+                {renderEmphasis(item.text)}
               </p>
             </div>
           ))}

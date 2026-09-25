@@ -25,7 +25,8 @@ export interface Talk {
   cover?: string                    // 16:9 photo for the card banner (e.g. taken at the venue)
   image?: string                    // paper figure; used as the backdrop until a cover exists
   paperId?: string                  // id in publications.json
-  summary: string                   // one or two sentences for the card
+  summary: string                   // one or two sentences for the card; the post's lead paragraph
+  body?: string                     // optional free-form post text; paragraphs separated by a blank line
   published: boolean                // false = hidden draft
   upcoming: boolean                 // true until the write-up is posted
   keyPoints?: string[]

@@ -34,9 +34,9 @@
      ============================================================ */
   @page {
     size: A4;
-    margin: 15mm 17mm 11mm 17mm;
+    margin: 13mm 17mm 11mm 17mm;
     @bottom-center {
-      content: "Jongmin Choi · Curriculum Vitae · " counter(page) " / " counter(pages);
+      content: "Jongmin Choi · Curriculum Vitae · Updated September 2026 · " counter(page) " / " counter(pages);
       font-family: 'SourceSans', sans-serif;
       font-size: 7.4pt;
       color: #a8a8ad;
@@ -90,7 +90,7 @@
   /* ============================================================
      Section headings
      ============================================================ */
-  section { margin-top: 9pt; }
+  section { margin-top: 8pt; }
   section:first-of-type { margin-top: 10pt; }
 
   h2 {
@@ -166,23 +166,35 @@
     font-size: 7.9pt;
     font-style: italic;
     color: #85858e;
-    margin: 0 0 5.5pt 0;
+    margin: 0 0 6pt 0;
   }
+  /* Two columns: venue tag on the left so the venue reads at a glance */
   .pub {
-    position: relative;
-    padding-left: 16pt;
-    margin-top: 6.5pt;
+    display: flex;
+    gap: 9pt;
+    margin-top: 7pt;
     break-inside: avoid;
   }
   .pub:first-of-type { margin-top: 0; }
-  .pub .idx {
-    position: absolute;
-    left: 0; top: 0.6pt;
+  .pub .tag { flex: 0 0 60pt; padding-top: 0.6pt; }
+  .pub .tag .v {
     font-family: 'SourceSerif', serif;
-    font-size: 8.2pt;
-    font-weight: 600;
-    color: #8c9bad;
+    font-size: 8.9pt;
+    font-weight: 700;
+    color: #1F3A5F;
+    line-height: 1.15;
   }
+  .pub .tag .t {
+    margin-top: 2.2pt;
+    font-size: 6.9pt;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #8a8a93;
+    line-height: 1.2;
+  }
+  .pub .tag .t.honor { color: #a1223c; }
+  .pub .body { flex: 1; min-width: 0; }
   .pub .title {
     font-family: 'SourceSerif', serif;
     font-size: 9.9pt;
@@ -197,29 +209,14 @@
   }
   .pub .authors .me { font-weight: 700; color: #16161a; }
   .pub .where-line {
-    margin-top: 2pt;
-    font-size: 8.7pt;
-    color: #55555c;
+    margin-top: 1.5pt;
+    font-size: 8.4pt;
+    font-style: italic;
+    color: #7a7a82;
   }
-  .pub .where-line .venue { font-style: italic; font-weight: 600; color: #3a3a42; }
-  .pub .where-line .dot { color: #bdbdc4; margin: 0 4pt; }
-
-  .badge {
-    display: inline-block;
-    font-size: 7.2pt;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    padding: 0.8pt 5pt;
-    border-radius: 2pt;
-    margin-left: 5pt;
-    vertical-align: 0.4pt;
-  }
-  .badge.oral, .badge.spotlight { color: #8d2437; background: #f7e9ec; }
-  .badge.poster { color: #5d5d68; background: transparent; border: 0.6pt solid #c9c9cf; padding: 0.2pt 4.4pt; }
-  .badge.review { color: #5d5d68; background: #eeeef1; }
-  .honor { margin-left: 6pt; font-size: 8.4pt; font-weight: 600; color: #a1223c; }
-  .honor .n { font-weight: 400; color: #8a6a72; }
+  .pub .where-line .dot { font-style: normal; color: #bdbdc4; margin: 0 4pt; }
+  .pub .where-line .honor { font-style: normal; font-weight: 600; color: #a1223c; }
+  .pub .where-line .honor .n { font-weight: 400; color: #8a6a72; }
 
   /* ============================================================
      Projects
@@ -327,50 +324,50 @@
 
   <section>
     <h2>Publications</h2>
-    <p class="legend">[C] Conference &nbsp;·&nbsp; [P] Preprint &nbsp;·&nbsp; * Equal contribution</p>
+    <p class="legend">* Equal contribution</p>
 
     <div class="pub">
-      <span class="idx">[P]</span>
-      <div class="title">OmniKVQuant: KV Cache Quantization for Omni-LLMs</div>
-      <div class="authors">Suho Yoo*, Hyunjong Ok*, <span class="me">Jongmin Choi</span>, Jihoo Jung, Joon Son Chung</div>
-      <div class="where-line">
-        Submitted to <span class="venue">IEEE International Conference on Acoustics, Speech, and Signal Processing (ICASSP)</span><span class="dot">·</span>2027<span class="badge review">Under Review</span>
+      <div class="tag"><div class="v">arXiv 2026</div><div class="t">Preprint</div></div>
+      <div class="body">
+        <div class="title">OmniKVQuant: KV Cache Quantization for Omni-LLMs</div>
+        <div class="authors">Suho Yoo*, Hyunjong Ok*, <span class="me">Jongmin Choi</span>, Jihoo Jung, Joon Son Chung</div>
+        <div class="where-line">Under review at IEEE International Conference on Acoustics, Speech, and Signal Processing (ICASSP 2027)</div>
       </div>
     </div>
 
     <div class="pub">
-      <span class="idx">[C]</span>
-      <div class="title">FiTS: Interpretable Spiking Neurons via Frequency Selectivity and Temporal Shaping</div>
-      <div class="authors"><span class="me">Jongmin Choi</span>, Joon Son Chung</div>
-      <div class="where-line">
-        <span class="venue">Neural Information Processing Systems (NeurIPS)</span><span class="dot">·</span>2026<span class="badge spotlight">Spotlight</span><span class="honor">Top 1.3% <span class="n">(Oral + Spotlight: 404 / 30,709)</span></span>
+      <div class="tag"><div class="v">NeurIPS 2026</div><div class="t honor">Spotlight</div></div>
+      <div class="body">
+        <div class="title">FiTS: Interpretable Spiking Neurons via Frequency Selectivity and Temporal Shaping</div>
+        <div class="authors"><span class="me">Jongmin Choi</span>, Joon Son Chung</div>
+        <div class="where-line">Neural Information Processing Systems<span class="dot">·</span><span class="honor">Top 1.3% <span class="n">(Oral + Spotlight: 404 / 30,709)</span></span></div>
       </div>
     </div>
 
     <div class="pub">
-      <span class="idx">[C]</span>
-      <div class="title">LAMB: LLM-based Audio Captioning with Modality Gap Bridging via Cauchy&ndash;Schwarz Divergence</div>
-      <div class="authors">Hyeongkeun Lee*, <span class="me">Jongmin Choi</span>*, KiHyun Nam, Joon Son Chung</div>
-      <div class="where-line">
-        <span class="venue">IEEE International Conference on Acoustics, Speech, and Signal Processing (ICASSP)</span><span class="dot">·</span>2026<span class="badge oral">Oral</span>
+      <div class="tag"><div class="v">ICASSP 2026</div><div class="t honor">Oral</div></div>
+      <div class="body">
+        <div class="title">LAMB: LLM-based Audio Captioning with Modality Gap Bridging via Cauchy&ndash;Schwarz Divergence</div>
+        <div class="authors">Hyeongkeun Lee*, <span class="me">Jongmin Choi</span>*, KiHyun Nam, Joon Son Chung</div>
+        <div class="where-line">IEEE International Conference on Acoustics, Speech, and Signal Processing</div>
       </div>
     </div>
 
     <div class="pub">
-      <span class="idx">[C]</span>
-      <div class="title">Diffusion-Link: Diffusion Probabilistic Model for Bridging the Audio&ndash;Text Modality Gap</div>
-      <div class="authors">KiHyun Nam*, <span class="me">Jongmin Choi</span>*, Hyeongkeun Lee, Jungwoo Heo, Joon Son Chung</div>
-      <div class="where-line">
-        <span class="venue">IEEE International Conference on Acoustics, Speech, and Signal Processing (ICASSP)</span><span class="dot">·</span>2026<span class="badge poster">Poster</span>
+      <div class="tag"><div class="v">ICASSP 2026</div><div class="t">Poster</div></div>
+      <div class="body">
+        <div class="title">Diffusion-Link: Diffusion Probabilistic Model for Bridging the Audio&ndash;Text Modality Gap</div>
+        <div class="authors">KiHyun Nam*, <span class="me">Jongmin Choi</span>*, Hyeongkeun Lee, Jungwoo Heo, Joon Son Chung</div>
+        <div class="where-line">IEEE International Conference on Acoustics, Speech, and Signal Processing</div>
       </div>
     </div>
 
     <div class="pub">
-      <span class="idx">[C]</span>
-      <div class="title">Fork-Merge Decoding: Enhancing Multimodal Understanding in Audio-Visual Large Language Models</div>
-      <div class="authors">Chaeyoung Jung*, Youngjoon Jang*, <span class="me">Jongmin Choi</span>, Joon Son Chung</div>
-      <div class="where-line">
-        Findings of <span class="venue">Empirical Methods in Natural Language Processing (EMNLP)</span><span class="dot">·</span>2026<span class="badge poster">Poster</span>
+      <div class="tag"><div class="v">EMNLP 2026</div><div class="t">Findings<br>Poster</div></div>
+      <div class="body">
+        <div class="title">Fork-Merge Decoding: Enhancing Multimodal Understanding in Audio-Visual Large Language Models</div>
+        <div class="authors">Chaeyoung Jung*, Youngjoon Jang*, <span class="me">Jongmin Choi</span>, Joon Son Chung</div>
+        <div class="where-line">Findings of Empirical Methods in Natural Language Processing</div>
       </div>
     </div>
   </section>
@@ -404,7 +401,6 @@
     </div>
   </section>
 
-  <div class="updated">Last updated: September 2026</div>
 
 </body>
 </html>

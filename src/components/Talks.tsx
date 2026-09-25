@@ -152,8 +152,8 @@ export default function Talks() {
                            ring-1 ring-black/[0.06] dark:ring-white/[0.08]
                            shadow-sm hover:shadow-lg transition-shadow duration-300"
               >
-                {/* 16:9 banner, height-capped on wide screens so it never becomes a hero */}
-                <div className="relative w-full aspect-video max-h-[480px]">
+                {/* Phone: 4:5 portrait card. sm+: 16:9 banner, height-capped so it never becomes a hero */}
+                <div className="relative w-full aspect-[4/5] max-h-[78vh] sm:aspect-video sm:max-h-[480px]">
 
                   {/* Backdrop: the venue photo (or the paper figure until one exists), kept sharp */}
                   {(t.cover ?? t.image) && (
@@ -178,14 +178,14 @@ export default function Talks() {
                   */}
                   <div
                     className="absolute inset-0
-                               bg-gradient-to-t from-black/70 via-black/40 via-45% to-black/0
+                               bg-gradient-to-t from-black/80 via-black/45 via-50% to-black/0
                                sm:left-auto sm:w-[60%]
                                sm:bg-gradient-to-r sm:from-black/0 sm:via-black/45 sm:via-30% sm:to-black/60"
                   />
 
                   {/* Text lives inside the dark area only */}
                   <div
-                    className="absolute inset-0 flex flex-col justify-end p-5
+                    className="absolute inset-0 flex flex-col justify-end p-6
                                sm:left-auto sm:w-[45%] sm:justify-center sm:p-8 sm:pr-10
                                text-white"
                   >
@@ -197,21 +197,23 @@ export default function Talks() {
                       )}
                     </div>
 
-                    <h3 className="mt-3 text-[17px] sm:text-[22px] font-semibold leading-snug tracking-tight line-clamp-2 sm:line-clamp-3">
+                    <h3 className="mt-3 text-[21px] sm:text-[22px] font-semibold leading-snug tracking-tight line-clamp-3">
                       {t.title}
                     </h3>
 
-                    <p className="hidden sm:block mt-2 text-[13px] leading-relaxed text-white/75 line-clamp-2">
+                    <p className="mt-2 text-[14px] sm:text-[13px] leading-relaxed text-white/80 sm:text-white/75 line-clamp-2">
                       {t.summary}
                     </p>
 
                     <div className="mt-3 sm:mt-4 flex items-center justify-between gap-3 text-[13px]">
-                      <span className="inline-flex items-center gap-1.5 text-white/70">
-                        <CalendarDays size={12} />
-                        {t.date}
-                        {t.location && <><span className="text-white/40">·</span>{t.location}</>}
+                      <span className="min-w-0 inline-flex items-center gap-1.5 text-white/70">
+                        <CalendarDays size={12} className="shrink-0" />
+                        <span className="truncate">
+                          {t.date}
+                          {t.location && <><span className="mx-1.5 text-white/40">·</span>{t.location}</>}
+                        </span>
                       </span>
-                      <span className="inline-flex items-center gap-1 font-medium text-white group-hover:gap-2 transition-all">
+                      <span className="shrink-0 whitespace-nowrap inline-flex items-center gap-1 font-medium text-white group-hover:gap-2 transition-all">
                         {t.upcoming ? 'View details' : 'Read notes'}
                         <ArrowRight size={12} />
                       </span>
@@ -250,7 +252,7 @@ export default function Talks() {
             <div
               role="tablist"
               aria-label="Slides"
-              className={`pointer-events-none absolute bottom-5 left-0 right-0 flex justify-center gap-2
+              className={`pointer-events-none absolute top-4 sm:top-auto sm:bottom-5 left-0 right-0 flex justify-center gap-2
                           transition-opacity duration-300 group-hover/track:opacity-100
                           ${scrolling ? 'opacity-100' : 'opacity-0'}`}
             >

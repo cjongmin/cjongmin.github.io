@@ -100,14 +100,14 @@
   .talk-blur-soft {
     -webkit-backdrop-filter: blur(6px);
     backdrop-filter: blur(6px);
-    -webkit-mask-image: linear-gradient(to top, black 0%, black 30%, transparent 65%);
-    mask-image: linear-gradient(to top, black 0%, black 30%, transparent 65%);
+    -webkit-mask-image: linear-gradient(to top, black 0%, black 38%, transparent 72%);
+    mask-image: linear-gradient(to top, black 0%, black 38%, transparent 72%);
   }
   .talk-blur-strong {
     -webkit-backdrop-filter: blur(18px);
     backdrop-filter: blur(18px);
-    -webkit-mask-image: linear-gradient(to top, black 0%, black 12%, transparent 42%);
-    mask-image: linear-gradient(to top, black 0%, black 12%, transparent 42%);
+    -webkit-mask-image: linear-gradient(to top, black 0%, black 18%, transparent 50%);
+    mask-image: linear-gradient(to top, black 0%, black 18%, transparent 50%);
   }
   @screen sm {
     .talk-blur-soft {

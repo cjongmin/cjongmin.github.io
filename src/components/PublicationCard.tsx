@@ -55,8 +55,8 @@ function topPercent(sel: NonNullable<Publication['selection']>): string {
 }
 
 // Shared chip geometry: slightly larger type, gently rounded corners (not pills).
-const VENUE_CHIP = 'text-[13px] font-semibold px-2.5 py-1 rounded-md leading-none'
-const CHIP = 'text-[12px] font-semibold px-2 py-[3px] rounded-md leading-none border'
+const VENUE_CHIP = 'text-[14px] font-semibold px-2.5 py-1 rounded-md leading-none'
+const CHIP = 'text-[13px] font-semibold px-2 py-[3px] rounded-md leading-none border'
 
 // "Name^1" in the data marks equal contribution; shown as a trailing "*".
 function parseAuthor(raw: string): { name: string; equal: boolean } {
@@ -65,7 +65,7 @@ function parseAuthor(raw: string): { name: string; equal: boolean } {
 }
 
 // Action buttons — all identical style, responsive sizing
-const BTN_BASE = 'inline-flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-lg text-[13px] sm:text-[14px] font-medium transition-colors duration-150 border cursor-pointer select-none'
+const BTN_BASE = 'inline-flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-lg text-[14px] sm:text-[15px] font-medium transition-colors duration-150 border cursor-pointer select-none'
 const BTN = `${BTN_BASE} bg-transparent border-neutral-300 text-neutral-700 hover:bg-neutral-100 dark:border-white/[0.2] dark:text-[#C7C7CB] dark:hover:bg-white/[0.08]`
 
 export default function PublicationCard({ pub, index }: PublicationCardProps) {
@@ -150,7 +150,7 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
               )}
               {pub.selection && (
                 <span
-                  className="text-[13px] font-semibold text-rose-700 dark:text-rose-400"
+                  className="text-[14px] font-semibold text-rose-700 dark:text-rose-400"
                   title={`${pub.selection.basis}: ${pub.selection.selected.toLocaleString('en-US')} of ${pub.selection.submissions.toLocaleString('en-US')} submissions`}
                 >
                   Top {topPercent(pub.selection)}%
@@ -162,12 +162,12 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
             </div>
 
             {/* 2. Title — strongest hierarchy element */}
-            <h3 className="text-[15px] font-semibold leading-snug text-[#1D1D1F] dark:text-[#F5F5F7]">
+            <h3 className="text-[17px] sm:text-[18px] font-semibold leading-snug text-[#1D1D1F] dark:text-[#F5F5F7]">
               {pub.title}
             </h3>
 
             {/* 3. Authors */}
-            <p className="text-[13px] leading-relaxed text-[#6E6E73] dark:text-[#8E8E93]">
+            <p className="text-[15px] leading-relaxed text-[#6E6E73] dark:text-[#8E8E93]">
               {pub.authors.map((raw, i) => {
                 const { name, equal } = parseAuthor(raw)
                 const isMe = name === profile.name
@@ -193,7 +193,7 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
               this line gives the full conference name.
             */}
             {pub.venueFull && (
-              <p className="text-[13px] italic leading-snug text-[#8E8E93] dark:text-[#7C7C82]">
+              <p className="text-[14px] italic leading-snug text-[#8E8E93] dark:text-[#7C7C82]">
                 {pub.venueFull}
               </p>
             )}

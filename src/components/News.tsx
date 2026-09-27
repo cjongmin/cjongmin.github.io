@@ -26,7 +26,7 @@ export default function News() {
           transition={{ duration: 0.6 }}
           className="mb-8"
         >
-          <p className="text-[13px] font-semibold text-[#6E6E73] dark:text-[#86868B] uppercase tracking-widest mb-3">
+          <p className="text-[14px] font-semibold text-[#6E6E73] dark:text-[#86868B] uppercase tracking-widest mb-3">
             News
           </p>
           <h2 className="section-title">Recent News</h2>
@@ -40,11 +40,11 @@ export default function News() {
         >
           {news.map(item => (
             <div key={item.id} className="flex gap-4 sm:gap-6 px-5 py-3.5 items-baseline">
-              <span className="shrink-0 w-[74px] text-[13px] font-medium text-secondary">
+              <span className="shrink-0 w-[84px] text-[14px] font-medium text-secondary">
                 {item.date}
               </span>
               <p
-                className={`text-[14px] sm:text-[15px] leading-relaxed ${
+                className={`text-[15px] sm:text-[16px] leading-relaxed ${
                   item.highlight
                     ? 'font-medium text-[#1D1D1F] dark:text-[#F5F5F7]'
                     : 'text-body'

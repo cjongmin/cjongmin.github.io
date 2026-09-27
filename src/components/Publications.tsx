@@ -45,7 +45,7 @@ export default function Publications() {
           transition={{ duration: 0.6 }}
           className="mb-8"
         >
-          <p className="text-[13px] font-semibold text-[#6E6E73] dark:text-[#86868B] uppercase tracking-widest mb-3">
+          <p className="text-[14px] font-semibold text-[#6E6E73] dark:text-[#86868B] uppercase tracking-widest mb-3">
             Publications
           </p>
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5">
@@ -59,7 +59,7 @@ export default function Publications() {
                     key={f}
                     onClick={() => setActiveFilter(f)}
                     aria-pressed={activeFilter === f}
-                    className={`px-3.5 py-1.5 rounded-lg text-sm font-medium transition-all duration-150
+                    className={`px-3.5 py-1.5 rounded-lg text-[15px] font-medium transition-all duration-150
                       ${activeFilter === f
                         ? 'bg-neutral-600 dark:bg-[#F5F5F7] text-white dark:text-[#1D1D1F]'
                         : 'bg-black/[0.06] dark:bg-white/10 text-secondary hover:bg-black/[0.1] dark:hover:bg-white/[0.15]'
@@ -73,7 +73,7 @@ export default function Publications() {
           </div>
         </motion.div>
 
-        <p className="-mt-3 mb-6 text-[13px] text-secondary">* Equal contribution</p>
+        <p className="-mt-3 mb-6 text-[14px] text-secondary">* Equal contribution</p>
 
         <div className="space-y-10">
           {filtered.length === 0 && (
@@ -83,7 +83,7 @@ export default function Publications() {
           {filtered.map(({ year, pubs }) => (
             <div key={year}>
               <div className="flex items-center gap-4 mb-5">
-                <span className="text-xl font-semibold text-[#1D1D1F] dark:text-[#F5F5F7]">{year}</span>
+                <span className="text-[22px] font-semibold text-[#1D1D1F] dark:text-[#F5F5F7]">{year}</span>
                 <div className="flex-1 h-px bg-black/[0.06] dark:bg-white/[0.08]" />
               </div>
               <div className="space-y-3">

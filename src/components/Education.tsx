@@ -16,7 +16,7 @@ export default function Education() {
           transition={{ duration: 0.6 }}
           className="mb-8"
         >
-          <p className="text-[13px] font-semibold text-[#6E6E73] dark:text-[#86868B] uppercase tracking-widest mb-3">
+          <p className="text-[14px] font-semibold text-[#6E6E73] dark:text-[#86868B] uppercase tracking-widest mb-3">
             Education
           </p>
           <h2 className="section-title">Education</h2>
@@ -49,12 +49,12 @@ export default function Education() {
                 {/* Card — degree / institution / department / advisor, nothing more */}
                 <div className="flex-1 pb-2">
                   <div className="glass-card p-5 hover:shadow-md transition-shadow duration-200">
-                    <span className="inline-block text-[13px] font-medium text-secondary mb-2">
+                    <span className="inline-block text-[14px] font-medium text-secondary mb-2">
                       {edu.startDate} — {edu.endDate}
                     </span>
 
                     <div className="flex items-start justify-between gap-3">
-                      <h3 className="text-[15px] font-semibold text-[#1D1D1F] dark:text-[#F5F5F7] leading-snug">
+                      <h3 className="text-[17px] sm:text-[18px] font-semibold text-[#1D1D1F] dark:text-[#F5F5F7] leading-snug">
                         {edu.title}
                       </h3>
                       {edu.link && (
@@ -70,16 +70,16 @@ export default function Education() {
                       )}
                     </div>
 
-                    <p className="text-sm font-medium text-secondary mt-1">
+                    <p className="text-[15px] font-medium text-secondary mt-1">
                       {edu.organization}
                     </p>
                     {edu.department && (
-                      <p className="text-[13px] text-secondary mt-0.5 leading-snug">
+                      <p className="text-[15px] text-secondary mt-0.5 leading-snug">
                         {edu.department}
                       </p>
                     )}
                     {edu.advisor && (
-                      <p className="text-[13px] text-body mt-1.5">
+                      <p className="text-[15px] text-body mt-1.5">
                         Advisor: <span className="font-medium text-[#1D1D1F] dark:text-[#F5F5F7]">{edu.advisor}</span>
                       </p>
                     )}

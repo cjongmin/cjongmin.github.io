@@ -18,7 +18,7 @@ function stepSize(el: HTMLDivElement): number {
 }
 
 // Pills sit on a dark overlay, so they are white-on-dark here.
-const PILL = 'text-[12px] font-semibold px-2 py-[3px] rounded-md leading-none'
+const PILL = 'text-[13px] font-semibold px-2 py-[3px] rounded-md leading-none'
 
 export default function Talks() {
   const ref = useRef<HTMLElement>(null)
@@ -114,12 +114,12 @@ export default function Talks() {
           transition={{ duration: 0.6 }}
           className="mb-8"
         >
-          <p className="text-[13px] font-semibold text-[#6E6E73] dark:text-[#86868B] uppercase tracking-widest mb-3">
+          <p className="text-[14px] font-semibold text-[#6E6E73] dark:text-[#86868B] uppercase tracking-widest mb-3">
             Talks &amp; Presentations
           </p>
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
             <h2 className="section-title">Conference · Presentation Notes</h2>
-            <p className="text-sm text-secondary">
+            <p className="text-[15px] text-secondary">
               What was asked, what mattered, what I took home.
             </p>
           </div>
@@ -201,11 +201,11 @@ export default function Talks() {
                       {t.title}
                     </h3>
 
-                    <p className="mt-2 text-[14px] sm:text-[13px] leading-relaxed text-white/80 sm:text-white/75 line-clamp-2">
+                    <p className="mt-2 text-[15px] sm:text-[14px] leading-relaxed text-white/80 sm:text-white/75 line-clamp-2">
                       {t.summary}
                     </p>
 
-                    <div className="mt-3 sm:mt-4 flex items-center justify-between gap-3 text-[13px]">
+                    <div className="mt-3 sm:mt-4 flex items-center justify-between gap-3 text-[14px]">
                       <span className="min-w-0 inline-flex items-center gap-1.5 text-white/70">
                         <CalendarDays size={12} className="shrink-0" />
                         <span className="truncate">

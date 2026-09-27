@@ -23,7 +23,7 @@
   }
 
   .section-title {
-    @apply text-3xl sm:text-4xl font-semibold tracking-tight text-[#1D1D1F] dark:text-[#F5F5F7];
+    @apply text-[28px] sm:text-[32px] font-semibold tracking-tight text-[#1D1D1F] dark:text-[#F5F5F7];
   }
 
   .glass-card {
@@ -31,14 +31,14 @@
   }
 
   .btn-primary {
-    @apply inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium
+    @apply inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[15px] font-medium
            bg-[#0071E3] dark:bg-[#2997FF] text-white
            hover:bg-[#0077ED] dark:hover:bg-[#3aa3ff]
            transition-colors duration-150;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center gap-1.5 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full text-[13px] sm:text-sm font-medium
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full text-[14px] sm:text-[15px] font-medium
            bg-black/[0.06] dark:bg-white/10 text-[#1D1D1F] dark:text-[#F5F5F7]
            hover:bg-black/[0.1] dark:hover:bg-white/[0.15]
            transition-colors duration-150;

@@ -20,8 +20,8 @@ npm run preview    # preview the production build locally
 
 | What to change | File |
 |---|---|
-| Name, bio, email, links, first-screen tagline / status | `src/data/profile.json` |
-| Recent news | `src/data/news.json` |
+| Name, bio, email, links, optional status line | `src/data/profile.json` |
+| Recent news (shown beside About) | `src/data/news.json` — `**text**` = red emphasis |
 | Publications | `src/data/publications.json` |
 | Talks & presentations | `src/data/talks.json` — set `cover` to a 16:9 venue photo; `published: false` keeps a draft hidden |
 | Education | `src/data/education.json` |

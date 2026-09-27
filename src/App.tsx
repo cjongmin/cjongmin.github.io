@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react'
 import Navbar from './components/Navbar'
-import Hero from './components/Hero'
-import News from './components/News'
-import About from './components/About'
+import Intro from './components/Intro'
 import Publications from './components/Publications'
 import Talks from './components/Talks'
 import Education from './components/Education'
@@ -37,9 +35,7 @@ export default function App() {
       <Navbar theme={theme} toggleTheme={toggleTheme} />
       <main>
         <ErrorBoundary>
-          <Hero />
-          <News />
-          <About />
+          <Intro />
           <Publications />
           <Talks />
           <Education />

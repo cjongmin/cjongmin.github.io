@@ -1,6 +1,7 @@
 {
   "name": "Jongmin Choi",
   "title": "MS Student in Multimodal AI",
+  "status": "",
   "affiliation": "MMAI Lab",
   "university": "Korea Advanced Institute of Science and Technology (KAIST)",
   "email": "cjmin2925@gmail.com",
@@ -11,15 +12,11 @@
     "scholar": "https://scholar.google.com/citations?user=sPvkgm8AAAAJ"
   },
   "bio": "I am Jongmin Choi, an MS student in the [Multimodal AI (MMAI) Lab](https://mm.kaist.ac.kr) at KAIST, advised by Professor [Joon Son Chung](https://mm.kaist.ac.kr/joon/). Biological intelligence provides the clearest evidence that learning can be both general and efficient, and I believe that building its principles into model architectures matters as much as scaling them up. From this perspective, I have studied multimodal learning that bridges the gap between audio and text while preserving the structure unique to each modality, as well as spiking neurons with temporal dynamics. Currently, guided by the idea that good reasoning begins with good input selection, I am exploring architectures that dynamically extract query-relevant information from diverse modalities and make it readily usable by language models. In parallel, I investigate the mathematical principles underlying deep network optimization. I am always open to discussing new research ideas and potential collaborations.",
-  "interests": [
-    "Multimodal AI",
-    "Modality Gap Mitigation",
-    "Spiking Neural Networks"
-  ],
   "keywords": [
-    "Multimodal AI",
-    "Modality Gap",
-    "Spiking Neural Network"
+    "Multimodal LLMs",
+    "Input Selection",
+    "Spiking Neurons",
+    "Optimization"
   ],
   "cvFile": "/Jongmin_Choi_CV.pdf",
   "profileImage": "/profile.jpg"

@@ -20,11 +20,12 @@ npm run preview    # preview the production build locally
 
 | What to change | File |
 |---|---|
-| Name, bio, email, links | `src/data/profile.json` |
+| Name, bio, email, links, first-screen tagline / status | `src/data/profile.json` |
 | Recent news | `src/data/news.json` |
 | Publications | `src/data/publications.json` |
 | Talks & presentations | `src/data/talks.json` — set `cover` to a 16:9 venue photo; `published: false` keeps a draft hidden |
 | Education | `src/data/education.json` |
+| Teaching | `src/data/teaching.json` |
 | iOS app projects | `src/data/projects.json` — generate entries with `prompts/extract-app-info.md` |
 | Accent color, fonts | `tailwind.config.js` |
 | GitHub Pages base path | `vite.config.ts` |

@@ -24,8 +24,8 @@ export default function Projects() {
             Projects
           </p>
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
-            <h2 className="section-title">Apps I've Built</h2>
-            <p className="text-[15px] text-secondary">Indie iOS development — tap a card for details.</p>
+            <h2 className="section-title">On-Device AI Apps</h2>
+            <p className="text-[15px] text-secondary">Indie iOS apps that run vision models entirely on the phone. Tap a card for details.</p>
           </div>
         </motion.div>
 

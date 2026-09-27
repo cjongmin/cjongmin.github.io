@@ -1,0 +1,18 @@
+[
+  {
+    "id": "ee70038-spring-2026",
+    "course": "EE.70038 Speech Recognition Systems",
+    "term": "Spring 2026",
+    "role": "Teaching Assistant",
+    "instructor": "Prof. Joon Son Chung",
+    "institution": "KAIST"
+  },
+  {
+    "id": "ee40034-fall-2025",
+    "course": "EE.40034 Deep Learning for Visual Understanding",
+    "term": "Fall 2025",
+    "role": "Teaching Assistant",
+    "instructor": "Prof. Joon Son Chung",
+    "institution": "KAIST"
+  }
+]

@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { ExternalLink, GraduationCap } from 'lucide-react'
 import { education } from '../data/education'
+import { teaching } from '../data/teaching'
 
 export default function Education() {
   const ref = useRef<HTMLElement>(null)
@@ -19,7 +20,7 @@ export default function Education() {
           <p className="text-[14px] font-semibold text-[#6E6E73] dark:text-[#86868B] uppercase tracking-widest mb-3">
             Education
           </p>
-          <h2 className="section-title">Education</h2>
+          <h2 className="section-title">Education &amp; Teaching</h2>
         </motion.div>
 
         {/* Timeline */}
@@ -89,6 +90,26 @@ export default function Education() {
             ))}
           </div>
         </div>
+
+        {/* Teaching — compact rows under the degrees */}
+        {teaching.length > 0 && (
+          <div className="mt-12">
+            <h3 className="text-[14px] font-semibold uppercase tracking-widest text-secondary mb-4">Teaching</h3>
+            <div className="glass-card divide-y divide-black/[0.05] dark:divide-white/[0.06]">
+              {teaching.map(t => (
+                <div key={t.id} className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-6 px-5 py-4">
+                  <span className="shrink-0 sm:w-[110px] text-[14px] font-medium text-secondary">{t.term}</span>
+                  <div className="min-w-0">
+                    <p className="text-[16px] font-semibold text-[#1D1D1F] dark:text-[#F5F5F7] leading-snug">{t.course}</p>
+                    <p className="mt-0.5 text-[15px] text-secondary">
+                      {[t.role, t.institution, t.instructor && `Instructor: ${t.instructor}`].filter(Boolean).join(' · ')}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   )

@@ -50,7 +50,7 @@ export default function About() {
           className="space-y-4"
         >
           {paragraphs.map((para, i) => (
-            <p key={i} className="text-[16px] sm:text-[17px] leading-relaxed text-body text-justify">
+            <p key={i} className="text-[16px] sm:text-[17px] leading-relaxed text-body">
               {renderLinks(para)}
             </p>
           ))}

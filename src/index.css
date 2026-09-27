@@ -3,8 +3,13 @@
 @tailwind utilities;
 
 @layer base {
+  /* Every size is in rem (postcss.config.js), so the root font size scales the
+     whole page. Up to ~2100px-wide windows it is the browser default (16px);
+     wider windows get the same layout, proportionally larger, up to 1.5x at
+     ~3140px (e.g. a 4K monitor at 100%), where it matches 150% browser zoom. */
   html {
     scroll-behavior: smooth;
+    font-size: clamp(100%, 0.765vw, 150%);
   }
 
   body {
@@ -55,10 +60,6 @@
     @apply text-[#4B4B4F] dark:text-[#ADADB0];
   }
 
-  .divider {
-    @apply border-t border-black/[0.06] dark:border-white/[0.08];
-  }
-
   /* Background glow orbs — cheap radial gradients, no blur filter */
   .glow-orb {
     @apply absolute rounded-full;
@@ -73,6 +74,15 @@
   .glow-indigo       { --glow: rgba(199, 210, 254, 0.18); }
   .dark .glow-indigo { --glow: rgba(255, 255, 255, 0.07); }
 }
+
+/* lucide icons are sized by width/height attributes, which the root font size
+   can't reach; restate the sizes in use as CSS so they scale with the text. */
+svg.lucide[width="11"] { width: 11px; height: 11px; }
+svg.lucide[width="12"] { width: 12px; height: 12px; }
+svg.lucide[width="13"] { width: 13px; height: 13px; }
+svg.lucide[width="14"] { width: 14px; height: 14px; }
+svg.lucide[width="16"] { width: 16px; height: 16px; }
+svg.lucide[width="18"] { width: 18px; height: 18px; }
 
 /* Scrollbar */
 ::-webkit-scrollbar {

@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Menu, X } from 'lucide-react'
 import ThemeToggle from './ThemeToggle'
-import { scrollToSection } from '../lib/utils'
+import { remPx, scrollToSection } from '../lib/utils'
 
 interface NavbarProps {
   theme: 'light' | 'dark'
@@ -21,6 +21,10 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
   const [activeSection, setActiveSection] = useState('home')
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  // After a menu click, the clicked item stays highlighted while the smooth
+  // scroll runs, and afterwards too when the page bottoms out before that
+  // section reaches the top (Projects and Contact on tall screens).
+  const navLock = useRef<{ until: number } | null>(null)
 
   useEffect(() => {
     // Throttle with rAF: at most one layout read + state update per frame,
@@ -29,8 +33,10 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
     const update = () => {
       ticking = false
       setScrolled(window.scrollY > 20)
+      if (navLock.current && performance.now() < navLock.current.until) return
+      navLock.current = null
 
-      const threshold = 64 + 40 // nav height + margin
+      const threshold = 6.5 * remPx() // nav height (4rem) + margin
       let current = NAV_ITEMS[0].id
       for (const item of NAV_ITEMS) {
         const el = document.getElementById(item.id)
@@ -39,6 +45,8 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
       setActiveSection(current)
     }
     const onScroll = () => {
+      // keep the lock until the programmatic scroll has stopped for 200ms
+      if (navLock.current) navLock.current.until = Math.max(navLock.current.until, performance.now() + 200)
       if (!ticking) {
         ticking = true
         requestAnimationFrame(update)
@@ -50,6 +58,8 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
   }, [])
 
   const handleNav = (id: string) => {
+    navLock.current = { until: performance.now() + 1000 }
+    setActiveSection(id)
     scrollToSection(id)
     setMenuOpen(false)
   }

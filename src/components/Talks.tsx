@@ -11,10 +11,10 @@ function talkIdFromHash(): string | null {
   return h.startsWith(HASH_PREFIX) ? decodeURIComponent(h.slice(HASH_PREFIX.length)) : null
 }
 
-// One slide = card width + the track's gap-4.
+// One slide = card width + the track's gap (gap-4, which grows with the root font size).
 function stepSize(el: HTMLDivElement): number {
   const card = el.querySelector<HTMLElement>('[data-card]')
-  return (card?.offsetWidth ?? el.clientWidth) + 16
+  return (card?.offsetWidth ?? el.clientWidth) + (parseFloat(getComputedStyle(el).columnGap) || 16)
 }
 
 // Pills sit on a dark overlay, so they are white-on-dark here.

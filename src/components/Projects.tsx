@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
+import { ChevronRight } from 'lucide-react'
 import { projects, Project } from '../data/projects'
 import AppIcon from './AppIcon'
 import ProjectModal from './ProjectModal'
@@ -29,38 +30,30 @@ export default function Projects() {
           </div>
         </motion.div>
 
-        {/* iOS-folder-style card grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        {/* Compact list rows: icon, name, one-line tagline; tap for the detail sheet */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {projects.map((project, i) => (
             <motion.button
               key={project.id}
               onClick={() => setSelected(project)}
-              initial={{ opacity: 0, y: 20, scale: 0.97 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
               transition={{ duration: 0.35, delay: i * 0.06 }}
               aria-label={`Open details for ${project.name}`}
-              className="glass-card rounded-[26px] p-5 sm:p-6 flex flex-col items-center text-center gap-3
+              className="group glass-card rounded-2xl px-4 py-3.5 flex items-center gap-4 text-left
                          hover:shadow-md transition-shadow duration-200 cursor-pointer"
             >
-              <AppIcon project={project} sizeClass="w-[72px] h-[72px] sm:w-20 sm:h-20" />
-              <div className="min-w-0 w-full">
-                <p className="text-[16px] font-semibold text-[#1D1D1F] dark:text-[#F5F5F7] truncate">
-                  {project.name}
-                </p>
-                <p className="text-[14px] text-secondary leading-snug mt-0.5 line-clamp-2">
-                  {project.tagline}
-                </p>
+              <AppIcon project={project} sizeClass="w-14 h-14" />
+              <div className="min-w-0 flex-1">
+                <p className="text-[16px] font-semibold text-[#1D1D1F] dark:text-[#F5F5F7] truncate">{project.name}</p>
+                <p className="text-[14px] text-secondary leading-snug line-clamp-2 sm:line-clamp-1">{project.tagline}</p>
               </div>
-              {project.status && (
-                <span className="text-[12px] font-medium px-2 py-0.5 rounded-full leading-none
-                                 bg-black/[0.04] dark:bg-white/[0.06] text-secondary
-                                 border border-black/[0.05] dark:border-white/[0.07]">
-                  {project.status}
-                </span>
-              )}
+              <ChevronRight
+                size={18}
+                className="shrink-0 text-secondary group-hover:translate-x-0.5 transition-transform"
+                aria-hidden
+              />
             </motion.button>
           ))}
         </div>

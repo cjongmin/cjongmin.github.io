@@ -50,8 +50,8 @@ function presentationBadgeClass(type: NonNullable<Publication['presentationType'
   }
 }
 
-function topPercent(sel: NonNullable<Publication['selection']>): string {
-  return ((sel.selected / sel.submissions) * 100).toFixed(1)
+function selectionRate(sel: NonNullable<Publication['selection']>): string {
+  return String(Number(((sel.selected / sel.submissions) * 100).toPrecision(2)))
 }
 
 // Shared chip geometry: slightly larger type, gently rounded corners (not pills).
@@ -153,7 +153,7 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
                   className="text-[14px] font-semibold text-rose-700 dark:text-rose-400"
                   title={`${pub.selection.basis}: ${pub.selection.selected.toLocaleString('en-US')} of ${pub.selection.submissions.toLocaleString('en-US')} submissions`}
                 >
-                  Top {topPercent(pub.selection)}%
+                  {selectionRate(pub.selection)}%
                   <span className="ml-1 font-normal text-neutral-500 dark:text-neutral-400">
                     ({pub.selection.selected.toLocaleString('en-US')} / {pub.selection.submissions.toLocaleString('en-US')})
                   </span>
@@ -193,7 +193,7 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
               this line gives the full conference name.
             */}
             {pub.venueFull && (
-              <p className="text-[14px] italic leading-snug text-[#8E8E93] dark:text-[#7C7C82]">
+              <p className="text-[14px] italic leading-snug text-secondary">
                 {pub.venueFull}
               </p>
             )}

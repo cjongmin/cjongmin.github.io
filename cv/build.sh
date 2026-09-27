@@ -14,10 +14,9 @@ REPO_ROOT="$(dirname "$CV_DIR")"
 source "$HOME/anaconda3/etc/profile.d/conda.sh"
 conda activate cvpdf
 
+# The site serves the CV from public/ (cvFile in src/data/profile.json).
+OUT="$REPO_ROOT/public/Jongmin_Choi_CV.pdf"
 cd "$CV_DIR"
-weasyprint cv.html Jongmin_Choi_CV.pdf
+weasyprint cv.html "$OUT"
 
-# The site serves the CV from public/ — keep the published copy in sync.
-cp Jongmin_Choi_CV.pdf "$REPO_ROOT/public/Jongmin_Choi_CV.pdf"
-
-echo "Built $(du -h Jongmin_Choi_CV.pdf | cut -f1) → cv/Jongmin_Choi_CV.pdf and public/"
+echo "Built $(du -h "$OUT" | cut -f1) → public/Jongmin_Choi_CV.pdf"

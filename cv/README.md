@@ -10,11 +10,11 @@ output is identical on any machine — no LaTeX toolchain required.
 # one-time setup
 conda create -n cvpdf -c conda-forge -y python=3.11 weasyprint
 
-./build.sh          # → cv/Jongmin_Choi_CV.pdf and public/Jongmin_Choi_CV.pdf
+./build.sh          # → public/Jongmin_Choi_CV.pdf
 ```
 
-`build.sh` also copies the PDF into `public/`, which is what the website's
-**CV** button links to (`cvFile` in `src/data/profile.json`).
+The PDF is written straight into `public/`, which is what the website's
+**CV** icon links to (`cvFile` in `src/data/profile.json`).
 
 ## Editing
 

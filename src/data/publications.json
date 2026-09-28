@@ -15,6 +15,7 @@
     "order": 1,
     "links": {
       "paper": "https://arxiv.org/abs/2609.11582",
+      "scholar": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=sPvkgm8AAAAJ&citation_for_view=sPvkgm8AAAAJ:2osOgNQ5qMEC",
       "code": "https://github.com/kaistmm/OmniKVQuant"
     },
     "bibtex": "@misc{yoo2026omnikvquant,\n      title={OmniKVQuant: KV Cache Quantization for Omni-LLMs},\n      author={Suho Yoo and Hyunjong Ok and Jongmin Choi and Jihoo Jung and Joon Son Chung},\n      year={2026},\n      eprint={2609.11582},\n      archivePrefix={arXiv},\n      primaryClass={cs.CV},\n      url={https://arxiv.org/abs/2609.11582},\n}",
@@ -102,6 +103,7 @@
     "order": 5,
     "links": {
       "paper": "https://arxiv.org/abs/2605.13071",
+      "scholar": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=sPvkgm8AAAAJ&citation_for_view=sPvkgm8AAAAJ:9yKSN-GCB0IC",
       "code": "https://github.com/kaistmm/FiTS"
     },
     "bibtex": "@inproceedings{choi2026fits,\n  title={FiTS: Interpretable Spiking Neurons via Frequency Selectivity and Temporal Shaping},\n  author={Choi, Jongmin and Chung, Joon Son},\n  booktitle={Advances in Neural Information Processing Systems (NeurIPS)},\n  year={2026}\n}",

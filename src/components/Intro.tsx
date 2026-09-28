@@ -52,7 +52,7 @@ export default function Intro() {
   return (
     <section id="home" className="relative pt-24 md:pt-32 pb-10 md:pb-16">
       <div className="section-container relative z-10">
-        <div className="grid md:grid-cols-[260px_minmax(0,1fr)] lg:grid-cols-[300px_minmax(0,1fr)] gap-8 md:gap-12 lg:gap-16 items-start">
+        <div className="grid md:grid-cols-[260px_minmax(0,1fr)] lg:grid-cols-[300px_minmax(0,1fr)] gap-8 md:gap-12 lg:gap-16 items-start lg:items-stretch">
 
           {/* ---------- Left: who ---------- */}
           <motion.aside
@@ -67,7 +67,7 @@ export default function Intro() {
                 alt={profile.name}
                 decoding="async"
                 {...{ fetchpriority: 'high' }}
-                className="w-[132px] h-[132px] md:w-[220px] md:h-[220px] lg:w-[240px] lg:h-[240px] rounded-full object-cover
+                className="w-[132px] h-[132px] md:w-[208px] md:h-[208px] rounded-full object-cover
                            ring-1 ring-black/[0.1] dark:ring-white/[0.12] shadow-lg"
               />
             )}
@@ -78,8 +78,13 @@ export default function Intro() {
             <p className="mt-2 md:mt-3 text-[16px] md:text-[17px] leading-snug text-secondary">{profile.title}</p>
             <p className="text-[16px] md:text-[17px] leading-snug text-secondary">{profile.affiliation}</p>
 
+            {/* lg+: the column stretches to the About text's height and this spacer
+                pushes the icons down, so they line up with the last line of About Me
+                (mb-[3px] centres the 26px icons on that line's 29.75px line box) */}
+            <div aria-hidden className="hidden lg:block lg:flex-1" />
+
             {/* Icon-only links */}
-            <div className="mt-4 md:mt-5 flex items-center justify-center gap-5 text-[#1D1D1F] dark:text-[#F5F5F7]">
+            <div className="mt-4 md:mt-5 lg:mb-[3px] flex items-center justify-center gap-5 text-[#1D1D1F] dark:text-[#F5F5F7]">
               {LINKS.map(l => (
                 <a
                   key={l.name}
@@ -116,7 +121,7 @@ export default function Intro() {
               {paragraphs.map((para, i) => (
                 // Justified. Phones may hyphenate long words (10+ letters) so the
                 // narrow column doesn't open wide gaps; wider screens never hyphenate.
-                <p key={i} className="text-[16px] sm:text-[17px] leading-relaxed text-body text-justify
+                <p key={i} className="text-[16px] sm:text-[17px] leading-[1.75] text-body text-justify
                                       hyphens-auto [hyphenate-limit-chars:10_4_4] sm:hyphens-manual">
                   {renderLinks(para)}
                 </p>

@@ -105,7 +105,7 @@
     },
     "bibtex": "@inproceedings{choi2026fits,\n  title={FiTS: Interpretable Spiking Neurons via Frequency Selectivity and Temporal Shaping},\n  author={Choi, Jongmin and Chung, Joon Son},\n  booktitle={Advances in Neural Information Processing Systems (NeurIPS)},\n  year={2026}\n}",
     "image": "/publications/fits-figure1-ts-module.webp",
-    "venueFull": "Neural Information Processing Systems (NeurIPS)",
+    "venueFull": "Conference on Neural Information Processing Systems (NeurIPS)",
     "status": "Conference",
     "presentationType": "Spotlight",
     "selection": {

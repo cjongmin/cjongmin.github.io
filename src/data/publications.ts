@@ -15,7 +15,7 @@ export interface Publication {
   authors: string[]         // Use "Name^1" for superscript author numbering
   venue: string             // Filter key: "ICASSP", "NeurIPS", "arXiv"
   displayVenue?: string     // Badge override, e.g. "EMNLP 2026 Findings" (fallback: "venue year")
-  venueFull?: string        // Spelled-out venue, e.g. "Neural Information Processing Systems (NeurIPS)"
+  venueFull?: string        // Spelled-out venue, e.g. "Conference on Neural Information Processing Systems (NeurIPS)"
   year: number
   order: number
   status?: 'Conference' | 'Workshop' | 'Preprint' | 'Journal'

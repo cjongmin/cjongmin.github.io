@@ -50,9 +50,18 @@ export default function Education() {
                 {/* Card — degree / institution / department / advisor, nothing more */}
                 <div className="flex-1 pb-2">
                   <div className="glass-card p-5 hover:shadow-md transition-shadow duration-200">
-                    <span className="inline-block text-[14px] font-medium text-secondary mb-2">
-                      {edu.startDate} — {edu.endDate}
-                    </span>
+                    <div className="flex flex-wrap items-center gap-2 mb-2">
+                      <span className="text-[14px] font-medium text-secondary">
+                        {edu.endDate ? `${edu.startDate} — ${edu.endDate}` : `Starting ${edu.startDate}`}
+                      </span>
+                      {edu.status && (
+                        <span className="text-[12px] font-semibold px-2 py-[3px] rounded-md leading-none
+                                         bg-emerald-50 text-emerald-700 border border-emerald-200
+                                         dark:bg-emerald-500/10 dark:text-emerald-300 dark:border-emerald-400/20">
+                          {edu.status}
+                        </span>
+                      )}
+                    </div>
 
                     <div className="flex items-start justify-between gap-3">
                       <h3 className="text-[17px] sm:text-[18px] font-semibold text-[#1D1D1F] dark:text-[#F5F5F7] leading-snug">

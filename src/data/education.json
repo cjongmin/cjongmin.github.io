@@ -1,5 +1,17 @@
 [
   {
+    "id": "phd-kaist-ee",
+    "title": "Ph.D. in Electrical Engineering",
+    "status": "Incoming",
+    "organization": "KAIST",
+    "department": "School of Electrical Engineering · Multimodal AI (MMAI) Lab",
+    "advisor": "Prof. Joon Son Chung",
+    "location": "Daejeon, South Korea",
+    "startDate": "Mar 2027",
+    "endDate": "",
+    "link": "https://mmai.io"
+  },
+  {
     "id": "ms-kaist-ee",
     "title": "M.S. in Electrical Engineering",
     "organization": "KAIST",
@@ -7,7 +19,7 @@
     "advisor": "Prof. Joon Son Chung",
     "location": "Daejeon, South Korea",
     "startDate": "Mar 2025",
-    "endDate": "Present",
+    "endDate": "Feb 2027 (expected)",
     "link": "https://mmai.io"
   },
   {

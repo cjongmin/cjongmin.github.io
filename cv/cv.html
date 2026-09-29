@@ -151,6 +151,8 @@
     color: #26262c;
   }
   .degree .qual { color: #5c5c64; }
+  .entry.degree-row { margin-top: 4pt; }
+  .inst + .entry.degree-row { margin-top: 1.5pt; }
   .detail {
     margin-top: 1.5pt;
     font-size: 8.7pt;
@@ -297,22 +299,32 @@
   <section>
     <h2>Education</h2>
 
-    <div class="entry">
+    <!-- One institution line; the three KAIST degrees are listed beneath it -->
+    <div class="inst">Korea Advanced Institute of Science and Technology (KAIST)
+      <span class="where">— Daejeon, South Korea</span></div>
+
+    <div class="entry degree-row">
       <div class="body">
-        <div class="inst">Korea Advanced Institute of Science and Technology (KAIST)
-          <span class="where">— Daejeon, South Korea</span></div>
+        <div class="degree">Ph.D. in Electrical Engineering <span class="qual">(Incoming)</span></div>
+        <div class="detail">
+          Advisor: <b>Prof. Joon Son Chung</b><span class="dot">·</span>Multimodal AI (MMAI) Lab
+        </div>
+      </div>
+      <div class="when">Starting Mar 2027</div>
+    </div>
+
+    <div class="entry degree-row">
+      <div class="body">
         <div class="degree">M.S. in Electrical Engineering</div>
         <div class="detail">
           Advisor: <b>Prof. Joon Son Chung</b><span class="dot">·</span>Multimodal AI (MMAI) Lab<span class="dot">·</span>GPA <b>4.06 / 4.30</b>
         </div>
       </div>
-      <div class="when">Mar 2025 &ndash; Present</div>
+      <div class="when">Mar 2025 &ndash; Feb 2027 (expected)</div>
     </div>
 
-    <div class="entry">
+    <div class="entry degree-row">
       <div class="body">
-        <div class="inst">Korea Advanced Institute of Science and Technology (KAIST)
-          <span class="where">— Daejeon, South Korea</span></div>
         <div class="degree">B.S. in Electrical Engineering and Mathematical Sciences
           <span class="qual">(Double Major)</span></div>
         <div class="detail">GPA <b>3.65 / 4.30</b></div>

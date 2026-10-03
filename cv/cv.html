@@ -186,16 +186,30 @@
     color: #1F3A5F;
     line-height: 1.15;
   }
+  /* Presentation type as a badge: Spotlight / Oral filled crimson (they stand
+     out first), Poster outlined, Preprint a light grey fill. */
+  .pub .tag .trk {
+    margin-top: 1pt;
+    font-size: 7.4pt;
+    font-style: italic;
+    color: #6e6e77;
+    line-height: 1.15;
+  }
   .pub .tag .t {
-    margin-top: 2.2pt;
+    display: inline-block;
+    margin-top: 2.6pt;
+    padding: 1.3pt 3.6pt 1.1pt;
+    border-radius: 2pt;
     font-size: 6.9pt;
     font-weight: 700;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
-    color: #8a8a93;
     line-height: 1.2;
+    color: #4a4a52;
+    border: 0.6pt solid #b4b4bc;
   }
-  .pub .tag .t.honor { color: #a1223c; }
+  .pub .tag .t.honor { color: #ffffff; background: #a1223c; border-color: #a1223c; }
+  .pub .tag .t.pre { color: #6e6e77; background: #ededf1; border-color: #ededf1; }
   .pub .body { flex: 1; min-width: 0; }
   .pub .title {
     font-family: 'SourceSerif', serif;
@@ -325,7 +339,7 @@
 
     <div class="entry degree-row">
       <div class="body">
-        <div class="degree">B.S. in Electrical Engineering and Mathematical Sciences
+        <div class="degree">B.S. in Mathematical Sciences and Electrical Engineering
           <span class="qual">(Double Major)</span></div>
         <div class="detail">GPA <b>3.65 / 4.30</b></div>
       </div>
@@ -365,7 +379,7 @@
     </div>
 
     <div class="pub">
-      <div class="tag"><div class="v">EMNLP 2026</div><div class="t">Findings<br>Poster</div></div>
+      <div class="tag"><div class="v">EMNLP 2026</div><div class="trk">Findings</div><div class="t">Poster</div></div>
       <div class="body">
         <div class="title">Fork-Merge Decoding: Enhancing Multimodal Understanding in Audio-Visual Large Language Models</div>
         <div class="authors">Chaeyoung Jung*, Youngjoon Jang*, <span class="me">Jongmin Choi</span>, Joon Son Chung</div>
@@ -374,7 +388,7 @@
     </div>
 
     <div class="pub">
-      <div class="tag"><div class="v">arXiv 2026</div><div class="t">Preprint</div></div>
+      <div class="tag"><div class="v">arXiv 2026</div><div class="t pre">Preprint</div></div>
       <div class="body">
         <div class="title">OmniKVQuant: KV Cache Quantization for Omni-LLMs</div>
         <div class="authors">Suho Yoo*, Hyunjong Ok*, <span class="me">Jongmin Choi</span>, Jihoo Jung, Joon Son Chung</div>

@@ -186,8 +186,9 @@
     color: #1F3A5F;
     line-height: 1.15;
   }
-  /* Presentation type as a badge: Spotlight / Oral filled crimson (they stand
-     out first), Poster outlined, Preprint a light grey fill. */
+  /* Presentation type: text only (no fill), set a little larger with a thin
+     bar on its left. Spotlight / Oral in crimson with a crimson bar; Poster /
+     Preprint in grey with a light bar, so the honours read first. */
   .pub .tag .trk {
     margin-top: 1pt;
     font-size: 7.4pt;
@@ -196,20 +197,17 @@
     line-height: 1.15;
   }
   .pub .tag .t {
-    display: inline-block;
     margin-top: 2.6pt;
-    padding: 1.3pt 3.6pt 1.1pt;
-    border-radius: 2pt;
-    font-size: 6.9pt;
+    padding-left: 3.2pt;
+    border-left: 1.6pt solid #cfcfd6;
+    font-size: 7.7pt;
     font-weight: 700;
-    letter-spacing: 0.07em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    line-height: 1.2;
-    color: #4a4a52;
-    border: 0.6pt solid #b4b4bc;
+    line-height: 1.15;
+    color: #7a7a83;
   }
-  .pub .tag .t.honor { color: #ffffff; background: #a1223c; border-color: #a1223c; }
-  .pub .tag .t.pre { color: #6e6e77; background: #ededf1; border-color: #ededf1; }
+  .pub .tag .t.honor { color: #a1223c; border-left-color: #a1223c; }
   .pub .body { flex: 1; min-width: 0; }
   .pub .title {
     font-family: 'SourceSerif', serif;
@@ -388,7 +386,7 @@
     </div>
 
     <div class="pub">
-      <div class="tag"><div class="v">arXiv 2026</div><div class="t pre">Preprint</div></div>
+      <div class="tag"><div class="v">arXiv 2026</div><div class="t">Preprint</div></div>
       <div class="body">
         <div class="title">OmniKVQuant: KV Cache Quantization for Omni-LLMs</div>
         <div class="authors">Suho Yoo*, Hyunjong Ok*, <span class="me">Jongmin Choi</span>, Jihoo Jung, Joon Son Chung</div>

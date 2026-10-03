@@ -186,9 +186,8 @@
     color: #1F3A5F;
     line-height: 1.15;
   }
-  /* Presentation type: text only (no fill), set a little larger with a thin
-     bar on its left. Spotlight / Oral in crimson with a crimson bar; Poster /
-     Preprint in grey with a light bar, so the honours read first. */
+  /* Presentation type in small caps; Spotlight / Oral in crimson with a
+     small star in front so they read first. Text only: no fill, no bar. */
   .pub .tag .trk {
     margin-top: 1pt;
     font-size: 7.4pt;
@@ -197,17 +196,25 @@
     line-height: 1.15;
   }
   .pub .tag .t {
-    margin-top: 2.6pt;
-    padding-left: 3.2pt;
-    border-left: 1.6pt solid #cfcfd6;
-    font-size: 7.7pt;
+    margin-top: 2.4pt;
+    font-size: 7.6pt;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     line-height: 1.15;
-    color: #7a7a83;
+    color: #8a8a93;
   }
-  .pub .tag .t.honor { color: #a1223c; border-left-color: #a1223c; }
+  .pub .tag .t.honor { color: #a1223c; }
+  .pub .tag .t.honor::before {
+    content: '';
+    display: inline-block;
+    width: 7pt;
+    height: 7pt;
+    margin-right: 2pt;
+    vertical-align: -0.6pt;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23a1223c' d='M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z'/></svg>") no-repeat;
+    background-size: contain;
+  }
   .pub .body { flex: 1; min-width: 0; }
   .pub .title {
     font-family: 'SourceSerif', serif;

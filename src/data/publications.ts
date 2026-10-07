@@ -24,6 +24,7 @@ export interface Publication {
   // How selective the presentation tier was, e.g. Oral + Spotlight = 404 of 30,709 submissions
   selection?: { selected: number; submissions: number; basis: string }
   image?: string
+  posterImage?: string      // Preview of links.poster, shown in the talk post
   links?: PublicationLink
   bibtex?: string
   equalContribution?: string[]  // Legacy; prefer ^number in authors

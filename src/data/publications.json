@@ -36,14 +36,16 @@
     "order": 2,
     "links": {
       "paper": "https://arxiv.org/abs/2505.20873",
-      "scholar": "https://scholar.google.com/scholar_lookup?arxiv_id=2505.20873"
+      "scholar": "https://scholar.google.com/scholar_lookup?arxiv_id=2505.20873",
+      "poster": "/publications/fork-merge-decoding-poster.pdf"
     },
     "bibtex": "@inproceedings{jung2026fork,\n  title={Fork-Merge Decoding: Enhancing Multimodal Understanding in Audio-Visual Large Language Models},\n  author={Jung, Chaeyoung and Jang, Youngjoon and Choi, Jongmin and Chung, Joon Son},\n  booktitle={Findings of the Association for Computational Linguistics: EMNLP 2026},\n  year={2026}\n}",
     "image": "/publications/fork-merge-decoding-enhancing-multimodal.jpg",
     "displayVenue": "EMNLP 2026 Findings",
     "venueFull": "Empirical Methods in Natural Language Processing (EMNLP)",
     "status": "Conference",
-    "presentationType": "Poster"
+    "presentationType": "Poster",
+    "posterImage": "/publications/fork-merge-decoding-poster.webp"
   },
   {
     "id": "diffusion-link-diffusion-probabilistic-m",
@@ -67,7 +69,8 @@
     "bibtex": "@INPROCEEDINGS{11460544,\n  author={Nam, KiHyun and Choi, Jongmin and Lee, Hyeongkeun and Heo, Jungwoo and Chung, Joon Son},\n  booktitle={ICASSP 2026 - 2026 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)}, \n  title={Diffusion-Link: Diffusion Probabilistic Model for Bridging the Audio-Text Modality Gap}, \n  year={2026},\n  volume={},\n  number={},\n  pages={19112-19116},\n  keywords={Feeds;LoRa;Radio access networks;Regional area networks;Protocols;HTTP;Data communication;Radio communication;Communication systems;Telecommunications;diffusion probabilistic model;modality gap;large language model;audio captioning;multimodal representation learning},\n  doi={10.1109/ICASSP55912.2026.11460544}}",
     "image": "/publications/diffusion-link-poster.webp",
     "presentationType": "Poster",
-    "venueFull": "IEEE International Conference on Acoustics, Speech, and Signal Processing (ICASSP)"
+    "venueFull": "IEEE International Conference on Acoustics, Speech, and Signal Processing (ICASSP)",
+    "posterImage": "/publications/diffusion-link-poster.webp"
   },
   {
     "id": "lamb-llm-based-audio-captioning-with-mod",

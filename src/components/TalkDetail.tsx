@@ -38,9 +38,12 @@ export default function TalkDetail({ talk, onClose }: TalkDetailProps) {
 
   const paper = talk.paperId ? publications.find(p => p.id === talk.paperId) : undefined
   const paperUrl = talk.links?.paper ?? paper?.links?.paper
+  // The poster comes from the talk itself or, failing that, from its paper
+  const posterUrl = talk.links?.poster ?? paper?.links?.poster
+  const posterImage = paper?.posterImage
   const extraLinks = [
     talk.links?.slides && { label: 'Slides', icon: Presentation, href: talk.links.slides },
-    talk.links?.poster && { label: 'Poster', icon: ImageIcon,    href: talk.links.poster },
+    posterUrl && !posterImage && { label: 'Poster', icon: ImageIcon, href: posterUrl },
   ].filter(Boolean) as { label: string; icon: React.ElementType; href: string }[]
 
   const paragraphs = talk.body?.split('\n\n').filter(Boolean) ?? []
@@ -149,6 +152,26 @@ export default function TalkDetail({ talk, onClose }: TalkDetailProps) {
               <p key={i} className="mt-6 text-[17px] leading-[1.75] text-body">{para}</p>
             ))}
 
+            {posterUrl && posterImage && (
+              <PostSection title="The poster">
+                <figure className="max-w-[720px]">
+                  <a href={posterUrl} target="_blank" rel="noopener noreferrer"
+                     className="block rounded-xl overflow-hidden border border-black/[0.08] dark:border-white/[0.1]
+                                hover:shadow-lg transition-shadow duration-200">
+                    <img src={posterImage} alt={`Poster: ${paper?.title ?? talk.title}`} loading="lazy" decoding="async"
+                         className="w-full h-auto" />
+                  </a>
+                  <figcaption className="mt-3 text-[14px] text-secondary">
+                    {talk.event} {talk.type.toLowerCase()} ·{' '}
+                    <a href={posterUrl} target="_blank" rel="noopener noreferrer"
+                       className="font-medium text-[#0071E3] dark:text-[#2997FF] hover:underline">
+                      Open the full-resolution PDF
+                    </a>
+                  </figcaption>
+                </figure>
+              </PostSection>
+            )}
+
             {talk.upcoming && !hasNotes ? (
               <UpcomingNotice />
             ) : (
@@ -198,37 +221,66 @@ export default function TalkDetail({ talk, onClose }: TalkDetailProps) {
               </>
             )}
 
-            {/* ---------- The paper ---------- */}
-            {paper && (
-              <a
-                href={paperUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group mt-14 flex gap-4 sm:gap-5 items-center rounded-2xl p-4 sm:p-5
-                           border border-black/[0.08] dark:border-white/[0.1]
-                           hover:shadow-md transition-shadow duration-200"
-              >
-                {paper.image && (
-                  <div className="shrink-0 w-24 sm:w-40 aspect-[4/3] rounded-lg overflow-hidden p-1.5
-                                  bg-neutral-50 dark:bg-zinc-900/60 flex items-center justify-center">
-                    <img src={paper.image} alt="" loading="lazy" className="max-w-full max-h-full object-contain" />
-                  </div>
-                )}
-                <div className="min-w-0">
-                  <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-secondary">The paper</p>
-                  <p className="mt-1 text-[15px] sm:text-[16px] font-semibold leading-snug text-[#1D1D1F] dark:text-[#F5F5F7]">
-                    {paper.title}
-                  </p>
-                  {paper.venueFull && (
-                    <p className="mt-1 text-[13px] italic text-secondary">{paper.venueFull}</p>
+            {/* ---------- The paper (and its poster) ---------- */}
+            <div className={`mt-14 grid gap-4 ${posterUrl && posterImage ? 'md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]' : ''}`}>
+              {paper && (
+                <a
+                  href={paperUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex gap-4 sm:gap-5 items-center rounded-2xl p-4 sm:p-5
+                             border border-black/[0.08] dark:border-white/[0.1]
+                             hover:shadow-md transition-shadow duration-200"
+                >
+                  {paper.image && (
+                    <div className="shrink-0 w-24 sm:w-40 aspect-[4/3] rounded-lg overflow-hidden p-1.5
+                                    bg-neutral-50 dark:bg-zinc-900/60 flex items-center justify-center">
+                      <img src={paper.image} alt="" loading="lazy" className="max-w-full max-h-full object-contain" />
+                    </div>
                   )}
-                  <span className="mt-2.5 inline-flex items-center gap-1 text-[13px] font-medium
-                                   text-[#0071E3] dark:text-[#2997FF] group-hover:gap-1.5 transition-all">
-                    Read the paper <ArrowUpRight size={13} />
-                  </span>
-                </div>
-              </a>
-            )}
+                  <div className="min-w-0">
+                    <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-secondary">The paper</p>
+                    <p className="mt-1 text-[15px] sm:text-[16px] font-semibold leading-snug text-[#1D1D1F] dark:text-[#F5F5F7]">
+                      {paper.title}
+                    </p>
+                    {paper.venueFull && (
+                      <p className="mt-1 text-[13px] italic text-secondary">{paper.venueFull}</p>
+                    )}
+                    <span className="mt-2.5 inline-flex items-center gap-1 text-[13px] font-medium
+                                     text-[#0071E3] dark:text-[#2997FF] group-hover:gap-1.5 transition-all">
+                      Read the paper <ArrowUpRight size={13} />
+                    </span>
+                  </div>
+                </a>
+              )}
+
+              {posterUrl && posterImage && (
+                <a
+                  href={posterUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex gap-4 sm:gap-5 items-center rounded-2xl p-4 sm:p-5
+                             border border-black/[0.08] dark:border-white/[0.1]
+                             hover:shadow-md transition-shadow duration-200"
+                >
+                  <div className="shrink-0 w-16 sm:w-20 aspect-[1/1.414] rounded-md overflow-hidden
+                                  ring-1 ring-black/[0.08] dark:ring-white/[0.1] bg-neutral-50">
+                    <img src={posterImage} alt="" loading="lazy" className="w-full h-full object-cover object-top" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-secondary">The poster</p>
+                    <p className="mt-1 text-[15px] sm:text-[16px] font-semibold leading-snug text-[#1D1D1F] dark:text-[#F5F5F7]">
+                      {talk.event} {talk.type}
+                    </p>
+                    <p className="mt-1 text-[13px] italic text-secondary">PDF · A0</p>
+                    <span className="mt-2.5 inline-flex items-center gap-1 text-[13px] font-medium
+                                     text-[#0071E3] dark:text-[#2997FF] group-hover:gap-1.5 transition-all">
+                      View the poster <ArrowUpRight size={13} />
+                    </span>
+                  </div>
+                </a>
+              )}
+            </div>
 
             {extraLinks.length > 0 && (
               <div className="mt-5 flex flex-wrap gap-2">

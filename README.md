@@ -24,22 +24,29 @@ entries hidden with `published: false`. Commit news only once it is announced.
 
 Each talk opens as a blog post with the same layout:
 
-1. **Title and subtitle**: `headline` and `subtitle` in `talks.json` (the card keeps the paper `title` and `summary`).
-2. **The paper**: title, venue and authors from `publications.json`. `Name^1` marks co-first
-   authors and `corresponding` lists corresponding authors; photos and links come from `people.json`.
+1. **Title and subtitle**: the paper `title` and the post's `subtitle` in `talks.json`.
+2. **The Authors**: from the paper in `publications.json`. `Name^1` marks co-first authors and
+   `corresponding` lists corresponding authors; photos and links come from `people.json`.
 3. **Contents**: built automatically from the post's `#` and `##` headings.
 4. **Body**: `src/content/talks/<id>.md`, which also places the venue photo (`cover`) where the
-   text mentions it. Supported: `#` / `##` headings, paragraphs, `-` and `1.` lists, `> callout`,
-   `**bold**`, `*italic*`, `` `code` ``, `[link](url)`, images (`![caption](/photo.webp)`, or
-   `"figure"` / `"wide"` after the path for charts), and blocks between `:::` fences:
-   `:::info Title` (`Key: Value` rows), `:::stats` (`value | label | note`),
+   text mentions it; clicking an image opens it in a lightbox. Supported: `#` / `##` headings,
+   paragraphs, `-` and `1.` lists, `> callout`, `**bold**`, `*italic*`, `` `code` ``, `[link](url)`,
+   images (`![caption](/photo.webp)`, or `"figure"` / `"wide"` after the path for charts), and blocks
+   between `:::` fences: `:::info Title` (`Key: Value` rows), `:::stats` (`value | label | note`),
    `:::steps` (`Title | text`) and `:::quote`.
-5. **The paper / The poster** cards, then **Presentation Notes**: every post as `#1, #2, …`,
-   five per page. `no` is the post's permanent number; give a new post the next one.
+5. **Paper & resources**: Paper, Scholar, Code, Poster, BibTeX… from the paper's `links`.
+6. **Presentation Notes**: every post, newest first (`#2, #1`), five per page. `no` is the post's
+   permanent number; give a new post the next one.
 
 Before the conference a post introduces the work (heading to the venue, presentation details,
 motivation, key idea, key findings, what to discuss, looking ahead). After it, add sections
 such as `# Questions from the poster session` and `# Takeaways`, and set `upcoming` to `false`.
+
+**Sharing a post**: use its *Copy link* address, `https://cjongmin.github.io/talks/<id>/`. The build
+writes that page with the post's own title, description and preview card, so LinkedIn, Slack and
+KakaoTalk show the post rather than the home page; visitors are sent straight on to the post. The
+card images are `public/talks/og/<id>.jpg`; regenerate them with `python3 scripts/talk_og.py`
+(Pillow) after adding a talk or changing a title.
 
 ## Build and deploy
 
@@ -49,7 +56,9 @@ publishes `dist/` to GitHub Pages.
 
 `npm run build` type-checks, bundles, and prerenders the page into
 `dist/index.html` ([scripts/prerender.mjs](scripts/prerender.mjs)), so search
-engines and link previews see the content without running JavaScript.
+engines and link previews see the content without running JavaScript. It also
+writes the talk share pages, `sitemap.xml` and `robots.txt`. The talk post view
+is a separate chunk that loads only when a post is opened.
 
 ## Notes
 

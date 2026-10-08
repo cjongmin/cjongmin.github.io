@@ -1,14 +1,14 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import {
-  ArrowLeft, ArrowUpRight, Check, ChevronLeft, ChevronRight, Link2,
-  Presentation, Image as ImageIcon,
-} from 'lucide-react'
-import { Talk, talkContent, talksInOrder } from '../data/talks'
+import { ArrowLeft, Check, ChevronLeft, ChevronRight, Link2 } from 'lucide-react'
+import { Talk, talkShareUrl, talksNewestFirst } from '../data/talks'
+import { talkContent } from '../data/talkContent'
 import { Publication, publications } from '../data/publications'
 import { profile } from '../data/profile'
 import { people } from '../data/people'
 import { Block, MarkdownBody, parseMarkdown } from '../lib/markdown'
+import PaperLinks from './PaperLinks'
+import Lightbox, { LightboxImage } from './Lightbox'
 
 interface TalkDetailProps {
   talk: Talk
@@ -18,16 +18,24 @@ interface TalkDetailProps {
 
 const HONOURS = new Set(['Oral', 'Spotlight'])
 
+// Same look as the icon-like tiles at the bottom of a post
+const LINK_TILE = `inline-flex flex-col items-center justify-center gap-1.5 w-[74px] h-[72px] sm:w-[96px] sm:h-[84px]
+  rounded-2xl border border-black/[0.08] dark:border-white/[0.1] text-[13px] sm:text-[14px] font-medium
+  text-[#1D1D1F] dark:text-[#F5F5F7] hover:shadow-md hover:border-black/[0.14] dark:hover:border-white/[0.2]
+  transition-all duration-150`
+
 /**
- * One talk as a blog post: eyebrow, title, subtitle and byline, then the paper
- * box (title, venue, authors), a table of contents, the body
- * (src/content/talks/<id>.md, which places its own photos), the paper and
- * poster cards, and the list of all posts. Opens over the site (no router), is addressable via #talk=<id>, and
- * closes on Back / Escape.
+ * One talk as a blog post: eyebrow, the paper title, subtitle and byline, then
+ * the authors, a table of contents, the body (src/content/talks/<id>.md, which
+ * places its own photos; clicking one opens it in a lightbox), the paper's
+ * links, and the list of all posts. Opens over the site (no router), is
+ * addressable via #talk=<id> (shared as /talks/<id>/), and closes on Back / Escape.
  */
 export default function TalkDetail({ talk, onClose, onNavigate }: TalkDetailProps) {
   const backRef = useRef<HTMLButtonElement>(null)
   const [copied, setCopied] = useState(false)
+  const [zoom, setZoom] = useState<LightboxImage | null>(null)
+  const closeZoom = useCallback(() => setZoom(null), [])
 
   useEffect(() => {
     backRef.current?.focus()
@@ -42,22 +50,14 @@ export default function TalkDetail({ talk, onClose, onNavigate }: TalkDetailProp
   }, [onClose])
 
   const paper = talk.paperId ? publications.find(p => p.id === talk.paperId) : undefined
-  const paperUrl = talk.links?.paper ?? paper?.links?.paper
-  // The poster comes from the talk itself or, failing that, from its paper
-  const posterUrl = talk.links?.poster ?? paper?.links?.poster
-  const posterImage = paper?.posterImage
-  const extraLinks = [
-    talk.links?.slides && { label: 'Slides', icon: Presentation, href: talk.links.slides },
-    posterUrl && !posterImage && { label: 'Poster', icon: ImageIcon, href: posterUrl },
-  ].filter(Boolean) as { label: string; icon: React.ElementType; href: string }[]
-
   const blocks = useMemo(() => parseMarkdown(talkContent(talk.id)), [talk.id])
   const headings = blocks.filter((b): b is Extract<Block, { kind: 'heading' }> => b.kind === 'heading')
   const honour = HONOURS.has(talk.type)
 
   const copyLink = async () => {
     try {
-      await navigator.clipboard.writeText(window.location.href)
+      // the share page carries this post's own title and preview image (scripts/prerender.mjs)
+      await navigator.clipboard.writeText(talkShareUrl(talk.id))
       setCopied(true)
       setTimeout(() => setCopied(false), 1800)
     } catch { /* clipboard unavailable — ignore */ }
@@ -70,7 +70,7 @@ export default function TalkDetail({ talk, onClose, onNavigate }: TalkDetailProp
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.18 }}
-        className="fixed inset-0 z-[100] overflow-y-auto bg-white dark:bg-black"
+        className="fixed inset-0 z-[100] overflow-y-auto overscroll-contain bg-white dark:bg-black"
         role="dialog"
         aria-modal="true"
         aria-label={talk.title}
@@ -83,7 +83,7 @@ export default function TalkDetail({ talk, onClose, onNavigate }: TalkDetailProp
               <ArrowLeft size={14} />
               Back
             </button>
-            <span className="text-[13px] font-semibold text-secondary uppercase tracking-widest">
+            <span className="text-[12px] sm:text-[13px] font-semibold text-secondary uppercase tracking-widest">
               Presentation Notes <span className="text-[#1D1D1F] dark:text-[#F5F5F7]">#{talk.no}</span>
             </span>
           </div>
@@ -95,9 +95,9 @@ export default function TalkDetail({ talk, onClose, onNavigate }: TalkDetailProp
           transition={{ duration: 0.3, delay: 0.05 }}
           className="pb-24"
         >
-          {/* ---------- Header ---------- */}
-          <header className="section-container pt-10 sm:pt-16">
-            <p className="text-[13px] font-semibold uppercase tracking-[0.14em] text-secondary">
+          {/* ---------- Header: same left and right edges as the body ---------- */}
+          <header className="section-container pt-9 sm:pt-16">
+            <p className="text-[12px] sm:text-[13px] font-semibold uppercase tracking-[0.14em] text-secondary">
               <span className="text-[#1D1D1F] dark:text-[#F5F5F7]">{talk.event}</span>
               <span className="mx-2 text-neutral-300 dark:text-neutral-600">·</span>
               <span className={honour ? 'text-rose-700 dark:text-rose-400' : ''}>{talk.type}</span>
@@ -109,12 +109,12 @@ export default function TalkDetail({ talk, onClose, onNavigate }: TalkDetailProp
               )}
             </p>
 
-            <h1 className="mt-4 max-w-[900px] text-[30px] sm:text-[44px] font-semibold tracking-tight leading-[1.12]
-                           text-[#1D1D1F] dark:text-[#F5F5F7]">
-              {talk.headline ?? talk.title}
+            <h1 className="mt-4 text-[26px] sm:text-[36px] lg:text-[44px] font-semibold tracking-tight leading-[1.14]
+                           text-[#1D1D1F] dark:text-[#F5F5F7] [text-wrap:balance]">
+              {talk.title}
             </h1>
             {talk.subtitle && (
-              <p className="mt-4 max-w-[860px] text-[19px] sm:text-[22px] leading-[1.45] text-secondary">{talk.subtitle}</p>
+              <p className="mt-4 text-[18px] sm:text-[21px] leading-[1.45] text-secondary [text-wrap:pretty]">{talk.subtitle}</p>
             )}
 
             {/* Byline */}
@@ -137,85 +137,23 @@ export default function TalkDetail({ talk, onClose, onNavigate }: TalkDetailProp
 
           {/* ---------- Body ---------- */}
           <article className="section-container">
-            {paper && <PaperBox paper={paper} venue={talk.eventFull ?? paper.venueFull} />}
+            {paper && <AuthorsBox paper={paper} />}
             {headings.length > 0 && <Contents headings={headings} />}
 
             {blocks.length > 0 ? (
-              <MarkdownBody blocks={blocks} />
+              <MarkdownBody blocks={blocks} onImageClick={setZoom} />
             ) : (
               <p className="mt-10 text-[19px] sm:text-[21px] leading-[1.6] text-[#3A3A3C] dark:text-[#D1D1D6]">{talk.summary}</p>
             )}
 
-            {/* ---------- The paper (and its poster) ---------- */}
-            <div className={`mt-14 grid gap-4 ${posterUrl && posterImage ? 'md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]' : ''}`}>
-              {paper && (
-                <a
-                  href={paperUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex gap-4 sm:gap-5 items-center rounded-2xl p-4 sm:p-5
-                             border border-black/[0.08] dark:border-white/[0.1]
-                             hover:shadow-md transition-shadow duration-200"
-                >
-                  {paper.image && (
-                    <div className="shrink-0 w-24 sm:w-40 aspect-[4/3] rounded-lg overflow-hidden p-1.5
-                                    bg-neutral-50 dark:bg-zinc-900/60 flex items-center justify-center">
-                      <img src={paper.image} alt="" loading="lazy" className="max-w-full max-h-full object-contain" />
-                    </div>
-                  )}
-                  <div className="min-w-0">
-                    <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-secondary">The paper</p>
-                    <p className="mt-1 text-[15px] sm:text-[16px] font-semibold leading-snug text-[#1D1D1F] dark:text-[#F5F5F7]">
-                      {paper.title}
-                    </p>
-                    {paper.venueFull && (
-                      <p className="mt-1 text-[13px] italic text-secondary">{paper.venueFull}</p>
-                    )}
-                    <span className="mt-2.5 inline-flex items-center gap-1 text-[13px] font-medium
-                                     text-[#0071E3] dark:text-[#2997FF] group-hover:gap-1.5 transition-all">
-                      Read the paper <ArrowUpRight size={13} />
-                    </span>
-                  </div>
-                </a>
-              )}
-
-              {posterUrl && posterImage && (
-                <a
-                  href={posterUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex gap-4 sm:gap-5 items-center rounded-2xl p-4 sm:p-5
-                             border border-black/[0.08] dark:border-white/[0.1]
-                             hover:shadow-md transition-shadow duration-200"
-                >
-                  <div className="shrink-0 w-16 sm:w-20 aspect-[1/1.414] rounded-md overflow-hidden
-                                  ring-1 ring-black/[0.08] dark:ring-white/[0.1] bg-neutral-50">
-                    <img src={posterImage} alt="" loading="lazy" className="w-full h-full object-cover object-top" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-secondary">The poster</p>
-                    <p className="mt-1 text-[15px] sm:text-[16px] font-semibold leading-snug text-[#1D1D1F] dark:text-[#F5F5F7]">
-                      {talk.event} {talk.type}
-                    </p>
-                    <p className="mt-1 text-[13px] italic text-secondary">PDF · A0</p>
-                    <span className="mt-2.5 inline-flex items-center gap-1 text-[13px] font-medium
-                                     text-[#0071E3] dark:text-[#2997FF] group-hover:gap-1.5 transition-all">
-                      View the poster <ArrowUpRight size={13} />
-                    </span>
-                  </div>
-                </a>
-              )}
-            </div>
-
-            {extraLinks.length > 0 && (
-              <div className="mt-5 flex flex-wrap gap-2">
-                {extraLinks.map(({ label, icon: Icon, href }) => (
-                  <a key={label} href={href} target="_blank" rel="noopener noreferrer" className="btn-secondary">
-                    <Icon size={14} />
-                    {label}
-                  </a>
-                ))}
-              </div>
+            {/* ---------- The paper's links, as simple icon tiles ---------- */}
+            {paper && (
+              <section aria-label="Paper and resources" className="mt-14">
+                <p className={EYEBROW}>Paper &amp; resources</p>
+                <div className="mt-4 flex flex-wrap gap-2 sm:gap-3">
+                  <PaperLinks pub={paper} links={{ ...paper.links, ...talk.links }} className={LINK_TILE} iconSize={20} />
+                </div>
+              </section>
             )}
 
             {/* ---------- All posts ---------- */}
@@ -239,6 +177,10 @@ export default function TalkDetail({ talk, onClose, onNavigate }: TalkDetailProp
             </div>
           </article>
         </motion.div>
+
+        <AnimatePresence>
+          {zoom && <Lightbox image={zoom} onClose={closeZoom} />}
+        </AnimatePresence>
       </motion.div>
     </AnimatePresence>
   )
@@ -258,24 +200,19 @@ function authorRoles(paper: Publication) {
   })
 }
 
-/** The paper at the top of the post: title, venue, and its authors in a row (photo, name, role; each links to their page). */
-function PaperBox({ paper, venue }: { paper: Publication; venue?: string }) {
+/** The paper's authors in a row: photo, name, role; each links to the author's page. */
+function AuthorsBox({ paper }: { paper: Publication }) {
   return (
-    <section aria-label="The paper and its authors"
-             className="mt-10 sm:mt-12 rounded-2xl border border-black/[0.08] dark:border-white/[0.1] px-3 py-6 sm:p-7 text-center">
-      <p className={EYEBROW}>The paper</p>
-      <p className="mt-2 mx-auto max-w-[760px] px-2 text-[17px] sm:text-[19px] font-semibold leading-snug tracking-tight
-                    text-[#1D1D1F] dark:text-[#F5F5F7]">
-        {paper.title}
-      </p>
-      {venue && <p className="mt-1.5 px-2 text-[14px] italic text-secondary">{venue}</p>}
-      <ul className="mt-6 flex flex-wrap justify-center gap-x-2.5 gap-y-6 sm:gap-x-6">
+    <section aria-label="The authors"
+             className="mt-9 sm:mt-12 rounded-2xl border border-black/[0.08] dark:border-white/[0.1] px-2 py-6 sm:px-7 sm:py-8 text-center">
+      <p className={EYEBROW}>The Authors</p>
+      <ul className="mt-5 sm:mt-6 flex flex-wrap justify-center gap-x-1.5 gap-y-6 sm:gap-x-4 md:gap-x-6 lg:gap-x-12">
         {authorRoles(paper).map(a => {
           const face = a.photo ? (
             <img src={a.photo} alt="" loading="lazy" decoding="async"
-                 className="w-14 h-14 sm:w-20 sm:h-20 rounded-full object-cover ring-1 ring-black/[0.08] dark:ring-white/[0.12]" />
+                 className="w-16 h-16 sm:w-24 sm:h-24 lg:w-28 lg:h-28 rounded-full object-cover ring-1 ring-black/[0.08] dark:ring-white/[0.12]" />
           ) : (
-            <span className="w-14 h-14 sm:w-20 sm:h-20 rounded-full flex items-center justify-center text-[18px] font-semibold
+            <span className="w-16 h-16 sm:w-24 sm:h-24 lg:w-28 lg:h-28 rounded-full flex items-center justify-center text-[20px] font-semibold
                              bg-neutral-100 dark:bg-white/[0.08] text-secondary">
               {a.name.split(' ').map(w => w[0]).join('')}
             </span>
@@ -283,15 +220,15 @@ function PaperBox({ paper, venue }: { paper: Publication; venue?: string }) {
           const text = (
             <>
               {face}
-              <span className="mt-2.5 text-[13px] sm:text-[15px] font-semibold leading-tight text-[#1D1D1F] dark:text-[#F5F5F7]
+              <span className="mt-3 text-[14px] sm:text-[15px] md:text-[17px] font-semibold leading-tight text-[#1D1D1F] dark:text-[#F5F5F7]
                                group-hover:text-[#0071E3] dark:group-hover:text-[#2997FF] transition-colors">
                 {a.name}
               </span>
-              <span className="mt-1 text-[11.5px] sm:text-[13px] leading-tight text-secondary">{a.role}</span>
+              <span className="mt-1 text-[12px] sm:text-[14px] leading-tight text-secondary">{a.role}</span>
             </>
           )
           return (
-            <li key={a.name} className="w-[68px] sm:w-[144px]">
+            <li key={a.name} className="w-[76px] sm:w-[112px] md:w-[140px] lg:w-[168px]">
               {a.url ? (
                 <a href={a.url} target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center text-center">
                   {text}
@@ -334,11 +271,11 @@ function Contents({ headings }: { headings: Extract<Block, { kind: 'heading' }>[
 
 const PAGE_SIZE = 5
 
-/** Every post in series order (#1, #2, …), five per page; the current one is marked. */
+/** Every post, newest first (#2, #1, …), five per page; the current one is marked. */
 function PostList({ current, onNavigate }: { current: Talk; onNavigate: (t: Talk) => void }) {
-  const pages = Math.max(1, Math.ceil(talksInOrder.length / PAGE_SIZE))
-  const [page, setPage] = useState(() => Math.max(0, Math.floor(talksInOrder.findIndex(t => t.id === current.id) / PAGE_SIZE)))
-  const shown = talksInOrder.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)
+  const pages = Math.max(1, Math.ceil(talksNewestFirst.length / PAGE_SIZE))
+  const [page, setPage] = useState(() => Math.max(0, Math.floor(talksNewestFirst.findIndex(t => t.id === current.id) / PAGE_SIZE)))
+  const shown = talksNewestFirst.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)
 
   return (
     <section aria-label="All presentation notes" className="mt-16">
@@ -346,7 +283,7 @@ function PostList({ current, onNavigate }: { current: Talk; onNavigate: (t: Talk
         <h2 className="text-[20px] sm:text-[22px] font-semibold tracking-tight text-[#1D1D1F] dark:text-[#F5F5F7]">
           Presentation Notes
         </h2>
-        <span className="text-[14px] text-secondary">{talksInOrder.length} posts</span>
+        <span className="text-[14px] text-secondary">{talksNewestFirst.length} posts</span>
       </div>
 
       <ol className="mt-4 rounded-2xl border border-black/[0.08] dark:border-white/[0.1] overflow-hidden
@@ -364,7 +301,7 @@ function PostList({ current, onNavigate }: { current: Talk; onNavigate: (t: Talk
                 <span className="shrink-0 w-8 text-[14px] font-semibold tabular-nums text-secondary">#{t.no}</span>
                 <span className="min-w-0 flex-1">
                   <span className="block text-[15px] sm:text-[16px] font-semibold leading-snug text-[#1D1D1F] dark:text-[#F5F5F7]">
-                    {t.headline ?? t.title}
+                    {t.title}
                   </span>
                   <span className="mt-1 block text-[13px] text-secondary">
                     {[`${t.event} · ${t.type}`, t.date, t.location].filter(Boolean).join(' · ')}

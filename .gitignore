@@ -6,3 +6,5 @@ dist
 .env.local
 *.zip
 /[0-9]_*.png
+# working files dropped in the repo root (e.g. a poster before it goes to public/)
+/*.pdf

@@ -135,8 +135,14 @@ export function renderInline(text: string): ReactNode[] {
   })
 }
 
-/** The post body. Headings carry ids (scroll-mt clears the sticky top bar) for the contents box. */
-export function MarkdownBody({ blocks }: { blocks: Block[] }) {
+/**
+ * The post body. Headings carry ids (scroll-mt clears the sticky top bar) for the
+ * contents box; clicking an image hands it to onImageClick (the post's lightbox).
+ */
+export function MarkdownBody({ blocks, onImageClick }: {
+  blocks: Block[]
+  onImageClick?: (image: { src: string; alt: string; chart: boolean }) => void
+}) {
   return (
     <>
       {blocks.map((b, i) => {
@@ -178,23 +184,26 @@ export function MarkdownBody({ blocks }: { blocks: Block[] }) {
                 {renderInline(b.text)}
               </div>
             )
-          case 'image':
+          case 'image': {
+            const chart = b.variant !== 'photo'
             return (
               <figure key={i} className={`mt-8 ${b.variant === 'figure' ? 'max-w-[760px] mx-auto' : ''}`}>
-                {b.variant === 'photo' ? (
-                  <img src={b.src} alt={b.alt} loading="lazy" decoding="async" className="w-full h-auto rounded-2xl" />
-                ) : (
-                  // charts keep a white ground in dark mode too, so their axes stay readable;
-                  // tap/click opens the full-size image (small on phones)
-                  <a href={b.src} target="_blank" rel="noopener noreferrer" aria-label={`Open full-size: ${b.alt}`}
-                     className="block rounded-2xl bg-white p-3 sm:p-5 border border-black/[0.06] dark:border-white/[0.08]
-                                hover:shadow-md transition-shadow cursor-zoom-in">
-                    <img src={b.src} alt={b.alt} loading="lazy" decoding="async" className="w-full h-auto" />
-                  </a>
-                )}
+                {/* tap / click enlarges it in the post's lightbox */}
+                <button
+                  type="button"
+                  onClick={() => onImageClick?.({ src: b.src, alt: b.alt, chart })}
+                  aria-label={`Enlarge image${b.alt ? `: ${b.alt}` : ''}`}
+                  className={`block w-full cursor-zoom-in transition-shadow hover:shadow-md ${chart
+                    // charts keep a white ground in dark mode too, so their axes stay readable
+                    ? 'rounded-2xl bg-white p-3 sm:p-5 border border-black/[0.06] dark:border-white/[0.08]'
+                    : 'rounded-2xl overflow-hidden'}`}
+                >
+                  <img src={b.src} alt={b.alt} loading="lazy" decoding="async" className="w-full h-auto" />
+                </button>
                 {b.alt && <figcaption className="mt-3 text-[14px] leading-relaxed text-secondary text-center">{renderInline(b.alt)}</figcaption>}
               </figure>
             )
+          }
           case 'info':
             return (
               <div key={i} className="mt-6 rounded-2xl border border-black/[0.08] dark:border-white/[0.1] overflow-hidden">

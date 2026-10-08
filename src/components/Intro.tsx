@@ -44,7 +44,7 @@ const EYEBROW = 'text-[14px] font-semibold text-[#6E6E73] dark:text-[#86868B] up
 /**
  * First screen: who I am on the left (photo, name, affiliation, links; centred),
  * About Me on the right, and Recent News below both at full width.
- * Phones: the centred profile, then About, then News.
+ * Phones and tablets (below lg): the centred profile, then About, then News.
  */
 export default function Intro() {
   const paragraphs = profile.bio.split('\n\n').filter(Boolean)
@@ -52,7 +52,7 @@ export default function Intro() {
   return (
     <section id="home" className="relative pt-24 md:pt-32 pb-10 md:pb-16">
       <div className="section-container relative z-10">
-        <div className="grid md:grid-cols-[260px_minmax(0,1fr)] lg:grid-cols-[300px_minmax(0,1fr)] gap-8 md:gap-12 lg:gap-16 items-start lg:items-stretch">
+        <div className="grid lg:grid-cols-[300px_minmax(0,1fr)] gap-8 md:gap-10 lg:gap-16 items-start lg:items-stretch">
 
           {/* ---------- Left: who ---------- */}
           <motion.aside
@@ -67,12 +67,12 @@ export default function Intro() {
                 alt={profile.name}
                 decoding="async"
                 {...{ fetchpriority: 'high' }}
-                className="w-[132px] h-[132px] md:w-[208px] md:h-[208px] rounded-full object-cover
+                className="w-[132px] h-[132px] md:w-[168px] md:h-[168px] lg:w-[208px] lg:h-[208px] rounded-full object-cover
                            ring-1 ring-black/[0.1] dark:ring-white/[0.12] shadow-lg"
               />
             )}
 
-            <h1 className="mt-5 md:mt-7 text-[30px] md:text-[36px] lg:text-[40px] font-bold tracking-tight leading-[1.1] text-[#1D1D1F] dark:text-[#F5F5F7]">
+            <h1 className="mt-5 md:mt-6 lg:mt-7 text-[30px] md:text-[36px] lg:text-[40px] font-bold tracking-tight leading-[1.1] text-[#1D1D1F] dark:text-[#F5F5F7]">
               {profile.name}
             </h1>
             <p className="mt-2 md:mt-3 text-[16px] md:text-[17px] leading-snug text-secondary">{profile.title}</p>

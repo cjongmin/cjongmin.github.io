@@ -1,6 +1,6 @@
 // Source of truth: talks.json — newest first (the order of the home-page carousel).
 // Entries with published: false are drafts and never rendered.
-// Each post's text lives in src/content/talks/<id>.md (see README → Talk posts).
+// Each post's text lives in src/content/talks/<id>.md, loaded by talkContent.ts (see README → Talk posts).
 import data from './talks.json'
 
 export interface TalkLinks {
@@ -12,8 +12,7 @@ export interface TalkLinks {
 export interface Talk {
   id: string
   no: number                        // series number: #1 is the first post; never renumber
-  title: string                     // usually the paper title
-  headline?: string                 // the post's own title (falls back to title)
+  title: string                     // the paper title; also the post's title
   subtitle?: string                 // one line under the post title
   event: string                     // short, e.g. "EMNLP 2026"
   eventFull?: string                // spelled-out venue
@@ -32,12 +31,10 @@ export interface Talk {
 
 export const talks: Talk[] = (data as Talk[]).filter(t => t.published)
 
-/** Talks in series order (#1, #2, …), as listed at the bottom of every post. */
-export const talksInOrder: Talk[] = [...talks].sort((a, b) => a.no - b.no)
+/** Newest post first (#2, #1, …), as listed at the bottom of every post. */
+export const talksNewestFirst: Talk[] = [...talks].sort((a, b) => b.no - a.no)
 
-const contents = import.meta.glob('../content/talks/*.md', { query: '?raw', import: 'default', eager: true }) as Record<string, string>
-
-/** Markdown body of a post (empty string if the file does not exist yet). */
-export function talkContent(id: string): string {
-  return contents[`../content/talks/${id}.md`] ?? ''
+/** The address to share: a static page with this post's title and preview image that opens the post. */
+export function talkShareUrl(id: string): string {
+  return new URL(`/talks/${id}/`, window.location.origin).href
 }

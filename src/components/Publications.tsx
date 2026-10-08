@@ -48,7 +48,7 @@ export default function Publications() {
           <p className="text-[14px] font-semibold text-[#6E6E73] dark:text-[#86868B] uppercase tracking-widest mb-3">
             Publications
           </p>
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5">
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 lg:gap-5">
             <h2 className="section-title">Research Papers</h2>
 
             {/* Filter pills — auto-generated from venue field */}

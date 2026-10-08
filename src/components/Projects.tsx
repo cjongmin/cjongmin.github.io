@@ -24,7 +24,7 @@ export default function Projects() {
           <p className="text-[14px] font-semibold text-[#6E6E73] dark:text-[#86868B] uppercase tracking-widest mb-3">
             Projects
           </p>
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-3">
             <h2 className="section-title">On-Device AI Apps</h2>
             <p className="text-[15px] text-secondary">Indie iOS apps that run vision models entirely on the phone. Tap a card for details.</p>
           </div>

@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { ArrowRight, CalendarDays, ChevronLeft, ChevronRight } from 'lucide-react'
 import { talks, Talk } from '../data/talks'
-import TalkDetail from './TalkDetail'
+// The post view (and every post's text) loads only when a post is opened
+const TalkDetail = lazy(() => import('./TalkDetail'))
 
 const HASH_PREFIX = '#talk='
 
@@ -123,7 +124,7 @@ export default function Talks() {
           <p className="text-[14px] font-semibold text-[#6E6E73] dark:text-[#86868B] uppercase tracking-widest mb-3">
             Talks &amp; Presentations
           </p>
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-3">
             <h2 className="section-title">Conference · Presentation Notes</h2>
             <p className="text-[15px] text-secondary">
               What was asked, what mattered, what I took home.
@@ -280,7 +281,11 @@ export default function Talks() {
       </div>
 
       {/* key: a new post remounts the view, so it opens at the top */}
-      {selected && <TalkDetail key={selected.id} talk={selected} onClose={close} onNavigate={navigate} />}
+      {selected && (
+        <Suspense fallback={null}>
+          <TalkDetail key={selected.id} talk={selected} onClose={close} onNavigate={navigate} />
+        </Suspense>
+      )}
     </section>
   )
 }

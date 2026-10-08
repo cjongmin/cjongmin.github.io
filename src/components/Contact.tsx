@@ -55,12 +55,12 @@ export default function Contact() {
           <h2 className="section-title">Get In Touch</h2>
         </motion.div>
 
-        {/* 5-column contact grid — vertical card layout prevents truncation */}
+        {/* Contact grid: 2 columns on phones, 3 on tablets, 5 from lg; long values wrap instead of overflowing */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.18 }}
-          className="grid grid-cols-2 sm:grid-cols-5 gap-3"
+          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3"
         >
           {contactItems.map(({ icon: Icon, label, value, href }, i) => {
             const cardClass = `glass-card p-4 flex flex-col items-center gap-2.5 text-center
@@ -73,7 +73,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="text-[13px] font-medium text-secondary mb-0.5">{label}</p>
-                  <p className="text-[15px] font-medium leading-snug text-[#1D1D1F] dark:text-[#F5F5F7]">
+                  <p className="text-[15px] font-medium leading-snug text-[#1D1D1F] dark:text-[#F5F5F7] [overflow-wrap:anywhere]">
                     {value}
                   </p>
                 </div>

@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { FileText, BookOpen, Code2, Globe, Quote, ImageOff, Presentation } from 'lucide-react'
+import { ImageOff } from 'lucide-react'
 import { Publication } from '../data/publications'
 import { profile } from '../data/profile'
-import BibtexModal from './BibtexModal'
+import PaperLinks from './PaperLinks'
 
 interface PublicationCardProps {
   pub: Publication
@@ -69,21 +69,12 @@ const BTN_BASE = 'inline-flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1
 const BTN = `${BTN_BASE} bg-transparent border-neutral-300 text-neutral-700 hover:bg-neutral-100 dark:border-white/[0.2] dark:text-[#C7C7CB] dark:hover:bg-white/[0.08]`
 
 export default function PublicationCard({ pub, index }: PublicationCardProps) {
-  const [bibtexOpen, setBibtexOpen] = useState(false)
   const [imgError, setImgError] = useState(false)
 
   const venueType = getVenueType(pub)
   const isPreprint = venueType === 'preprint'
 
-  const links = [
-    pub.links?.paper   && { label: 'Paper',   icon: FileText, href: pub.links.paper },
-    pub.links?.scholar && { label: 'Scholar',  icon: BookOpen, href: pub.links.scholar },
-    pub.links?.code    && { label: 'Code',     icon: Code2,    href: pub.links.code },
-    pub.links?.project && { label: 'Project',  icon: Globe,    href: pub.links.project },
-    pub.links?.poster  && { label: 'Poster',   icon: Presentation, href: pub.links.poster },
-  ].filter(Boolean) as { label: string; icon: React.ElementType; href: string }[]
-
-  const hasActions = links.length > 0 || !!pub.bibtex
+  const hasActions = Object.values(pub.links ?? {}).some(Boolean) || !!pub.bibtex
 
   return (
     <>
@@ -204,43 +195,13 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
             */}
             {hasActions && (
               <div className="flex flex-wrap gap-1.5 pt-0.5">
-                {links.map(({ label, icon: Icon, href }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`${label} for ${pub.title}`}
-                    className={BTN}
-                  >
-                    <Icon size={12} />
-                    {label}
-                  </a>
-                ))}
-                {pub.bibtex && (
-                  <button
-                    onClick={() => setBibtexOpen(true)}
-                    aria-label={`Show BibTeX for ${pub.title}`}
-                    className={BTN}
-                  >
-                    <Quote size={12} />
-                    BibTeX
-                  </button>
-                )}
+                <PaperLinks pub={pub} className={BTN} iconSize={12} />
               </div>
             )}
 
           </div>
         </div>
       </motion.div>
-
-      {bibtexOpen && (
-        <BibtexModal
-          bibtex={pub.bibtex!}
-          title={pub.title}
-          onClose={() => setBibtexOpen(false)}
-        />
-      )}
     </>
   )
 }

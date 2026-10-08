@@ -85,6 +85,12 @@ export default function Talks() {
     setSelected(t)
   }
 
+  // Switching posts from the list at the bottom replaces the entry, so Back still closes the post.
+  const navigate = useCallback((t: Talk) => {
+    history.replaceState(null, '', HASH_PREFIX + t.id)
+    setSelected(t)
+  }, [])
+
   const close = useCallback(() => {
     if (pushedRef.current) {
       pushedRef.current = false
@@ -273,7 +279,8 @@ export default function Talks() {
         </div>
       </div>
 
-      {selected && <TalkDetail talk={selected} onClose={close} />}
+      {/* key: a new post remounts the view, so it opens at the top */}
+      {selected && <TalkDetail key={selected.id} talk={selected} onClose={close} onNavigate={navigate} />}
     </section>
   )
 }

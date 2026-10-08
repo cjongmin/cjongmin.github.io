@@ -1,7 +1,10 @@
 [
   {
     "id": "neurips-2026-fits",
+    "no": 2,
     "title": "FiTS: Interpretable Spiking Neurons via Frequency Selectivity and Temporal Shaping",
+    "headline": "Presenting FiTS at NeurIPS 2026",
+    "subtitle": "Spiking neurons that learn which frequency to respond to, and when.",
     "event": "NeurIPS 2026",
     "eventFull": "Conference on Neural Information Processing Systems (NeurIPS)",
     "type": "Spotlight",
@@ -13,14 +16,14 @@
     "paperId": "fits-interpretable-spiking-neurons-via-f",
     "summary": "FiTS has been accepted to NeurIPS 2026 as a Spotlight paper, and as the first author I will be in Sydney in early December to present it at the poster session. If you are attending, please come say hello. I would love to talk about spiking neurons, frequency selectivity, and what biology can still teach us about network design. After the conference, I will update this page with questions from the session, key discussion points, and personal takeaways. See you in Sydney!",
     "published": true,
-    "upcoming": true,
-    "keyPoints": [],
-    "questions": [],
-    "takeaways": []
+    "upcoming": true
   },
   {
     "id": "emnlp-2026-fork-merge",
+    "no": 1,
     "title": "Fork-Merge Decoding: Enhancing Multimodal Understanding in Audio-Visual Large Language Models",
+    "headline": "Presenting Fork-Merge Decoding at EMNLP 2026 Findings",
+    "subtitle": "Mitigating modality bias in audio-visual large language models through training-free decoding.",
     "event": "EMNLP 2026",
     "eventFull": "Findings of Empirical Methods in Natural Language Processing (EMNLP)",
     "type": "Poster",
@@ -28,12 +31,9 @@
     "date": "Oct 2026",
     "image": "/publications/fork-merge-decoding-enhancing-multimodal.jpg",
     "paperId": "fork-merge-decoding-enhancing-multimodal",
-    "summary": "As a co-author, I will be attending EMNLP 2026 in Budapest to present our work, Fork-Merge Decoding. After the presentation, I will update this page with questions from the session, key discussion points, and personal takeaways.",
+    "summary": "As a co-author, I will be presenting our work, Fork-Merge Decoding, at EMNLP 2026 in Budapest. Ahead of the session, this post walks through what our poster highlights: where the idea came from, the problem it solves, and what we found. After the conference, I will add the questions from the session and what I took away from them.",
     "published": true,
     "upcoming": true,
-    "keyPoints": [],
-    "questions": [],
-    "takeaways": [],
     "location": "Budapest, Hungary",
     "cover": "/talks/emnlp-2026-budapest.webp"
   }

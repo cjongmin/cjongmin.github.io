@@ -13,6 +13,7 @@ export interface Publication {
   id: string
   title: string
   authors: string[]         // Use "Name^1" for superscript author numbering
+  corresponding?: string[]  // Corresponding author(s), shown in a talk post's author box
   venue: string             // Filter key: "ICASSP", "NeurIPS", "arXiv"
   displayVenue?: string     // Badge override, e.g. "EMNLP 2026 Findings" (fallback: "venue year")
   venueFull?: string        // Spelled-out venue, e.g. "Conference on Neural Information Processing Systems (NeurIPS)"

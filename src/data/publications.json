@@ -45,7 +45,10 @@
     "venueFull": "Empirical Methods in Natural Language Processing (EMNLP)",
     "status": "Conference",
     "presentationType": "Poster",
-    "posterImage": "/publications/fork-merge-decoding-poster.webp"
+    "posterImage": "/publications/fork-merge-decoding-poster.webp",
+    "corresponding": [
+      "Joon Son Chung"
+    ]
   },
   {
     "id": "diffusion-link-diffusion-probabilistic-m",
@@ -118,6 +121,9 @@
       "selected": 292,
       "submissions": 30709,
       "basis": "Spotlight"
-    }
+    },
+    "corresponding": [
+      "Joon Son Chung"
+    ]
   }
 ]

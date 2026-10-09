@@ -80,7 +80,14 @@ export default function Talks() {
     }
   }, [])
 
+  // Keyboard users land back on the card they opened the post from
+  const openerRef = useRef<HTMLElement | null>(null)
+  useEffect(() => {
+    if (!selected && openerRef.current) { openerRef.current.focus(); openerRef.current = null }
+  }, [selected])
+
   const open = (t: Talk) => {
+    openerRef.current = document.activeElement as HTMLElement | null
     history.pushState(null, '', HASH_PREFIX + t.id)
     pushedRef.current = true
     setSelected(t)

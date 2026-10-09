@@ -110,7 +110,7 @@ export default function TalkDetail({ talk, onClose, onNavigate }: TalkDetailProp
             </p>
 
             <h1 className="mt-4 text-[26px] sm:text-[36px] lg:text-[44px] font-semibold tracking-tight leading-[1.14]
-                           text-[#1D1D1F] dark:text-[#F5F5F7] [text-wrap:balance]">
+                           text-[#1D1D1F] dark:text-[#F5F5F7]">
               {talk.title}
             </h1>
             {talk.subtitle && (

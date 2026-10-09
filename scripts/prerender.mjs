@@ -7,13 +7,14 @@
 //     previews (LinkedIn, Slack, KakaoTalk, X) read its own title, description
 //     and card image (public/talks/og/<id>.jpg, scripts/talk_og.py), and a
 //     browser is sent straight on to the post (/#talk=<id>).
-//  3. Write sitemap.xml and robots.txt.
+//  3. Write sitemap.xml, robots.txt and 404.html.
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { createServer } from 'vite'
 
 const SITE = 'https://cjongmin.github.io'
 
-const vite = await createServer({ server: { middlewareMode: true }, appType: 'custom', logLevel: 'error' })
+// One-shot render: no file watcher (it can hit the OS watch limit and is never needed here)
+const vite = await createServer({ server: { middlewareMode: true, watch: null }, appType: 'custom', logLevel: 'error' })
 try {
   const { render } = await vite.ssrLoadModule('/src/entry-server.tsx')
   const app = render()
@@ -72,5 +73,30 @@ writeFileSync('dist/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map(u => `  <url><loc>${u}</loc></url>`).join('\n')}
 </urlset>
+`)
+// GitHub Pages serves 404.html for unknown paths: say so briefly, then go home
+writeFileSync('dist/404.html', `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Page not found · Jongmin Choi</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta http-equiv="refresh" content="4; url=/" />
+  <style>
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; text-align: center;
+           font-family: Inter, system-ui, -apple-system, sans-serif; color: #1d1d1f; background: #fff; }
+    @media (prefers-color-scheme: dark) { body { color: #f5f5f7; background: #000; } }
+    p { color: #6e6e73; } a { color: #0071e3; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Page not found</h1>
+    <p>Taking you to <a href="/">cjongmin.github.io</a>…</p>
+  </main>
+</body>
+</html>
 `)
 writeFileSync('dist/robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`)

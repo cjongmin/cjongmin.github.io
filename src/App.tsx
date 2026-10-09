@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { MotionConfig } from 'framer-motion'
 import Navbar from './components/Navbar'
 import Intro from './components/Intro'
 import Publications from './components/Publications'
@@ -30,22 +31,25 @@ export default function App() {
   const toggleTheme = () => setTheme(t => (t === 'dark' ? 'light' : 'dark'))
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden">
-      <BackgroundGlow />
-      <Navbar theme={theme} toggleTheme={toggleTheme} />
-      <main>
-        <ErrorBoundary>
-          <Intro />
-          <Publications />
-          <Talks />
-          <Education />
-          <Projects />
-          <Contact />
-        </ErrorBoundary>
-      </main>
-      <footer className="py-6 text-center text-secondary text-[14px] border-t border-black/[0.06] dark:border-white/[0.06]">
-        <p>© {new Date().getFullYear()} Jongmin Choi</p>
-      </footer>
-    </div>
+    // "Reduce motion" in the OS turns the fade / slide-in animations off
+    <MotionConfig reducedMotion="user">
+      <div className="relative min-h-screen overflow-x-hidden">
+        <BackgroundGlow />
+        <Navbar theme={theme} toggleTheme={toggleTheme} />
+        <main>
+          <ErrorBoundary>
+            <Intro />
+            <Publications />
+            <Talks />
+            <Education />
+            <Projects />
+            <Contact />
+          </ErrorBoundary>
+        </main>
+        <footer className="py-6 text-center text-secondary text-[14px] border-t border-black/[0.06] dark:border-white/[0.06]">
+          <p>© {new Date().getFullYear()} Jongmin Choi</p>
+        </footer>
+      </div>
+    </MotionConfig>
   )
 }

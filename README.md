@@ -32,7 +32,8 @@ Each talk opens as a blog post with the same layout:
    text mentions it; clicking an image opens it in a lightbox. Supported: `#` / `##` headings,
    paragraphs, `-` and `1.` lists, `> callout`, `**bold**`, `*italic*`, `` `code` ``, `[link](url)`,
    images (`![caption](/photo.webp)`, or `"figure"` / `"wide"` after the path for charts), and blocks
-   between `:::` fences: `:::info Title` (`Key: Value` rows), `:::stats` (`value | label | note`),
+   between `:::` fences: `:::event` (a ticket: `Date`, `Title`, `Detail`, `Place`, `Note` rows),
+   `:::info Title` (`Key: Value` rows), `:::stats` (`value | label | note`),
    `:::steps` (`Title | text`) and `:::quote`.
 5. **Paper & resources**: Paper, Scholar, Code, Poster, BibTeX… from the paper's `links`.
 6. **Presentation Notes**: every post, newest first (`#2, #1`), five per page. `no` is the post's

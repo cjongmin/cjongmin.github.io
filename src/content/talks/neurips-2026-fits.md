@@ -4,6 +4,16 @@ FiTS has been accepted to NeurIPS 2026 as a Spotlight paper, and as the first au
 
 ![Sydney, Australia, the host city of NeurIPS 2026](/talks/neurips-2026-sydney.webp)
 
+# Spotlight presentation
+
+:::event
+Date: Dec 2026
+Title: NeurIPS 2026
+Detail: Spotlight paper, presented at the poster session
+Place: Sydney, Australia
+Note: Session and time to be announced
+:::
+
 # At a glance
 
 - **Temporal computation, inside each neuron.** FiTS is a spiking neuron that factorizes the temporal computation within each neuron into **Frequency Selectivity (FS)** and **Temporal Shaping (TS)**.

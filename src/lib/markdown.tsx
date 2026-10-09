@@ -15,6 +15,7 @@ import { CalendarDays, Clock, Info, Landmark, MapPin, Presentation, Users } from
  *
  * Visual blocks, one item per line between ::: fences:
  *   :::info Title          Key: Value           → a fact card
+ *   :::event               Date / Title / Detail / Place / Note: …  → a ticket (date stub + details)
  *   :::stats               value | label | note → number tiles
  *   :::steps               Title | text         → numbered step cards
  *   :::quote               text                 → a highlighted question / pull quote
@@ -29,6 +30,7 @@ export type Block =
   | { kind: 'image'; alt: string; src: string; variant: 'photo' | 'figure' | 'wide' }
   | { kind: 'rule' }
   | { kind: 'info'; title: string; rows: [string, string][] }
+  | { kind: 'event'; fields: Record<string, string> }
   | { kind: 'stats'; items: { value: string; label: string; note?: string }[] }
   | { kind: 'steps'; items: { title: string; text: string }[] }
   | { kind: 'quote'; text: string }
@@ -58,14 +60,18 @@ export function parseMarkdown(src: string): Block[] {
     }
     if (/^-{3,}$/.test(line.trim())) { blocks.push({ kind: 'rule' }); i++; continue }
 
-    const fence = line.match(/^:::(info|stats|steps|quote)\s*(.*)$/)
+    const fence = line.match(/^:::(info|event|stats|steps|quote)\s*(.*)$/)
     if (fence) {
       const body: string[] = []
       i++
       while (i < lines.length && lines[i].trim() !== ':::') { if (lines[i].trim()) body.push(lines[i].trim()); i++ }
       i++                                                     // closing :::
       const cells = (l: string) => l.split('|').map(c => c.trim())
-      if (fence[1] === 'info') {
+      if (fence[1] === 'event') {
+        const fields: Record<string, string> = {}
+        for (const l of body) { const k = l.indexOf(':'); if (k > 0) fields[l.slice(0, k).trim().toLowerCase()] = l.slice(k + 1).trim() }
+        blocks.push({ kind: 'event', fields })
+      } else if (fence[1] === 'info') {
         blocks.push({ kind: 'info', title: fence[2].trim(), rows: body.map(l => {
           const k = l.indexOf(':'); return [l.slice(0, k).trim(), l.slice(k + 1).trim()] as [string, string]
         }) })
@@ -122,6 +128,60 @@ function infoIcon(key: string) {
   if (/conference|event|venue|meeting/.test(k)) return Landmark
   if (/session|people|host|chair/.test(k)) return Users
   return Info
+}
+
+// "Oct 2026" / "Oct 21, 2026" → the ticket stub's month, big number (day or year) and small line
+function ticketDate(date: string): { month: string; big: string; small?: string } {
+  const full = date.match(/^([A-Za-z]+)\.?\s+(\d{1,2}),?\s+(\d{4})$/)
+  if (full) return { month: full[1].slice(0, 3).toUpperCase(), big: full[2], small: full[3] }
+  const my = date.match(/^([A-Za-z]+)\.?\s+(\d{4})$/)
+  if (my) return { month: my[1].slice(0, 3).toUpperCase(), big: my[2] }
+  return { month: '', big: date }
+}
+
+/** A conference ticket: date stub, a perforated tear line, then the details. */
+function EventTicket({ fields }: { fields: Record<string, string> }) {
+  const d = ticketDate(fields.date ?? '')
+  return (
+    <div className="mt-6 flex rounded-2xl overflow-hidden bg-white dark:bg-[#111113]
+                    border border-black/[0.08] dark:border-white/[0.1] shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_-12px_rgba(0,0,0,0.12)]">
+      {/* stub */}
+      <div className="shrink-0 w-[92px] sm:w-[128px] flex flex-col items-center justify-center py-5 text-white
+                      bg-gradient-to-br from-[#2B8CFF] to-[#0060C8] dark:from-[#2997FF] dark:to-[#0A5BBF]">
+        {d.month && <span className="text-[12px] sm:text-[13px] font-semibold tracking-[0.18em]">{d.month}</span>}
+        <span className="mt-0.5 text-[28px] sm:text-[38px] font-semibold leading-none tracking-tight tabular-nums">{d.big}</span>
+        {d.small && <span className="mt-1 text-[12px] sm:text-[13px] font-medium opacity-80">{d.small}</span>}
+      </div>
+      {/* tear line, with the two notches of a ticket */}
+      <div aria-hidden className="relative w-0 border-l-2 border-dashed border-black/[0.12] dark:border-white/[0.16]">
+        <span className="absolute -top-2.5 -left-[11px] w-5 h-5 rounded-full bg-white dark:bg-black border border-black/[0.08] dark:border-white/[0.1]" />
+        <span className="absolute -bottom-2.5 -left-[11px] w-5 h-5 rounded-full bg-white dark:bg-black border border-black/[0.08] dark:border-white/[0.1]" />
+      </div>
+      {/* details */}
+      <div className="min-w-0 flex-1 px-4 py-4 sm:px-7 sm:py-6">
+        {fields.title && (
+          <p className="text-[16px] sm:text-[20px] font-semibold tracking-tight leading-snug text-[#1D1D1F] dark:text-[#F5F5F7]">
+            {renderInline(fields.title)}
+          </p>
+        )}
+        {fields.detail && <p className="mt-1 text-[14px] sm:text-[16px] text-secondary">{renderInline(fields.detail)}</p>}
+        {(fields.place || fields.note) && (
+          <div className="mt-3 sm:mt-4 flex flex-col sm:flex-row sm:flex-wrap gap-x-5 gap-y-1.5 text-[13px] sm:text-[14px] text-secondary">
+            {fields.place && (
+              <span className="inline-flex items-center gap-1.5 text-[#1D1D1F] dark:text-[#F5F5F7] font-medium">
+                <MapPin size={14} className="text-[#0071E3] dark:text-[#2997FF]" aria-hidden />{renderInline(fields.place)}
+              </span>
+            )}
+            {fields.note && (
+              <span className="inline-flex items-center gap-1.5">
+                <Clock size={14} aria-hidden />{renderInline(fields.note)}
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  )
 }
 
 // Columns for 1–4 facts (full class names, so Tailwind generates them)
@@ -259,6 +319,8 @@ export function MarkdownBody({ blocks, onImageClick }: {
                 </dl>
               </div>
             )
+          case 'event':
+            return <EventTicket key={i} fields={b.fields} />
           case 'stats':
             return (
               <div key={i} className={`mt-7 grid gap-3 sm:gap-4 ${b.items.length >= 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2'}`}>

@@ -10,11 +10,12 @@ Before the conference, I'd like to briefly introduce the motivation behind our w
 
 # Poster presentation
 
-:::info
-Conference: EMNLP 2026 Findings
-Presentation: In-person poster
-Location: Budapest, Hungary
-When: October 2026 (session and time to be announced)
+:::event
+Date: Oct 2026
+Title: EMNLP 2026 Findings
+Detail: In-person poster presentation
+Place: Budapest, Hungary
+Note: Session and time to be announced
 :::
 
 # Motivation: modality bias in AV-LLMs

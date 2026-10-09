@@ -244,27 +244,38 @@ function AuthorsBox({ paper }: { paper: Publication }) {
   )
 }
 
-/** Notion-style table of contents built from the post's # and ## headings. */
+/** Numbered table of contents (1., 2., 2.1 …) built from the post's # and ## headings. */
 function Contents({ headings }: { headings: Extract<Block, { kind: 'heading' }>[] }) {
   const plain = (t: string) => t.replace(/\*\*|`|\*/g, '').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+  let section = 0, sub = 0
+  const numbered = headings.map(h => {
+    if (h.level === 1) { section += 1; sub = 0; return { h, no: `${section}.` } }
+    sub += 1
+    return { h, no: `${Math.max(section, 1)}.${sub}` }
+  })
   return (
     <nav aria-label="Contents"
          className="mt-5 rounded-2xl px-5 py-5 sm:px-7 bg-neutral-50 dark:bg-white/[0.04] border border-black/[0.05] dark:border-white/[0.08]">
       <p className={EYEBROW}>Contents</p>
-      <ul className="mt-3 space-y-1">
-        {headings.map(h => (
-          <li key={h.id} className={h.level === 2 ? 'pl-5' : ''}>
+      <ol className="mt-3 space-y-1">
+        {numbered.map(({ h, no }) => (
+          <li key={h.id} className={h.level === 2 ? 'pl-7 sm:pl-8' : ''}>
             <button
               onClick={() => document.getElementById(h.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-              className={`py-0.5 text-left leading-snug underline-offset-4 decoration-black/25 dark:decoration-white/30 hover:underline
-                          hover:text-[#0071E3] dark:hover:text-[#2997FF] transition-colors
+              className={`group/toc flex gap-2.5 py-0.5 text-left leading-snug transition-colors
+                          hover:text-[#0071E3] dark:hover:text-[#2997FF]
                           ${h.level === 1 ? 'text-[15px] sm:text-[16px] font-medium text-[#1D1D1F] dark:text-[#F5F5F7]' : 'text-[14px] sm:text-[15px] text-secondary'}`}
             >
-              {plain(h.text)}
+              <span className={`shrink-0 tabular-nums ${h.level === 1 ? 'min-w-5' : 'min-w-7'} text-secondary group-hover/toc:text-current`}>
+                {no}
+              </span>
+              <span className="underline-offset-4 decoration-black/25 dark:decoration-white/30 group-hover/toc:underline">
+                {plain(h.text)}
+              </span>
             </button>
           </li>
         ))}
-      </ul>
+      </ol>
     </nav>
   )
 }

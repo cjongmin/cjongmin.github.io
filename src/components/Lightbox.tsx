@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { X } from 'lucide-react'
 
 export interface LightboxImage {
@@ -28,7 +28,7 @@ export default function Lightbox({ image, onClose }: { image: LightboxImage; onC
   }, [onClose])
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -48,7 +48,7 @@ export default function Lightbox({ image, onClose }: { image: LightboxImage; onC
       >
         <X size={18} />
       </button>
-      <motion.figure
+      <m.figure
         initial={{ opacity: 0, scale: 0.96, y: 8 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.97 }}
@@ -73,7 +73,7 @@ export default function Lightbox({ image, onClose }: { image: LightboxImage; onC
             {image.alt}
           </figcaption>
         )}
-      </motion.figure>
-    </motion.div>
+      </m.figure>
+    </m.div>
   )
 }

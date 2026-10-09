@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { m, useInView } from 'framer-motion'
 import { ChevronRight } from 'lucide-react'
 import { projects, Project } from '../data/projects'
 import AppIcon from './AppIcon'
@@ -15,7 +15,7 @@ export default function Projects() {
   return (
     <section id="projects" ref={ref} className="py-16 sm:py-24">
       <div className="section-container">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 28 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
@@ -28,12 +28,12 @@ export default function Projects() {
             <h2 className="section-title">On-Device AI Apps</h2>
             <p className="text-[15px] text-secondary">Indie iOS apps that run vision models entirely on the phone. Tap a card for details.</p>
           </div>
-        </motion.div>
+        </m.div>
 
         {/* Compact list rows: icon, name, one-line tagline; tap for the detail sheet */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {projects.map((project, i) => (
-            <motion.button
+            <m.button
               key={project.id}
               onClick={() => setSelected(project)}
               initial={{ opacity: 0, y: 16 }}
@@ -54,7 +54,7 @@ export default function Projects() {
                 className="shrink-0 text-secondary group-hover:translate-x-0.5 transition-transform"
                 aria-hidden
               />
-            </motion.button>
+            </m.button>
           ))}
         </div>
       </div>

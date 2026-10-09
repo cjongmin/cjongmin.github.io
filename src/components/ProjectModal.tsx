@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { X, Github, Globe, ImageOff, Layers, Cpu } from 'lucide-react'
 import { Project } from '../data/projects'
 import AppIcon from './AppIcon'
@@ -52,7 +52,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
 
   return (
     <AnimatePresence>
-      <motion.div
+      <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -65,7 +65,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
         {/* Backdrop */}
         <div className="absolute inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm" />
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0, scale: 0.96, y: 16 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: 16 }}
@@ -192,8 +192,8 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               ))}
             </div>
           )}
-        </motion.div>
-      </motion.div>
+        </m.div>
+      </m.div>
     </AnimatePresence>
   )
 }

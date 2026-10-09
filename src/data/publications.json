@@ -40,7 +40,7 @@
       "poster": "/publications/fork-merge-decoding-poster.pdf"
     },
     "bibtex": "@inproceedings{jung2026fork,\n  title={Fork-Merge Decoding: Enhancing Multimodal Understanding in Audio-Visual Large Language Models},\n  author={Jung, Chaeyoung and Jang, Youngjoon and Choi, Jongmin and Chung, Joon Son},\n  booktitle={Findings of the Association for Computational Linguistics: EMNLP 2026},\n  year={2026}\n}",
-    "image": "/publications/fork-merge-decoding-enhancing-multimodal.jpg",
+    "image": "/publications/fork-merge-decoding-enhancing-multimodal.webp",
     "displayVenue": "EMNLP 2026 Findings",
     "venueFull": "Empirical Methods in Natural Language Processing (EMNLP)",
     "status": "Conference",
@@ -91,7 +91,7 @@
       "code": "https://github.com/Hyeongkeun/LAMB"
     },
     "bibtex": "@INPROCEEDINGS{11462125,\n  author={Lee, Hyeongkeun and Choi, Jongmin and Nam, KiHyun and Chung, Joon Son},\n  booktitle={ICASSP 2026 - 2026 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)}, \n  title={LAMB: LLM-Based Audio Captioning with Modality Gap Bridging Via Cauchy-Schwarz Divergence}, \n  year={2026},\n  volume={},\n  number={},\n  pages={14502-14506},\n  keywords={Very large scale integration;Communications technology;Information and communication technology;LoRa;Protocols;HTTP;Data communication;Media Access Control;Videos;Video equipment;automated audio captioning;large language model;modality gap;Cauchy-Schwarz divergence},\n  doi={10.1109/ICASSP55912.2026.11462125}}",
-    "image": "/publications/lamb-llm-based-audio-captioning-with-mod.jpg",
+    "image": "/publications/lamb-llm-based-audio-captioning-with-mod.webp",
     "presentationType": "Oral",
     "venueFull": "IEEE International Conference on Acoustics, Speech, and Signal Processing (ICASSP)"
   },

@@ -1,5 +1,5 @@
 import { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { m, useInView } from 'framer-motion'
 import { ArrowRight, CalendarDays, ChevronLeft, ChevronRight } from 'lucide-react'
 import { talks, Talk } from '../data/talks'
 // The post view (and every post's text) loads only when a post is opened
@@ -17,6 +17,17 @@ function stepSize(el: HTMLDivElement): number {
   const card = el.querySelector<HTMLElement>('[data-card]')
   return (card?.offsetWidth ?? el.clientWidth) + (parseFloat(getComputedStyle(el).columnGap) || 16)
 }
+
+// Covers (public/talks/<name>.webp, 2000px wide) have 960 / 1440px copies from
+// scripts/responsive_images.py; other images are used as they are.
+function coverSrcSet(src: string): string | undefined {
+  if (!/^\/talks\/[^/]+\.webp$/.test(src)) return undefined
+  const base = src.slice(0, -'.webp'.length)
+  return `${base}-960.webp 960w, ${base}-1440.webp 1440w, ${src} 2000w`
+}
+// Rendered width of the photo: the card on sm+, but on phones the 4:5 card crops
+// a 16:9 photo, so it is drawn about 2.2 times the card width.
+const COVER_SIZES = '(min-width: 2100px) 50vw, (min-width: 1164px) 1036px, (min-width: 640px) calc(100vw - 4rem), 222vw'
 
 // Pills sit on a dark overlay, so they are white-on-dark here.
 const PILL = 'text-[13px] font-semibold px-2 py-[3px] rounded-md leading-none'
@@ -122,7 +133,7 @@ export default function Talks() {
   return (
     <section id="talks" ref={ref} className="py-16 sm:py-24">
       <div className="section-container">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 28 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
@@ -137,7 +148,7 @@ export default function Talks() {
               What was asked, what mattered, what I took home.
             </p>
           </div>
-        </motion.div>
+        </m.div>
 
         {/*
           One full-width banner per talk. Swipe / arrows move between them.
@@ -151,7 +162,7 @@ export default function Talks() {
                        [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {talks.map((t, i) => (
-              <motion.button
+              <m.button
                 key={t.id}
                 data-card
                 onClick={() => open(t)}
@@ -173,6 +184,8 @@ export default function Talks() {
                   {(t.cover ?? t.image) && (
                     <img
                       src={t.cover ?? t.image}
+                      srcSet={coverSrcSet(t.cover ?? t.image!)}
+                      sizes={COVER_SIZES}
                       alt=""
                       loading="lazy"
                       decoding="async"
@@ -234,7 +247,7 @@ export default function Talks() {
                     </div>
                   </div>
                 </div>
-              </motion.button>
+              </m.button>
             ))}
           </div>
 

@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { m, useInView } from 'framer-motion'
 import { Mail, Github, Linkedin, BookOpen, MapPin } from 'lucide-react'
 import { profile } from '../data/profile'
 
@@ -43,7 +43,7 @@ export default function Contact() {
   return (
     <section id="contact" ref={ref} className="py-16 sm:py-24">
       <div className="section-container">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 28 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
@@ -53,10 +53,10 @@ export default function Contact() {
             Contact
           </p>
           <h2 className="section-title">Get In Touch</h2>
-        </motion.div>
+        </m.div>
 
         {/* Contact grid: 2 columns on phones, 3 on tablets, 5 from lg; long values wrap instead of overflowing */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.18 }}
@@ -81,7 +81,7 @@ export default function Contact() {
             )
 
             return href ? (
-              <motion.a
+              <m.a
                 key={label}
                 href={href}
                 target={href.startsWith('mailto') ? undefined : '_blank'}
@@ -92,9 +92,9 @@ export default function Contact() {
                 className={cardClass}
               >
                 {inner}
-              </motion.a>
+              </m.a>
             ) : (
-              <motion.div
+              <m.div
                 key={label}
                 initial={{ opacity: 0, y: 12 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -102,10 +102,10 @@ export default function Contact() {
                 className={cardClass}
               >
                 {inner}
-              </motion.div>
+              </m.div>
             )
           })}
-        </motion.div>
+        </m.div>
       </div>
     </section>
   )

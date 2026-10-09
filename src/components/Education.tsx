@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { m, useInView } from 'framer-motion'
 import { ExternalLink, GraduationCap } from 'lucide-react'
 import { education } from '../data/education'
 import { teaching } from '../data/teaching'
@@ -11,7 +11,7 @@ export default function Education() {
   return (
     <section id="education" ref={ref} className="py-16 sm:py-24">
       <div className="section-container">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 28 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
@@ -21,7 +21,7 @@ export default function Education() {
             Education
           </p>
           <h2 className="section-title">Education &amp; Teaching</h2>
-        </motion.div>
+        </m.div>
 
         {/* Timeline */}
         <div className="relative">
@@ -29,7 +29,7 @@ export default function Education() {
 
           <div className="space-y-6">
             {education.map((edu, i) => (
-              <motion.div
+              <m.div
                 key={edu.id}
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -95,7 +95,7 @@ export default function Education() {
                     )}
                   </div>
                 </div>
-              </motion.div>
+              </m.div>
             ))}
           </div>
         </div>

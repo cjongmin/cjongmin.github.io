@@ -46,7 +46,8 @@ such as `# Questions from the poster session` and `# Takeaways`, and set `upcomi
 writes that page with the post's own title, description and preview card, so LinkedIn, Slack and
 KakaoTalk show the post rather than the home page; visitors are sent straight on to the post. The
 card images are `public/talks/og/<id>.jpg`; regenerate them with `python3 scripts/talk_og.py`
-(Pillow) after adding a talk or changing a title.
+(Pillow) after adding a talk or changing a title. A new cover (`public/talks/<name>.webp`, 2000px wide) also
+needs its smaller carousel copies: `python3 scripts/responsive_images.py`.
 
 ## Build and deploy
 
@@ -66,3 +67,6 @@ is a separate chunk that loads only when a post is opened.
   The root font size grows on very wide screens ([src/index.css](src/index.css)),
   so the whole page scales with it, up to 1.5× on a 4K monitor at 100% zoom.
 - `public/app-ads.txt` is the AdMob publisher record for the iOS apps and must stay at the site root.
+- Images are WebP, sized to how large they are drawn. Inter loads without blocking the first
+  paint, and animations use framer-motion's `LazyMotion` with `m.*` components (a plain
+  `motion.*` component throws under `strict`). Lighthouse: 99 / 100 / 100 / 100 on mobile.

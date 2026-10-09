@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { m, useInView } from 'framer-motion'
 import { publications } from '../data/publications'
 import PublicationCard from './PublicationCard'
 
@@ -39,7 +39,7 @@ export default function Publications() {
   return (
     <section id="publications" ref={ref} className="py-16 sm:py-24">
       <div className="section-container">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 28 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
@@ -65,13 +65,13 @@ export default function Publications() {
                         : 'bg-black/[0.06] dark:bg-white/10 text-secondary hover:bg-black/[0.1] dark:hover:bg-white/[0.15]'
                       }`}
                   >
-                    {f} <span className="opacity-60">({count})</span>
+                    {f} <span className="font-normal">({count})</span>
                   </button>
                 ))}
               </div>
             )}
           </div>
-        </motion.div>
+        </m.div>
 
         <p className="-mt-3 mb-6 text-[14px] text-secondary">* Equal contribution</p>
 

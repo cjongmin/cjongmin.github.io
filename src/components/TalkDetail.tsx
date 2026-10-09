@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, Check, ChevronLeft, ChevronRight, Link2 } from 'lucide-react'
 import { Talk, talkShareUrl, talksNewestFirst } from '../data/talks'
 import { talkContent } from '../data/talkContent'
@@ -65,7 +65,7 @@ export default function TalkDetail({ talk, onClose, onNavigate }: TalkDetailProp
 
   return (
     <AnimatePresence>
-      <motion.div
+      <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -89,7 +89,7 @@ export default function TalkDetail({ talk, onClose, onNavigate }: TalkDetailProp
           </div>
         </div>
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.05 }}
@@ -176,12 +176,12 @@ export default function TalkDetail({ talk, onClose, onNavigate }: TalkDetailProp
               </button>
             </div>
           </article>
-        </motion.div>
+        </m.div>
 
         <AnimatePresence>
           {zoom && <Lightbox image={zoom} onClose={closeZoom} />}
         </AnimatePresence>
-      </motion.div>
+      </m.div>
     </AnimatePresence>
   )
 }

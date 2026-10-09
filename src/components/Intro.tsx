@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { profile } from '../data/profile'
 import { news } from '../data/news'
 import { SocialIcon, SocialIconName } from './SocialIcons'
@@ -55,7 +55,7 @@ export default function Intro() {
         <div className="grid lg:grid-cols-[300px_minmax(0,1fr)] gap-8 md:gap-10 lg:gap-16 items-start lg:items-stretch">
 
           {/* ---------- Left: who ---------- */}
-          <motion.aside
+          <m.aside
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -107,10 +107,10 @@ export default function Intro() {
                 {profile.status}
               </p>
             )}
-          </motion.aside>
+          </m.aside>
 
           {/* ---------- Right: about ---------- */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
@@ -127,12 +127,12 @@ export default function Intro() {
                 </p>
               ))}
             </div>
-          </motion.div>
+          </m.div>
         </div>
 
         {/* ---------- Below both columns: news, full width ---------- */}
         {news.length > 0 && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -154,7 +154,7 @@ export default function Intro() {
                 </div>
               ))}
             </div>
-          </motion.div>
+          </m.div>
         )}
       </div>
     </section>

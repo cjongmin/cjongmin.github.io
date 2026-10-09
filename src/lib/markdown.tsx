@@ -146,14 +146,17 @@ function EventTicket({ fields }: { fields: Record<string, string> }) {
     <div className="mt-6 flex rounded-2xl overflow-hidden bg-white dark:bg-[#111113]
                     border border-black/[0.08] dark:border-white/[0.1] shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_-12px_rgba(0,0,0,0.12)]">
       {/* stub */}
-      <div className="shrink-0 w-[92px] sm:w-[128px] flex flex-col items-center justify-center py-5 text-white
-                      bg-gradient-to-br from-[#2B8CFF] to-[#0060C8] dark:from-[#2997FF] dark:to-[#0A5BBF]">
-        {d.month && <span className="text-[12px] sm:text-[13px] font-semibold tracking-[0.18em]">{d.month}</span>}
-        <span className="mt-0.5 text-[28px] sm:text-[38px] font-semibold leading-none tracking-tight tabular-nums">{d.big}</span>
-        {d.small && <span className="mt-1 text-[12px] sm:text-[13px] font-medium opacity-80">{d.small}</span>}
+      <div className="shrink-0 w-[88px] sm:w-[120px] flex flex-col items-center justify-center py-5
+                      bg-[#F3F7FD] dark:bg-[#2997FF]/[0.08]">
+        {d.month && (
+          <span className="text-[12px] sm:text-[13px] font-semibold tracking-[0.18em] text-[#0071E3] dark:text-[#2997FF]">{d.month}</span>
+        )}
+        <span className="mt-1 text-[24px] sm:text-[32px] font-semibold leading-none tracking-tight tabular-nums
+                         text-[#1D1D1F] dark:text-[#F5F5F7]">{d.big}</span>
+        {d.small && <span className="mt-1 text-[12px] sm:text-[13px] font-medium text-secondary">{d.small}</span>}
       </div>
       {/* tear line, with the two notches of a ticket */}
-      <div aria-hidden className="relative w-0 border-l-2 border-dashed border-black/[0.12] dark:border-white/[0.16]">
+      <div aria-hidden className="relative w-0 border-l-[1.5px] border-dashed border-black/[0.14] dark:border-white/[0.16]">
         <span className="absolute -top-2.5 -left-[11px] w-5 h-5 rounded-full bg-white dark:bg-black border border-black/[0.08] dark:border-white/[0.1]" />
         <span className="absolute -bottom-2.5 -left-[11px] w-5 h-5 rounded-full bg-white dark:bg-black border border-black/[0.08] dark:border-white/[0.1]" />
       </div>

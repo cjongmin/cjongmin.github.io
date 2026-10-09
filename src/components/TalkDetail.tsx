@@ -21,9 +21,11 @@ const HONOURS = new Set(['Oral', 'Spotlight'])
 // Keep the last two words together so a title never ends on a lone word
 const noOrphan = (text: string) => text.replace(/\s+(\S+)\s*$/, '\u00A0$1')
 
-// Same look as the icon-like tiles at the bottom of a post
-const LINK_TILE = `inline-flex flex-col items-center justify-center gap-1.5 w-[74px] h-[72px] sm:w-[96px] sm:h-[84px]
-  rounded-2xl border border-black/[0.08] dark:border-white/[0.1] text-[13px] sm:text-[14px] font-medium
+// Icon-like tiles at the bottom of a post. They share the row equally, so the row
+// always spans both edges whatever the number of links: one row from sm; on phones
+// up to four per row, and a shorter last row stretches to the full width too.
+const LINK_TILE = `grow basis-[calc(25%-0.375rem)] sm:basis-0 min-w-0 inline-flex flex-col items-center justify-center gap-1.5
+  h-[72px] sm:h-[84px] rounded-2xl border border-black/[0.08] dark:border-white/[0.1] text-[13px] sm:text-[14px] font-medium
   text-[#1D1D1F] dark:text-[#F5F5F7] hover:shadow-md hover:border-black/[0.14] dark:hover:border-white/[0.2]
   transition-all duration-150`
 

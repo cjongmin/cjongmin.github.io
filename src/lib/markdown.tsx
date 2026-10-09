@@ -1,4 +1,5 @@
 import { Fragment, ReactNode } from 'react'
+import { CalendarDays, Clock, Info, Landmark, MapPin, Presentation, Users } from 'lucide-react'
 
 /**
  * The small Markdown subset that talk posts are written in
@@ -111,6 +112,27 @@ export function parseMarkdown(src: string): Block[] {
   return blocks
 }
 
+// :::info rows get an icon from their key; anything else gets a generic one
+function infoIcon(key: string) {
+  const k = key.toLowerCase()
+  if (/when|date|day/.test(k)) return CalendarDays
+  if (/time|hour/.test(k)) return Clock
+  if (/where|location|venue|city|room/.test(k)) return MapPin
+  if (/presentation|format|type|poster|talk/.test(k)) return Presentation
+  if (/conference|event|venue|meeting/.test(k)) return Landmark
+  if (/session|people|host|chair/.test(k)) return Users
+  return Info
+}
+
+// Columns for 1–4 facts (full class names, so Tailwind generates them)
+const INFO_COLS = ['grid-cols-1', 'grid-cols-1', 'grid-cols-1 sm:grid-cols-2', 'grid-cols-1 sm:grid-cols-3', 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4']
+
+// "October 2026 (session to be announced)" → main value + a small note
+function splitNote(value: string): [string, string | undefined] {
+  const m = value.match(/^(.*?)\s*\(([^)]+)\)\s*$/)
+  return m ? [m[1], m[2]] : [value, undefined]
+}
+
 // Body text is justified like About Me; phones may hyphenate long words (10+ letters)
 // so narrow lines don't open wide gaps, wider screens never hyphenate.
 const JUSTIFY = 'text-justify hyphens-auto [hyphenate-limit-chars:10_4_4] sm:hyphens-manual'
@@ -154,27 +176,27 @@ export function MarkdownBody({ blocks, onImageClick }: {
           case 'heading':
             return b.level === 1 ? (
               <h2 key={i} id={b.id}
-                  className="scroll-mt-24 mt-14 text-[24px] sm:text-[26px] font-semibold tracking-tight text-[#1D1D1F] dark:text-[#F5F5F7]">
+                  className="scroll-mt-24 mt-12 sm:mt-14 text-[20px] sm:text-[26px] font-semibold tracking-tight text-[#1D1D1F] dark:text-[#F5F5F7]">
                 {renderInline(b.text)}
               </h2>
             ) : (
               <h3 key={i} id={b.id}
-                  className="scroll-mt-24 mt-9 text-[19px] sm:text-[20px] font-semibold tracking-tight text-[#1D1D1F] dark:text-[#F5F5F7]">
+                  className="scroll-mt-24 mt-8 sm:mt-9 text-[17px] sm:text-[20px] font-semibold tracking-tight text-[#1D1D1F] dark:text-[#F5F5F7]">
                 {renderInline(b.text)}
               </h3>
             )
           case 'paragraph':
-            return <p key={i} className={`mt-5 text-[17px] leading-[1.75] text-body ${JUSTIFY}`}>{renderInline(b.text)}</p>
+            return <p key={i} className={`mt-4 sm:mt-5 text-[15px] sm:text-[17px] leading-[1.7] sm:leading-[1.75] text-body ${JUSTIFY}`}>{renderInline(b.text)}</p>
           case 'list':
             return b.ordered ? (
               <ol key={i} className="mt-5 space-y-2.5 list-decimal pl-6 marker:text-secondary marker:font-medium">
-                {b.items.map((it, j) => <li key={j} className={`pl-1 text-[17px] leading-[1.7] text-body ${JUSTIFY}`}>{renderInline(it)}</li>)}
+                {b.items.map((it, j) => <li key={j} className={`pl-1 text-[15px] sm:text-[17px] leading-[1.7] text-body ${JUSTIFY}`}>{renderInline(it)}</li>)}
               </ol>
             ) : (
               <ul key={i} className="mt-5 space-y-2.5">
                 {b.items.map((it, j) => (
-                  <li key={j} className="flex gap-3 text-[17px] leading-[1.7] text-body">
-                    <span className="mt-[11px] w-1.5 h-1.5 rounded-full bg-[#1D1D1F]/50 dark:bg-white/50 shrink-0" />
+                  <li key={j} className="flex gap-3 text-[15px] sm:text-[17px] leading-[1.7] text-body">
+                    <span className="mt-[10px] sm:mt-[11px] w-1.5 h-1.5 rounded-full bg-[#1D1D1F]/50 dark:bg-white/50 shrink-0" />
                     <span className={`min-w-0 flex-1 ${JUSTIFY}`}>{renderInline(it)}</span>
                   </li>
                 ))}
@@ -184,7 +206,7 @@ export function MarkdownBody({ blocks, onImageClick }: {
             return (
               <div key={i} className={`mt-6 rounded-xl px-5 py-4 bg-neutral-50 dark:bg-white/[0.04]
                                       border border-black/[0.06] dark:border-white/[0.08]
-                                      text-[16px] leading-[1.7] text-body ${JUSTIFY}`}>
+                                      text-[14.5px] sm:text-[16px] leading-[1.7] text-body ${JUSTIFY}`}>
                 {renderInline(b.text)}
               </div>
             )
@@ -204,26 +226,36 @@ export function MarkdownBody({ blocks, onImageClick }: {
                 >
                   <img src={b.src} alt={b.alt} loading="lazy" decoding="async" className="w-full h-auto" />
                 </button>
-                {b.alt && <figcaption className="mt-3 text-[14px] leading-relaxed text-secondary text-center">{renderInline(b.alt)}</figcaption>}
+                {b.alt && <figcaption className="mt-2.5 sm:mt-3 text-[13px] sm:text-[14px] leading-relaxed text-secondary text-center">{renderInline(b.alt)}</figcaption>}
               </figure>
             )
           }
           case 'info':
+            // A fact strip, not a table: icon, small label, value (and an optional note)
             return (
-              <div key={i} className="mt-6 rounded-2xl border border-black/[0.08] dark:border-white/[0.1] overflow-hidden">
-                {b.title && (
-                  <p className="px-5 sm:px-6 py-3 text-[12px] font-semibold uppercase tracking-[0.12em] text-secondary
-                                bg-neutral-50 dark:bg-white/[0.04] border-b border-black/[0.06] dark:border-white/[0.08]">
-                    {b.title}
-                  </p>
-                )}
-                <dl className="divide-y divide-black/[0.06] dark:divide-white/[0.08]">
-                  {b.rows.map(([k, v]) => (
-                    <div key={k} className="flex flex-col sm:flex-row gap-0.5 sm:gap-6 px-5 sm:px-6 py-3">
-                      <dt className="shrink-0 sm:w-[150px] text-[14px] font-medium text-secondary">{k}</dt>
-                      <dd className="text-[16px] text-[#1D1D1F] dark:text-[#F5F5F7]">{renderInline(v)}</dd>
-                    </div>
-                  ))}
+              <div key={i} className="mt-6 rounded-2xl bg-neutral-50 dark:bg-white/[0.04] border border-black/[0.05] dark:border-white/[0.08]
+                                      px-5 py-5 sm:px-7 sm:py-6">
+                {b.title && <p className="mb-4 text-[12px] font-semibold uppercase tracking-[0.12em] text-secondary">{b.title}</p>}
+                <dl className={`grid gap-x-5 gap-y-4 sm:gap-y-6 ${INFO_COLS[Math.min(b.rows.length, 4)]}`}>
+                  {b.rows.map(([k, v]) => {
+                    const Icon = infoIcon(k)
+                    const [value, note] = splitNote(v)
+                    return (
+                      <div key={k} className="flex gap-3 min-w-0">
+                        <span className="shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center
+                                         bg-[#0071E3]/[0.08] text-[#0071E3] dark:bg-[#2997FF]/[0.14] dark:text-[#2997FF]">
+                          <Icon size={18} aria-hidden />
+                        </span>
+                        <div className="min-w-0">
+                          <dt className="text-[11px] sm:text-[12px] font-semibold uppercase tracking-[0.08em] text-secondary">{k}</dt>
+                          <dd className="mt-0.5 sm:mt-1 text-[14.5px] sm:text-[16px] font-semibold leading-snug text-[#1D1D1F] dark:text-[#F5F5F7]">
+                            {renderInline(value)}
+                          </dd>
+                          {note && <dd className="mt-0.5 text-[12px] sm:text-[13px] leading-snug text-secondary">{renderInline(note)}</dd>}
+                        </div>
+                      </div>
+                    )
+                  })}
                 </dl>
               </div>
             )
@@ -233,11 +265,11 @@ export function MarkdownBody({ blocks, onImageClick }: {
                 {b.items.map(it => (
                   <div key={it.value + it.label}
                        className="rounded-2xl px-5 py-5 bg-neutral-50 dark:bg-white/[0.04] border border-black/[0.05] dark:border-white/[0.08]">
-                    <p className="text-[30px] sm:text-[34px] font-semibold tracking-tight leading-none text-[#0071E3] dark:text-[#2997FF] tabular-nums">
+                    <p className="text-[26px] sm:text-[34px] font-semibold tracking-tight leading-none text-[#0071E3] dark:text-[#2997FF] tabular-nums">
                       {it.value}
                     </p>
-                    <p className="mt-2.5 text-[15px] font-medium leading-snug text-[#1D1D1F] dark:text-[#F5F5F7]">{renderInline(it.label)}</p>
-                    {it.note && <p className="mt-1 text-[13px] text-secondary">{renderInline(it.note)}</p>}
+                    <p className="mt-2 sm:mt-2.5 text-[14px] sm:text-[15px] font-medium leading-snug text-[#1D1D1F] dark:text-[#F5F5F7]">{renderInline(it.label)}</p>
+                    {it.note && <p className="mt-1 text-[12px] sm:text-[13px] text-secondary">{renderInline(it.note)}</p>}
                   </div>
                 ))}
               </div>
@@ -250,9 +282,9 @@ export function MarkdownBody({ blocks, onImageClick }: {
                     <div className="flex items-center gap-3">
                       <span className="w-7 h-7 rounded-full bg-[#0071E3] dark:bg-[#2997FF] text-white text-[13px] font-semibold
                                        flex items-center justify-center tabular-nums">{j + 1}</span>
-                      <span className="text-[18px] font-semibold tracking-tight text-[#1D1D1F] dark:text-[#F5F5F7]">{it.title}</span>
+                      <span className="text-[16px] sm:text-[18px] font-semibold tracking-tight text-[#1D1D1F] dark:text-[#F5F5F7]">{it.title}</span>
                     </div>
-                    <p className={`mt-3 text-[16px] leading-[1.7] text-body ${JUSTIFY}`}>{renderInline(it.text)}</p>
+                    <p className={`mt-2.5 sm:mt-3 text-[14.5px] sm:text-[16px] leading-[1.7] text-body ${JUSTIFY}`}>{renderInline(it.text)}</p>
                   </li>
                 ))}
               </ol>
@@ -260,7 +292,7 @@ export function MarkdownBody({ blocks, onImageClick }: {
           case 'quote':
             return (
               <blockquote key={i} className="my-8 pl-5 sm:pl-6 border-l-[3px] border-[#0071E3] dark:border-[#2997FF]
-                                             text-[19px] sm:text-[22px] font-medium leading-[1.5] tracking-tight
+                                             text-[17px] sm:text-[22px] font-medium leading-[1.5] tracking-tight
                                              text-[#1D1D1F] dark:text-[#F5F5F7]">
                 {renderInline(b.text)}
               </blockquote>

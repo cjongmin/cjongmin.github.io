@@ -121,7 +121,7 @@ export default function Intro() {
               {paragraphs.map((para, i) => (
                 // Justified. Phones may hyphenate long words (10+ letters) so the
                 // narrow column doesn't open wide gaps; wider screens never hyphenate.
-                <p key={i} className="text-[16px] sm:text-[17px] leading-[1.75] text-body text-justify
+                <p key={i} className="text-[15px] sm:text-[17px] leading-[1.75] text-body text-justify
                                       hyphens-auto [hyphenate-limit-chars:10_4_4] sm:hyphens-manual">
                   {renderLinks(para)}
                 </p>
@@ -145,7 +145,7 @@ export default function Intro() {
                   {/* phones: date above the text so the sentence gets the full width */}
                   <span className="shrink-0 sm:w-[76px] text-[14px] font-medium text-secondary">{item.date}</span>
                   <p
-                    className={`text-[15px] sm:text-[16px] leading-relaxed ${
+                    className={`text-[14px] sm:text-[16px] leading-relaxed ${
                       item.highlight ? 'font-medium text-[#1D1D1F] dark:text-[#F5F5F7]' : 'text-body'
                     }`}
                   >

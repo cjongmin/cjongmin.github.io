@@ -115,12 +115,12 @@ export default function TalkDetail({ talk, onClose, onNavigate }: TalkDetailProp
             {/* Title and subtitle: justified edge to edge from sm (phones keep them left-aligned:
                 large type on a narrow line would open wide gaps), never ending on a lone word;
                 long words may hyphenate so a short line doesn't open wide gaps */}
-            <h1 className="mt-4 text-[26px] sm:text-[34px] lg:text-[40px] font-semibold tracking-tight leading-[1.16]
+            <h1 className="mt-3 sm:mt-4 text-[24px] sm:text-[34px] lg:text-[40px] font-semibold tracking-tight leading-[1.18]
                            text-[#1D1D1F] dark:text-[#F5F5F7] sm:text-justify sm:hyphens-auto [hyphenate-limit-chars:8_4_4]">
               {noOrphan(talk.title)}
             </h1>
             {talk.subtitle && (
-              <p className="mt-4 text-[18px] sm:text-[21px] leading-[1.45] text-secondary sm:text-justify">{noOrphan(talk.subtitle)}</p>
+              <p className="mt-3 sm:mt-4 text-[16px] sm:text-[21px] leading-[1.45] text-secondary sm:text-justify">{noOrphan(talk.subtitle)}</p>
             )}
 
             {/* Byline */}
@@ -133,8 +133,8 @@ export default function TalkDetail({ talk, onClose, onNavigate }: TalkDetailProp
                 />
               )}
               <div className="leading-tight">
-                <p className="text-[15px] font-semibold text-[#1D1D1F] dark:text-[#F5F5F7]">{profile.name}</p>
-                <p className="mt-1 text-[13px] text-secondary">
+                <p className="text-[14px] sm:text-[15px] font-semibold text-[#1D1D1F] dark:text-[#F5F5F7]">{profile.name}</p>
+                <p className="mt-1 text-[12px] sm:text-[13px] text-secondary">
                   {[talk.role, talk.date, talk.location].filter(Boolean).join(' · ')}
                 </p>
               </div>
@@ -226,11 +226,11 @@ function AuthorsBox({ paper }: { paper: Publication }) {
           const text = (
             <>
               {face}
-              <span className="mt-3 text-[14px] sm:text-[15px] md:text-[17px] font-semibold leading-tight text-[#1D1D1F] dark:text-[#F5F5F7]
+              <span className="mt-2.5 sm:mt-3 text-[13px] sm:text-[15px] md:text-[17px] font-semibold leading-tight text-[#1D1D1F] dark:text-[#F5F5F7]
                                group-hover:text-[#0071E3] dark:group-hover:text-[#2997FF] transition-colors">
                 {a.name}
               </span>
-              <span className="mt-1 text-[12px] sm:text-[14px] leading-tight text-secondary">{a.role}</span>
+              <span className="mt-1 text-[11px] sm:text-[14px] leading-tight text-secondary">{a.role}</span>
             </>
           )
           return (
@@ -270,7 +270,7 @@ function Contents({ headings }: { headings: Extract<Block, { kind: 'heading' }>[
               onClick={() => document.getElementById(h.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
               className={`group/toc flex gap-2.5 py-0.5 text-left leading-snug transition-colors
                           hover:text-[#0071E3] dark:hover:text-[#2997FF]
-                          ${h.level === 1 ? 'text-[15px] sm:text-[16px] font-medium text-[#1D1D1F] dark:text-[#F5F5F7]' : 'text-[14px] sm:text-[15px] text-secondary'}`}
+                          ${h.level === 1 ? 'text-[14px] sm:text-[16px] font-medium text-[#1D1D1F] dark:text-[#F5F5F7]' : 'text-[13px] sm:text-[15px] text-secondary'}`}
             >
               <span className={`shrink-0 tabular-nums ${h.level === 1 ? 'min-w-5' : 'min-w-7'} text-secondary group-hover/toc:text-current`}>
                 {no}
@@ -297,7 +297,7 @@ function PostList({ current, onNavigate }: { current: Talk; onNavigate: (t: Talk
   return (
     <section aria-label="All presentation notes" className="mt-16">
       <div className="flex items-baseline justify-between gap-4">
-        <h2 className="text-[20px] sm:text-[22px] font-semibold tracking-tight text-[#1D1D1F] dark:text-[#F5F5F7]">
+        <h2 className="text-[18px] sm:text-[22px] font-semibold tracking-tight text-[#1D1D1F] dark:text-[#F5F5F7]">
           Presentation Notes
         </h2>
         <span className="text-[14px] text-secondary">{talksNewestFirst.length} posts</span>
@@ -315,12 +315,12 @@ function PostList({ current, onNavigate }: { current: Talk; onNavigate: (t: Talk
                 className={`w-full text-left flex items-baseline gap-4 px-5 py-4 transition-colors
                             ${isCurrent ? 'bg-neutral-50 dark:bg-white/[0.04] cursor-default' : 'hover:bg-black/[0.025] dark:hover:bg-white/[0.04]'}`}
               >
-                <span className="shrink-0 w-8 text-[14px] font-semibold tabular-nums text-secondary">#{t.no}</span>
+                <span className="shrink-0 w-7 sm:w-8 text-[13px] sm:text-[14px] font-semibold tabular-nums text-secondary">#{t.no}</span>
                 <span className="min-w-0 flex-1">
-                  <span className="block text-[15px] sm:text-[16px] font-semibold leading-snug text-[#1D1D1F] dark:text-[#F5F5F7]">
+                  <span className="block text-[14px] sm:text-[16px] font-semibold leading-snug text-[#1D1D1F] dark:text-[#F5F5F7]">
                     {t.title}
                   </span>
-                  <span className="mt-1 block text-[13px] text-secondary">
+                  <span className="mt-1 block text-[12px] sm:text-[13px] text-secondary">
                     {[`${t.event} · ${t.type}`, t.date, t.location].filter(Boolean).join(' · ')}
                   </span>
                 </span>

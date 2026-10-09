@@ -111,6 +111,10 @@ export function parseMarkdown(src: string): Block[] {
   return blocks
 }
 
+// Body text is justified like About Me; phones may hyphenate long words (10+ letters)
+// so narrow lines don't open wide gaps, wider screens never hyphenate.
+const JUSTIFY = 'text-justify hyphens-auto [hyphenate-limit-chars:10_4_4] sm:hyphens-manual'
+
 // **bold**, *italic*, `code`, [text](url)
 export function renderInline(text: string): ReactNode[] {
   return text.split(/(\*\*[^*]+\*\*|\*[^*\s][^*]*\*|`[^`]+`|\[[^\]]+\]\([^)]+\))/).map((part, i) => {
@@ -160,27 +164,27 @@ export function MarkdownBody({ blocks, onImageClick }: {
               </h3>
             )
           case 'paragraph':
-            return <p key={i} className="mt-5 text-[17px] leading-[1.75] text-body">{renderInline(b.text)}</p>
+            return <p key={i} className={`mt-5 text-[17px] leading-[1.75] text-body ${JUSTIFY}`}>{renderInline(b.text)}</p>
           case 'list':
             return b.ordered ? (
               <ol key={i} className="mt-5 space-y-2.5 list-decimal pl-6 marker:text-secondary marker:font-medium">
-                {b.items.map((it, j) => <li key={j} className="pl-1 text-[17px] leading-[1.7] text-body">{renderInline(it)}</li>)}
+                {b.items.map((it, j) => <li key={j} className={`pl-1 text-[17px] leading-[1.7] text-body ${JUSTIFY}`}>{renderInline(it)}</li>)}
               </ol>
             ) : (
               <ul key={i} className="mt-5 space-y-2.5">
                 {b.items.map((it, j) => (
                   <li key={j} className="flex gap-3 text-[17px] leading-[1.7] text-body">
                     <span className="mt-[11px] w-1.5 h-1.5 rounded-full bg-[#1D1D1F]/50 dark:bg-white/50 shrink-0" />
-                    <span>{renderInline(it)}</span>
+                    <span className={`min-w-0 flex-1 ${JUSTIFY}`}>{renderInline(it)}</span>
                   </li>
                 ))}
               </ul>
             )
           case 'callout':
             return (
-              <div key={i} className="mt-6 rounded-xl px-5 py-4 bg-neutral-50 dark:bg-white/[0.04]
+              <div key={i} className={`mt-6 rounded-xl px-5 py-4 bg-neutral-50 dark:bg-white/[0.04]
                                       border border-black/[0.06] dark:border-white/[0.08]
-                                      text-[16px] leading-[1.7] text-body">
+                                      text-[16px] leading-[1.7] text-body ${JUSTIFY}`}>
                 {renderInline(b.text)}
               </div>
             )
@@ -248,7 +252,7 @@ export function MarkdownBody({ blocks, onImageClick }: {
                                        flex items-center justify-center tabular-nums">{j + 1}</span>
                       <span className="text-[18px] font-semibold tracking-tight text-[#1D1D1F] dark:text-[#F5F5F7]">{it.title}</span>
                     </div>
-                    <p className="mt-3 text-[16px] leading-[1.7] text-body">{renderInline(it.text)}</p>
+                    <p className={`mt-3 text-[16px] leading-[1.7] text-body ${JUSTIFY}`}>{renderInline(it.text)}</p>
                   </li>
                 ))}
               </ol>

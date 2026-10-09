@@ -18,6 +18,9 @@ interface TalkDetailProps {
 
 const HONOURS = new Set(['Oral', 'Spotlight'])
 
+// Keep the last two words together so a title never ends on a lone word
+const noOrphan = (text: string) => text.replace(/\s+(\S+)\s*$/, '\u00A0$1')
+
 // Same look as the icon-like tiles at the bottom of a post
 const LINK_TILE = `inline-flex flex-col items-center justify-center gap-1.5 w-[74px] h-[72px] sm:w-[96px] sm:h-[84px]
   rounded-2xl border border-black/[0.08] dark:border-white/[0.1] text-[13px] sm:text-[14px] font-medium
@@ -109,12 +112,15 @@ export default function TalkDetail({ talk, onClose, onNavigate }: TalkDetailProp
               )}
             </p>
 
-            <h1 className="mt-4 text-[26px] sm:text-[36px] lg:text-[44px] font-semibold tracking-tight leading-[1.14]
-                           text-[#1D1D1F] dark:text-[#F5F5F7]">
-              {talk.title}
+            {/* Title and subtitle: justified edge to edge from sm (phones keep them left-aligned:
+                large type on a narrow line would open wide gaps), never ending on a lone word;
+                long words may hyphenate so a short line doesn't open wide gaps */}
+            <h1 className="mt-4 text-[26px] sm:text-[34px] lg:text-[40px] font-semibold tracking-tight leading-[1.16]
+                           text-[#1D1D1F] dark:text-[#F5F5F7] sm:text-justify sm:hyphens-auto [hyphenate-limit-chars:8_4_4]">
+              {noOrphan(talk.title)}
             </h1>
             {talk.subtitle && (
-              <p className="mt-4 text-[18px] sm:text-[21px] leading-[1.45] text-secondary [text-wrap:pretty]">{talk.subtitle}</p>
+              <p className="mt-4 text-[18px] sm:text-[21px] leading-[1.45] text-secondary sm:text-justify">{noOrphan(talk.subtitle)}</p>
             )}
 
             {/* Byline */}

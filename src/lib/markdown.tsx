@@ -21,7 +21,8 @@ import { CalendarDays, CalendarPlus, Clock, Info, Landmark, MapPin, Presentation
  *   :::steps               Title | text         → numbered step cards
  *   :::quote               text                 → a highlighted question / pull quote
  *   :::lead                paragraphs + one ![caption](/figure.webp)
- *                          → an opening: text on the left, the figure on the right (stacked on phones)
+ *                          → an opening like wrapfigure: the figure floats right and the text wraps
+ *                            around it (from lg; stacked below)
  *
  * Parsing produces plain data, so the same headings feed the table of contents.
  */
@@ -354,33 +355,38 @@ export function MarkdownBody({ blocks, onImageClick }: {
             )
           case 'event':
             return <EventTicket key={i} fields={b.fields} />
-          case 'lead':
-            // Opening of a post: text and a diagnostic figure side by side, tops aligned;
-            // the figure sits lightly next to the text (no card), stacked below lg
+          case 'lead': {
+            // Opening of a post, like LaTeX's wrapfigure: from lg the figure floats right and the
+            // text wraps around it, running full width once it passes the figure (flow-root keeps
+            // the next heading below). Below lg the text comes first and the figure follows.
+            const fig = b.figure
+            const figure = (cls: string) => fig && (
+              <figure className={cls}>
+                <button
+                  type="button"
+                  onClick={() => onImageClick?.({ src: fig.src, alt: fig.alt, chart: true })}
+                  aria-label={`Enlarge image: ${fig.alt}`}
+                  className="block w-full rounded-xl overflow-hidden bg-white cursor-zoom-in"
+                >
+                  <img src={fig.src} alt={fig.alt} loading="lazy" decoding="async" className="w-full h-auto" />
+                </button>
+                {fig.alt && (
+                  <figcaption className="mt-2 text-[12.5px] sm:text-[13px] leading-snug text-secondary text-center">
+                    {renderInline(fig.alt)}
+                  </figcaption>
+                )}
+              </figure>
+            )
             return (
-              <div key={i} className="mt-4 sm:mt-5 grid gap-5 lg:gap-8 items-start lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
-                <div className="min-w-0 [&>*:first-child]:mt-0">
+              <div key={i} className="mt-4 sm:mt-5 flow-root">
+                {figure('hidden lg:block float-right w-[43%] ml-8 mb-3 mt-1')}
+                <div className="[&>*:first-child]:mt-0">
                   <MarkdownBody blocks={b.blocks} onImageClick={onImageClick} />
                 </div>
-                {b.figure && (
-                  <figure className="lg:mt-1 max-w-[560px] lg:max-w-none mx-auto lg:mx-0 w-full">
-                    <button
-                      type="button"
-                      onClick={() => onImageClick?.({ src: b.figure!.src, alt: b.figure!.alt, chart: true })}
-                      aria-label={`Enlarge image: ${b.figure.alt}`}
-                      className="block w-full rounded-xl overflow-hidden bg-white cursor-zoom-in"
-                    >
-                      <img src={b.figure.src} alt={b.figure.alt} loading="lazy" decoding="async" className="w-full h-auto" />
-                    </button>
-                    {b.figure.alt && (
-                      <figcaption className="mt-2 text-[12.5px] sm:text-[13px] leading-snug text-secondary text-center">
-                        {renderInline(b.figure.alt)}
-                      </figcaption>
-                    )}
-                  </figure>
-                )}
+                {figure('lg:hidden mt-6 max-w-[560px] mx-auto')}
               </div>
             )
+          }
           case 'stats':
             return (
               <div key={i} className={`mt-7 grid gap-3 sm:gap-4 ${b.items.length >= 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2'}`}>

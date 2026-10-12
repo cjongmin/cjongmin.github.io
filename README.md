@@ -31,7 +31,8 @@ Each talk opens as a blog post with the same layout:
 3. **Contents**: built automatically from the post's `#` and `##` headings.
 4. **Body**: `src/content/talks/<id>.md`, which also places the venue photo (`cover`) where the
    text mentions it; clicking an image opens it in a lightbox. Supported: `#` / `##` headings,
-   paragraphs, `-` and `1.` lists, `> callout`, `**bold**`, `*italic*`, `` `code` ``, `[link](url)`,
+   paragraphs, `-` and `1.` lists, `> callout`, `**bold**`, `*italic*`, `==accent==`, `{{pill}}` /
+   `{{pill|green}}`, `$maths$` and `$$ … $$` blocks (KaTeX, rendered at build time), `` `code` ``, `[link](url)`,
    images (`![caption](/photo.webp)`, or `"figure"` / `"wide"` after the path for charts), and blocks
    between `:::` fences: `:::event` (a ticket: `Date`, `Title`, `Detail`, `Place`, `Note` rows),
    `:::info Title` (`Key: Value` rows), `:::stats` (`value | label | note`),

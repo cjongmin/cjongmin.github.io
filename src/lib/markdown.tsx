@@ -1,5 +1,5 @@
 import { Fragment, ReactNode } from 'react'
-import { CalendarDays, Clock, Info, Landmark, MapPin, Presentation, Users } from 'lucide-react'
+import { CalendarDays, CalendarPlus, Clock, Info, Landmark, MapPin, Presentation, Users } from 'lucide-react'
 
 /**
  * The small Markdown subset that talk posts are written in
@@ -15,7 +15,8 @@ import { CalendarDays, Clock, Info, Landmark, MapPin, Presentation, Users } from
  *
  * Visual blocks, one item per line between ::: fences:
  *   :::info Title          Key: Value           → a fact card
- *   :::event               Date / Title / Detail / Place / Note: …  → a ticket (date stub + details)
+ *   :::event               Date / Title / Detail / Place / Time / Note / Calendar: …  → a ticket
+ *                          (date stub + details; Calendar is a link to an .ics file)
  *   :::stats               value | label | note → number tiles
  *   :::steps               Title | text         → numbered step cards
  *   :::quote               text                 → a highlighted question / pull quote
@@ -168,19 +169,33 @@ function EventTicket({ fields }: { fields: Record<string, string> }) {
           </p>
         )}
         {fields.detail && <p className="mt-1 text-[14px] sm:text-[16px] text-secondary">{renderInline(fields.detail)}</p>}
-        {(fields.place || fields.note) && (
-          <div className="mt-3 sm:mt-4 flex flex-col sm:flex-row sm:flex-wrap gap-x-5 gap-y-1.5 text-[13px] sm:text-[14px] text-secondary">
+        {(fields.place || fields.time || fields.note) && (
+          <div className="mt-3 sm:mt-4 flex flex-col gap-1.5 text-[13px] sm:text-[14px] text-secondary">
+            {fields.time && (
+              <span className="inline-flex items-start gap-1.5 text-[#1D1D1F] dark:text-[#F5F5F7] font-medium">
+                <Clock size={14} className="mt-[3px] shrink-0 text-[#0071E3] dark:text-[#2997FF]" aria-hidden />{renderInline(fields.time)}
+              </span>
+            )}
             {fields.place && (
-              <span className="inline-flex items-center gap-1.5 text-[#1D1D1F] dark:text-[#F5F5F7] font-medium">
-                <MapPin size={14} className="text-[#0071E3] dark:text-[#2997FF]" aria-hidden />{renderInline(fields.place)}
+              <span className="inline-flex items-start gap-1.5 text-[#1D1D1F] dark:text-[#F5F5F7] font-medium">
+                <MapPin size={14} className="mt-[3px] shrink-0 text-[#0071E3] dark:text-[#2997FF]" aria-hidden />{renderInline(fields.place)}
               </span>
             )}
             {fields.note && (
-              <span className="inline-flex items-center gap-1.5">
-                <Clock size={14} aria-hidden />{renderInline(fields.note)}
+              <span className="inline-flex items-start gap-1.5">
+                <Info size={14} className="mt-[3px] shrink-0" aria-hidden />{renderInline(fields.note)}
               </span>
             )}
           </div>
+        )}
+        {fields.calendar && (
+          <a href={fields.calendar} download
+             className="mt-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] sm:text-[14px] font-medium
+                        text-[#0071E3] dark:text-[#2997FF] bg-[#0071E3]/[0.07] dark:bg-[#2997FF]/[0.12]
+                        hover:bg-[#0071E3]/[0.12] dark:hover:bg-[#2997FF]/[0.18] transition-colors">
+            <CalendarPlus size={14} aria-hidden />
+            Add to calendar
+          </a>
         )}
       </div>
     </div>

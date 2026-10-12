@@ -8,3 +8,5 @@ dist
 /[0-9]_*.png
 # working files dropped in the repo root (e.g. a poster before it goes to public/)
 /*.pdf
+# paper sources dropped in for reference (never commit them)
+/arXiv-*

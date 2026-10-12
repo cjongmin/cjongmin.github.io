@@ -3,16 +3,16 @@
 ## Seeing and hearing does not mean using both
 
 :::lead
-An audio-visual language model can receive a video and its soundtrack together, yet still miss information needed to answer a question. Sometimes its answer follows the visual scene while leaving out an audible event. *Providing both inputs does not ensure that both contribute where they should.*
+An audio-visual language model can receive a video and its soundtrack together, yet still miss information needed to answer a question. Sometimes its answer follows the visual scene while leaving out an audible event. Providing both inputs does not guarantee that the model uses *the evidence needed to answer the question*.
 
-As a diagnostic, we examined where the final question token attends in the last decoder layer of VideoLLaMA2. Vanilla decoding places substantially more attention on **video** than on **audio**. Our method, **Fork-Merge Decoding (FMD)**, lets the model read each modality on its own in the early decoder layers by zeroing out the other one. Only then does it bring the two together for joint reasoning. With FMD, the attention gap becomes much smaller.
+As a diagnostic, we examined where the final question token attends in the last decoder layer of VideoLLaMA2. Vanilla decoding places substantially more attention on **video** than on **audio**. Our method, **Fork-Merge Decoding (FMD)**, lets the model read each modality on its own in the early decoder layers by zeroing out the other one. Only then does it bring the two together for joint reasoning. With FMD, this attention gap narrows.
 
 ![Figure 1. Attention weight analysis in VideoLLaMA2 on the AVHBench dataset.](/talks/fmd/attention-bias.webp)
 :::
 
 ## A train that looks like a cable car
 
-Figure 2 makes the failure concrete. The early frames are visually ambiguous, while the audio provides a clearer cue.
+Figure 2 makes the problem concrete with an example from AVQA.
 
 ![Figure 2. AVQA example: original decoding predicts Cable car, while FMD predicts Train.](/talks/fmd/qual-train.webp "wide")
 
@@ -39,12 +39,12 @@ $$
 \alpha = \frac{\sum_{i \in \mathcal{A}} \mathbf{a}_{\text{last}}^{v[\text{masked}]}[i] + \sum_{i \in \mathcal{V}} \mathbf{a}_{\text{last}}^{a[\text{masked}]}[i]}{\sum_{i \in \mathcal{V} \cup \mathcal{A}} \left( \mathbf{a}_{\text{last}}^{v[\text{masked}]}[i] + \mathbf{a}_{\text{last}}^{a[\text{masked}]}[i] \right)}
 $$
 
-The two attention terms come from the video-masked and audio-masked branches, and $\mathcal{V}$ and $\mathcal{A}$ are the video and audio token positions. At each modality's positions, $\alpha$ weights the branch in which that modality was visible and $1-\alpha$ weights the other. The question positions are averaged.
+The two attention terms come from the video-masked and audio-masked branches, and $\mathcal{V}$ and $\mathcal{A}$ are the video and audio token positions. At each modality's positions, $\alpha$ weights the branch in which that modality was visible and $1-\alpha$ weights the other. The question positions are averaged. $\alpha$ is not computed for each input. We estimate one fixed value per model and reuse it.
 
 :::details How α is estimated, and how video-SALMONN differs
-Rather than computing $\alpha$ for every input, we estimate one value per model from 100 random AVHBench examples (0.8 for VideoLLaMA2 and 0.9 for Qwen2.5-Omni) and reuse it during evaluation.
+We estimate $\alpha$ from 100 random AVHBench examples. It is 0.8 for VideoLLaMA2 and 0.9 for Qwen2.5-Omni.
 
-video-SALMONN mixes audio and video in the same channels, so there is no separate audio or video position to weight. For it, we simply add the two branches' audio-visual hidden states and average the question positions.
+video-SALMONN combines audio and video features along the channel dimension at shared token positions, so there is no separate audio or video position to weight. For it, we simply add the two branches' audio-visual hidden states and average the question positions.
 :::
 
 FMD is a ==training-free== and ==plug-and-play== inference strategy. It changes how the pretrained decoder is used, without retraining it or modifying its architecture. By separating the two modalities early, *it gives each one a chance to contribute before joint processing resumes.*
@@ -53,13 +53,13 @@ FMD is a ==training-free== and ==plug-and-play== inference strategy. It changes 
 
 ## Balance is not equality
 
-The part I find most interesting is how little separation is needed, and how quickly more separation becomes a trade-off. Extending the separate processing sounds like a natural next step. The layer experiments show why that needs care.
+The part I find most interesting is how few layers of separate processing are needed, and how extending it helps some tasks while hurting others. In our experiments the fork covers only the first 4 of 28 decoder layers (6 of 40 for video-SALMONN). Extending the separate processing sounds like a natural next step. The layer experiments show why that needs care.
 
 On VideoLLaMA2, later merge points generally reduce attention to video. Audio attention stays above the original decoding baseline, but varies across merge points rather than increasing steadily. Task accuracy changes in different directions. In Figure 4, A→V asks about visible content, V→A about audible content, and AV matching about whether the two correspond (VideoLLaMA2, 200 AVHBench samples per task). Deeper separation tends to help V→A and hurt the other two.
 
 ![Figure 4. AVHBench accuracy of VideoLLaMA2 as the merge point moves deeper.](/talks/fmd/fork-depth.webp "wide")
 
-That is the result I would put at the center of the story.
+For me, this trade-off is the most informative result.
 
 :::quote
 Useful multimodal processing depends on the evidence a question requires. Equal attention to both modalities is not an objective in itself.
@@ -84,12 +84,12 @@ I read these results as evidence that changing the inference procedure can impro
 There is also a computational cost. In our VideoLLaMA2 timing experiment on 100 AVHBench examples, FMD took 0.43 seconds per generated token, compared with 0.34 seconds for original decoding: 1.26 times the latency, or about 26% more. VCD and SID took 2.03 and 2.09 times the baseline latency in the same comparison. FMD duplicates the early decoder computation while sharing the remaining layers after the merge.
 
 :::details Scope and evaluation notes
-The 21 comparisons count the available model–task results in the main table. Three Qwen2.5-Omni dataset evaluations were unavailable because of memory constraints, and AVUT and WorldSense were restricted to videos under 60 seconds. These numbers follow the EMNLP 2026 version of the paper. The current arXiv version (v2) reports AVHBench, AVQA and MUSIC-AVQA. The timing figures come from a single RTX A6000 setup and are not a general latency guarantee.
+The 21 comparisons count the available model–task results in the main table. Three Qwen2.5-Omni dataset evaluations were unavailable because of memory constraints, and AVUT and WorldSense were restricted to videos under 60 seconds. The timing figures come from a single RTX A6000 setup and are not a general latency guarantee.
 :::
 
 ## More complete descriptions still need checking
 
-The train example concerns a discrete answer. A fishing clip from AVHBench shows another kind of change.
+The train example involves choosing an answer from a fixed set of options. A fishing clip from AVHBench shows another kind of change.
 
 The prompt asks the model to describe what it sees and hears. Original decoding describes a man standing in a stream while fishing. FMD also mentions the sound of the stream and occasional splashes, matching the acoustic context described in the example.
 
@@ -101,11 +101,11 @@ In one example, FMD mentions a woman speaking and drying her hair, but describes
 
 ![Figure 6. Remaining FMD errors: temporal relation and object identity.](/talks/fmd/qual-failures.webp "wide")
 
-These failures show where the improvement stops. FMD can improve the use of multimodal information while still producing errors in timing and object identity. More complete descriptions and more accurate descriptions need to be evaluated separately.
+These examples show the kinds of errors that remain. FMD can improve the use of multimodal information while still producing errors in timing and object identity. More complete descriptions and more accurate descriptions need to be evaluated separately.
 
 # At EMNLP 2026
 
-## Questions I am bringing
+## What I'd like to discuss
 
 I will be presenting this work at Findings of EMNLP 2026 in Budapest.
 
@@ -118,11 +118,9 @@ Place: Hall H, Hungexpo Budapest Congress and Exhibition Center
 Calendar: /talks/fmd/emnlp-2026-fmd-poster.ics
 :::
 
-The layer trade-off is what I most want to discuss. How much separate processing does a model actually need? What evidence would show that a better answer came from using the right modality?
+Beyond the performance gains, I am curious about what actually takes shape inside the LLM decoder. What information does each layer build up as the model reasons, and is that processing hierarchical? If it is, that might explain why processing each modality on its own before merging works. I would love to hear your thoughts on this at the poster.
 
-I am also interested in whether the same approach helps when the input conditions change, for example when audio is unreliable or the two streams conflict. Those are the cases I would like to test next.
-
-If these questions overlap with your work, I would be glad to talk at the poster. The full conference schedule is in the [EMNLP 2026 program](https://2026.emnlp.org/program/).
+The full conference schedule is in the [EMNLP 2026 program](https://2026.emnlp.org/program/).
 
 ## After the session
 

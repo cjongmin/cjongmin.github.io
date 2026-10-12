@@ -181,62 +181,82 @@ function ticketDate(date: string): { month: string; big: string; small?: string 
   return { month: '', big: date }
 }
 
-/** A conference ticket: date stub, a perforated tear line, then the details. */
+/** A tear line between ticket parts, with the two notches of a ticket. */
+function TearLine({ className = '' }: { className?: string }) {
+  return (
+    <div aria-hidden className={`relative w-0 border-l-[1.5px] border-dashed border-black/[0.14] dark:border-white/[0.16] ${className}`}>
+      <span className="absolute -top-2.5 -left-[11px] w-5 h-5 rounded-full bg-white dark:bg-black border border-black/[0.08] dark:border-white/[0.1]" />
+      <span className="absolute -bottom-2.5 -left-[11px] w-5 h-5 rounded-full bg-white dark:bg-black border border-black/[0.08] dark:border-white/[0.1]" />
+    </div>
+  )
+}
+
+/**
+ * A conference ticket in three parts: the date stub, the details, and an "Add to
+ * calendar" stub on the right (a strip along the bottom on phones).
+ */
 function EventTicket({ fields }: { fields: Record<string, string> }) {
   const d = ticketDate(fields.date ?? '')
   return (
-    <div className="mt-6 flex rounded-2xl overflow-hidden bg-white dark:bg-[#111113]
+    <div className="mt-6 flex rounded-2xl overflow-hidden bg-white dark:bg-[#111113] break-inside-avoid
                     border border-black/[0.08] dark:border-white/[0.1] shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_-12px_rgba(0,0,0,0.12)]">
-      {/* stub */}
-      <div className="shrink-0 w-[88px] sm:w-[120px] flex flex-col items-center justify-center py-5
-                      bg-[#F3F7FD] dark:bg-[#2997FF]/[0.08]">
+      {/* date stub */}
+      <div className="shrink-0 w-[78px] sm:w-[104px] flex flex-col items-center justify-center py-4 bg-[#F3F7FD] dark:bg-[#2997FF]/[0.08]">
         {d.month && (
           <span className="text-[12px] sm:text-[13px] font-semibold tracking-[0.18em] text-[#0071E3] dark:text-[#2997FF]">{d.month}</span>
         )}
-        <span className="mt-1 text-[24px] sm:text-[32px] font-semibold leading-none tracking-tight tabular-nums
-                         text-[#1D1D1F] dark:text-[#F5F5F7]">{d.big}</span>
+        <span className="mt-1 text-[24px] sm:text-[30px] font-semibold leading-none tracking-tight tabular-nums text-[#1D1D1F] dark:text-[#F5F5F7]">
+          {d.big}
+        </span>
         {d.small && <span className="mt-1 text-[12px] sm:text-[13px] font-medium text-secondary">{d.small}</span>}
       </div>
-      {/* tear line, with the two notches of a ticket */}
-      <div aria-hidden className="relative w-0 border-l-[1.5px] border-dashed border-black/[0.14] dark:border-white/[0.16]">
-        <span className="absolute -top-2.5 -left-[11px] w-5 h-5 rounded-full bg-white dark:bg-black border border-black/[0.08] dark:border-white/[0.1]" />
-        <span className="absolute -bottom-2.5 -left-[11px] w-5 h-5 rounded-full bg-white dark:bg-black border border-black/[0.08] dark:border-white/[0.1]" />
-      </div>
-      {/* details */}
-      <div className="min-w-0 flex-1 px-4 py-4 sm:px-7 sm:py-6">
-        {fields.title && (
-          <p className="text-[16px] sm:text-[20px] font-semibold tracking-tight leading-snug text-[#1D1D1F] dark:text-[#F5F5F7]">
-            {renderInline(fields.title)}
-          </p>
-        )}
-        {fields.detail && <p className="mt-1 text-[14px] sm:text-[16px] text-secondary">{renderInline(fields.detail)}</p>}
-        {(fields.place || fields.time || fields.note) && (
-          <div className="mt-3 sm:mt-4 flex flex-col gap-1.5 text-[13px] sm:text-[14px] text-secondary">
-            {fields.time && (
-              <span className="inline-flex items-start gap-1.5 text-[#1D1D1F] dark:text-[#F5F5F7] font-medium">
-                <Clock size={14} className="mt-[3px] shrink-0 text-[#0071E3] dark:text-[#2997FF]" aria-hidden />{renderInline(fields.time)}
-              </span>
-            )}
-            {fields.place && (
-              <span className="inline-flex items-start gap-1.5 text-[#1D1D1F] dark:text-[#F5F5F7] font-medium">
-                <MapPin size={14} className="mt-[3px] shrink-0 text-[#0071E3] dark:text-[#2997FF]" aria-hidden />{renderInline(fields.place)}
-              </span>
-            )}
-            {fields.note && (
-              <span className="inline-flex items-start gap-1.5">
-                <Info size={14} className="mt-[3px] shrink-0" aria-hidden />{renderInline(fields.note)}
-              </span>
-            )}
-          </div>
-        )}
+      <TearLine />
+
+      <div className="min-w-0 flex-1 flex flex-col sm:flex-row">
+        {/* details */}
+        <div className="min-w-0 flex-1 px-4 py-4 sm:px-6 sm:py-5">
+          {fields.title && (
+            <p className="text-[16px] sm:text-[20px] font-semibold tracking-tight leading-snug text-[#1D1D1F] dark:text-[#F5F5F7]">
+              {renderInline(fields.title)}
+            </p>
+          )}
+          {fields.detail && <p className="mt-0.5 text-[14px] sm:text-[16px] text-secondary">{renderInline(fields.detail)}</p>}
+          {(fields.time || fields.place || fields.note) && (
+            <div className="mt-3 flex flex-col gap-1.5 text-[14px] sm:text-[16px] font-medium text-[#1D1D1F] dark:text-[#F5F5F7]">
+              {fields.time && (
+                <span className="inline-flex items-start gap-2">
+                  <Clock size={16} className="mt-[3px] sm:mt-1 shrink-0 text-[#0071E3] dark:text-[#2997FF]" aria-hidden />{renderInline(fields.time)}
+                </span>
+              )}
+              {fields.place && (
+                <span className="inline-flex items-start gap-2">
+                  <MapPin size={16} className="mt-[3px] sm:mt-1 shrink-0 text-[#0071E3] dark:text-[#2997FF]" aria-hidden />{renderInline(fields.place)}
+                </span>
+              )}
+              {fields.note && (
+                <span className="inline-flex items-start gap-2 font-normal text-secondary">
+                  <Info size={16} className="mt-[3px] sm:mt-1 shrink-0" aria-hidden />{renderInline(fields.note)}
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* calendar stub */}
         {fields.calendar && (
-          <a href={fields.calendar} download
-             className="mt-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] sm:text-[14px] font-medium print:hidden
-                        text-[#0071E3] dark:text-[#2997FF] bg-[#0071E3]/[0.07] dark:bg-[#2997FF]/[0.12]
-                        hover:bg-[#0071E3]/[0.12] dark:hover:bg-[#2997FF]/[0.18] transition-colors">
-            <CalendarPlus size={14} aria-hidden />
-            Add to calendar
-          </a>
+          <>
+            <TearLine className="hidden sm:block" />
+            <a href={fields.calendar} download aria-label="Add to calendar"
+               className="shrink-0 sm:w-[112px] flex sm:flex-col items-center justify-center gap-2 sm:gap-1.5 py-2.5 sm:py-4 print:hidden
+                          border-t border-dashed border-black/[0.12] dark:border-white/[0.16] sm:border-t-0
+                          bg-rose-50 dark:bg-rose-500/[0.10] text-rose-700 dark:text-rose-300
+                          hover:bg-rose-100 dark:hover:bg-rose-500/[0.16] transition-colors">
+              <CalendarPlus size={20} aria-hidden />
+              <span className="text-[13px] sm:text-[13px] font-semibold leading-tight text-center">
+                Add to<span className="sm:hidden"> </span><br className="hidden sm:block" />calendar
+              </span>
+            </a>
+          </>
         )}
       </div>
     </div>

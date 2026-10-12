@@ -1,4 +1,5 @@
 import { Fragment, ReactNode } from 'react'
+import 'katex/dist/katex.min.css'   // maths is rendered at build time (vite.config.ts → prerenderMath)
 import { CalendarDays, CalendarPlus, Clock, Info, Landmark, MapPin, Presentation, Users } from 'lucide-react'
 
 /**
@@ -12,13 +13,17 @@ import { CalendarDays, CalendarPlus, Clock, Info, Landmark, MapPin, Presentation
  *   ![caption](/chart.webp "figure")             chart on white, up to 760px wide
  *   ![caption](/diagram.webp "wide")             chart on white, full width
  *   **bold**  *italic*  `code`  [link](https://…)
+ *   ==key phrase==        → accent-coloured emphasis (use sparingly)
+ *   {{Training-free}}     → a coloured pill; {{Plug-and-play|green}} picks the colour (blue, green, rose)
+ *   $\alpha$              → inline maths; a $$ … $$ block (on its own lines) is displayed maths.
+ *                          Both are rendered with KaTeX at build time and arrive here as @@MATH@@ markers.
  *
  * Visual blocks, one item per line between ::: fences:
  *   :::info Title          Key: Value           → a fact card
  *   :::event               Date / Title / Detail / Place / Time / Note / Calendar: …  → a ticket
  *                          (date stub + details; Calendar is a link to an .ics file)
  *   :::stats               value | label | note → number tiles
- *   :::steps               Title | text         → numbered step cards
+ *   :::steps               Title | lead | text  → numbered steps, stacked (lead is optional)
  *   :::quote               text                 → a highlighted question / pull quote
  *   :::lead                paragraphs + one ![caption](/figure.webp)
  *                          → an opening like wrapfigure: the figure floats right and the text wraps
@@ -36,7 +41,8 @@ export type Block =
   | { kind: 'info'; title: string; rows: [string, string][] }
   | { kind: 'event'; fields: Record<string, string> }
   | { kind: 'stats'; items: { value: string; label: string; note?: string }[] }
-  | { kind: 'steps'; items: { title: string; text: string }[] }
+  | { kind: 'steps'; items: { title: string; lead?: string; text: string }[] }
+  | { kind: 'math'; html: string }
   | { kind: 'quote'; text: string }
   | { kind: 'lead'; blocks: Block[]; figure?: { src: string; alt: string } }
 
@@ -64,6 +70,12 @@ export function parseMarkdown(src: string): Block[] {
       continue
     }
     if (/^-{3,}$/.test(line.trim())) { blocks.push({ kind: 'rule' }); i++; continue }
+
+    if (line.startsWith('@@MATHBLOCK@@')) {
+      blocks.push({ kind: 'math', html: decodeURIComponent(line.slice('@@MATHBLOCK@@'.length)) })
+      i++
+      continue
+    }
 
     if (/^:::lead\s*$/.test(line)) {
       // keep blank lines: the lead is regular markdown (paragraphs) plus one figure
@@ -95,7 +107,10 @@ export function parseMarkdown(src: string): Block[] {
       } else if (fence[1] === 'stats') {
         blocks.push({ kind: 'stats', items: body.map(l => { const [value, label, note] = cells(l); return { value, label, note } }) })
       } else if (fence[1] === 'steps') {
-        blocks.push({ kind: 'steps', items: body.map(l => { const [title, text] = cells(l); return { title, text } }) })
+        blocks.push({ kind: 'steps', items: body.map(l => {
+          const c = cells(l)
+          return c.length >= 3 ? { title: c[0], lead: c[1], text: c.slice(2).join(' | ') } : { title: c[0], text: c[1] ?? '' }
+        }) })
       } else {
         blocks.push({ kind: 'quote', text: body.join(' ') })
       }
@@ -127,7 +142,7 @@ export function parseMarkdown(src: string): Block[] {
     }
 
     const para: string[] = []
-    while (i < lines.length && lines[i].trim() && !/^(#{1,2}\s|>|!\[|:::|\s*[-*]\s|\s*\d+\.\s|-{3,}$)/.test(lines[i])) {
+    while (i < lines.length && lines[i].trim() && !/^(#{1,2}\s|>|!\[|:::|@@MATHBLOCK@@|\s*[-*]\s|\s*\d+\.\s|-{3,}$)/.test(lines[i])) {
       para.push(lines[i++].trim())
     }
     blocks.push({ kind: 'paragraph', text: para.join(' ') })
@@ -232,10 +247,30 @@ function splitNote(value: string): [string, string | undefined] {
 const JUSTIFY = 'text-justify hyphens-auto [hyphenate-limit-chars:10_4_4] sm:hyphens-manual'
 
 // **bold**, *italic*, `code`, [text](url)
+const PILL: Record<string, string> = {
+  blue: 'bg-[#0071E3]/[0.09] text-[#0062C4] dark:bg-[#2997FF]/[0.16] dark:text-[#5AB0FF]',
+  green: 'bg-emerald-500/[0.11] text-emerald-700 dark:bg-emerald-400/[0.15] dark:text-emerald-300',
+  rose: 'bg-rose-500/[0.10] text-rose-700 dark:bg-rose-400/[0.15] dark:text-rose-300',
+}
+
 export function renderInline(text: string): ReactNode[] {
-  return text.split(/(\*\*[^*]+\*\*|\*[^*\s][^*]*\*|`[^`]+`|\[[^\]]+\]\([^)]+\))/).map((part, i) => {
+  return text.split(/(@@MATH@@[^@]+@@|\{\{[^}]+\}\}|==[^=]+==|\*\*[^*]+\*\*|\*[^*\s][^*]*\*|`[^`]+`|\[[^\]]+\]\([^)]+\))/).map((part, i) => {
+    if (part.startsWith('@@MATH@@') && part.endsWith('@@')) {
+      return <span key={i} dangerouslySetInnerHTML={{ __html: decodeURIComponent(part.slice(8, -2)) }} />
+    }
+    if (part.startsWith('{{') && part.endsWith('}}')) {
+      const [label, colour = 'blue'] = part.slice(2, -2).split('|').map(x => x.trim())
+      return (
+        <span key={i} className={`inline-block align-baseline px-2 py-[1px] mx-[1px] rounded-md text-[0.92em] font-semibold ${PILL[colour] ?? PILL.blue}`}>
+          {label}
+        </span>
+      )
+    }
+    if (part.length > 4 && part.startsWith('==') && part.endsWith('==')) {
+      return <strong key={i} className="font-semibold text-[#0062C4] dark:text-[#5AB0FF]">{renderInline(part.slice(2, -2))}</strong>
+    }
     if (part.startsWith('**') && part.endsWith('**')) {
-      return <strong key={i} className="font-semibold text-[#1D1D1F] dark:text-[#F5F5F7]">{part.slice(2, -2)}</strong>
+      return <strong key={i} className="font-semibold text-[#1D1D1F] dark:text-[#F5F5F7]">{renderInline(part.slice(2, -2))}</strong>
     }
     if (part.startsWith('`') && part.endsWith('`')) {
       return <code key={i} className="px-1 py-0.5 rounded bg-black/[0.05] dark:bg-white/10 text-[0.9em]">{part.slice(1, -1)}</code>
@@ -403,19 +438,31 @@ export function MarkdownBody({ blocks, onImageClick }: {
               </div>
             )
           case 'steps':
+            // Stacked steps joined by a thin line: number, title, an optional bold lead, then the text
             return (
-              <ol key={i} className={`mt-7 grid gap-3 sm:gap-4 ${b.items.length >= 2 ? 'sm:grid-cols-2' : ''}`}>
+              <ol key={i} className="mt-7 rounded-2xl border border-black/[0.08] dark:border-white/[0.1] px-5 py-5 sm:px-7 sm:py-6">
                 {b.items.map((it, j) => (
-                  <li key={it.title} className="rounded-2xl p-5 sm:p-6 border border-black/[0.08] dark:border-white/[0.1]">
-                    <div className="flex items-center gap-3">
-                      <span className="w-7 h-7 rounded-full bg-[#0071E3] dark:bg-[#2997FF] text-white text-[13px] font-semibold
-                                       flex items-center justify-center tabular-nums">{j + 1}</span>
-                      <span className="text-[16px] sm:text-[18px] font-semibold tracking-tight text-[#1D1D1F] dark:text-[#F5F5F7]">{it.title}</span>
+                  <li key={it.title} className="relative flex gap-4 sm:gap-5 pb-6 last:pb-0">
+                    {j < b.items.length - 1 && (
+                      <span aria-hidden className="absolute left-[13px] sm:left-[15px] top-9 bottom-1 w-px bg-black/[0.1] dark:bg-white/[0.14]" />
+                    )}
+                    <span className="shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#0071E3] dark:bg-[#2997FF] text-white text-[13px] sm:text-[14px]
+                                     font-semibold flex items-center justify-center tabular-nums">{j + 1}</span>
+                    <div className="min-w-0 flex-1 pt-0.5">
+                      <p className="text-[16px] sm:text-[18px] leading-snug tracking-tight">
+                        <span className="font-semibold text-[#1D1D1F] dark:text-[#F5F5F7]">{it.title}</span>
+                        {it.lead && <span className="text-secondary"> — {renderInline(it.lead)}</span>}
+                      </p>
+                      <p className={`mt-2 text-[14.5px] sm:text-[16px] leading-[1.7] text-body ${JUSTIFY}`}>{renderInline(it.text)}</p>
                     </div>
-                    <p className={`mt-2.5 sm:mt-3 text-[14.5px] sm:text-[16px] leading-[1.7] text-body ${JUSTIFY}`}>{renderInline(it.text)}</p>
                   </li>
                 ))}
               </ol>
+            )
+          case 'math':
+            return (
+              <div key={i} className="mt-6 overflow-x-auto overflow-y-hidden py-1 text-[#1D1D1F] dark:text-[#F5F5F7] text-[15px] sm:text-[17px]"
+                   dangerouslySetInnerHTML={{ __html: b.html }} />
             )
           case 'quote':
             return (

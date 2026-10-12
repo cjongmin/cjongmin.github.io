@@ -1,6 +1,7 @@
 import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import { readFileSync } from 'node:fs'
+import katex from 'katex'
 
 const SITE = 'https://cjongmin.github.io'
 
@@ -85,8 +86,32 @@ function stripDraftTalks(): Plugin {
   }
 }
 
+/**
+ * Talk posts may contain maths: $…$ inline and $$ … $$ as a block. Render it to
+ * KaTeX HTML at build time, so readers download only katex.css (and the fonts in
+ * use), not KaTeX itself. The HTML travels inside the post's text as a marker
+ * that src/lib/markdown.tsx turns back into markup.
+ */
+function prerenderMath(): Plugin {
+  const html = (tex: string, displayMode: boolean) =>
+    encodeURIComponent(katex.renderToString(tex.trim(), { displayMode, throwOnError: true, strict: 'ignore' }))
+  return {
+    name: 'prerender-talk-math',
+    enforce: 'pre',
+    load(id) {
+      const [file, query] = id.split('?')
+      if (!/\/src\/content\/talks\/[^/]+\.md$/.test(file) || !query?.includes('raw')) return null
+      const text = readFileSync(file, 'utf8')
+        .replace(/^\$\$\s*\n([\s\S]*?)\n\$\$\s*$/gm, (_, tex) => `@@MATHBLOCK@@${html(tex, true)}`)
+        .replace(/\$([^$\n]+)\$/g, (_, tex) => `@@MATH@@${html(tex, false)}@@`)
+      this.addWatchFile(file)
+      return `export default ${JSON.stringify(text)}`
+    },
+  }
+}
+
 export default defineConfig({
-  plugins: [react(), jsonLd(), stripDraftTalks()],
+  plugins: [react(), jsonLd(), stripDraftTalks(), prerenderMath()],
   build: {
     rollupOptions: {
       output: {

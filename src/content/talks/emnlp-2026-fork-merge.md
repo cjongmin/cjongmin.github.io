@@ -1,43 +1,45 @@
 # Seeing and hearing does not mean using both
 
 :::lead
-An audio-visual language model can receive a video and its soundtrack together, yet still miss information needed to answer a question. Sometimes its answer follows the visual scene while leaving out an audible event. Providing both inputs does not ensure that both contribute where they should.
+An audio-visual language model can receive a video and its soundtrack together, yet still miss information needed to answer a question. Sometimes its answer follows the visual scene while leaving out an audible event. *Providing both inputs does not ensure that both contribute where they should.*
 
-As a diagnostic, we examined where the final question token attends in the last decoder layer of VideoLLaMA2. Vanilla decoding places substantially more attention on video than on audio. Fork-Merge Decoding (FMD), the method this post is about, narrows this gap by reducing video attention and increasing audio attention.
+As a diagnostic, we examined where the final question token attends in the last decoder layer of VideoLLaMA2. Vanilla decoding places substantially more attention on **video** than on **audio**. Our method, **Fork-Merge Decoding (FMD)**, has the model first read each modality on its own, with the other one zeroed out, in the early decoder layers, and only then brings the two together for joint reasoning. With FMD, the attention gap becomes much smaller.
 
-Attention is not a complete causal account of modality reliance, but the pattern gives a useful clue: the model can receive both modalities while behaving as if one were enough.
-
-![Final-question-token attention in VideoLLaMA2 on AVHBench (100 samples).](/talks/fmd/attention-bias.webp)
+![Attention weight analysis in VideoLLaMA2 on the AVHBench dataset.](/talks/fmd/attention-bias.webp)
 :::
 
 # A train that looks like a cable car
 
 One example from AVQA makes the problem concrete. In the early video frames, a train could be mistaken for a cable car. The accompanying audio contains the sound of a train gradually accelerating as it leaves a station.
 
-Asked what is driving in the video, VideoLLaMA2 with its original decoding procedure selects "Cable car." With FMD, the same model selects the correct answer, "Train."
+Asked what is driving in the video, VideoLLaMA2 with its original decoding procedure selects **"Cable car."** With FMD, the same model selects the correct answer, **"Train."**
 
 ![Figure 1. AVQA example with VideoLLaMA2. The soundtrack provides a cue that can help resolve the ambiguous early frames. Original decoding selects (A) Cable car; FMD selects (C) Train.](/talks/fmd/qual-train.webp "wide")
 
-The model had access to both signals, but the answer followed the more visually plausible interpretation. This example illustrates the behavior we want to improve; it does not, by itself, establish which internal computation caused the original error.
+The model had access to both signals, yet its answer followed the visually plausible interpretation. This is the kind of failure we want FMD to reduce.
 
 # Giving each modality a separate start
 
-One possible contributor to the imbalance is the training data: video–text pairs are more readily available than aligned audio–video–text data. That is a hypothesis about the source of the bias; our experiments do not isolate it as the cause.
+One possible source of this imbalance is the training data. Video–text pairs are much more common than aligned audio–video–text data. We treat this as a hypothesis, not as a conclusion from our experiments.
 
-In the AV-LLMs we study, audio and video representations enter the language-model decoder together. FMD changes when they interact within that decoder, without changing the model weights:
-
-:::steps
-Fork | We make two versions of the input: one masks the video, the other masks the audio, and both retain the question. They pass separately through the same early decoder layers, so each branch processes the available modality in the context of the question.
-Merge | We then merge the two branches' hidden states and continue through the remaining layers to produce an answer.
-:::
-
-The separation is short: four of 28 decoder layers for VideoLLaMA2 and Qwen2.5-Omni, and six of 40 for video-SALMONN in our experiments.
+FMD changes ==when audio and video begin to interact== inside the decoder. The model weights remain unchanged.
 
 ![Figure 2. The fork and merge stages. Two masked inputs share the pretrained decoder weights and run separately through its early layers; their hidden states are merged before decoding continues. The attention-guided merge shown here is the token-wise variant.](/talks/fmd/method.webp "wide")
 
-The merge rule depends on how a model represents the modalities. For VideoLLaMA2 and Qwen2.5-Omni, which use separate audio and video token positions, we use attention-derived weights to combine the two branches at those positions. We estimate a fixed weight for each model from 100 randomly sampled AVHBench examples and reuse it during evaluation. For video-SALMONN's channel-wise representation, we add the branches' audio-visual hidden states. Both variants average the hidden states at the question positions.
+:::steps
+Fork | Isolate each modality | We create two inputs by **zeroing out one modality** in each. One keeps the audio and zeros the video; the other keeps the video and zeros the audio. Both keep the question. Zeroing preserves the shape and positions of the input but removes its content. The two inputs then pass independently through the same early decoder layers, so the model reads each modality on its own, in the context of the question.
+Merge | Bring the branches back together | We merge the two branches' hidden states and continue through the remaining decoder layers, where cross-modal interaction and joint reasoning take place.
+:::
 
-FMD therefore requires no additional model training, but it does require a change to the inference procedure. Its early separation gives each modality an opportunity to contribute before joint processing resumes.
+For models that keep audio and video at separate token positions (VideoLLaMA2 and Qwen2.5-Omni), the merge is **attention-guided**. We take the final token's attention in each branch, $\mathbf{a}_{\text{last}}^{v[\text{masked}]}$ and $\mathbf{a}_{\text{last}}^{a[\text{masked}]}$, and measure how much of it falls on the modality that was left unmasked:
+
+$$
+\alpha = \frac{\sum_{i \in \mathcal{A}} \mathbf{a}_{\text{last}}^{v[\text{masked}]}[i] + \sum_{i \in \mathcal{V}} \mathbf{a}_{\text{last}}^{a[\text{masked}]}[i]}{\sum_{i \in \mathcal{V} \cup \mathcal{A}} \left( \mathbf{a}_{\text{last}}^{v[\text{masked}]}[i] + \mathbf{a}_{\text{last}}^{a[\text{masked}]}[i] \right)}
+$$
+
+Here $\mathcal{V}$ and $\mathcal{A}$ are the video and audio token positions. At each modality's positions, $\alpha$ weights the branch in which that modality was visible, and $1-\alpha$ the other; the question positions are averaged. Rather than computing $\alpha$ for every input, we estimate one value per model from 100 random AVHBench examples ($\alpha = 0.8$ for VideoLLaMA2, $0.9$ for Qwen2.5-Omni) and reuse it. video-SALMONN mixes audio and video in the same channels, so there we simply add the two branches' audio-visual hidden states and average the question positions.
+
+FMD is a {{Training-free}} and {{Plug-and-play|green}} inference strategy. It changes how the pretrained decoder is used, without retraining it or modifying its architecture. By separating the two modalities early, *it gives each one a chance to contribute before joint processing resumes.*
 
 # Balance is not equality
 

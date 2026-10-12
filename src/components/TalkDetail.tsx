@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { m, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, Check, ChevronLeft, ChevronRight, Link2 } from 'lucide-react'
 import { Talk, talkShareUrl, talksNewestFirst } from '../data/talks'
@@ -14,6 +15,24 @@ interface TalkDetailProps {
   talk: Talk
   onClose: () => void
   onNavigate: (talk: Talk) => void   // open another post from the list at the bottom
+  standalone?: boolean               // its own page (/talks/<id>/) rather than an overlay on the home page
+}
+
+/** While printing: open collapsed asides, load lazy images, and print in light colours. */
+function usePrintPreparation() {
+  useEffect(() => {
+    let wasDark = false
+    const before = () => {
+      document.querySelectorAll('details').forEach(d => { d.open = true })
+      document.querySelectorAll<HTMLImageElement>('img[loading="lazy"]').forEach(img => { img.loading = 'eager' })
+      wasDark = document.documentElement.classList.contains('dark')
+      document.documentElement.classList.remove('dark')
+    }
+    const after = () => { if (wasDark) document.documentElement.classList.add('dark') }
+    window.addEventListener('beforeprint', before)
+    window.addEventListener('afterprint', after)
+    return () => { window.removeEventListener('beforeprint', before); window.removeEventListener('afterprint', after) }
+  }, [])
 }
 
 const HONOURS = new Set(['Oral', 'Spotlight'])
@@ -33,26 +52,34 @@ const LINK_TILE = `grow basis-[calc(25%-0.375rem)] sm:basis-0 min-w-0 inline-fle
  * One talk as a blog post: eyebrow, the paper title, subtitle and byline, then
  * the authors, a table of contents, the body (src/content/talks/<id>.md, which
  * places its own photos; clicking one opens it in a lightbox), the paper's
- * links, and the list of all posts. Opens over the site (no router), is
- * addressable via #talk=<id> (shared as /talks/<id>/), and closes on Back / Escape.
+ * links, and the list of all posts.
+ *
+ * Two ways in: from the home page it opens over the site (#talk=<id>, rendered into
+ * <body> through a portal, closes on Back / Escape); at /talks/<id>/ it is its own
+ * page, prerendered at build time (scripts/prerender.mjs) so it reads, prints and
+ * indexes as an ordinary article.
  */
-export default function TalkDetail({ talk, onClose, onNavigate }: TalkDetailProps) {
+export default function TalkDetail({ talk, onClose, onNavigate, standalone = false }: TalkDetailProps) {
   const backRef = useRef<HTMLButtonElement>(null)
   const [copied, setCopied] = useState(false)
   const [zoom, setZoom] = useState<LightboxImage | null>(null)
   const closeZoom = useCallback(() => setZoom(null), [])
 
+  usePrintPreparation()
   useEffect(() => {
+    if (standalone) return
     backRef.current?.focus()
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
     document.addEventListener('keydown', onKey)
     const prev = document.body.style.overflow
     document.body.style.overflow = 'hidden'
+    document.documentElement.classList.add('talk-open')     // print: hide the home page underneath (index.css)
     return () => {
       document.removeEventListener('keydown', onKey)
       document.body.style.overflow = prev
+      document.documentElement.classList.remove('talk-open')
     }
-  }, [onClose])
+  }, [onClose, standalone])
 
   const paper = talk.paperId ? publications.find(p => p.id === talk.paperId) : undefined
   const blocks = useMemo(() => parseMarkdown(talkContent(talk.id)), [talk.id])
@@ -68,26 +95,33 @@ export default function TalkDetail({ talk, onClose, onNavigate }: TalkDetailProp
     } catch { /* clipboard unavailable — ignore */ }
   }
 
-  return (
+  const view = (
     <AnimatePresence>
       <m.div
-        initial={{ opacity: 0 }}
+        initial={standalone ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.18 }}
-        className="fixed inset-0 z-[100] overflow-y-auto overscroll-contain bg-white dark:bg-black"
-        role="dialog"
-        aria-modal="true"
-        aria-label={talk.title}
+        className={standalone
+          ? 'talk-page min-h-screen bg-white dark:bg-black'
+          : 'talk-overlay fixed inset-0 z-[100] overflow-y-auto overscroll-contain bg-white dark:bg-black'}
+        {...(standalone ? {} : { role: 'dialog', 'aria-modal': true, 'aria-label': talk.title })}
       >
         {/* Sticky top bar */}
         <div className="sticky top-0 z-10 h-14 bg-white/85 dark:bg-black/85 backdrop-blur-xl
-                        border-b border-black/[0.06] dark:border-white/[0.07]">
+                        border-b border-black/[0.06] dark:border-white/[0.07] print:hidden">
           <div className="section-container h-full flex items-center justify-between">
-            <button ref={backRef} onClick={onClose} className="btn-secondary">
-              <ArrowLeft size={14} />
-              Back
-            </button>
+            {standalone ? (
+              <a href="/#talks" className="btn-secondary">
+                <ArrowLeft size={14} />
+                {profile.name}
+              </a>
+            ) : (
+              <button ref={backRef} onClick={onClose} className="btn-secondary">
+                <ArrowLeft size={14} />
+                Back
+              </button>
+            )}
             <span className="text-[12px] sm:text-[13px] font-semibold text-secondary uppercase tracking-widest">
               Presentation Notes <span className="text-[#1D1D1F] dark:text-[#F5F5F7]">#{talk.no}</span>
             </span>
@@ -95,7 +129,7 @@ export default function TalkDetail({ talk, onClose, onNavigate }: TalkDetailProp
         </div>
 
         <m.div
-          initial={{ opacity: 0, y: 12 }}
+          initial={standalone ? false : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.05 }}
           className="pb-24"
@@ -118,7 +152,7 @@ export default function TalkDetail({ talk, onClose, onNavigate }: TalkDetailProp
                 words per line opens wide gaps), never ending on a lone word */}
             <h1 className="mt-3 sm:mt-4 text-[24px] sm:text-[34px] lg:text-[40px] font-semibold tracking-tight leading-[1.18]
                            text-[#1D1D1F] dark:text-[#F5F5F7] [text-wrap:balance]">
-              {noOrphan(talk.headline ?? talk.title)}
+              {noOrphan(talk.title)}
             </h1>
             {talk.subtitle && (
               <p className="mt-3 sm:mt-4 text-[16px] sm:text-[21px] leading-[1.45] text-secondary [text-wrap:balance]">{noOrphan(talk.subtitle)}</p>
@@ -140,18 +174,6 @@ export default function TalkDetail({ talk, onClose, onNavigate }: TalkDetailProp
                 </p>
               </div>
             </div>
-            {/* A post with its own headline credits the paper by its full title */}
-            {talk.headline && paper && (
-              <p className="mt-5 text-[14px] sm:text-[15px] leading-relaxed text-secondary">
-                Based on our paper{' '}
-                <a href={paper.links?.paper ?? '#'} target="_blank" rel="noopener noreferrer"
-                   className="italic text-[#1D1D1F] dark:text-[#F5F5F7] underline decoration-black/20 dark:decoration-white/25
-                              underline-offset-[3px] hover:text-[#0071E3] dark:hover:text-[#2997FF] transition-colors">
-                  {paper.title}
-                </a>
-                {` (${paper.displayVenue ?? `${paper.venue} ${paper.year}`})`}.
-              </p>
-            )}
           </header>
 
           {/* ---------- Body ---------- */}
@@ -176,11 +198,13 @@ export default function TalkDetail({ talk, onClose, onNavigate }: TalkDetailProp
             )}
 
             {/* ---------- All posts ---------- */}
-            <PostList current={talk} onNavigate={onNavigate} />
+            <div className="print:hidden">
+              <PostList current={talk} onNavigate={onNavigate} />
+            </div>
 
             {/* ---------- Footer ---------- */}
             <div className="mt-16 pt-6 border-t border-black/[0.08] dark:border-white/[0.1]
-                            flex items-center justify-between gap-4">
+                            flex items-center justify-between gap-4 print:hidden">
               <button
                 onClick={onClose}
                 className="inline-flex items-center gap-1.5 text-[14px] font-medium text-secondary
@@ -203,6 +227,8 @@ export default function TalkDetail({ talk, onClose, onNavigate }: TalkDetailProp
       </m.div>
     </AnimatePresence>
   )
+  // The overlay goes straight into <body>, outside #root, so printing can hide the home page under it
+  return standalone ? view : createPortal(view, document.body)
 }
 
 const EYEBROW = 'text-[12px] font-semibold uppercase tracking-[0.12em] text-secondary'
@@ -331,7 +357,7 @@ function PostList({ current, onNavigate }: { current: Talk; onNavigate: (t: Talk
                 <span className="shrink-0 w-7 sm:w-8 text-[13px] sm:text-[14px] font-semibold tabular-nums text-secondary">#{t.no}</span>
                 <span className="min-w-0 flex-1">
                   <span className="block text-[14px] sm:text-[16px] font-semibold leading-snug text-[#1D1D1F] dark:text-[#F5F5F7]">
-                    {t.headline ?? t.title}
+                    {t.title}
                   </span>
                   <span className="mt-1 block text-[12px] sm:text-[13px] text-secondary">
                     {[`${t.event} · ${t.type}`, t.date, t.location].filter(Boolean).join(' · ')}

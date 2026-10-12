@@ -1,5 +1,5 @@
 import { Fragment, ReactNode } from 'react'
-import { CalendarDays, CalendarPlus, Clock, Info, Landmark, MapPin, Presentation, Users } from 'lucide-react'
+import { CalendarDays, CalendarPlus, ChevronRight, Clock, Info, Landmark, MapPin, Presentation, Users } from 'lucide-react'
 
 /**
  * The small Markdown subset that talk posts are written in
@@ -23,6 +23,7 @@ import { CalendarDays, CalendarPlus, Clock, Info, Landmark, MapPin, Presentation
  *   :::stats               value | label | note → number tiles
  *   :::steps               Title | lead | text  → numbered steps, stacked (lead is optional)
  *   :::quote               text                 → a highlighted question / pull quote
+ *   :::details Title       markdown             → a collapsed aside (detail, caveats); opens for print
  *   :::lead                paragraphs + one ![caption](/figure.webp)
  *                          → an opening like wrapfigure: the figure floats right and the text wraps
  *                            around it (from lg; stacked below)
@@ -43,6 +44,7 @@ export type Block =
   | { kind: 'math'; html: string }
   | { kind: 'quote'; text: string }
   | { kind: 'lead'; blocks: Block[]; figure?: { src: string; alt: string } }
+  | { kind: 'details'; title: string; blocks: Block[] }
 
 export function slugify(text: string): string {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'section'
@@ -72,6 +74,16 @@ export function parseMarkdown(src: string): Block[] {
     if (line.startsWith('@@MATHBLOCK@@')) {
       blocks.push({ kind: 'math', html: decodeURIComponent(line.slice('@@MATHBLOCK@@'.length)) })
       i++
+      continue
+    }
+
+    const det = line.match(/^:::details\s+(.+)$/)
+    if (det) {
+      const raw: string[] = []
+      i++
+      while (i < lines.length && lines[i].trim() !== ':::') raw.push(lines[i++])
+      i++                                                     // closing :::
+      blocks.push({ kind: 'details', title: det[1].trim(), blocks: parseMarkdown(raw.join('\n')) })
       continue
     }
 
@@ -219,7 +231,7 @@ function EventTicket({ fields }: { fields: Record<string, string> }) {
         )}
         {fields.calendar && (
           <a href={fields.calendar} download
-             className="mt-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] sm:text-[14px] font-medium
+             className="mt-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] sm:text-[14px] font-medium print:hidden
                         text-[#0071E3] dark:text-[#2997FF] bg-[#0071E3]/[0.07] dark:bg-[#2997FF]/[0.12]
                         hover:bg-[#0071E3]/[0.12] dark:hover:bg-[#2997FF]/[0.18] transition-colors">
             <CalendarPlus size={14} aria-hidden />
@@ -378,6 +390,21 @@ export function MarkdownBody({ blocks, onImageClick }: {
             )
           case 'event':
             return <EventTicket key={i} fields={b.fields} />
+          case 'details':
+            return (
+              <details key={i} className="group mt-6 rounded-xl border border-black/[0.06] dark:border-white/[0.08]
+                                          bg-neutral-50/70 dark:bg-white/[0.03] break-inside-avoid">
+                <summary className="flex items-center gap-2 px-4 sm:px-5 py-3 cursor-pointer select-none list-none
+                                    [&::-webkit-details-marker]:hidden text-[13.5px] sm:text-[14px] font-medium text-secondary
+                                    hover:text-[#1D1D1F] dark:hover:text-[#F5F5F7] transition-colors">
+                  <ChevronRight size={14} className="shrink-0 transition-transform group-open:rotate-90" aria-hidden />
+                  {renderInline(b.title)}
+                </summary>
+                <div className="px-4 sm:px-5 pb-4 [&>*:first-child]:mt-0">
+                  <MarkdownBody blocks={b.blocks} />
+                </div>
+              </details>
+            )
           case 'lead': {
             // Opening of a post, like LaTeX's wrapfigure: from lg the figure floats right and the
             // text wraps around it, running full width once it passes the figure (flow-root keeps

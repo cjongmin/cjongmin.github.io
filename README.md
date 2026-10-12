@@ -24,8 +24,7 @@ entries hidden with `published: false`. Commit news only once it is announced.
 
 Each talk opens as a blog post with the same layout:
 
-1. **Title and subtitle**: the post's `headline` (or the paper `title`) and `subtitle` in `talks.json`;
-   with a `headline`, a "Based on our paper …" line credits the paper by its full title.
+1. **Title and subtitle**: the paper `title` and the post's `subtitle` in `talks.json`.
 2. **The Authors**: from the paper in `publications.json`. `Name^1` marks co-first authors and
    `corresponding` lists corresponding authors; photos and links come from `people.json`.
 3. **Contents**: built automatically from the post's `#` and `##` headings.
@@ -46,12 +45,14 @@ Before the conference a post introduces the work (heading to the venue, presenta
 motivation, key idea, key findings, what to discuss, looking ahead). After it, add sections
 such as `# Questions from the poster session` and `# Takeaways`, and set `upcoming` to `false`.
 
-**Sharing a post**: use its *Copy link* address, `https://cjongmin.github.io/talks/<id>/`. The build
-writes that page with the post's own title, description and preview card, so LinkedIn, Slack and
-KakaoTalk show the post rather than the home page; visitors are sent straight on to the post. The
-card images are `public/talks/og/<id>.jpg`; regenerate them with `python3 scripts/talk_og.py`
-(Pillow) after adding a talk or changing a title. A new cover (`public/talks/<name>.webp`, 2000px wide) also
-needs its smaller carousel copies: `python3 scripts/responsive_images.py`.
+**Each post has its own page**, `https://cjongmin.github.io/talks/<id>/` (the *Copy link* address).
+The build prerenders the article into it with the post's own title, description, preview card and
+BlogPosting data, so link previews, search engines, reader mode and printing all get the article;
+in the browser, `main.tsx` mounts it as a page. From the home page the same post opens as an
+overlay (`#talk=<id>`), and printing that overlay prints only the article. Card images are
+`public/talks/og/<id>.jpg`; regenerate them with `python3 scripts/talk_og.py` (Pillow) after adding
+a talk or changing a title. A new cover (`public/talks/<name>.webp`, 2000px wide) also needs its
+smaller carousel copies: `python3 scripts/responsive_images.py`.
 
 ## Build and deploy
 
@@ -62,7 +63,7 @@ publishes `dist/` to GitHub Pages.
 `npm run build` type-checks, bundles, and prerenders the page into
 `dist/index.html` ([scripts/prerender.mjs](scripts/prerender.mjs)), so search
 engines and link previews see the content without running JavaScript. It also
-writes the talk share pages, `sitemap.xml` and `robots.txt`. The talk post view
+writes each talk post's own page, `sitemap.xml`, `robots.txt` and `404.html`. The talk post view
 is a separate chunk that loads only when a post is opened.
 
 ## Notes

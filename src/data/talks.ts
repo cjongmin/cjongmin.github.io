@@ -12,8 +12,7 @@ export interface TalkLinks {
 export interface Talk {
   id: string
   no: number                        // series number: #1 is the first post; never renumber
-  title: string                     // the paper title (the post's title unless headline is set)
-  headline?: string                 // the post's own title; the paper title then appears as "Based on our paper …"
+  title: string                     // the paper title; also the post's title
   subtitle?: string                 // one line under the post title
   event: string                     // short, e.g. "EMNLP 2026"
   eventFull?: string                // spelled-out venue
@@ -35,7 +34,7 @@ export const talks: Talk[] = (data as Talk[]).filter(t => t.published)
 /** Newest post first (#2, #1, …), as listed at the bottom of every post. */
 export const talksNewestFirst: Talk[] = [...talks].sort((a, b) => b.no - a.no)
 
-/** The address to share: a static page with this post's title and preview image that opens the post. */
+/** The address to share: the post's own page, prerendered with its title, description and preview image. */
 export function talkShareUrl(id: string): string {
   return new URL(`/talks/${id}/`, window.location.origin).href
 }

@@ -170,7 +170,7 @@ export default function Talks() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ duration: 0.45, delay: i * 0.06 }}
-                aria-label={`Open notes for ${t.headline ?? t.title}`}
+                aria-label={`Open notes for ${t.title}`}
                 className="snap-center shrink-0 w-full text-left group
                            relative overflow-hidden rounded-[22px]
                            bg-neutral-200 dark:bg-zinc-900
@@ -225,7 +225,7 @@ export default function Talks() {
                     </div>
 
                     <h3 className="mt-3 text-[21px] sm:text-[22px] font-semibold leading-snug tracking-tight line-clamp-3">
-                      {t.headline ?? t.title}
+                      {t.title}
                     </h3>
 
                     <p className="mt-2 text-[15px] sm:text-[14px] leading-relaxed text-white/80 sm:text-white/75 line-clamp-2">

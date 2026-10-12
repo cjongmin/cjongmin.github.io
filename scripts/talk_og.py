@@ -47,7 +47,7 @@ def card(talk):
     d = ImageDraw.Draw(img)
     eyebrow = ' · '.join(x for x in (talk['event'], talk['type'], talk.get('location', '').split(',')[0]) if x).upper()
     title_font = font('SourceSans3-Bold.ttf', 50)
-    lines = wrap(d, talk['title'], title_font, W - 2 * PAD)[:3]
+    lines = wrap(d, talk.get('headline') or talk['title'], title_font, W - 2 * PAD)[:3]
     y = H - PAD - 34 - 18 - len(lines) * 60 - 16 - 30
     d.text((PAD, y), eyebrow, font=font('SourceSans3-Semibold.ttf', 26), fill=(255, 255, 255, 230)); y += 30 + 16
     for line in lines:

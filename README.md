@@ -24,7 +24,8 @@ entries hidden with `published: false`. Commit news only once it is announced.
 
 Each talk opens as a blog post with the same layout:
 
-1. **Title and subtitle**: the paper `title` and the post's `subtitle` in `talks.json`.
+1. **Title and subtitle**: the post's `headline` (or the paper `title`) and `subtitle` in `talks.json`;
+   with a `headline`, a "Based on our paper …" line credits the paper by its full title.
 2. **The Authors**: from the paper in `publications.json`. `Name^1` marks co-first authors and
    `corresponding` lists corresponding authors; photos and links come from `people.json`.
 3. **Contents**: built automatically from the post's `#` and `##` headings.

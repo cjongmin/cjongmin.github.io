@@ -12,7 +12,8 @@ export interface TalkLinks {
 export interface Talk {
   id: string
   no: number                        // series number: #1 is the first post; never renumber
-  title: string                     // the paper title; also the post's title
+  title: string                     // the paper title (the post's title unless headline is set)
+  headline?: string                 // the post's own title; the paper title then appears as "Based on our paper …"
   subtitle?: string                 // one line under the post title
   event: string                     // short, e.g. "EMNLP 2026"
   eventFull?: string                // spelled-out venue

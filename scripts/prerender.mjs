@@ -35,7 +35,7 @@ for (const t of talks) {
   const url = `${SITE}/talks/${t.id}/`
   const target = `/#talk=${encodeURIComponent(t.id)}`
   const card = existsSync(`public/talks/og/${t.id}.jpg`) ? `/talks/og/${t.id}.jpg` : t.cover ?? '/og-image.png'
-  const title = `${t.title} · ${t.event} ${t.type}`
+  const title = `${t.headline ?? t.title} · ${t.event} ${t.type}`
   const description = t.subtitle ?? t.summary
   mkdirSync(`dist/talks/${t.id}`, { recursive: true })
   writeFileSync(`dist/talks/${t.id}/index.html`, `<!doctype html>
@@ -60,7 +60,7 @@ for (const t of talks) {
   <script>location.replace(${JSON.stringify(target)})</script>
 </head>
 <body>
-  <p><a href="${target}">${esc(t.title)}</a></p>
+  <p><a href="${target}">${esc(t.headline ?? t.title)}</a></p>
 </body>
 </html>
 `)

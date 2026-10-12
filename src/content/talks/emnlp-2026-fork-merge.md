@@ -1,87 +1,95 @@
+# Seeing and hearing does not mean using both
+
+An audio-visual language model can receive a video and its soundtrack together, yet still miss information needed to answer a question. Sometimes its answer follows the visual scene while leaving out an audible event. Simply providing both inputs does not ensure that both contribute where they should.
+
+Fork-Merge Decoding (FMD) explores whether giving audio and video separate processing in the first few decoder layers can help. Each branch processes one modality alongside the question; their hidden states then come together for the remaining layers. The model weights stay unchanged.
+
+The part I find most interesting is how little separation is needed, and how quickly more separation becomes a trade-off.
+
 # A train that looks like a cable car
 
-Take this clip from AVQA. In the first frames, the vehicle could pass for a cable car. The soundtrack settles it: a train slowly accelerating out of a station. Asked *"What's driving in the video?"*, VideoLLaMA2 answers **cable car**.
+One example from AVQA makes the problem concrete. In the early video frames, a train could be mistaken for a cable car. The accompanying audio contains the sound of a train gradually accelerating as it leaves a station.
 
-![AVQA with VideoLLaMA2. The early frames look like a cable car; the audio is a train leaving the station. Vanilla decoding answers (A) Cable car, FMD answers (C) Train.](/talks/fmd/qual-train.webp "wide")
+Asked what is driving in the video, VideoLLaMA2 with its original decoding procedure selects "Cable car." With FMD, the same model selects the correct answer, "Train."
 
-The model was given both pieces of evidence and answered from one. This post is about why that happens, and about a small change at decoding time that helps: **Fork-Merge Decoding (FMD)**, which we will present at Findings of EMNLP 2026. The session details are at the end.
+![Figure 1. AVQA example with VideoLLaMA2. The soundtrack provides a cue that can help resolve the ambiguous early frames. Original decoding selects (A) Cable car; FMD selects (C) Train.](/talks/fmd/qual-train.webp "wide")
 
-# Seeing and hearing is not using both
+This example illustrates the behavior we want to improve. It does not, by itself, establish which internal computation caused the original error.
 
-Audio-visual LLMs (AV-LLMs) read video, audio and text together. Reading them together, though, does not mean weighing them evenly. As a diagnostic, we looked at where the final question token attends in the last decoder layer of VideoLLaMA2 (100 AVHBench samples): most of that attention goes to video tokens.
+We also examined attention as a diagnostic. Across 100 AVHBench samples, the final question token in VideoLLaMA2's last decoder layer assigned substantially more attention to video tokens than to audio tokens. FMD reduced that gap. This is consistent with the qualitative examples, although attention alone is not a causal explanation of the model's answers.
 
-![Where the final question token attends in the last decoder layer of VideoLLaMA2. Vanilla decoding leans on video; FMD lowers video attention and raises audio attention.](/talks/fmd/attention-bias.webp "figure")
+One possible contributor is the imbalance in training data: video–text pairs are more readily available than aligned audio–video–text data. That is a hypothesis about the source of the bias; our experiments do not isolate it as the cause.
 
-Attention is not a full causal account of what a model relies on, but the pattern matches failures like the one above. We suspect part of the imbalance comes from the training data: video–text pairs are plentiful, while aligned audio–video–text data is scarce.
+# Giving each modality a separate start
 
-# When to fuse, not how
-
-Most work on multimodal models asks *how* to combine modalities. FMD started from a different question:
-
-:::quote
-What if the problem is not how audio and video are fused, but when?
-:::
-
-In current AV-LLMs, audio and video enter the decoder together and are mixed from the first layer on. A modality the model finds easier to read can take over before the other has formed a useful representation. FMD separates the two first and brings them together later:
+In the AV-LLMs we study, audio and video representations enter the language-model decoder together. FMD changes when they interact within that decoder.
 
 :::steps
-Fork | For the early decoder layers, the input runs twice: once with the video masked, once with the audio masked, both with the full question. Each branch reasons over a single modality.
-Merge | The two branches' hidden states are combined by attention-guided fusion, and the remaining layers reason over audio and video jointly.
+Fork | We make two versions of the input: one masks the video, the other masks the audio, and both retain the question. They pass separately through the same early decoder layers, so each branch processes the available modality in the context of the question.
+Merge | We then merge the two branches' hidden states and continue through the remaining layers to produce an answer.
 :::
 
-![Fork: the video-masked and audio-masked inputs pass through the early decoder layers separately. Merge: attention-guided fusion combines the two branches for the remaining layers.](/talks/fmd/method.webp "wide")
+The separation is short: four of 28 decoder layers for VideoLLaMA2 and Qwen2.5-Omni, and six of 40 for video-SALMONN in our experiments.
 
-It needs no training and no change to the architecture, so it can be dropped into an existing AV-LLM as is.
+![Figure 2. The fork and merge stages. Two masked inputs share the pretrained decoder weights and run separately through its early layers; their hidden states are merged before decoding continues. The attention-guided merge shown here is the token-wise variant.](/talks/fmd/method.webp "wide")
+
+The merge rule depends on how a model represents the modalities. For VideoLLaMA2 and Qwen2.5-Omni, which use separate audio and video token positions, we use attention-derived weights to combine the two branches at those positions. We estimate a fixed weight for each model from 100 randomly sampled AVHBench examples and reuse it during evaluation. For video-SALMONN's channel-wise representation, we add the branches' audio-visual hidden states. Both variants average the hidden states at the question positions.
+
+FMD therefore requires no additional model training, but it does require a change to the inference procedure. Its early separation gives each modality an opportunity to contribute before joint processing resumes.
 
 # Balance is not equality
 
-The result I find most interesting is what happens as the fork goes deeper. Forking for more layers keeps shifting attention from video toward audio, but accuracy does not keep improving. Deeper forks help V→A, where the answer is in the audio, and hurt A→V and AV matching, which also need the picture.
+Extending the separate processing sounds like a natural next step. The layer experiments show why that needs care.
 
-![Accuracy on AVHBench tasks as the fork layer goes deeper. Deeper forks help V→A but hurt A→V and AV matching, so FMD forks early.](/talks/fmd/fork-depth.webp "wide")
+On VideoLLaMA2, later merge points generally reduce attention to video. Audio attention stays above the original decoding baseline, but varies across merge points rather than increasing steadily. Task accuracy changes in different directions: deeper separation tends to help questions targeting audible content, while hurting questions targeting visible content and questions about whether the audio and video match.
 
-So the fix for a video-dominated model is not simply to make it look at audio more:
+![Figure 3. Changing the merge point changes the trade-off. On AVHBench, A→V tests video-targeted understanding, V→A tests audio-targeted understanding, and AV matching tests their correspondence. Deep separation favors the audio-targeted task at the expense of the other two. VideoLLaMA2, 200 AVHBench samples per task.](/talks/fmd/fork-depth.webp "wide")
+
+That is the result I would put at the center of the story.
 
 :::quote
-The goal is not equal reliance on every modality. It is to give each modality enough room to form a useful representation before cross-modal interaction begins.
+Useful multimodal processing depends on the evidence a question requires. Equal attention to both modalities is not an objective in itself.
 :::
 
-That is why FMD forks early (`L_fork = 4` for VideoLLaMA2): long enough to keep video from taking over, short enough to keep what the pretrained model already does well.
+Our early merge settings offer a useful compromise in the tested models. They should not be read as a universal rule that every audio-visual decoder ought to merge at the fourth layer, or after a fixed fraction of its depth.
 
-# What the numbers say
+# What improved, and what it cost
 
-We tested FMD on three AV-LLMs (VideoLLaMA2, video-SALMONN and Qwen2.5-Omni) across five audio-visual benchmarks.
+We evaluated FMD on VideoLLaMA2, video-SALMONN, and Qwen2.5-Omni across five datasets: AVHBench, AVQA, MUSIC-AVQA, AVUT, and WorldSense. All 21 reported model–task comparisons in the main results table improved over original decoding.
 
 :::stats
-21 / 21 | comparisons improve over vanilla decoding | 3 AV-LLMs, 5 benchmarks
-+5.31 pp | AV matching on video-SALMONN | 49.46% → 54.77%
-1.26× | the latency of vanilla decoding | VCD and SID: about 2×
+21 / 21 | reported model–task comparisons improve | 3 AV-LLMs, 5 datasets
++12.26 pp | largest gain: video-SALMONN on AVQA, zero-shot | smallest: +0.12 pp, Qwen2.5-Omni on AVQA
+1.26× | latency per generated token | VideoLLaMA2, vs. original decoding
 :::
 
-The largest single gain is zero-shot: video-SALMONN was never trained on AVQA, and FMD still raises its accuracy there from 28.20% to 40.46% (+12.26 pp).
+The improvements vary considerably. On video-SALMONN, AV matching accuracy rose from 49.46% to 54.77%, a gain of 5.31 percentage points. Its AVQA score rose from 28.20% to 40.46%, or 12.26 points, even though the model had not been trained on AVQA. Other gains were small: Qwen2.5-Omni's AVQA score increased from 86.49% to 86.61%.
 
-# More cases
+I read these results as evidence that changing the inference procedure can improve how the tested models use their inputs. The size of that benefit depends on the model and task.
 
-## Describing what it sees and hears
+There is also a computational cost. In our VideoLLaMA2 timing experiment on 100 AVHBench examples, FMD took 0.43 seconds per generated token, compared with 0.34 seconds for original decoding: 1.26 times the latency, or about 26% more. VCD and SID took 2.03 and 2.09 times the baseline latency in the same comparison. FMD duplicates the early decoder computation while sharing the remaining layers after the merge.
 
-Asked to describe a clip of a man fishing, vanilla decoding mentions only what is visible. FMD also reports the flowing stream and the occasional splash, which exist only in the audio.
+> A note on scope: the 21 comparisons count the available model–task results in the main table. Three Qwen2.5-Omni dataset evaluations were unavailable because of memory constraints, and AVUT and WorldSense were restricted to videos under 60 seconds. These numbers follow the EMNLP 2026 version of the paper; the current arXiv version (v2) reports AVHBench, AVQA and MUSIC-AVQA. The timing figures come from a single RTX A6000 setup and are not a general latency guarantee.
 
-![AVHBench, VideoLLaMA2. Vanilla: "A man is standing in a stream while fishing." FMD adds the sound of the stream and the occasional splash.](/talks/fmd/qual-fishing.webp "wide")
+# More complete descriptions still need checking
 
-## A question about the sound
+The train example concerns a discrete answer. A fishing clip from AVHBench shows another kind of change.
 
-Here the answer is entirely in the audio, and vanilla decoding still gets it wrong.
+The prompt asks the model to describe what it sees and hears. Original decoding describes a man standing in a stream while fishing. FMD also mentions the sound of the stream and occasional splashes, matching the acoustic context described in the example.
 
-![AVHBench, VideoLLaMA2. "Is the sawing wood making sound in the audio?" Vanilla decoding says no; FMD says yes.](/talks/fmd/qual-sawing.webp "wide")
+![Figure 4. Fishing example with VideoLLaMA2. FMD includes auditory details omitted by the original response, alongside the visible activity.](/talks/fmd/qual-fishing.webp "wide")
 
-# What FMD does not fix
+What matters here is the inclusion of relevant evidence. A longer description would be of little value if its extra details were unsupported, and the failure cases make that distinction clear.
 
-Better integration is not the same as no hallucination. In the two descriptions below, FMD uses both modalities and still gets details wrong: it says the woman is talking *while* drying her hair, although in the audio she speaks first and the dryer follows; and it calls a glass a *cup*.
+In one example, FMD mentions a woman speaking and drying her hair, but describes the events as simultaneous; the audio has speech followed by the hair dryer. In another, it includes the sound of talking while someone washes a glass, but incorrectly names the object as a cup.
 
-![Failure cases with VideoLLaMA2. FMD captures more of the audio and the video than vanilla decoding, but makes errors (red) in a temporal relation and an object name.](/talks/fmd/qual-failures.webp "wide")
+![Figure 5. Two remaining errors with VideoLLaMA2: an incorrect temporal relation and an incorrect object reference (red). Incorporating more of the scene's audio does not ensure that every detail is accurate.](/talks/fmd/qual-failures.webp "wide")
 
-Fine-grained temporal relations and object identity remain open problems, and FMD does not solve them.
+These examples set a useful boundary on the result. FMD can improve the use of multimodal information while still producing errors in timing and object identity. More complete descriptions and more accurate descriptions need to be evaluated separately.
 
-# Come find us in Budapest
+# Questions I am bringing to EMNLP
+
+I will be presenting this work at Findings of EMNLP 2026 in Budapest.
 
 :::event
 Date: Oct 26, 2026
@@ -92,13 +100,12 @@ Place: Hall H, Hungexpo Budapest Congress and Exhibition Center
 Calendar: /talks/fmd/emnlp-2026-fmd-poster.ics
 :::
 
-![Budapest, Hungary, the host city of EMNLP 2026](/talks/emnlp-2026-budapest.webp)
+The layer trade-off is what I most want to discuss: how should we decide how much separate processing a model needs, and what evidence would show that a better answer comes from using the appropriate modality?
 
-If you work on multimodal understanding, audio-visual reasoning or inference-time methods, please stop by. I would especially like to talk about:
+I am also interested in whether the same approach helps when the input conditions change, for example when audio is unreliable or the two streams conflict. The current results give us a starting point, while leaving room for more systematic tests.
 
-- how modality-specific processing and cross-modal integration should be divided across decoder layers, and
-- whether "separate first, integrate later" carries over to other multimodal architectures.
+If these questions overlap with your work, I would be glad to talk at the poster. The full conference schedule is in the [EMNLP 2026 program](https://2026.emnlp.org/program/).
 
 # After the session
 
-> This section will be updated after the poster session: the questions people asked, and what they changed in how I think about this work.
+> I will update this section after EMNLP with the questions that sharpened the discussion, what the current experiments can answer, and what still needs testing. If a conversation changes how I interpret a result, I will revise the relevant section above and note the change here.

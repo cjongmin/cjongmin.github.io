@@ -114,15 +114,14 @@ export default function TalkDetail({ talk, onClose, onNavigate }: TalkDetailProp
               )}
             </p>
 
-            {/* Title and subtitle: justified edge to edge from sm (phones keep them left-aligned:
-                large type on a narrow line would open wide gaps), never ending on a lone word;
-                long words may hyphenate so a short line doesn't open wide gaps */}
+            {/* Title and subtitle: left-aligned with balanced line lengths (justifying a few large
+                words per line opens wide gaps), never ending on a lone word */}
             <h1 className="mt-3 sm:mt-4 text-[24px] sm:text-[34px] lg:text-[40px] font-semibold tracking-tight leading-[1.18]
-                           text-[#1D1D1F] dark:text-[#F5F5F7] sm:text-justify sm:hyphens-auto [hyphenate-limit-chars:8_4_4]">
-              {noOrphan(talk.title)}
+                           text-[#1D1D1F] dark:text-[#F5F5F7] [text-wrap:balance]">
+              {noOrphan(talk.headline ?? talk.title)}
             </h1>
             {talk.subtitle && (
-              <p className="mt-3 sm:mt-4 text-[16px] sm:text-[21px] leading-[1.45] text-secondary sm:text-justify">{noOrphan(talk.subtitle)}</p>
+              <p className="mt-3 sm:mt-4 text-[16px] sm:text-[21px] leading-[1.45] text-secondary [text-wrap:balance]">{noOrphan(talk.subtitle)}</p>
             )}
 
             {/* Byline */}
@@ -141,6 +140,18 @@ export default function TalkDetail({ talk, onClose, onNavigate }: TalkDetailProp
                 </p>
               </div>
             </div>
+            {/* A post with its own headline credits the paper by its full title */}
+            {talk.headline && paper && (
+              <p className="mt-5 text-[14px] sm:text-[15px] leading-relaxed text-secondary">
+                Based on our paper{' '}
+                <a href={paper.links?.paper ?? '#'} target="_blank" rel="noopener noreferrer"
+                   className="italic text-[#1D1D1F] dark:text-[#F5F5F7] underline decoration-black/20 dark:decoration-white/25
+                              underline-offset-[3px] hover:text-[#0071E3] dark:hover:text-[#2997FF] transition-colors">
+                  {paper.title}
+                </a>
+                {` (${paper.displayVenue ?? `${paper.venue} ${paper.year}`})`}.
+              </p>
+            )}
           </header>
 
           {/* ---------- Body ---------- */}
@@ -320,7 +331,7 @@ function PostList({ current, onNavigate }: { current: Talk; onNavigate: (t: Talk
                 <span className="shrink-0 w-7 sm:w-8 text-[13px] sm:text-[14px] font-semibold tabular-nums text-secondary">#{t.no}</span>
                 <span className="min-w-0 flex-1">
                   <span className="block text-[14px] sm:text-[16px] font-semibold leading-snug text-[#1D1D1F] dark:text-[#F5F5F7]">
-                    {t.title}
+                    {t.headline ?? t.title}
                   </span>
                   <span className="mt-1 block text-[12px] sm:text-[13px] text-secondary">
                     {[`${t.event} · ${t.type}`, t.date, t.location].filter(Boolean).join(' · ')}

@@ -85,6 +85,11 @@ svg.lucide[width="16"] { width: 16px; height: 16px; }
 svg.lucide[width="18"] { width: 18px; height: 18px; }
 svg.lucide[width="20"] { width: 20px; height: 20px; }
 
+/* Maths in talk posts (MathJax SVG, rendered at build time). Preflight makes every svg a
+   block; keep formulas inline (inline maths) or centred on their own line (display). */
+.mjx-inline svg, .mjx-block svg { display: inline-block; max-width: none; }
+.mjx-block mjx-container { display: block; }
+
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;

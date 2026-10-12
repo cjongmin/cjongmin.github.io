@@ -1,5 +1,4 @@
 import { Fragment, ReactNode } from 'react'
-import 'katex/dist/katex.min.css'   // maths is rendered at build time (vite.config.ts → prerenderMath)
 import { CalendarDays, CalendarPlus, Clock, Info, Landmark, MapPin, Presentation, Users } from 'lucide-react'
 
 /**
@@ -13,10 +12,9 @@ import { CalendarDays, CalendarPlus, Clock, Info, Landmark, MapPin, Presentation
  *   ![caption](/chart.webp "figure")             chart on white, up to 760px wide
  *   ![caption](/diagram.webp "wide")             chart on white, full width
  *   **bold**  *italic*  `code`  [link](https://…)
- *   ==key phrase==        → accent-coloured emphasis (use sparingly)
- *   {{Training-free}}     → a coloured pill; {{Plug-and-play|green}} picks the colour (blue, green, rose)
+ *   ==key phrase==        → blue emphasis      {{key property}} → red bold emphasis (use both sparingly)
  *   $\alpha$              → inline maths; a $$ … $$ block (on its own lines) is displayed maths.
- *                          Both are rendered with KaTeX at build time and arrive here as @@MATH@@ markers.
+ *                          Both are rendered to SVG with MathJax at build time and arrive as @@MATH@@ markers.
  *
  * Visual blocks, one item per line between ::: fences:
  *   :::info Title          Key: Value           → a fact card
@@ -247,24 +245,14 @@ function splitNote(value: string): [string, string | undefined] {
 const JUSTIFY = 'text-justify hyphens-auto [hyphenate-limit-chars:10_4_4] sm:hyphens-manual'
 
 // **bold**, *italic*, `code`, [text](url)
-const PILL: Record<string, string> = {
-  blue: 'bg-[#0071E3]/[0.09] text-[#0062C4] dark:bg-[#2997FF]/[0.16] dark:text-[#5AB0FF]',
-  green: 'bg-emerald-500/[0.11] text-emerald-700 dark:bg-emerald-400/[0.15] dark:text-emerald-300',
-  rose: 'bg-rose-500/[0.10] text-rose-700 dark:bg-rose-400/[0.15] dark:text-rose-300',
-}
-
 export function renderInline(text: string): ReactNode[] {
   return text.split(/(@@MATH@@[^@]+@@|\{\{[^}]+\}\}|==[^=]+==|\*\*[^*]+\*\*|\*[^*\s][^*]*\*|`[^`]+`|\[[^\]]+\]\([^)]+\))/).map((part, i) => {
     if (part.startsWith('@@MATH@@') && part.endsWith('@@')) {
-      return <span key={i} dangerouslySetInnerHTML={{ __html: decodeURIComponent(part.slice(8, -2)) }} />
+      return <span key={i} className="mjx-inline" dangerouslySetInnerHTML={{ __html: decodeURIComponent(part.slice(8, -2)) }} />
     }
     if (part.startsWith('{{') && part.endsWith('}}')) {
-      const [label, colour = 'blue'] = part.slice(2, -2).split('|').map(x => x.trim())
-      return (
-        <span key={i} className={`inline-block align-baseline px-2 py-[1px] mx-[1px] rounded-md text-[0.92em] font-semibold ${PILL[colour] ?? PILL.blue}`}>
-          {label}
-        </span>
-      )
+      // same red as the emphasis in Recent News
+      return <strong key={i} className="font-semibold text-rose-700 dark:text-rose-400">{renderInline(part.slice(2, -2))}</strong>
     }
     if (part.length > 4 && part.startsWith('==') && part.endsWith('==')) {
       return <strong key={i} className="font-semibold text-[#0062C4] dark:text-[#5AB0FF]">{renderInline(part.slice(2, -2))}</strong>
@@ -406,7 +394,7 @@ export function MarkdownBody({ blocks, onImageClick }: {
                   <img src={fig.src} alt={fig.alt} loading="lazy" decoding="async" className="w-full h-auto" />
                 </button>
                 {fig.alt && (
-                  <figcaption className="mt-2 text-[12.5px] sm:text-[13px] leading-snug text-secondary text-center">
+                  <figcaption className="mt-2 text-[12.5px] sm:text-[13px] lg:text-[12px] xl:text-[13px] leading-snug text-secondary text-center">
                     {renderInline(fig.alt)}
                   </figcaption>
                 )}
@@ -414,7 +402,7 @@ export function MarkdownBody({ blocks, onImageClick }: {
             )
             return (
               <div key={i} className="mt-4 sm:mt-5 flow-root">
-                {figure('hidden lg:block float-right w-[43%] ml-8 mb-3 mt-1')}
+                {figure('hidden lg:block float-right w-1/2 ml-8 mb-3 mt-1')}
                 <div className="[&>*:first-child]:mt-0">
                   <MarkdownBody blocks={b.blocks} onImageClick={onImageClick} />
                 </div>
@@ -461,7 +449,9 @@ export function MarkdownBody({ blocks, onImageClick }: {
             )
           case 'math':
             return (
-              <div key={i} className="mt-6 overflow-x-auto overflow-y-hidden py-1 text-[#1D1D1F] dark:text-[#F5F5F7] text-[15px] sm:text-[17px]"
+              // centred; a formula wider than the column scrolls inside its own box instead of overflowing
+              <div key={i} className="mjx-block mt-6 mb-2 overflow-x-auto overflow-y-hidden py-2 text-center
+                                      text-[#1D1D1F] dark:text-[#F5F5F7] text-[15px] sm:text-[18px]"
                    dangerouslySetInnerHTML={{ __html: b.html }} />
             )
           case 'quote':

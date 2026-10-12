@@ -1,7 +1,12 @@
 import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import { readFileSync } from 'node:fs'
-import katex from 'katex'
+import { mathjax } from 'mathjax-full/js/mathjax.js'
+import { TeX } from 'mathjax-full/js/input/tex.js'
+import { SVG } from 'mathjax-full/js/output/svg.js'
+import { liteAdaptor } from 'mathjax-full/js/adaptors/liteAdaptor.js'
+import { RegisterHTMLHandler } from 'mathjax-full/js/handlers/html.js'
+import { AllPackages } from 'mathjax-full/js/input/tex/AllPackages.js'
 
 const SITE = 'https://cjongmin.github.io'
 
@@ -87,14 +92,25 @@ function stripDraftTalks(): Plugin {
 }
 
 /**
- * Talk posts may contain maths: $…$ inline and $$ … $$ as a block. Render it to
- * KaTeX HTML at build time, so readers download only katex.css (and the fonts in
- * use), not KaTeX itself. The HTML travels inside the post's text as a marker
- * that src/lib/markdown.tsx turns back into markup.
+ * Talk posts may contain maths: $…$ inline and $$ … $$ as a block (on their own
+ * lines). Render it at build time with MathJax to self-contained SVG (glyphs as
+ * paths, fill = currentColor), so it looks the same in every browser and needs no
+ * maths fonts, stylesheet or script at runtime. The SVG travels inside the post's
+ * text as a marker that src/lib/markdown.tsx turns back into markup.
  */
 function prerenderMath(): Plugin {
-  const html = (tex: string, displayMode: boolean) =>
-    encodeURIComponent(katex.renderToString(tex.trim(), { displayMode, throwOnError: true, strict: 'ignore' }))
+  const adaptor = liteAdaptor()
+  RegisterHTMLHandler(adaptor)
+  const doc = mathjax.document('', {
+    InputJax: new TeX({ packages: AllPackages }),
+    OutputJax: new SVG({ fontCache: 'none' }),
+  })
+  const svg = (tex: string, display: boolean) => {
+    const label = tex.trim().replace(/\s+/g, ' ').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
+    const html = adaptor.outerHTML(doc.convert(tex.trim(), { display }))
+      .replace('<svg ', `<svg aria-label="${label}" `)
+    return encodeURIComponent(html)
+  }
   return {
     name: 'prerender-talk-math',
     enforce: 'pre',
@@ -102,8 +118,8 @@ function prerenderMath(): Plugin {
       const [file, query] = id.split('?')
       if (!/\/src\/content\/talks\/[^/]+\.md$/.test(file) || !query?.includes('raw')) return null
       const text = readFileSync(file, 'utf8')
-        .replace(/^\$\$\s*\n([\s\S]*?)\n\$\$\s*$/gm, (_, tex) => `@@MATHBLOCK@@${html(tex, true)}`)
-        .replace(/\$([^$\n]+)\$/g, (_, tex) => `@@MATH@@${html(tex, false)}@@`)
+        .replace(/^\$\$\s*\n([\s\S]*?)\n\$\$\s*$/gm, (_, tex) => `@@MATHBLOCK@@${svg(tex, true)}`)
+        .replace(/\$([^$\n]+)\$/g, (_, tex) => `@@MATH@@${svg(tex, false)}@@`)
       this.addWatchFile(file)
       return `export default ${JSON.stringify(text)}`
     },

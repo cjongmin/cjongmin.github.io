@@ -36,7 +36,7 @@ for (const t of talks) {
   const target = `/#talk=${encodeURIComponent(t.id)}`
   const card = existsSync(`public/talks/og/${t.id}.jpg`) ? `/talks/og/${t.id}.jpg` : t.cover ?? '/og-image.png'
   const title = `${t.headline ?? t.title} · ${t.event} ${t.type}`
-  const description = t.subtitle ?? t.summary
+  const description = t.summary   // the card teaser says what the work is; the subtitle can be just a tagline
   mkdirSync(`dist/talks/${t.id}`, { recursive: true })
   writeFileSync(`dist/talks/${t.id}/index.html`, `<!doctype html>
 <html lang="en">

@@ -35,7 +35,8 @@ Each talk opens as a blog post with the same layout:
    images (`![caption](/photo.webp)`, or `"figure"` / `"wide"` after the path for charts), and blocks
    between `:::` fences: `:::event` (a ticket: `Date`, `Title`, `Detail`, `Place`, `Note` rows),
    `:::info Title` (`Key: Value` rows), `:::stats` (`value | label | note`),
-   `:::steps` (`Title | text`) and `:::quote`.
+   `:::steps` (`Title | text`), `:::quote`, and `:::lead` (paragraphs plus one figure: text on the
+   left, the figure on the right from lg, stacked on smaller screens; good for a post's opening).
 5. **Paper & resources**: Paper, Scholar, Code, Poster, BibTeX… from the paper's `links`.
 6. **Presentation Notes**: every post, newest first (`#2, #1`), five per page. `no` is the post's
    permanent number; give a new post the next one.

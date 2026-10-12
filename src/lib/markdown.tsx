@@ -20,6 +20,8 @@ import { CalendarDays, CalendarPlus, Clock, Info, Landmark, MapPin, Presentation
  *   :::stats               value | label | note → number tiles
  *   :::steps               Title | text         → numbered step cards
  *   :::quote               text                 → a highlighted question / pull quote
+ *   :::lead                paragraphs + one ![caption](/figure.webp)
+ *                          → an opening: text on the left, the figure on the right (stacked on phones)
  *
  * Parsing produces plain data, so the same headings feed the table of contents.
  */
@@ -35,6 +37,7 @@ export type Block =
   | { kind: 'stats'; items: { value: string; label: string; note?: string }[] }
   | { kind: 'steps'; items: { title: string; text: string }[] }
   | { kind: 'quote'; text: string }
+  | { kind: 'lead'; blocks: Block[]; figure?: { src: string; alt: string } }
 
 export function slugify(text: string): string {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'section'
@@ -60,6 +63,18 @@ export function parseMarkdown(src: string): Block[] {
       continue
     }
     if (/^-{3,}$/.test(line.trim())) { blocks.push({ kind: 'rule' }); i++; continue }
+
+    if (/^:::lead\s*$/.test(line)) {
+      // keep blank lines: the lead is regular markdown (paragraphs) plus one figure
+      const raw: string[] = []
+      i++
+      while (i < lines.length && lines[i].trim() !== ':::') raw.push(lines[i++])
+      i++                                                     // closing :::
+      const inner = parseMarkdown(raw.join('\n'))
+      const img = inner.find((b): b is Extract<Block, { kind: 'image' }> => b.kind === 'image')
+      blocks.push({ kind: 'lead', blocks: inner.filter(b => b !== img), figure: img && { src: img.src, alt: img.alt } })
+      continue
+    }
 
     const fence = line.match(/^:::(info|event|stats|steps|quote)\s*(.*)$/)
     if (fence) {
@@ -339,6 +354,33 @@ export function MarkdownBody({ blocks, onImageClick }: {
             )
           case 'event':
             return <EventTicket key={i} fields={b.fields} />
+          case 'lead':
+            // Opening of a post: text and a diagnostic figure side by side, tops aligned;
+            // the figure sits lightly next to the text (no card), stacked below lg
+            return (
+              <div key={i} className="mt-4 sm:mt-5 grid gap-5 lg:gap-8 items-start lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
+                <div className="min-w-0 [&>*:first-child]:mt-0">
+                  <MarkdownBody blocks={b.blocks} onImageClick={onImageClick} />
+                </div>
+                {b.figure && (
+                  <figure className="lg:mt-1 max-w-[560px] lg:max-w-none mx-auto lg:mx-0 w-full">
+                    <button
+                      type="button"
+                      onClick={() => onImageClick?.({ src: b.figure!.src, alt: b.figure!.alt, chart: true })}
+                      aria-label={`Enlarge image: ${b.figure.alt}`}
+                      className="block w-full rounded-xl overflow-hidden bg-white cursor-zoom-in"
+                    >
+                      <img src={b.figure.src} alt={b.figure.alt} loading="lazy" decoding="async" className="w-full h-auto" />
+                    </button>
+                    {b.figure.alt && (
+                      <figcaption className="mt-2 text-[12.5px] sm:text-[13px] leading-snug text-secondary text-center">
+                        {renderInline(b.figure.alt)}
+                      </figcaption>
+                    )}
+                  </figure>
+                )}
+              </div>
+            )
           case 'stats':
             return (
               <div key={i} className={`mt-7 grid gap-3 sm:gap-4 ${b.items.length >= 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2'}`}>

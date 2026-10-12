@@ -1,10 +1,14 @@
 # Seeing and hearing does not mean using both
 
-An audio-visual language model can receive a video and its soundtrack together, yet still miss information needed to answer a question. Sometimes its answer follows the visual scene while leaving out an audible event. Simply providing both inputs does not ensure that both contribute where they should.
+:::lead
+An audio-visual language model can receive a video and its soundtrack together, yet still miss information needed to answer a question. Sometimes its answer follows the visual scene while leaving out an audible event. Providing both inputs does not ensure that both contribute where they should.
 
-Fork-Merge Decoding (FMD) explores whether giving audio and video separate processing in the first few decoder layers can help. Each branch processes one modality alongside the question; their hidden states then come together for the remaining layers. The model weights stay unchanged.
+As a diagnostic, we examined where the final question token attends in the last decoder layer of VideoLLaMA2. Vanilla decoding places substantially more attention on video than on audio. Fork-Merge Decoding (FMD), the method this post is about, narrows this gap by reducing video attention and increasing audio attention.
 
-The part I find most interesting is how little separation is needed, and how quickly more separation becomes a trade-off.
+Attention is not a complete causal account of modality reliance, but the pattern gives a useful clue: the model can receive both modalities while behaving as if one were enough.
+
+![Final-question-token attention in VideoLLaMA2 on AVHBench (100 samples).](/talks/fmd/attention-bias.webp)
+:::
 
 # A train that looks like a cable car
 
@@ -14,15 +18,13 @@ Asked what is driving in the video, VideoLLaMA2 with its original decoding proce
 
 ![Figure 1. AVQA example with VideoLLaMA2. The soundtrack provides a cue that can help resolve the ambiguous early frames. Original decoding selects (A) Cable car; FMD selects (C) Train.](/talks/fmd/qual-train.webp "wide")
 
-This example illustrates the behavior we want to improve. It does not, by itself, establish which internal computation caused the original error.
-
-We also examined attention as a diagnostic. Across 100 AVHBench samples, the final question token in VideoLLaMA2's last decoder layer assigned substantially more attention to video tokens than to audio tokens. FMD reduced that gap. This is consistent with the qualitative examples, although attention alone is not a causal explanation of the model's answers.
-
-One possible contributor is the imbalance in training data: video–text pairs are more readily available than aligned audio–video–text data. That is a hypothesis about the source of the bias; our experiments do not isolate it as the cause.
+The model had access to both signals, but the answer followed the more visually plausible interpretation. This example illustrates the behavior we want to improve; it does not, by itself, establish which internal computation caused the original error.
 
 # Giving each modality a separate start
 
-In the AV-LLMs we study, audio and video representations enter the language-model decoder together. FMD changes when they interact within that decoder.
+One possible contributor to the imbalance is the training data: video–text pairs are more readily available than aligned audio–video–text data. That is a hypothesis about the source of the bias; our experiments do not isolate it as the cause.
+
+In the AV-LLMs we study, audio and video representations enter the language-model decoder together. FMD changes when they interact within that decoder, without changing the model weights:
 
 :::steps
 Fork | We make two versions of the input: one masks the video, the other masks the audio, and both retain the question. They pass separately through the same early decoder layers, so each branch processes the available modality in the context of the question.
@@ -39,7 +41,7 @@ FMD therefore requires no additional model training, but it does require a chang
 
 # Balance is not equality
 
-Extending the separate processing sounds like a natural next step. The layer experiments show why that needs care.
+The part I find most interesting is how little separation is needed, and how quickly more separation becomes a trade-off. Extending the separate processing sounds like a natural next step; the layer experiments show why that needs care.
 
 On VideoLLaMA2, later merge points generally reduce attention to video. Audio attention stays above the original decoding baseline, but varies across merge points rather than increasing steadily. Task accuracy changes in different directions: deeper separation tends to help questions targeting audible content, while hurting questions targeting visible content and questions about whether the audio and video match.
 

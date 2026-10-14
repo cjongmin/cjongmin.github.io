@@ -31,13 +31,13 @@ function getVenueType(pub: Publication): VenueType {
 }
 
 /*
-  Colour hierarchy: colour is reserved for honours. Everything else is neutral.
-    1. Oral / Spotlight   solid rose (+ selectivity in rose text)  — the only colour on the list
-    2. Accepted venue     solid near-black
+  Colour hierarchy: the venue reads first, honours stand out, the rest is neutral.
+    1. Accepted venue     soft indigo badge, bold — low saturation, so it never competes with honours
+    2. Oral / Spotlight   solid rose (+ selectivity in rose text)
     3. Poster             white chip, grey outline
     4. Preprint           light grey chip, grey text
 */
-const ACCEPTED_VENUE = 'bg-neutral-800 text-white dark:bg-neutral-200 dark:text-neutral-900'
+const ACCEPTED_VENUE = 'bg-[#EEF2FF] text-[#4338CA] border border-[#C7D2FE] dark:bg-[#242640] dark:text-[#C7D2FE] dark:border-[#44476A]'
 const PREPRINT = 'bg-neutral-100 text-neutral-600 border-neutral-200 dark:bg-white/[0.06] dark:text-neutral-300 dark:border-white/10'
 
 function presentationBadgeClass(type: NonNullable<Publication['presentationType']>): string {
@@ -55,7 +55,7 @@ function selectionRate(sel: NonNullable<Publication['selection']>): string {
 }
 
 // Shared chip geometry: slightly larger type, gently rounded corners (not pills).
-const VENUE_CHIP = 'text-[14px] font-semibold px-2.5 py-1 rounded-md leading-none'
+const VENUE_CHIP = 'text-[14px] font-bold tracking-[-0.01em] px-3 py-[5px] rounded-md leading-none'
 const CHIP = 'text-[13px] font-semibold px-2 py-[3px] rounded-md leading-none border'
 
 // "Name^1" in the data marks equal contribution; shown as a trailing "*".
@@ -141,7 +141,7 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
               )}
               {pub.selection && (
                 <span
-                  className="text-[14px] font-semibold text-rose-700 dark:text-rose-400"
+                  className="text-[14px] font-medium text-rose-700 dark:text-rose-400"
                   title={`${pub.selection.basis}: ${pub.selection.selected.toLocaleString('en-US')} of ${pub.selection.submissions.toLocaleString('en-US')} submissions`}
                 >
                   {selectionRate(pub.selection)}%

@@ -37,7 +37,7 @@ function getVenueType(pub: Publication): VenueType {
     3. Poster             white chip, grey outline
     4. Preprint           light grey chip, grey text
 */
-const ACCEPTED_VENUE = 'bg-[#EEF2FF] text-[#4338CA] border border-[#C7D2FE] dark:bg-[#242640] dark:text-[#C7D2FE] dark:border-[#44476A]'
+const ACCEPTED_VENUE = 'bg-[#EEF2FF] text-[#4338CA] border-[#C7D2FE] dark:bg-[#242640] dark:text-[#C7D2FE] dark:border-[#44476A]'
 const PREPRINT = 'bg-neutral-100 text-neutral-600 border-neutral-200 dark:bg-white/[0.06] dark:text-neutral-300 dark:border-white/10'
 
 function presentationBadgeClass(type: NonNullable<Publication['presentationType']>): string {
@@ -55,11 +55,12 @@ function selectionRate(sel: NonNullable<Publication['selection']>): string {
 }
 
 // Shared chip geometry: slightly larger type, gently rounded corners (not pills).
-// Fixed height + flex centring, and the label trimmed to cap height / baseline (text-box), so the
-// text sits in the optical centre in every browser instead of following each font's ascent/descent.
-const VENUE_CHIP = 'inline-flex items-center h-[26px] text-[14px] font-bold tracking-[-0.01em] px-3 rounded-md leading-none'
+// Every chip on a card shares one height. Fixed height + flex centring, with the label trimmed to cap
+// height / baseline (text-box), keeps the text in the optical centre in every browser.
+const CHIP_BOX = 'inline-flex items-center h-[26px] rounded-md leading-none border'
+const VENUE_CHIP = `${CHIP_BOX} px-3 text-[14px] font-bold tracking-[-0.01em]`
 const CAP_TRIM = '[text-box:trim-both_cap_alphabetic]'
-const CHIP = 'text-[13px] font-semibold px-2 py-[3px] rounded-md leading-none border'
+const CHIP = `${CHIP_BOX} px-2.5 text-[13px] font-semibold`
 
 // "Name^1" in the data marks equal contribution; shown as a trailing "*".
 function parseAuthor(raw: string): { name: string; equal: boolean } {
@@ -129,8 +130,8 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
             <div className="flex items-center gap-2 flex-wrap">
               {isPreprint ? (
                 // One light chip for preprints: status and where it is under review
-                <span className={`${CHIP} ${PREPRINT}`}>
-                  {pub.submittedTo ? `Preprint: Submitted to ${pub.submittedTo}` : 'Preprint'}
+                <span className={`${VENUE_CHIP} ${PREPRINT}`}>
+                  <span className={CAP_TRIM}>{pub.submittedTo ? `Preprint: Submitted to ${pub.submittedTo}` : 'Preprint'}</span>
                 </span>
               ) : (
                 <span className={`${VENUE_CHIP} ${ACCEPTED_VENUE}`}>
@@ -139,7 +140,7 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
               )}
               {pub.presentationType && (
                 <span className={`${CHIP} ${presentationBadgeClass(pub.presentationType)}`}>
-                  {pub.presentationType}
+                  <span className={CAP_TRIM}>{pub.presentationType}</span>
                 </span>
               )}
               {pub.selection && (

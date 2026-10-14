@@ -55,7 +55,10 @@ function selectionRate(sel: NonNullable<Publication['selection']>): string {
 }
 
 // Shared chip geometry: slightly larger type, gently rounded corners (not pills).
-const VENUE_CHIP = 'text-[14px] font-bold tracking-[-0.01em] px-3 py-[5px] rounded-md leading-none'
+// Fixed height + flex centring, and the label trimmed to cap height / baseline (text-box), so the
+// text sits in the optical centre in every browser instead of following each font's ascent/descent.
+const VENUE_CHIP = 'inline-flex items-center h-[26px] text-[14px] font-bold tracking-[-0.01em] px-3 rounded-md leading-none'
+const CAP_TRIM = '[text-box:trim-both_cap_alphabetic]'
 const CHIP = 'text-[13px] font-semibold px-2 py-[3px] rounded-md leading-none border'
 
 // "Name^1" in the data marks equal contribution; shown as a trailing "*".
@@ -131,7 +134,7 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
                 </span>
               ) : (
                 <span className={`${VENUE_CHIP} ${ACCEPTED_VENUE}`}>
-                  {pub.displayVenue ?? `${pub.venue} ${pub.year}`}
+                  <span className={CAP_TRIM}>{pub.displayVenue ?? `${pub.venue} ${pub.year}`}</span>
                 </span>
               )}
               {pub.presentationType && (

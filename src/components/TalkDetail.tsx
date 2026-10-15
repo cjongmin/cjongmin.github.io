@@ -15,7 +15,7 @@ interface TalkDetailProps {
   talk: Talk
   onClose: () => void
   onNavigate: (talk: Talk) => void   // open another post from the list at the bottom
-  standalone?: boolean               // its own page (/talks/<id>/) rather than an overlay on the home page
+  standalone?: boolean               // its own page (/talks/<no>/) rather than an overlay on the home page
 }
 
 /** While printing: open collapsed asides, load lazy images, and print in light colours. */
@@ -54,8 +54,8 @@ const LINK_TILE = `grow basis-[calc(25%-0.375rem)] sm:basis-0 min-w-0 inline-fle
  * places its own photos; clicking one opens it in a lightbox), the paper's
  * links, and the list of all posts.
  *
- * Two ways in: from the home page it opens over the site (#talk=<id>, rendered into
- * <body> through a portal, closes on Back / Escape); at /talks/<id>/ it is its own
+ * Two ways in: from the home page it opens over the site (#talk=<no>, rendered into
+ * <body> through a portal, closes on Back / Escape); at /talks/<no>/ it is its own
  * page, prerendered at build time (scripts/prerender.mjs) so it reads, prints and
  * indexes as an ordinary article.
  */
@@ -89,7 +89,7 @@ export default function TalkDetail({ talk, onClose, onNavigate, standalone = fal
   const copyLink = async () => {
     try {
       // the share page carries this post's own title and preview image (scripts/prerender.mjs)
-      await navigator.clipboard.writeText(talkShareUrl(talk.id))
+      await navigator.clipboard.writeText(talkShareUrl(talk))
       setCopied(true)
       setTimeout(() => setCopied(false), 1800)
     } catch { /* clipboard unavailable — ignore */ }

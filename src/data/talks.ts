@@ -34,7 +34,12 @@ export const talks: Talk[] = (data as Talk[]).filter(t => t.published)
 /** Newest post first (#2, #1, …), as listed at the bottom of every post. */
 export const talksNewestFirst: Talk[] = [...talks].sort((a, b) => b.no - a.no)
 
+/** A post's own page is addressed by its number, /talks/<no>/ (ids are internal: file names, images). */
+export function talkPath(t: Talk): string {
+  return `/talks/${t.no}/`
+}
+
 /** The address to share: the post's own page, prerendered with its title, description and preview image. */
-export function talkShareUrl(id: string): string {
-  return new URL(`/talks/${id}/`, window.location.origin).href
+export function talkShareUrl(t: Talk): string {
+  return new URL(talkPath(t), window.location.origin).href
 }

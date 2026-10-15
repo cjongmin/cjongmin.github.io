@@ -1,0 +1,21 @@
+# Redirects on cjmin.me, applied by Cloudflare Pages (see README → Short links).
+# 302: a short link whose target may change later (QR codes, CV). Browsers do not remember it.
+# 301: an address that moved for good.
+
+# CV: always the latest PDF
+/cv     /Jongmin_Choi_CV.pdf    302
+/cv/    /Jongmin_Choi_CV.pdf    302
+
+# Posters: /poster/<venue><year>/<paper title>
+/poster/emnlp2026/fork-merge-decoding     /publications/fork-merge-decoding-poster.pdf    302
+/poster/emnlp2026/fork-merge-decoding/    /publications/fork-merge-decoding-poster.pdf    302
+
+# Presentation notes live at /talks/<no>/; /talks itself is the section on the home page
+/talks     /#talks    302
+/talks/    /#talks    302
+
+# The posts' first addresses (by name), shared before posts were numbered
+/talks/emnlp-2026-fork-merge     /talks/1/    301
+/talks/emnlp-2026-fork-merge/    /talks/1/    301
+/talks/neurips-2026-fits         /talks/2/    301
+/talks/neurips-2026-fits/        /talks/2/    301

@@ -12,11 +12,11 @@ if (stored === 'dark' || (!stored && prefersDark)) {
 
 const root = createRoot(document.getElementById('root')!)
 
-// /talks/<id>/ is a talk post on its own page (prerendered; this takes over once loaded)
-const talk = window.location.pathname.match(/^\/talks\/([^/]+)\/?$/)
+// /talks/<no>/ is a talk post on its own page (prerendered; this takes over once loaded)
+const talk = window.location.pathname.match(/^\/talks\/(\d+)\/?$/)
 if (talk) {
   import('./TalkPage').then(({ default: TalkPage }) =>
-    root.render(<StrictMode><TalkPage id={decodeURIComponent(talk[1])} /></StrictMode>))
+    root.render(<StrictMode><TalkPage no={Number(talk[1])} /></StrictMode>))
 } else {
   root.render(<StrictMode><App /></StrictMode>)
 }

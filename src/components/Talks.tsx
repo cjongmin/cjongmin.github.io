@@ -7,9 +7,12 @@ const TalkDetail = lazy(() => import('./TalkDetail'))
 
 const HASH_PREFIX = '#talk='
 
-function talkIdFromHash(): string | null {
+/** The post named in the address, #talk=<no> (also the older #talk=<id>). */
+function talkFromHash(): Talk | null {
   const h = window.location.hash
-  return h.startsWith(HASH_PREFIX) ? decodeURIComponent(h.slice(HASH_PREFIX.length)) : null
+  if (!h.startsWith(HASH_PREFIX)) return null
+  const key = decodeURIComponent(h.slice(HASH_PREFIX.length))
+  return talks.find(t => String(t.no) === key || t.id === key) ?? null
 }
 
 // One slide = card width + the track's gap (gap-4, which grows with the root font size).
@@ -43,12 +46,12 @@ export default function Talks() {
   const scrollTimer = useRef<number>()
   const pushedRef = useRef(false)
 
-  // Detail view is addressable (#talk=<id>): deep links work and the
+  // Detail view is addressable (#talk=<no>): deep links work and the
   // browser back button closes it.
   useEffect(() => {
     const sync = () => {
-      const id = talkIdFromHash()
-      const t = id ? talks.find(x => x.id === id) ?? null : null
+      const t = talkFromHash()
+      if (t && window.location.hash !== HASH_PREFIX + t.no) history.replaceState(null, '', HASH_PREFIX + t.no)
       if (!t) pushedRef.current = false
       setSelected(t)
     }
@@ -99,14 +102,14 @@ export default function Talks() {
 
   const open = (t: Talk) => {
     openerRef.current = document.activeElement as HTMLElement | null
-    history.pushState(null, '', HASH_PREFIX + t.id)
+    history.pushState(null, '', HASH_PREFIX + t.no)
     pushedRef.current = true
     setSelected(t)
   }
 
   // Switching posts from the list at the bottom replaces the entry, so Back still closes the post.
   const navigate = useCallback((t: Talk) => {
-    history.replaceState(null, '', HASH_PREFIX + t.id)
+    history.replaceState(null, '', HASH_PREFIX + t.no)
     setSelected(t)
   }, [])
 

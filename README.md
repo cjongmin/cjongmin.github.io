@@ -45,11 +45,13 @@ Before the conference a post introduces the work (heading to the venue, presenta
 motivation, key idea, key findings, what to discuss, looking ahead). After it, add sections
 such as `# Questions from the poster session` and `# Takeaways`, and set `upcoming` to `false`.
 
-**Each post has its own page**, `https://cjmin.me/talks/<id>/` (the *Copy link* address).
+**Each post has its own page**, `https://cjmin.me/talks/<no>/` (the *Copy link* address), addressed
+by its permanent number so a paper without a short name still gets a clean address; the `id` only
+names files (`<id>.md`, card images).
 The build prerenders the article into it with the post's own title, description, preview card and
 BlogPosting data, so link previews, search engines, reader mode and printing all get the article;
 in the browser, `main.tsx` mounts it as a page. From the home page the same post opens as an
-overlay (`#talk=<id>`), and printing that overlay prints only the article. Card images are
+overlay (`#talk=<no>`), and printing that overlay prints only the article. Card images are
 `public/talks/og/<id>.jpg`; regenerate them with `python3 scripts/talk_og.py` (Pillow) after adding
 a talk or changing a title. A new cover (`public/talks/<name>.webp`, 2000px wide) also needs its
 smaller carousel copies: `python3 scripts/responsive_images.py`.
@@ -78,6 +80,20 @@ www.cjmin.me is forwarded to cjmin.me by a small Worker,
 engines and link previews see the content without running JavaScript. It also
 writes each talk post's own page, `sitemap.xml`, `robots.txt` and `404.html`. The talk post view
 is a separate chunk that loads only when a post is opened.
+
+## Short links
+
+[public/_redirects](public/_redirects) holds the site's redirects (Cloudflare Pages applies them):
+
+| Address | Goes to |
+|---|---|
+| `cjmin.me/cv` | the latest CV PDF |
+| `cjmin.me/poster/<venue><year>/<paper-title>` | that poster's PDF, e.g. `/poster/emnlp2026/fork-merge-decoding` |
+| `cjmin.me/talks` | the Talks section of the home page |
+| `cjmin.me/talks/emnlp-2026-fork-merge/`, … | the posts' first addresses, now `/talks/1/`, … |
+
+Use `302` for a short link whose target may change (a QR code on a poster), `301` for an
+address that moved for good. Add a poster link when its PDF goes into `public/publications/`.
 
 ## Notes
 

@@ -1,5 +1,5 @@
 """Link-preview cards (1200x630 JPEG) for talk posts, shown when a post's
-share page (/talks/<id>/) is posted on LinkedIn, Slack, KakaoTalk, X.
+share page (/talks/<no>/) is posted on LinkedIn, Slack, KakaoTalk, X.
 
     python3 scripts/talk_og.py            # needs Pillow; writes public/talks/og/<id>.jpg
 

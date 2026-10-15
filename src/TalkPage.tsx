@@ -1,10 +1,10 @@
-// A talk post as its own page, /talks/<id>/ (see main.tsx and scripts/prerender.mjs).
+// A talk post as its own page, /talks/<no>/ (see main.tsx and scripts/prerender.mjs).
 import { LazyMotion, MotionConfig, domAnimation } from 'framer-motion'
 import TalkDetail from './components/TalkDetail'
-import { talks } from './data/talks'
+import { talkPath, talks } from './data/talks'
 
-export default function TalkPage({ id }: { id: string }) {
-  const talk = talks.find(t => t.id === id)
+export default function TalkPage({ no }: { no: number }) {
+  const talk = talks.find(t => t.no === no)
   if (!talk) return null
   return (
     <LazyMotion features={domAnimation} strict>
@@ -13,7 +13,7 @@ export default function TalkPage({ id }: { id: string }) {
           talk={talk}
           standalone
           onClose={() => window.location.assign('/#talks')}
-          onNavigate={t => window.location.assign(`/talks/${t.id}/`)}
+          onNavigate={t => window.location.assign(talkPath(t))}
         />
       </MotionConfig>
     </LazyMotion>

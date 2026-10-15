@@ -3,11 +3,11 @@
 //     browser still mounts the app with createRoot, which replaces this markup,
 //     so what visitors see is unchanged; crawlers and link previews get the text
 //     (bio, news, papers) instead of an empty div.
-//  2. Write each published talk post as its own page, dist/talks/<id>/index.html,
+//  2. Write each published talk post as its own page, dist/talks/<no>/index.html,
 //     from the same template: the article prerendered into #root, and its own
 //     title, description, canonical URL, card image (public/talks/og/<id>.jpg,
 //     scripts/talk_og.py) and BlogPosting JSON-LD. In the browser, main.tsx sees
-//     /talks/<id>/ and mounts the post as a page (not the home page).
+//     /talks/<no>/ and mounts the post as a page (not the home page).
 //  3. Write sitemap.xml, robots.txt and 404.html.
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { createServer } from 'vite'
@@ -29,7 +29,7 @@ function setTag(html, pattern, replacement) {
 }
 
 function talkHtml(t, article) {
-  const url = `${SITE}/talks/${t.id}/`
+  const url = `${SITE}/talks/${t.no}/`
   const card = existsSync(`public/talks/og/${t.id}.jpg`) ? `/talks/og/${t.id}.jpg` : t.cover ?? '/og-image.png'
   const title = `${t.title} · ${t.event} ${t.type}`
   const description = t.summary   // the card teaser says what the work is; the subtitle can be just a tagline
@@ -62,16 +62,16 @@ try {
   writeFileSync(file, template.replace(slot, `<div id="root">${app}</div>`))
   console.log(`prerender: ${(app.length / 1024).toFixed(1)} KB of HTML written into ${file}`)
   for (const t of talks) {
-    const article = renderTalk(t.id)
-    mkdirSync(`dist/talks/${t.id}`, { recursive: true })
-    writeFileSync(`dist/talks/${t.id}/index.html`, talkHtml(t, article))
+    const article = renderTalk(t.no)
+    mkdirSync(`dist/talks/${t.no}`, { recursive: true })
+    writeFileSync(`dist/talks/${t.no}/index.html`, talkHtml(t, article))
   }
   console.log(`prerender: ${talks.length} talk posts as pages in dist/talks/`)
 } finally {
   await vite.close()
 }
 
-const urls = [`${SITE}/`, ...talks.map(t => `${SITE}/talks/${t.id}/`)]
+const urls = [`${SITE}/`, ...talks.map(t => `${SITE}/talks/${t.no}/`)]
 writeFileSync('dist/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map(u => `  <url><loc>${u}</loc></url>`).join('\n')}

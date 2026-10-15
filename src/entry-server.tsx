@@ -10,6 +10,6 @@ export function render(): string {
   return renderToString(<StrictMode><App /></StrictMode>)
 }
 
-export function renderTalk(id: string): string {
-  return renderToString(<StrictMode><TalkPage id={id} /></StrictMode>)
+export function renderTalk(no: number): string {
+  return renderToString(<StrictMode><TalkPage no={no} /></StrictMode>)
 }

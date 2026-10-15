@@ -51,7 +51,7 @@ names files (`<id>.md`, card images).
 The build prerenders the article into it with the post's own title, description, preview card and
 BlogPosting data, so link previews, search engines, reader mode and printing all get the article;
 in the browser, `main.tsx` mounts it as a page. From the home page the same post opens as an
-overlay (`#talk=<no>`), and printing that overlay prints only the article. Card images are
+overlay, with the same `/talks/<no>/` in the address bar, and printing that overlay prints only the article. Card images are
 `public/talks/og/<id>.jpg`; regenerate them with `python3 scripts/talk_og.py` (Pillow) after adding
 a talk or changing a title. A new cover (`public/talks/<name>.webp`, 2000px wide) also needs its
 smaller carousel copies: `python3 scripts/responsive_images.py`.

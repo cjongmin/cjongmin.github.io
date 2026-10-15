@@ -1,18 +1,26 @@
 import { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react'
 import { m, useInView } from 'framer-motion'
 import { ArrowRight, CalendarDays, ChevronLeft, ChevronRight } from 'lucide-react'
-import { talks, Talk } from '../data/talks'
+import { talkPath, talks, Talk } from '../data/talks'
 // The post view (and every post's text) loads only when a post is opened
 const TalkDetail = lazy(() => import('./TalkDetail'))
 
 const HASH_PREFIX = '#talk='
 
-/** The post named in the address, #talk=<no> (also the older #talk=<id>). */
-function talkFromHash(): Talk | null {
+/** The post named in the address: /talks/<no>/ while a post is open over the home page,
+ *  or an older link to the home page with #talk=<no> or #talk=<id>. */
+function talkFromLocation(): Talk | null {
+  const path = window.location.pathname.match(/^\/talks\/(\d+)\/?$/)
+  if (path) return talks.find(t => t.no === Number(path[1])) ?? null
   const h = window.location.hash
   if (!h.startsWith(HASH_PREFIX)) return null
   const key = decodeURIComponent(h.slice(HASH_PREFIX.length))
   return talks.find(t => String(t.no) === key || t.id === key) ?? null
+}
+
+/** GoatCounter counts page loads only; a post opened over the home page is counted here, under its own address. */
+function countView(t: Talk) {
+  (window as { goatcounter?: { count?: (o: object) => void } }).goatcounter?.count?.({ path: talkPath(t), title: t.title, event: false })
 }
 
 // One slide = card width + the track's gap (gap-4, which grows with the root font size).
@@ -46,12 +54,12 @@ export default function Talks() {
   const scrollTimer = useRef<number>()
   const pushedRef = useRef(false)
 
-  // Detail view is addressable (#talk=<no>): deep links work and the
-  // browser back button closes it.
+  // An open post shows its own address (/talks/<no>/, the same page a reload or a shared link
+  // opens), and the browser back button closes it.
   useEffect(() => {
     const sync = () => {
-      const t = talkFromHash()
-      if (t && window.location.hash !== HASH_PREFIX + t.no) history.replaceState(null, '', HASH_PREFIX + t.no)
+      const t = talkFromLocation()
+      if (t && window.location.pathname !== talkPath(t)) history.replaceState(null, '', talkPath(t))
       if (!t) pushedRef.current = false
       setSelected(t)
     }
@@ -102,15 +110,17 @@ export default function Talks() {
 
   const open = (t: Talk) => {
     openerRef.current = document.activeElement as HTMLElement | null
-    history.pushState(null, '', HASH_PREFIX + t.no)
+    history.pushState(null, '', talkPath(t))
     pushedRef.current = true
     setSelected(t)
+    countView(t)
   }
 
   // Switching posts from the list at the bottom replaces the entry, so Back still closes the post.
   const navigate = useCallback((t: Talk) => {
-    history.replaceState(null, '', HASH_PREFIX + t.no)
+    history.replaceState(null, '', talkPath(t))
     setSelected(t)
+    countView(t)
   }, [])
 
   const close = useCallback(() => {
@@ -118,7 +128,7 @@ export default function Talks() {
       pushedRef.current = false
       history.back()                      // popstate → sync() clears selection
     } else {
-      history.replaceState(null, '', window.location.pathname + window.location.search)
+      history.replaceState(null, '', '/' + window.location.search)
       setSelected(null)
     }
   }, [])

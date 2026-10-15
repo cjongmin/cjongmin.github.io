@@ -54,7 +54,7 @@ const LINK_TILE = `grow basis-[calc(25%-0.375rem)] sm:basis-0 min-w-0 inline-fle
  * places its own photos; clicking one opens it in a lightbox), the paper's
  * links, and the list of all posts.
  *
- * Two ways in: from the home page it opens over the site (#talk=<no>, rendered into
+ * Two ways in: from the home page it opens over the site (address /talks/<no>/, rendered into
  * <body> through a portal, closes on Back / Escape); at /talks/<no>/ it is its own
  * page, prerendered at build time (scripts/prerender.mjs) so it reads, prints and
  * indexes as an ordinary article.

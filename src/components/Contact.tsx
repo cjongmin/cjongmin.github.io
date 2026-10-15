@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { Fragment, useRef } from 'react'
 import { m, useInView } from 'framer-motion'
 import { Mail, Github, Linkedin, BookOpen, MapPin } from 'lucide-react'
 import { profile } from '../data/profile'
@@ -31,7 +31,7 @@ const contactItems = [
   {
     icon: MapPin,
     label: 'Location',
-    value: 'Daejeon, South Korea',
+    value: 'Daejeon, South\u00a0Korea',    // no-break space: wraps as "Daejeon, / South Korea"
     href: undefined,
   },
 ]
@@ -47,7 +47,7 @@ export default function Contact() {
           initial={{ opacity: 0, y: 28 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="mb-8"
+          className="mb-8 text-center"
         >
           <p className="text-[14px] font-semibold text-[#6E6E73] dark:text-[#86868B] uppercase tracking-widest mb-3">
             Contact
@@ -55,15 +55,19 @@ export default function Contact() {
           <h2 className="section-title">Get In Touch</h2>
         </m.div>
 
-        {/* Contact grid: 2 columns on phones, 3 on tablets, 5 from lg; long values wrap instead of overflowing */}
+        {/* Contact cards, centred rows: phones show Email on its own row and then two per row,
+            tablets 3 + 2, and from lg all 5 in one row (widths subtract the 0.75rem gaps). */}
         <m.div
           initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.18 }}
-          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3"
+          className="flex flex-wrap justify-center gap-3"
         >
           {contactItems.map(({ icon: Icon, label, value, href }, i) => {
-            const cardClass = `glass-card p-4 flex flex-col items-center gap-2.5 text-center
+            const width = label === 'Email'
+              ? 'basis-full sm:basis-[calc((100%-1.5rem)/3)] lg:basis-[calc((100%-3rem)/5)]'
+              : 'basis-[calc((100%-0.75rem)/2)] sm:basis-[calc((100%-1.5rem)/3)] lg:basis-[calc((100%-3rem)/5)]'
+            const cardClass = `glass-card ${width} min-w-0 px-2 py-4 flex flex-col items-center gap-2.5 text-center
               ${href ? 'hover:shadow-md transition-shadow duration-200 cursor-pointer' : ''}`
 
             const inner = (
@@ -73,8 +77,11 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="text-[13px] font-medium text-secondary mb-0.5">{label}</p>
+                  {/* An address that does not fit breaks before "@", not mid-word */}
                   <p className="text-[15px] font-medium leading-snug text-[#1D1D1F] dark:text-[#F5F5F7] [overflow-wrap:anywhere]">
-                    {value}
+                    {value.split('@').map((part, j) => (
+                      <Fragment key={j}>{j > 0 && <><wbr />@</>}{part}</Fragment>
+                    ))}
                   </p>
                 </div>
               </>

@@ -8,7 +8,7 @@ import { liteAdaptor } from 'mathjax-full/js/adaptors/liteAdaptor.js'
 import { RegisterHTMLHandler } from 'mathjax-full/js/handlers/html.js'
 import { AllPackages } from 'mathjax-full/js/input/tex/AllPackages.js'
 
-const SITE = 'https://cjongmin.github.io'
+const SITE = 'https://cjmin.me'
 
 /**
  * Inject schema.org JSON-LD at build time, derived straight from
@@ -69,9 +69,9 @@ function jsonLd(): Plugin {
         // "<" must never appear raw inside a <script> body
         children: JSON.stringify(graph).replace(/</g, '\\u003c'),
         injectTo: 'head',
-      }]
+      }];
     },
-  }
+  };
 }
 
 /**
@@ -123,7 +123,7 @@ function prerenderMath(): Plugin {
       this.addWatchFile(file)
       return `export default ${JSON.stringify(text)}`
     },
-  }
+  };
 }
 
 export default defineConfig({

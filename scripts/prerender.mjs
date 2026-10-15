@@ -12,7 +12,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { createServer } from 'vite'
 
-const SITE = 'https://cjongmin.github.io'
+const SITE = 'https://cjmin.me'
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 const talks = JSON.parse(readFileSync('src/data/talks.json', 'utf8')).filter(t => t.published)
 const profile = JSON.parse(readFileSync('src/data/profile.json', 'utf8'))
@@ -97,7 +97,7 @@ writeFileSync('dist/404.html', `<!doctype html>
 <body>
   <main>
     <h1>Page not found</h1>
-    <p>Taking you to <a href="/">cjongmin.github.io</a>…</p>
+    <p>Taking you to <a href="/">cjmin.me</a>…</p>
   </main>
 </body>
 </html>

@@ -1,5 +1,6 @@
 node_modules
 dist
+dist-github
 *.local
 .DS_Store
 .env
@@ -10,3 +11,4 @@ dist
 /*.pdf
 # paper sources dropped in for reference (never commit them)
 /arXiv-*
+.wrangler

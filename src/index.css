@@ -9,7 +9,14 @@
      ~3140px (e.g. a 4K monitor at 100%), where it matches 150% browser zoom. */
   html {
     scroll-behavior: smooth;
-    font-size: clamp(100%, 0.765vw, 150%);
+    font-size: 100%;
+  }
+
+  /* Laptops and desktops: 10% smaller; from about 1880px wide it grows again, up to 1.5× near 3140px. */
+  @media (min-width: 1024px) {
+    html {
+      font-size: clamp(90%, 0.765vw, 150%);
+    }
   }
 
   body {

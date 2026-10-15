@@ -1,16 +1,16 @@
 BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//cjongmin.github.io//Presentation Notes//EN
+PRODID:-//cjmin.me//Presentation Notes//EN
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
 BEGIN:VEVENT
-UID:emnlp-2026-fork-merge@cjongmin.github.io
+UID:emnlp-2026-fork-merge@cjmin.me
 DTSTAMP:20261012T000000Z
 DTSTART:20261026T080000Z
 DTEND:20261026T093000Z
 SUMMARY:EMNLP 2026 Poster Session C: Fork-Merge Decoding (FMD)
 LOCATION:Hall H\, Hungexpo Budapest Congress and Exhibition Center\, Budapest\, Hungary
-DESCRIPTION:Findings of EMNLP 2026 · Session 5 · Poster Session C\nhttps://cjongmin.github.io/talks/emnlp-2026-fork-merge/
-URL:https://cjongmin.github.io/talks/emnlp-2026-fork-merge/
+DESCRIPTION:Findings of EMNLP 2026 · Session 5 · Poster Session C\nhttps://cjmin.me/talks/emnlp-2026-fork-merge/
+URL:https://cjmin.me/talks/emnlp-2026-fork-merge/
 END:VEVENT
 END:VCALENDAR

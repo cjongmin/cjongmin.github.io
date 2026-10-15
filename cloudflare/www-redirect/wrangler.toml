@@ -1,0 +1,6 @@
+# Sends www.cjmin.me to cjmin.me. Deploy from this folder: npx wrangler deploy
+name = "cjmin-www-redirect"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+workers_dev = false
+routes = [{ pattern = "www.cjmin.me/*", zone_name = "cjmin.me" }]

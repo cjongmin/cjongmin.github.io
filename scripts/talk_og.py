@@ -53,7 +53,7 @@ def card(talk):
     for line in lines:
         d.text((PAD, y), line, font=title_font, fill='white'); y += 60
     y += 18
-    d.text((PAD, y), f"Presentation Notes #{talk['no']}  ·  Jongmin Choi  ·  cjongmin.github.io",
+    d.text((PAD, y), f"Presentation Notes #{talk['no']}  ·  Jongmin Choi  ·  cjmin.me",
            font=font('SourceSans3-Regular.ttf', 26), fill=(215, 218, 226))
     return img
 

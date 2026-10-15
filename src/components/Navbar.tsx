@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Menu, X } from 'lucide-react'
 import ThemeToggle from './ThemeToggle'
+import WorldLink from './WorldLink'
 import { remPx, scrollToSection } from '../lib/utils'
 
 interface NavbarProps {
@@ -99,6 +100,7 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
         </nav>
 
         <div className="flex items-center gap-2">
+          <WorldLink />
           <ThemeToggle theme={theme} onToggle={toggleTheme} />
 
           {/* Mobile hamburger */}

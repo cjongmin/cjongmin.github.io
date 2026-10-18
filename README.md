@@ -81,6 +81,20 @@ engines and link previews see the content without running JavaScript. It also
 writes each talk post's own page, `sitemap.xml`, `robots.txt` and `404.html`. The talk post view
 is a separate chunk that loads only when a post is opened.
 
+## App pages
+
+The iOS apps' support and privacy pages are plain HTML files, copied into the build as they are:
+
+| Address | File |
+|---|---|
+| `cjmin.me/app/pickcam/` | [public/app/pickcam/index.html](public/app/pickcam/index.html) |
+| `cjmin.me/app/nureumkkot/` | [public/app/nureumkkot/index.html](public/app/nureumkkot/index.html) |
+
+Edit the file, then build and deploy as above. They started as copies of
+cjongmin.github.io/pickcam-site/ and cjongmin.github.io/nureumkkot-site/, which still answer
+until the App Store listings point here. Cloudflare's email obfuscation rewrites the `mailto:`
+links on the live pages; a small script turns them back in the browser.
+
 ## Short links
 
 [public/_redirects](public/_redirects) holds the site's redirects (Cloudflare Pages applies them):

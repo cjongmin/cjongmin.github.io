@@ -1,3 +1,23 @@
+:::intuition When Do We Close Our Eyes or Cover Our Ears?
+Eyebrow: A personal intuition
+Subtitle: From an intuition about human perception to Fork-Merge Decoding
+Note: An analogy, not a biological claim.
+
+![Illustration generated with ChatGPT.](/talks/fmd/eyes-and-ears.webp)
+
+Our eyes and ears convert physical signals—light and sound—into neural signals that the brain can process. In a similar sense, video and audio encoders serve as the eyes and ears of multimodal language models, transforming raw sensory inputs into meaningful representations.
+
+The human brain does not simply process these signals in a single forward pass. Information flows through multiple stages, with top-down feedback influencing how sensory inputs are interpreted. While this is not directly equivalent to how Transformers operate, both involve progressively processing and integrating information.
+
+Interestingly, we do not always pay equal attention to every sense. In a noisy environment, we might cover our ears to focus on what we see. When trying to catch a faint sound, we might close our eyes and listen more carefully.
+
+**What if multimodal language models could benefit from a similar principle?**
+
+Rather than processing audio and visual information jointly from the beginning, perhaps we should let the model focus on each modality separately before combining them.
+
+This simple intuition motivates **Fork-Merge Decoding (FMD)**: first developing modality-specific representations through separate decoding branches, then merging them for joint reasoning.
+:::
+
 # Motivation
 
 ## Seeing and hearing does not mean using both
@@ -105,8 +125,6 @@ These examples show the kinds of errors that remain. FMD can improve the use of 
 
 # At EMNLP 2026
 
-## What I'd like to discuss
-
 I will be presenting this work at Findings of EMNLP 2026 in Budapest.
 
 :::event
@@ -118,9 +136,11 @@ Place: Hall H, Hungexpo Budapest Congress and Exhibition Center
 Calendar: /talks/fmd/emnlp-2026-fmd-poster.ics
 :::
 
-Beyond the performance gains, I am curious about what actually takes shape inside the LLM decoder. What information does each layer build up as the model reasons, and is that processing hierarchical? If it is, that might explain why processing each modality on its own before merging works. I would love to hear your thoughts on this at the poster.
-
 The full conference schedule is in the [EMNLP 2026 program](https://2026.emnlp.org/program/).
+
+## What I'd like to discuss
+
+Beyond the performance gains, I am curious about what actually takes shape inside the LLM decoder. What information does each layer build up as the model reasons, and is that processing hierarchical? If it is, that might explain why processing each modality on its own before merging works. I would love to hear your thoughts on this at the poster.
 
 ## After the session
 

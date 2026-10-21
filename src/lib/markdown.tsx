@@ -1,5 +1,5 @@
 import { Fragment, ReactNode } from 'react'
-import { CalendarDays, CalendarPlus, ChevronRight, Clock, Info, Landmark, MapPin, Presentation, Users } from 'lucide-react'
+import { Brain, CalendarDays, CalendarPlus, ChevronRight, Clock, Info, Landmark, MapPin, Presentation, Users } from 'lucide-react'
 
 /**
  * The small Markdown subset that talk posts are written in
@@ -27,6 +27,11 @@ import { CalendarDays, CalendarPlus, ChevronRight, Clock, Info, Landmark, MapPin
  *   :::lead                paragraphs + one ![caption](/figure.webp)
  *                          → an opening like wrapfigure: the figure floats right and the text wraps
  *                            around it (from lg; stacked below)
+ *   :::intuition Title     Eyebrow: … / Subtitle: … / Note: … (optional, first lines), then
+ *                          one ![caption](/illustration.webp) and paragraphs
+ *                          → a rounded card set apart from the sections: label, illustration,
+ *                            title and subtitle, the text, and a closing note under a rule.
+ *                            Its title is not a heading, so it stays out of the contents box.
  *
  * Parsing produces plain data, so the same headings feed the table of contents.
  */
@@ -45,6 +50,7 @@ export type Block =
   | { kind: 'quote'; text: string }
   | { kind: 'lead'; blocks: Block[]; figure?: { src: string; alt: string } }
   | { kind: 'details'; title: string; blocks: Block[] }
+  | { kind: 'intuition'; title: string; fields: Record<string, string>; blocks: Block[]; figure?: { src: string; alt: string } }
 
 export function slugify(text: string): string {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'section'
@@ -84,6 +90,22 @@ export function parseMarkdown(src: string): Block[] {
       while (i < lines.length && lines[i].trim() !== ':::') raw.push(lines[i++])
       i++                                                     // closing :::
       blocks.push({ kind: 'details', title: det[1].trim(), blocks: parseMarkdown(raw.join('\n')) })
+      continue
+    }
+
+    const intu = line.match(/^:::intuition\s*(.*)$/)
+    if (intu) {
+      const raw: string[] = [], fields: Record<string, string> = {}
+      i++
+      // leading "Key: value" lines are the card's own fields; the rest is markdown
+      while (i < lines.length && lines[i].trim() !== ':::' && /^(eyebrow|subtitle|note):/i.test(lines[i].trim())) {
+        const l = lines[i++].trim(), k = l.indexOf(':'); fields[l.slice(0, k).trim().toLowerCase()] = l.slice(k + 1).trim()
+      }
+      while (i < lines.length && lines[i].trim() !== ':::') raw.push(lines[i++])
+      i++                                                     // closing :::
+      const inner = parseMarkdown(raw.join('\n'))
+      const img = inner.find((b): b is Extract<Block, { kind: 'image' }> => b.kind === 'image')
+      blocks.push({ kind: 'intuition', title: intu[1].trim(), fields, blocks: inner.filter(b => b !== img), figure: img && { src: img.src, alt: img.alt } })
       continue
     }
 
@@ -425,6 +447,46 @@ export function MarkdownBody({ blocks, onImageClick }: {
                 </div>
               </details>
             )
+          case 'intuition': {
+            // A thought set apart from the argument: a soft card with its own label, an illustration,
+            // the title, the text, and a closing note under a hairline.
+            const fig = b.figure
+            return (
+              <aside key={i} aria-label={b.title}
+                     className="mt-10 sm:mt-12 rounded-[28px] bg-neutral-50 dark:bg-white/[0.04] border border-black/[0.05] dark:border-white/[0.08]
+                                px-4 py-5 sm:px-8 sm:py-8 break-inside-avoid">
+                <p className="flex items-center gap-2.5 text-[11.5px] sm:text-[12px] font-semibold uppercase tracking-[0.14em] text-secondary">
+                  <Brain size={18} strokeWidth={1.75} aria-hidden />
+                  {b.fields.eyebrow || 'A personal intuition'}
+                </p>
+                {fig && (
+                  <figure className="mt-5 sm:mt-6">
+                    <button
+                      type="button"
+                      onClick={() => onImageClick?.({ src: fig.src, alt: fig.alt, chart: false })}
+                      aria-label={`Enlarge image${fig.alt ? `: ${fig.alt}` : ''}`}
+                      className="block w-full rounded-2xl overflow-hidden cursor-zoom-in transition-shadow hover:shadow-md"
+                    >
+                      <img src={fig.src} alt={fig.alt} loading="lazy" decoding="async" className="w-full h-auto" />
+                    </button>
+                    {fig.alt && <figcaption className="mt-2.5 text-[12.5px] sm:text-[13px] leading-snug text-secondary text-center">{renderInline(fig.alt)}</figcaption>}
+                  </figure>
+                )}
+                <h3 className="mt-6 sm:mt-7 text-[19px] sm:text-[23px] font-semibold tracking-tight leading-snug text-[#1D1D1F] dark:text-[#F5F5F7]">
+                  {renderInline(b.title)}
+                </h3>
+                {b.fields.subtitle && <p className="mt-2 text-[14.5px] sm:text-[16px] leading-snug text-secondary">{renderInline(b.fields.subtitle)}</p>}
+                <div className="[&>p:first-child]:mt-5 [&_p]:text-left sm:[&_p]:text-justify">   {/* (a narrow phone column reads better ragged-right) */}
+                  <MarkdownBody blocks={b.blocks} onImageClick={onImageClick} />
+                </div>
+                {b.fields.note && (
+                  <p className="mt-6 sm:mt-7 pt-5 border-t border-black/[0.08] dark:border-white/[0.1] text-[13.5px] sm:text-[14.5px] text-secondary">
+                    {renderInline(b.fields.note)}
+                  </p>
+                )}
+              </aside>
+            )
+          }
           case 'lead': {
             // Opening of a post, like LaTeX's wrapfigure: from lg the figure floats right and the
             // text wraps around it, running full width once it passes the figure (flow-root keeps

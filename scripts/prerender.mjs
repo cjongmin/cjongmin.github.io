@@ -1,7 +1,7 @@
 // After `vite build`:
-//  1. Render <App/> to HTML and put it inside #root of dist/index.html. The
-//     browser still mounts the app with createRoot, which replaces this markup,
-//     so what visitors see is unchanged; crawlers and link previews get the text
+//  1. Render <App/> to HTML and put it inside #root of dist/index.html. In the
+//     browser React hydrates this markup (main.tsx), so the first render has to
+//     match it; crawlers and link previews get the text
 //     (bio, news, papers) instead of an empty div.
 //  2. Write each published talk post as its own page, dist/talks/<no>/index.html,
 //     from the same template: the article prerendered into #root, and its own

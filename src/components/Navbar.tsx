@@ -5,7 +5,6 @@ import WorldLink from './WorldLink'
 import { remPx, scrollToSection } from '../lib/utils'
 
 interface NavbarProps {
-  theme: 'light' | 'dark'
   toggleTheme: () => void
 }
 
@@ -18,7 +17,7 @@ const NAV_ITEMS = [
   { label: 'Contact', id: 'contact' },
 ]
 
-export default function Navbar({ theme, toggleTheme }: NavbarProps) {
+export default function Navbar({ toggleTheme }: NavbarProps) {
   const [activeSection, setActiveSection] = useState('home')
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -101,7 +100,7 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
 
         <div className="flex items-center gap-2">
           <WorldLink />
-          <ThemeToggle theme={theme} onToggle={toggleTheme} />
+          <ThemeToggle onToggle={toggleTheme} />
 
           {/* Mobile hamburger */}
           <button

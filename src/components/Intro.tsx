@@ -1,4 +1,3 @@
-import { m } from 'framer-motion'
 import { profile } from '../data/profile'
 import { news } from '../data/news'
 import { SocialIcon, SocialIconName } from './SocialIcons'
@@ -45,6 +44,8 @@ const EYEBROW = 'text-[14px] font-semibold text-[#6E6E73] dark:text-[#86868B] up
  * First screen: who I am on the left (photo, name, affiliation, links; centred),
  * About Me on the right, and Recent News below both at full width.
  * Phones and tablets (below lg): the centred profile, then About, then News.
+ * The entrance is a CSS animation (.rise-in), so it plays from the prerendered HTML's
+ * first paint instead of waiting for the scripts.
  */
 export default function Intro() {
   const paragraphs = profile.bio.split('\n\n').filter(Boolean)
@@ -55,12 +56,7 @@ export default function Intro() {
         <div className="grid lg:grid-cols-[300px_minmax(0,1fr)] gap-8 md:gap-10 lg:gap-16 items-start lg:items-stretch">
 
           {/* ---------- Left: who ---------- */}
-          <m.aside
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="flex flex-col items-center text-center"
-          >
+          <aside className="rise-in flex flex-col items-center text-center">
             {profile.profileImage && (
               <img
                 src={profile.profileImage}
@@ -107,15 +103,10 @@ export default function Intro() {
                 {profile.status}
               </p>
             )}
-          </m.aside>
+          </aside>
 
           {/* ---------- Right: about ---------- */}
-          <m.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="min-w-0"
-          >
+          <div className="rise-in [animation-delay:100ms] min-w-0">
             <p className={`${EYEBROW} mb-3`}>About Me</p>
             <div className="space-y-4">
               {paragraphs.map((para, i) => (
@@ -127,17 +118,12 @@ export default function Intro() {
                 </p>
               ))}
             </div>
-          </m.div>
+          </div>
         </div>
 
         {/* ---------- Below both columns: news, full width ---------- */}
         {news.length > 0 && (
-          <m.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="mt-12 md:mt-16"
-          >
+          <div className="rise-in [animation-delay:200ms] mt-12 md:mt-16">
             <p className={`${EYEBROW} mb-3`}>Recent News</p>
             <div className="glass-card divide-y divide-black/[0.05] dark:divide-white/[0.06]">
               {news.map(item => (
@@ -154,7 +140,7 @@ export default function Intro() {
                 </div>
               ))}
             </div>
-          </m.div>
+          </div>
         )}
       </div>
     </section>

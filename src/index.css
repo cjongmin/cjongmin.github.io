@@ -2,6 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Inter 4.001 (SIL Open Font License), served from this site instead of Google Fonts.
+   index.html preloads the Latin file, so text is set in Inter from the first paint
+   rather than swapping in a second later. One variable file per subset covers every
+   weight; the Latin Extended and Greek files load only when a page uses those letters. */
+@font-face {
+  font-family: 'Inter'; font-style: normal; font-weight: 100 900; font-display: swap;
+  src: url(/fonts/inter-greek-v4.woff2) format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+@font-face {
+  font-family: 'Inter'; font-style: normal; font-weight: 100 900; font-display: swap;
+  src: url(/fonts/inter-latin-ext-v4.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Inter'; font-style: normal; font-weight: 100 900; font-display: swap;
+  src: url(/fonts/inter-latin-v4.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 @layer base {
   /* Every size is in rem (postcss.config.js), so the root font size scales the
      whole page. Up to ~2100px-wide windows it is the browser default (16px);
@@ -91,6 +111,17 @@ svg.lucide[width="14"] { width: 14px; height: 14px; }
 svg.lucide[width="16"] { width: 16px; height: 16px; }
 svg.lucide[width="18"] { width: 18px; height: 18px; }
 svg.lucide[width="20"] { width: 20px; height: 20px; }
+
+/* The first screen's entrance (.rise-in in Intro.tsx) is CSS, not script: it plays from the
+   prerendered page's first paint, on the compositor, while the scripts are still loading.
+   With "reduce motion" it only fades. */
+@keyframes rise-in { from { opacity: 0; transform: translateY(12px); } }
+@keyframes fade-in { from { opacity: 0; } }
+@layer components {
+  /* (a component, so Tailwind's [animation-delay:…] utilities come after it and win) */
+  .rise-in { animation: rise-in 0.5s cubic-bezier(0.25, 0.1, 0.25, 1) both; }
+  @media (prefers-reduced-motion: reduce) { .rise-in { animation-name: fade-in; } }
+}
 
 /* Maths in talk posts (MathJax SVG, rendered at build time). Preflight makes every svg a
    block; keep formulas inline (inline maths) or centred on their own line (display). */

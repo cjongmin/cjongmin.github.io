@@ -1,8 +1,8 @@
 // After `vite build`:
-//  1. Render <App/> to HTML and put it inside #root of dist/index.html. In the
-//     browser React hydrates this markup (main.tsx), so the first render has to
-//     match it; crawlers and link previews get the text
-//     (bio, news, papers) instead of an empty div.
+//  1. Render <App/> to HTML and put it inside #root of dist/index.html, with the
+//     stylesheet inlined into the page. In the browser React hydrates this markup
+//     (main.tsx), so the first render has to match it; crawlers and link previews
+//     get the text (bio, news, papers) instead of an empty div.
 //  2. Write each published talk post as its own page, dist/talks/<no>/index.html,
 //     from the same template: the article prerendered into #root, and its own
 //     title, description, canonical URL, card image (public/talks/og/<id>.jpg,
@@ -18,9 +18,24 @@ const talks = JSON.parse(readFileSync('src/data/talks.json', 'utf8')).filter(t =
 const profile = JSON.parse(readFileSync('src/data/profile.json', 'utf8'))
 
 const file = 'dist/index.html'
-const template = readFileSync(file, 'utf8')
 const slot = '<div id="root"></div>'
+const template = inlineStylesheet(readFileSync(file, 'utf8'))
 if (!template.includes(slot)) throw new Error(`${file}: ${slot} not found`)
+
+/** The stylesheet goes into the page itself. Visitors in Korea reach cjmin.me through Los Angeles,
+ *  where each request costs about a second, and this one stood between the HTML and the first paint. */
+function inlineStylesheet(html) {
+  const link = html.match(/<link rel="stylesheet"[^>]* href="(\/assets\/[^"]+\.css)"[^>]*>/)
+  if (!link) throw new Error(`prerender: no stylesheet link in ${file}`)
+  const css = readFileSync(`dist${link[1]}`, 'utf8')
+  if (css.includes('</style')) throw new Error('prerender: the stylesheet contains </style')
+  return html.replace(link[0], () => `<style>${css}</style>`)
+}
+
+/** The prerendered markup inside #root. The email_off comments keep Cloudflare's email obfuscation
+ *  away from it: rewriting the mailto: link costs a blocking script at the end of the page, and the
+ *  address is on the page in plain text anyway. React's hydration skips comments like these. */
+const root = markup => `<div id="root"><!--email_off-->${markup}<!--/email_off--></div>`
 
 /** Swap one tag's attribute value in the template (title / meta / link), failing loudly if it is missing. */
 function setTag(html, pattern, replacement) {
@@ -51,7 +66,7 @@ function talkHtml(t, article) {
     about: t.title, isPartOf: { '@type': 'Blog', name: 'Presentation Notes', url: `${SITE}/#talks` },
   }
   html = html.replace('</head>', `<script type="application/ld+json">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script>\n  </head>`)
-  return html.replace(slot, `<div id="root">${article}</div>`)
+  return html.replace(slot, () => root(article))
 }
 
 // One-shot render: no file watcher (it can hit the OS watch limit and is never needed here)
@@ -59,7 +74,7 @@ const vite = await createServer({ server: { middlewareMode: true, watch: null },
 try {
   const { render, renderTalk } = await vite.ssrLoadModule('/src/entry-server.tsx')
   const app = render()
-  writeFileSync(file, template.replace(slot, `<div id="root">${app}</div>`))
+  writeFileSync(file, template.replace(slot, () => root(app)))
   console.log(`prerender: ${(app.length / 1024).toFixed(1)} KB of HTML written into ${file}`)
   for (const t of talks) {
     const article = renderTalk(t.no)

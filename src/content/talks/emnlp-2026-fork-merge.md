@@ -1,7 +1,6 @@
 :::intuition When Do We Close Our Eyes or Cover Our Ears?
 Eyebrow: A personal intuition
 Subtitle: From an intuition about human perception to Fork-Merge Decoding
-Note: An analogy, not a biological claim.
 
 ![Illustration generated with ChatGPT.](/talks/fmd/eyes-and-ears.webp)
 

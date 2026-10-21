@@ -155,12 +155,7 @@ export default function Talks() {
           <p className="text-[14px] font-semibold text-[#6E6E73] dark:text-[#86868B] uppercase tracking-widest mb-3">
             Talks &amp; Presentations
           </p>
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-3">
-            <h2 className="section-title">Conference · Presentation Notes</h2>
-            <p className="text-[15px] text-secondary">
-              What was asked, what mattered, what I took home.
-            </p>
-          </div>
+          <h2 className="section-title">Conference · Presentation Notes</h2>
         </m.div>
 
         {/*

@@ -61,7 +61,7 @@
     "id": "pickcam",
     "name": "PickCam",
     "tagline": "Auto-reframe any group video around one person",
-    "description": "Group dance videos, concerts, school recitals — the moment you actually want is one person, but the frame is everyone. PickCam turns any multi-person video into a fancam of whoever you pick: tap a person once and the app follows them to the end of the clip, reframing every frame around them for 9:16, 1:1, or 16:9.\n\nEverything runs on-device. A Core ML detector (YOLOX-Tiny) works alongside Apple's Vision framework to detect, segment, and track people frame by frame, while a face-embedding model re-identifies the chosen subject after occlusions and re-entries — the hard part of this problem is not finding people, it's not losing the *right* one. A path optimizer then smooths the crop trajectory so the output reads like a camera operator followed the subject rather than a bounding box snapping around them. There is no server and no account; video never leaves the device.\n\nThe tracking is editable rather than take-it-or-leave-it: split the timeline into segments to switch subjects mid-video, or drop keyframes and drag/pinch the crop when a detection is missed. Export runs through AVFoundation with Metal-based upscaling for 4K output, and monetization is built in — StoreKit 2 subscriptions for Pro, with a rewarded-ad and daily-quota gate on the free tier.",
+    "description": "Group dance videos, concerts, school recitals — the moment you actually want is one person, but the frame is everyone. PickCam turns any multi-person video into a fancam of whoever you pick: tap a person once and the app follows them to the end of the clip, reframing every frame around them for 9:16, 1:1, or 16:9. Version 1.2 adds Lock-On, which pins the subject's face, torso, or body center to one spot on screen while the background moves — a look dance editors usually build by hand with point tracking and keyframes.\n\nEverything runs on-device; there is no server and no account, and video never leaves the device. A Core ML person detector (D-FINE-N) works alongside Apple's Vision framework, while a face-embedding model (AuraFace) and full-body appearance features re-identify the chosen subject after occlusions, crossings, scene cuts, and re-entries — the hard part of this problem is not finding people, it's not losing the *right* one. For clips where dancers cross constantly, an optional precision-tracking pack (EdgeTAM video-memory models, about 54 MB) is delivered as Apple-hosted On-Demand Resources, so the app itself stays under 100 MB. On a ground-truth benchmark measured on a real device (group-dance clips labeled once per second), the share of time spent on the right person rose from 40.3% in v1.1 to 72.8% by default, and from 82.7% to 98.9% on the real clips with precision tracking. All bundled weights are Apache-2.0.\n\nLock-On is split into two passes: a template tracker follows the chosen point every frame, then a layout pass picks the smallest zoom (at most 25%) that keeps the whole person in frame and smooths the crop within the region where it stays inside the source frame — so there are never black bars. In synthetic tests, face jitter in the output fell from 1.39% / 2.46% of frame height with smooth follow to 0.50% / 0.33% with Lock-On. Because layout is separate from tracking, changing the framing re-lays out the path instantly, and the editor preview is exactly what gets exported. Subjects can be switched mid-video with a glide or a cut, and keyframes fix any missed detection. Export runs through AVFoundation with Metal-based upscaling up to 4K, monetized with StoreKit 2 subscriptions and a rewarded-ad, daily-quota free tier. Localized in eight languages.",
     "icon": "/projects/pickcam/icon.webp",
     "accentColor": "#1E86FD",
     "screenshots": [
@@ -69,17 +69,21 @@
       "/projects/pickcam/screenshot-2.webp",
       "/projects/pickcam/screenshot-3.webp",
       "/projects/pickcam/screenshot-4.webp",
-      "/projects/pickcam/screenshot-5.webp"
+      "/projects/pickcam/screenshot-5.webp",
+      "/projects/pickcam/screenshot-6.webp"
     ],
-    "platforms": ["iOS"],
+    "platforms": ["iOS", "iPadOS"],
     "status": "App Store",
     "year": 2026,
     "features": [
       "Tap one person in a group video and get a fancam — AI follows them to the end",
-      "On-device person detection and face re-identification that survives occlusion and re-entry",
-      "Reframe to 9:16, 1:1, or 16:9 for Reels, Shorts, and TikTok",
-      "Switch the tracked subject per timeline segment, or correct framing with keyframes",
-      "Export up to 4K (HEVC/H.264) with Metal-based quality upscaling"
+      "Lock-On pins the face, torso, or body center to one spot while the background moves, zooming only when needed",
+      "Switch to another person mid-video — the camera glides over, or cuts",
+      "On-device detection and face re-identification that survives occlusion, crossings, scene cuts, and re-entry",
+      "Optional precision-tracking pack for crowded choreography (Apple-hosted On-Demand Resources)",
+      "The preview is the export — flip between Result and Original to see the exact crop",
+      "Reframe to 9:16, 1:1, or 16:9 and export up to 4K (HEVC/H.264) with Metal-based upscaling",
+      "Native on iPhone and iPad, localized in eight languages"
     ],
     "techStack": [
       "Swift",
@@ -87,7 +91,9 @@
       "Swift Concurrency (async/await)",
       "Observation (@Observable)",
       "MVVM + protocol-based service layer",
-      "XcodeGen"
+      "XcodeGen",
+      "XCTest",
+      "PyTorch + coremltools (model conversion)"
     ],
     "apis": [
       "Vision",
@@ -95,6 +101,7 @@
       "AVFoundation",
       "Core Image",
       "Metal / MetalFX",
+      "On-Demand Resources",
       "StoreKit 2",
       "WidgetKit",
       "ActivityKit (Live Activities)",

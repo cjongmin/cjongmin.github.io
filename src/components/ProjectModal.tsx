@@ -9,6 +9,13 @@ interface ProjectModalProps {
   onClose: () => void
 }
 
+// "*word*" in a description is shown in italics.
+function renderEmphasis(text: string) {
+  return text.split(/(\*[^*\n]+\*)/).map((part, i) =>
+    /^\*[^*\n]+\*$/.test(part) ? <em key={i}>{part.slice(1, -1)}</em> : part,
+  )
+}
+
 const CHIP = 'text-[13px] font-medium px-2.5 py-1 rounded-full bg-black/[0.05] dark:bg-white/[0.07] text-secondary border border-black/[0.05] dark:border-white/[0.07]'
 
 function statusBadgeClass(status?: Project['status']): string {
@@ -127,7 +134,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
           <div className="space-y-3 mb-5">
             {paragraphs.map((para, i) => (
               <p key={i} className="text-[15px] leading-relaxed text-body">
-                {para}
+                {renderEmphasis(para)}
               </p>
             ))}
           </div>

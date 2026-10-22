@@ -13,7 +13,7 @@ export interface Project {
   id: string
   name: string
   tagline: string            // one-liner shown on the card
-  description: string        // long form, shown in modal ("\n\n" splits paragraphs)
+  description: string        // long form, shown in modal ("\n\n" splits paragraphs, *word* is italic)
   icon: string               // /projects/<id>/icon.png — square 1024px, no pre-rounded corners
   accentColor?: string       // optional hex used as icon backdrop glow
   screenshots?: string[]     // /projects/<id>/screenshot-1.png ... (portrait, ~1290x2796)

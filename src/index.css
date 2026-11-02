@@ -144,13 +144,6 @@
 .gal-pill { @apply inline-block max-w-full truncate px-3 py-[3px] rounded-full text-[14px] sm:text-[15px] font-semibold text-white dark:text-[#1a1212]; background: var(--accent); }
 a.gal-pill { @apply transition-opacity hover:opacity-85; }
 .gal-tag { @apply inline-block px-2.5 py-[3px] rounded-full text-[13px] sm:text-[14px] font-medium; color: var(--ink); background: var(--tag); }
-.gal-stack { @apply block w-[30px] h-[30px] -ml-2 rounded-full object-cover; box-shadow: 0 0 0 2px #fff; }
-.dark .gal-stack { box-shadow: 0 0 0 2px #141416; }
-.gal-next {
-  @apply flex items-center justify-center w-[26px] h-[26px] rounded-full;
-  color: var(--accent);
-  border: 1.5px dashed var(--accent);
-}
 
 .gal-card { @apply block rounded-2xl transition-shadow duration-300 hover:shadow-[0_14px_30px_-20px_rgba(0,0,0,0.35)]; background: var(--card); }
 .gal-stage { background: var(--card); }

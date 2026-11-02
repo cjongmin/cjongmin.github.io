@@ -1,11 +1,11 @@
 // The albums on their own pages: /gallery/ and /gallery/<album>/ (see main.tsx and scripts/prerender.mjs).
 import { ReactNode } from 'react'
 import { LazyMotion, MotionConfig, domAnimation } from 'framer-motion'
-import { ArrowLeft, ArrowRight, Plus } from 'lucide-react'
+import { ArrowLeft, ArrowRight } from 'lucide-react'
 import AlbumFolder from './components/AlbumFolder'
 import AlbumViewer from './components/AlbumViewer'
 import GalleryWindow from './components/GalleryWindow'
-import { albumPath, albums, albumTone, coverOf, countPhotos, photoUrl, GalleryAlbum } from './data/gallery'
+import { albumPath, albums, albumTone, countPhotos, GalleryAlbum } from './data/gallery'
 import { profile } from './data/profile'
 
 /** The heading inside a window: a dashed mark, the big title, then a row of small facts. */
@@ -28,24 +28,6 @@ function Fact({ label, children }: { label: string; children: ReactNode }) {
       <span className="text-[14px] sm:text-[15px] text-secondary">{label}</span>
       {children}
     </div>
-  )
-}
-
-/** A few photos as overlapping circles, the way a team shows its members. */
-function PhotoStack({ photos }: { photos: { album: GalleryAlbum; photo: GalleryAlbum['photos'][number] }[] }) {
-  return (
-    <span aria-hidden className="flex items-center pl-2">
-      {photos.slice(0, 4).map(({ album, photo }) => (
-        <img
-          key={`${album.slug}/${photo.id}`}
-          src={photoUrl(album, photo)}
-          alt=""
-          decoding="async"
-          style={{ backgroundColor: photo.color, objectPosition: photo.position }}
-          className="gal-stack"
-        />
-      ))}
-    </span>
   )
 }
 
@@ -86,12 +68,7 @@ function AlbumList() {
     <GalleryWindow up="/#gallery" tone={albumTone(latest)} path={[{ label: 'cjmin.me', href: '/#gallery' }, { label: 'Gallery' }]}>
       <WindowHeader title="Gallery" intro="Photos from conferences and trips, one folder at a time.">
         <Fact label="Latest"><a href={albumPath(latest)} className="gal-pill">{latest.title}</a></Fact>
-        <Fact label="Photos">
-          <PhotoStack photos={albums.map(a => ({ album: a, photo: coverOf(a) })).concat(albums.flatMap(a => a.photos.filter(p => p !== coverOf(a)).map(photo => ({ album: a, photo }))))} />
-          <span className="text-[14px] sm:text-[15px] text-secondary">{total}</span>
-          <span aria-hidden className="gal-next"><Plus size={12} /></span>
-          <span className="text-[14px] sm:text-[15px] font-medium gal-accent">next stop?</span>
-        </Fact>
+        <Fact label="Photos"><span className="gal-tag">{total}</span></Fact>
       </WindowHeader>
       <div className={`p-5 sm:p-8 ${wide ? '' : 'grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5'}`}>
         {albums.map(a => <AlbumCard key={a.slug} album={a} wide={wide} />)}
@@ -110,10 +87,7 @@ function AlbumPage({ album }: { album: GalleryAlbum }) {
       <WindowHeader title={album.title}>
         {album.context && <Fact label="About"><span className="gal-pill">{album.context}</span></Fact>}
         {album.date && <Fact label="When"><span className="gal-tag">{album.date}</span></Fact>}
-        <Fact label="Photos">
-          <PhotoStack photos={album.photos.map(photo => ({ album, photo }))} />
-          <span className="text-[14px] sm:text-[15px] text-secondary">{album.photos.length}</span>
-        </Fact>
+        <Fact label="Photos"><span className="gal-tag">{album.photos.length}</span></Fact>
         {album.link && (
           <a href={album.link.href} className="group sm:ml-auto inline-flex items-center gap-1.5 text-[15px] font-medium gal-accent">
             {album.link.label}

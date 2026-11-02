@@ -1,0 +1,17 @@
+{
+  "title": "Hawaii",
+  "tone": "periwinkle",
+  "cover": "IMG_4417.jpg",
+  "order": ["IMG_4417.jpg", "IMG_4071.JPG", "IMG_4173.jpg", "IMG_4220.HEIC", "IMG_4407.jpg", "IMG_4447.JPG", "IMG_4485.JPG", "IMG_4493.JPG", "IMG_4523.JPG"],
+  "photos": [
+    { "file": "IMG_4417.jpg", "alt": "A full rainbow arching over a marina and city towers under dark clouds." },
+    { "file": "IMG_4071.JPG", "alt": "An airport terminal entrance with a blue sign reading Welcome to Hawaii." },
+    { "file": "IMG_4173.jpg", "alt": "A rainbow seen through palm fronds beside a high-rise building." },
+    { "file": "IMG_4220.HEIC", "alt": "A person in a white shirt and cap looking out over the sunlit sea toward Diamond Head." },
+    { "file": "IMG_4407.jpg", "alt": "A rainbow over a green park and a pond with city towers behind, as someone walks past." },
+    { "file": "IMG_4447.JPG", "alt": "A white lighthouse on a green headland above a blue sea with lines of surf." },
+    { "file": "IMG_4485.JPG", "alt": "Turquoise water foaming over a dark, mossy sea wall." },
+    { "file": "IMG_4493.JPG", "alt": "Close-up of a banyan tree's tangled trunks, carved with names." },
+    { "file": "IMG_4523.JPG", "alt": "People on a beach beyond a green lawn, framed by large banyan trees in low sun." }
+  ]
+}

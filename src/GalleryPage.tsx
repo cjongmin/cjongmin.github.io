@@ -28,7 +28,7 @@ function Fact({ label, children }: { label: string; children: ReactNode }) {
   )
 }
 
-/** A lone album fills the window beside its details; several sit in a grid of equal cards. */
+/** A lone album fills the window beside its details; several sit in a grid of equal cards, two side by side. */
 function AlbumCard({ album, wide }: { album: GalleryAlbum; wide: boolean }) {
   return (
     <a
@@ -67,7 +67,7 @@ function AlbumList() {
         <Fact label="Latest"><a href={albumPath(latest)} className="gal-pill">{latest.title}</a></Fact>
         <Fact label="Photos"><span className="gal-tag">{total}</span></Fact>
       </WindowHeader>
-      <div className={`p-5 sm:p-8 ${wide ? '' : 'grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5'}`}>
+      <div className={`p-5 sm:p-8 ${wide ? '' : `grid sm:grid-cols-2 ${albums.length > 2 ? 'lg:grid-cols-3' : ''} gap-4 sm:gap-5`}`}>
         {albums.map(a => <AlbumCard key={a.slug} album={a} wide={wide} />)}
       </div>
     </GalleryWindow>

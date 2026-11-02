@@ -1,5 +1,6 @@
 {
   "title": "Budapest",
+  "tone": "coral",
   "context": "EMNLP 2026",
   "cover": "IMG_0090.jpg",
   "link": { "label": "Read the EMNLP 2026 notes", "href": "/talks/1/" },

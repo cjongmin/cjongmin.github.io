@@ -17,6 +17,7 @@
     {
       "slug": "budapest",
       "title": "Budapest",
+      "tone": "coral",
       "context": "EMNLP 2026",
       "date": "Oct 23–27, 2026 (AoE)",
       "link": {
@@ -313,6 +314,129 @@
           "color": "#b38c5c",
           "alt": "A grilled steak on sliced potatoes with a small pan of sauce.",
           "date": "Oct 27, 2026 (AoE)"
+        }
+      ]
+    },
+    {
+      "slug": "hawaii",
+      "title": "Hawaii",
+      "tone": "periwinkle",
+      "date": "Oct 18–21, 2025 (AoE)",
+      "cover": "img-4417",
+      "photos": [
+        {
+          "id": "img-4417",
+          "width": 2835,
+          "height": 1595,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#778176",
+          "alt": "A full rainbow arching over a marina and city towers under dark clouds.",
+          "date": "Oct 21, 2025 (AoE)"
+        },
+        {
+          "id": "img-4071",
+          "width": 1869,
+          "height": 3322,
+          "widths": [
+            360,
+            720,
+            1238
+          ],
+          "color": "#858171",
+          "alt": "An airport terminal entrance with a blue sign reading Welcome to Hawaii.",
+          "date": "Oct 18, 2025 (AoE)"
+        },
+        {
+          "id": "img-4173",
+          "width": 1206,
+          "height": 1231,
+          "widths": [
+            627,
+            1206
+          ],
+          "color": "#90978d",
+          "alt": "A rainbow seen through palm fronds beside a high-rise building."
+        },
+        {
+          "id": "img-4220",
+          "width": 4032,
+          "height": 3024,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#5a6e7e",
+          "alt": "A person in a white shirt and cap looking out over the sunlit sea toward Diamond Head.",
+          "date": "Oct 19, 2025 (AoE)"
+        },
+        {
+          "id": "img-4407",
+          "width": 1206,
+          "height": 678,
+          "widths": [
+            640,
+            1206
+          ],
+          "color": "#919a8e",
+          "alt": "A rainbow over a green park and a pond with city towers behind, as someone walks past.",
+          "date": "Oct 20, 2025"
+        },
+        {
+          "id": "img-4447",
+          "width": 3856,
+          "height": 2892,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#7aa2b6",
+          "alt": "A white lighthouse on a green headland above a blue sea with lines of surf.",
+          "date": "Oct 21, 2025 (AoE)"
+        },
+        {
+          "id": "img-4485",
+          "width": 3979,
+          "height": 2984,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#7b8a87",
+          "alt": "Turquoise water foaming over a dark, mossy sea wall.",
+          "date": "Oct 21, 2025 (AoE)"
+        },
+        {
+          "id": "img-4493",
+          "width": 5482,
+          "height": 4112,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#4f4a45",
+          "alt": "Close-up of a banyan tree's tangled trunks, carved with names.",
+          "date": "Oct 21, 2025 (AoE)"
+        },
+        {
+          "id": "img-4523",
+          "width": 3024,
+          "height": 4032,
+          "widths": [
+            480,
+            960,
+            1650
+          ],
+          "color": "#68693c",
+          "alt": "People on a beach beyond a green lawn, framed by large banyan trees in low sun.",
+          "date": "Oct 21, 2025 (AoE)"
         }
       ]
     }

@@ -112,10 +112,10 @@ def day(d):
 
 
 def day_span(taken):
-    """The album's dates from (time, is AoE) pairs. It says AoE only if every photo's date is in AoE."""
+    """The album's dates from (time, is AoE) pairs. It says AoE if the first and last dates are in AoE."""
     if not taken:
         return None
-    first, last = min(t for t, _ in taken), max(t for t, _ in taken)
+    (first, first_aoe), (last, last_aoe) = min(taken), max(taken)
     if first.date() == last.date():
         span = day(first)
     elif (first.year, first.month) == (last.year, last.month):
@@ -124,7 +124,7 @@ def day_span(taken):
         span = f'{first:%b} {first.day} – {last:%b} {last.day}, {first.year}'
     else:
         span = f'{day(first)} – {day(last)}'
-    return f'{span} (AoE)' if all(aoe for _, aoe in taken) else span
+    return f'{span} (AoE)' if first_aoe and last_aoe else span
 
 
 def og_card(slug, photo):
@@ -179,6 +179,7 @@ def main():
         albums.append({
             'slug': slug,
             'title': meta.get('title') or folder.name.replace('-', ' ').title(),
+            **({'tone': meta['tone']} if meta.get('tone') else {}),
             **({'context': meta['context']} if meta.get('context') else {}),
             **({'date': meta.get('date') or day_span(taken)} if meta.get('date') or taken else {}),
             **({'link': meta['link']} if meta.get('link') else {}),

@@ -17,6 +17,7 @@ export interface GalleryPhoto {
 export interface GalleryAlbum {
   slug: string
   title: string
+  tone?: string                     // its colours: coral, periwinkle, sage or butter
   context?: string                  // what the trip was for, e.g. "EMNLP 2026"
   date?: string                     // the days its photos were taken, e.g. "Oct 24–25, 2026 (AoE)"
   link?: { label: string; href: string }
@@ -34,8 +35,9 @@ export const featured = data.featured.flatMap(({ album: slug, photo: id }) => {
 })
 
 const TONES = ['gal-tone-coral', 'gal-tone-periwinkle', 'gal-tone-sage', 'gal-tone-butter']
-/** An album's colours, counted from the oldest so it keeps them when newer albums arrive. */
-export const albumTone = (a: GalleryAlbum) => TONES[(albums.length - 1 - albums.indexOf(a)) % TONES.length]
+/** An album's colours: its own choice, or else counted from the oldest so it keeps them when newer albums arrive. */
+export const albumTone = (a: GalleryAlbum) =>
+  a.tone ? `gal-tone-${a.tone}` : TONES[(albums.length - 1 - albums.indexOf(a)) % TONES.length]
 
 /** A tooltip for dates given in AoE. */
 export const dateTitle = (date: string) => (date.includes('AoE') ? 'Anywhere on Earth (UTC−12)' : undefined)

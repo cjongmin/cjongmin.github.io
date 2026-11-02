@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,7 +14,7 @@
   header { text-align: center; margin-bottom: 28px; }
   header h1 { font-size: 28px; font-weight: 800; color: var(--accent); }
   header p { color: var(--muted); font-size: 14px; margin-top: 4px; }
-  .langs { display: flex; justify-content: center; gap: 8px; margin: 20px 0 32px; }
+  .langs { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 20px 0 32px; }
   .langs button { border: 1px solid #d6deea; background: #fff; border-radius: 999px;
     padding: 6px 14px; font-size: 13px; cursor: pointer; color: var(--muted); }
   .langs button.on { background: var(--accent); border-color: var(--accent); color: #fff; }
@@ -28,6 +28,9 @@
   ul { padding-left: 20px; }
   a { color: var(--accent); }
   .date { color: var(--muted); font-size: 13px; margin-top: 16px; }
+  /* 한자 자형을 언어에 맞게 — 번체는 TC 글꼴 (기본 글꼴 목록의 PingFang SC는 간체 자형) */
+  :lang(zh-Hant) { font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC", sans-serif; }
+  :lang(ja) { font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif; }
 </style>
 </head>
 <body>
@@ -38,14 +41,18 @@
   </header>
 
   <div class="langs">
-    <button data-l="ko">한국어</button>
     <button data-l="en">English</button>
+    <button data-l="de">Deutsch</button>
+    <button data-l="es">Español</button>
+    <button data-l="fr">Français</button>
     <button data-l="ja">日本語</button>
-    <button data-l="zh">中文</button>
+    <button data-l="ko">한국어</button>
+    <button data-l="zh-Hans">简体中文</button>
+    <button data-l="zh-Hant">繁體中文</button>
   </div>
 
   <!-- ================================ 한국어 ================================ -->
-  <section class="lang" id="ko">
+  <section class="lang" id="ko" lang="ko">
     <div class="card">
       <h2>지원</h2>
       <p>문의: <a href="mailto:cjmin2925@gmail.com">cjmin2925@gmail.com</a></p>
@@ -91,7 +98,7 @@
   </section>
 
   <!-- ================================ English ================================ -->
-  <section class="lang" id="en">
+  <section class="lang" id="en" lang="en">
     <div class="card">
       <h2>Support</h2>
       <p>Contact: <a href="mailto:cjmin2925@gmail.com">cjmin2925@gmail.com</a></p>
@@ -147,7 +154,7 @@
   </section>
 
   <!-- ================================ 日本語 ================================ -->
-  <section class="lang" id="ja">
+  <section class="lang" id="ja" lang="ja">
     <div class="card">
       <h2>サポート</h2>
       <p>お問い合わせ: <a href="mailto:cjmin2925@gmail.com">cjmin2925@gmail.com</a></p>
@@ -199,7 +206,7 @@
   </section>
 
   <!-- ================================ 中文 ================================ -->
-  <section class="lang" id="zh">
+  <section class="lang" id="zh-Hans" lang="zh-Hans">
     <div class="card">
       <h2>支持</h2>
       <p>联系方式: <a href="mailto:cjmin2925@gmail.com">cjmin2925@gmail.com</a></p>
@@ -242,19 +249,263 @@
       <p class="date">生效日期: 2026年10月19日(上一版本生效日期: 2026年7月11日)</p>
     </div>
   </section>
+
+  <!-- ================================ Deutsch ================================ -->
+  <section class="lang" id="de" lang="de">
+    <div class="card">
+      <h2>Support</h2>
+      <p>Kontakt: <a href="mailto:cjmin2925@gmail.com">cjmin2925@gmail.com</a></p>
+      <p>Schick uns Fehlerberichte, Funktionswünsche oder Fragen zum Abo. Kündigungen und
+         Erstattungen von Abos laufen über den Apple App Store
+         (Einstellungen → Apple Account → Abonnements).</p>
+    </div>
+    <div class="card">
+      <h2>Datenschutzerklärung</h2>
+      <h3>Daten, die der Entwickler erhebt: keine</h3>
+      <p>Analyse, Bearbeitung und Export von Videos finden in PickCam <b>vollständig auf deinem
+         Gerät</b> statt. Der Entwickler erhebt, überträgt oder speichert weder deine Videos noch
+         Fotos, Gesichtsdaten oder sonstige personenbezogene Daten. Es gibt keine Konten und keine
+         Anmeldung. Projekte in Bearbeitung (einschließlich einer Kopie des Videos) werden nur im
+         Speicher der App auf diesem Gerät abgelegt, sind vom iCloud-Backup ausgenommen und werden
+         gelöscht, wenn du das Projekt oder die App löschst.</p>
+      <h3>Zur Gesichtserkennung</h3>
+      <p>Um einer Person zu folgen, berechnet PickCam während der Analyse vorübergehend visuelle
+         Gesichtsmerkmale im Arbeitsspeicher des Geräts. Dabei wird nicht erkannt, wer du bist; die
+         Merkmale verlassen dein Gerät nie und werden am Ende der Bearbeitung verworfen.</p>
+      <h3>Werbung (kostenlose Version) — Google AdMob</h3>
+      <p>Die Werbung in der kostenlosen Version wird von Google AdMob (Google LLC, USA)
+         ausgeliefert. Um Anzeigen auszuliefern und zu messen und Betrug zu verhindern, kann Google
+         Folgendes verarbeiten: die Werbe-ID deines Geräts (IDFA — nur wenn du Tracking erlaubst),
+         einen aus deiner IP-Adresse abgeleiteten ungefähren Standort, Interaktionen mit Anzeigen wie
+         Einblendungen und Klicks sowie Diagnosedaten zu Gerät und App. Diese Daten werden an Server
+         von Google übertragen (auch außerhalb deines Landes) und nach den Richtlinien von Google
+         verarbeitet.</p>
+      <ul>
+        <li>Tracking (IDFA) wird nur genutzt, wenn du es über die App-Tracking-Transparenz von iOS
+            erlaubst; du kannst das jederzeit unter Einstellungen → Datenschutz &amp; Sicherheit →
+            Tracking ändern.</li>
+        <li>Nutzer im EWR, im Vereinigten Königreich und in der Schweiz entscheiden im
+            Einwilligungsformular beim ersten Start und können ihre Einwilligung jederzeit in der App
+            unter Einstellungen → „Datenschutz für Werbung“ ändern oder widerrufen.</li>
+        <li>Auch wenn du ablehnst, kannst du alle Funktionen nutzen; dann werden nicht
+            personalisierte Anzeigen gezeigt. Solange du Pro abonniert hast, wird keine Werbung
+            angezeigt.</li>
+      </ul>
+      <p>Details: <a href="https://policies.google.com/privacy">Datenschutzerklärung von Google</a> ·
+         <a href="https://policies.google.com/technologies/partner-sites">Wie Google Daten aus Partner-Apps verwendet</a></p>
+      <h3>Zahlungen</h3>
+      <p>Pro-Abos werden über den Apple App Store abgewickelt; der Entwickler hat keinen Zugriff
+         auf deine Zahlungsdaten.</p>
+      <h3>Kinder</h3>
+      <p>PickCam richtet sich nicht an Kinder und erhebt nicht wissentlich personenbezogene Daten
+         von Kindern.</p>
+      <h3>Deine Rechte</h3>
+      <p>Der Entwickler speichert keine personenbezogenen Daten, daher gibt es nichts, was
+         eingesehen, berichtigt oder gelöscht werden könnte. Von Google verarbeitete Werbedaten
+         kannst du über die oben genannten Tracking- und Einwilligungseinstellungen sowie deine
+         Google-Werbeeinstellungen verwalten.</p>
+      <h3>Kontakt zum Datenschutz</h3>
+      <p>PickCam-Entwickler · <a href="mailto:cjmin2925@gmail.com">cjmin2925@gmail.com</a></p>
+      <p class="date">Gültig ab: 19. Oktober 2026 (vorherige Fassung: 11. Juli 2026)</p>
+    </div>
+  </section>
+
+  <!-- ================================ Español ================================ -->
+  <section class="lang" id="es" lang="es">
+    <div class="card">
+      <h2>Soporte</h2>
+      <p>Contacto: <a href="mailto:cjmin2925@gmail.com">cjmin2925@gmail.com</a></p>
+      <p>Envía informes de errores, sugerencias de funciones o dudas sobre la suscripción. Las
+         cancelaciones y los reembolsos de suscripciones los gestiona el App Store de Apple
+         (Ajustes → Cuenta de Apple → Suscripciones).</p>
+    </div>
+    <div class="card">
+      <h2>Política de privacidad</h2>
+      <h3>Datos que recopila el desarrollador: ninguno</h3>
+      <p>Todo el análisis, la edición y la exportación de vídeos en PickCam se realiza
+         <b>íntegramente en tu dispositivo</b>. El desarrollador no recopila, transmite ni almacena
+         tus vídeos, fotos, datos faciales ni ningún otro dato personal. No hay cuentas ni inicio de
+         sesión. Los proyectos que estás editando (incluida una copia del vídeo) se guardan solo en el
+         almacenamiento de la app en este dispositivo, quedan excluidos de la copia de seguridad de
+         iCloud y se eliminan cuando borras el proyecto o la app.</p>
+      <h3>Sobre el reconocimiento facial</h3>
+      <p>Para seguir a una persona, PickCam calcula temporalmente rasgos faciales visuales en la
+         memoria del dispositivo durante el análisis. Esto no identifica quién eres, nunca sale de tu
+         dispositivo y se descarta al terminar la edición.</p>
+      <h3>Publicidad (versión gratuita) — Google AdMob</h3>
+      <p>Los anuncios de la versión gratuita los sirve Google AdMob (Google LLC, EE. UU.). Para
+         mostrar y medir anuncios y prevenir el fraude, Google puede tratar: el identificador de
+         publicidad de tu dispositivo (IDFA, solo si permites el rastreo), la ubicación aproximada
+         deducida de tu dirección IP, las interacciones con anuncios, como impresiones y clics, y
+         datos de diagnóstico del dispositivo y de la app. Estos datos se transfieren a los servidores
+         de Google (también fuera de tu país) y se tratan conforme a las políticas de Google.</p>
+      <ul>
+        <li>El rastreo (IDFA) solo se usa si lo permites mediante la Transparencia del rastreo de
+            apps de iOS; puedes cambiarlo en cualquier momento en Ajustes → Privacidad y seguridad →
+            Rastreo.</li>
+        <li>Los usuarios del EEE, el Reino Unido y Suiza eligen en el formulario de consentimiento
+            que aparece en el primer inicio y pueden cambiar o retirar su consentimiento en cualquier
+            momento en Ajustes → «Privacidad de los anuncios» de la app.</li>
+        <li>Si no aceptas, puedes usar todas las funciones con anuncios no personalizados. Mientras
+            tengas la suscripción Pro, no se muestran anuncios.</li>
+      </ul>
+      <p>Detalles: <a href="https://policies.google.com/privacy">Política de privacidad de Google</a> ·
+         <a href="https://policies.google.com/technologies/partner-sites">Cómo usa Google la información de las apps asociadas</a></p>
+      <h3>Pagos</h3>
+      <p>Las suscripciones Pro las procesa el App Store de Apple; el desarrollador nunca tiene acceso
+         a tus datos de pago.</p>
+      <h3>Menores</h3>
+      <p>PickCam no está dirigida a menores y no recopila a sabiendas datos personales de
+         menores.</p>
+      <h3>Tus derechos</h3>
+      <p>El desarrollador no conserva datos personales, por lo que no hay nada que consultar,
+         rectificar ni eliminar. Los datos publicitarios que trata Google se pueden gestionar con los
+         ajustes de rastreo y consentimiento indicados arriba y con tu configuración de anuncios de
+         Google.</p>
+      <h3>Contacto de privacidad</h3>
+      <p>Desarrollador de PickCam · <a href="mailto:cjmin2925@gmail.com">cjmin2925@gmail.com</a></p>
+      <p class="date">Vigente desde: 19 de octubre de 2026 (versión anterior: 11 de julio de 2026)</p>
+    </div>
+  </section>
+
+  <!-- ================================ Français ================================ -->
+  <section class="lang" id="fr" lang="fr">
+    <div class="card">
+      <h2>Assistance</h2>
+      <p>Contact : <a href="mailto:cjmin2925@gmail.com">cjmin2925@gmail.com</a></p>
+      <p>Envoyez-nous vos rapports de bug, vos suggestions de fonctionnalités ou vos questions sur
+         l’abonnement. Les résiliations et remboursements d’abonnement sont gérés par l’App Store
+         d’Apple (Réglages → Compte Apple → Abonnements).</p>
+    </div>
+    <div class="card">
+      <h2>Politique de confidentialité</h2>
+      <h3>Données collectées par le développeur : aucune</h3>
+      <p>L’analyse, le montage et l’exportation des vidéos dans PickCam se font <b>entièrement sur
+         votre appareil</b>. Le développeur ne collecte, ne transmet ni ne conserve vos vidéos, photos,
+         données faciales ou toute autre donnée personnelle. Il n’y a ni compte ni connexion. Les
+         projets en cours de montage (y compris une copie de la vidéo) sont conservés uniquement dans
+         le stockage de l’app sur cet appareil, sont exclus de la sauvegarde iCloud et sont supprimés
+         lorsque vous supprimez le projet ou l’app.</p>
+      <h3>À propos de la reconnaissance faciale</h3>
+      <p>Pour suivre une personne, PickCam calcule temporairement des caractéristiques visuelles du
+         visage dans la mémoire de l’appareil pendant l’analyse. Cela ne permet pas de savoir qui vous
+         êtes, ne quitte jamais votre appareil et est supprimé à la fin du montage.</p>
+      <h3>Publicité (version gratuite) — Google AdMob</h3>
+      <p>Les publicités de la version gratuite sont diffusées par Google AdMob (Google LLC,
+         États-Unis). Pour diffuser et mesurer les publicités et prévenir la fraude, Google peut
+         traiter : l’identifiant publicitaire de votre appareil (IDFA, uniquement si vous autorisez le
+         suivi), une position approximative déduite de votre adresse IP, les interactions avec les
+         publicités comme les affichages et les clics, ainsi que des données de diagnostic de
+         l’appareil et de l’app. Ces données sont transférées vers les serveurs de Google (y compris
+         hors de votre pays) et traitées selon les règles de Google.</p>
+      <ul>
+        <li>Le suivi (IDFA) n’est utilisé que si vous l’autorisez via la Transparence du suivi des
+            apps d’iOS ; vous pouvez modifier ce choix à tout moment dans Réglages → Confidentialité et
+            sécurité → Suivi.</li>
+        <li>Les utilisateurs de l’EEE, du Royaume-Uni et de la Suisse font leur choix dans le
+            formulaire de consentement affiché au premier lancement et peuvent modifier ou retirer leur
+            consentement à tout moment dans Réglages → « Confidentialité des publicités » de l’app.</li>
+        <li>Si vous refusez, vous gardez accès à toutes les fonctionnalités, avec des publicités non
+            personnalisées. Aucune publicité n’est affichée pendant votre abonnement Pro.</li>
+      </ul>
+      <p>Détails : <a href="https://policies.google.com/privacy">Règles de confidentialité de Google</a> ·
+         <a href="https://policies.google.com/technologies/partner-sites">Comment Google utilise les informations des apps partenaires</a></p>
+      <h3>Paiements</h3>
+      <p>Les abonnements Pro sont traités par l’App Store d’Apple ; le développeur n’a jamais accès à
+         vos informations de paiement.</p>
+      <h3>Enfants</h3>
+      <p>PickCam ne s’adresse pas aux enfants et ne collecte pas sciemment de données personnelles
+         concernant des enfants.</p>
+      <h3>Vos droits</h3>
+      <p>Le développeur ne détient aucune donnée personnelle : il n’y a donc rien à consulter, à
+         rectifier ou à supprimer. Les données publicitaires traitées par Google peuvent être gérées
+         via les réglages de suivi et de consentement ci-dessus et vos paramètres publicitaires
+         Google.</p>
+      <h3>Contact confidentialité</h3>
+      <p>Développeur de PickCam · <a href="mailto:cjmin2925@gmail.com">cjmin2925@gmail.com</a></p>
+      <p class="date">En vigueur le 19 octobre 2026 (version précédente : 11 juillet 2026)</p>
+    </div>
+  </section>
+
+  <!-- ================================ 繁體中文 ================================ -->
+  <section class="lang" id="zh-Hant" lang="zh-Hant">
+    <div class="card">
+      <h2>支援</h2>
+      <p>聯絡方式：<a href="mailto:cjmin2925@gmail.com">cjmin2925@gmail.com</a></p>
+      <p>歡迎寄送錯誤回報、功能建議或訂閱相關問題。取消訂閱與退款由 Apple App Store
+         處理（設定 → Apple 帳號 → 訂閱項目）。</p>
+    </div>
+    <div class="card">
+      <h2>隱私權政策</h2>
+      <h3>開發者蒐集的資料：無</h3>
+      <p>PickCam 的影片分析、編輯與匯出<b>全部在您的裝置上</b>進行。開發者不會蒐集、傳輸或儲存您的
+         影片、照片、臉部資料或任何個人資料。不需要帳號，也不需要登入。正在編輯的專案（包括影片副本）
+         只會儲存在本裝置的 App 儲存空間中，不會納入 iCloud 備份，並會在您刪除專案或 App 時一併刪除。</p>
+      <h3>關於臉部辨識</h3>
+      <p>為了追蹤人物，PickCam 會在分析期間於裝置記憶體中暫時計算臉部視覺特徵。這不會辨識您的身分，
+         不會離開您的裝置，並會在編輯結束時捨棄。</p>
+      <h3>廣告（免費版）— Google AdMob</h3>
+      <p>免費版的廣告由 Google AdMob（Google LLC，美國）提供。為了投放與衡量廣告並防範詐欺，Google
+         可能會處理以下資料：裝置的廣告識別碼（IDFA，僅在您允許追蹤時）、依 IP 位址推算的大致位置、
+         廣告曝光與點擊等互動，以及裝置與 App 的診斷資料。這些資料會傳送至 Google 的伺服器（包括您所在
+         國家／地區以外的地方），並依 Google 的政策處理。</p>
+      <ul>
+        <li>只有在您透過 iOS 的「App 追蹤透明度」允許時才會使用追蹤（IDFA）；您可以隨時在
+            設定 → 隱私權與安全性 → 追蹤 中變更。</li>
+        <li>歐洲經濟區、英國與瑞士的使用者可在首次啟動時顯示的同意表單中選擇，並可隨時在 App 的
+            設定 →「廣告隱私權設定」中變更或撤回同意。</li>
+        <li>即使不同意，您仍可使用所有功能，並會看到非個人化廣告。訂閱 Pro 期間不會顯示廣告。</li>
+      </ul>
+      <p>詳細資訊：<a href="https://policies.google.com/privacy">Google 隱私權政策</a> ·
+         <a href="https://policies.google.com/technologies/partner-sites">Google 如何使用合作夥伴 App 的資訊</a></p>
+      <h3>付款</h3>
+      <p>Pro 訂閱由 Apple App Store 處理，開發者無法存取您的付款資訊。</p>
+      <h3>兒童</h3>
+      <p>PickCam 並非以兒童為對象，也不會在知情的情況下蒐集兒童的個人資料。</p>
+      <h3>您的權利</h3>
+      <p>開發者不持有任何個人資料，因此沒有可供查閱、更正或刪除的資料。Google 處理的廣告資料可透過
+         上述追蹤與同意設定，以及您的 Google 廣告設定進行管理。</p>
+      <h3>隱私權聯絡窗口</h3>
+      <p>PickCam 開發者 · <a href="mailto:cjmin2925@gmail.com">cjmin2925@gmail.com</a></p>
+      <p class="date">生效日期：2026年10月19日（前一版生效日期：2026年7月11日）</p>
+    </div>
+  </section>
 </div>
 <script>
+  // 8개 언어 (앱과 같은 목록). 우선순위: 유효한 ?lang= → 유효한 저장값 → 브라우저 언어 → 영어
+  const LANGS = ['en', 'de', 'es', 'fr', 'ja', 'ko', 'zh-Hans', 'zh-Hant'];
+  const TITLES = {
+    'en': 'PickCam — Support & Privacy Policy', 'de': 'PickCam – Support und Datenschutz',
+    'es': 'PickCam — Soporte y privacidad', 'fr': 'PickCam — Assistance et confidentialité',
+    'ja': 'PickCam — サポートとプライバシーポリシー', 'ko': 'PickCam — 지원 및 개인정보 처리방침',
+    'zh-Hans': 'PickCam — 支持与隐私政策', 'zh-Hant': 'PickCam — 支援與隱私權'
+  };
+  // 언어 태그 → 지원 언어. 중국어는 문자 체계(Hans·Hant)가 먼저, 없을 때만 지역(TW·HK·MO → 번체)
+  const resolve = tag => {
+    if (!tag) return null;
+    const parts = String(tag).replace(/_/g, '-').toLowerCase().split('-');
+    if (parts[0] === 'zh') {
+      if (parts.includes('hant')) return 'zh-Hant';
+      if (parts.includes('hans')) return 'zh-Hans';
+      return parts.some(p => ['tw', 'hk', 'mo'].includes(p)) ? 'zh-Hant' : 'zh-Hans';
+    }
+    return LANGS.includes(parts[0]) ? parts[0] : null;
+  };
   const pick = l => {
     document.querySelectorAll('section.lang').forEach(s => s.classList.toggle('on', s.id === l));
     document.querySelectorAll('.langs button').forEach(b => b.classList.toggle('on', b.dataset.l === l));
+    document.documentElement.lang = l;
+    document.title = TITLES[l];
     try { localStorage.setItem('lang', l); } catch (e) {}
   };
   document.querySelectorAll('.langs button').forEach(b => b.onclick = () => pick(b.dataset.l));
-  let saved = null;
+  let fromUrl = null, saved = null;
+  try { fromUrl = new URLSearchParams(location.search).get('lang'); } catch (e) {}
   try { saved = localStorage.getItem('lang'); } catch (e) {}
-  const nav = (navigator.language || 'en').toLowerCase();
-  pick(saved || (nav.startsWith('ko') ? 'ko' : nav.startsWith('ja') ? 'ja'
-                 : nav.startsWith('zh') ? 'zh' : 'en'));
+  if (saved === 'zh') saved = 'zh-Hans'; // 예전 4개 언어 페이지가 저장한 값
+  const browser = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language])
+    .map(resolve).find(Boolean);
+  pick([fromUrl, saved].map(v => LANGS.includes(v) ? v : resolve(v)).find(Boolean) || browser || 'en');
 </script>
 </body>
 </html>

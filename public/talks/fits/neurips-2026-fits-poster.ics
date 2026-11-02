@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//cjmin.me//Presentation Notes//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:neurips-2026-fits@cjmin.me
+DTSTAMP:20261102T000000Z
+DTSTART:20261210T060000Z
+SUMMARY:NeurIPS 2026 Poster Session 6: FiTS
+LOCATION:Hall 1-4\, Sydney\, Australia
+DESCRIPTION:NeurIPS 2026 · Spotlight paper · Poster Session 6\nhttps://cjmin.me/talks/2/
+URL:https://cjmin.me/talks/2/
+END:VEVENT
+END:VCALENDAR

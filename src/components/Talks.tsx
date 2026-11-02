@@ -197,6 +197,7 @@ export default function Talks() {
                       alt=""
                       loading="lazy"
                       decoding="async"
+                      style={t.coverPosition ? { objectPosition: t.coverPosition } : undefined}
                       className="absolute inset-0 w-full h-full object-cover
                                  transition-transform duration-700 group-hover:scale-[1.03]"
                     />

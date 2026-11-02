@@ -21,6 +21,7 @@ export interface Talk {
   date: string                      // e.g. "Nov 2026"
   location?: string
   cover?: string                    // 16:9 photo for the card banner; place it in the post's .md where it is mentioned
+  coverPosition?: string            // which part of the cover the card keeps when it crops (CSS object-position); default: the middle
   image?: string                    // paper figure; used as the backdrop until a cover exists
   paperId?: string                  // id in publications.json (authors, paper and poster links)
   summary: string                   // one or two sentences for the card (and the post, if it has no .md yet)

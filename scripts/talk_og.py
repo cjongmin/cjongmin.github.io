@@ -4,7 +4,9 @@ share page (/talks/<no>/) is posted on LinkedIn, Slack, KakaoTalk, X.
     python3 scripts/talk_og.py            # needs Pillow; writes public/talks/og/<id>.jpg
 
 Each card is the talk's cover photo under a dark gradient with the event, the
-paper title and the series number. Re-run after adding a talk or changing a title.
+paper title and the series number. A cover with a coverPosition (a person on the
+left) keeps its top left, and the text goes on the right instead of over them.
+Re-run after adding a talk or changing a title.
 """
 import json
 from pathlib import Path
@@ -30,10 +32,37 @@ def wrap(draw, text, fnt, width):
     return lines + [line]
 
 
+def side_card(talk, cover):
+    img = cover.crop((0, 0, W, H))
+    # dark panel fading in from the left, as on the site's banner
+    shade = Image.new('L', (W, 1))
+    for x in range(W):
+        t = max(0.0, (x - W * 0.3) / (W * 0.3))
+        shade.putpixel((x, 0), int(255 * min(0.92, t)))
+    img = Image.composite(Image.new('RGB', (W, H), (8, 10, 18)), img, shade.resize((W, H)))
+
+    d = ImageDraw.Draw(img)
+    x, width = round(W * 0.5), round(W * 0.5) - PAD
+    eyebrow = ' · '.join(y for y in (talk['event'], talk['type'], talk.get('location', '').split(',')[0]) if y).upper()
+    title_font = font('SourceSans3-Bold.ttf', 42)
+    lines = wrap(d, talk['title'], title_font, width)
+    y = (H - (30 + 16 + len(lines) * 50 + 18 + 58)) // 2
+    d.text((x, y), eyebrow, font=font('SourceSans3-Semibold.ttf', 24), fill=(255, 255, 255, 230)); y += 30 + 16
+    for line in lines:
+        d.text((x, y), line, font=title_font, fill='white'); y += 50
+    y += 18
+    small = font('SourceSans3-Regular.ttf', 24)
+    d.text((x, y), f"Presentation Notes #{talk['no']}", font=small, fill=(215, 218, 226)); y += 29
+    d.text((x, y), 'Jongmin Choi  ·  cjmin.me', font=small, fill=(215, 218, 226))
+    return img
+
+
 def card(talk):
     cover = Image.open(ROOT / 'public' / talk['cover'].lstrip('/')).convert('RGB')
     scale = max(W / cover.width, H / cover.height)
     cover = cover.resize((round(cover.width * scale), round(cover.height * scale)), Image.LANCZOS)
+    if talk.get('coverPosition'):
+        return side_card(talk, cover)
     left, top = (cover.width - W) // 2, (cover.height - H) // 2
     img = cover.crop((left, top, left + W, top + H))
 

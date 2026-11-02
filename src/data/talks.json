@@ -8,7 +8,7 @@
     "eventFull": "Conference on Neural Information Processing Systems (NeurIPS)",
     "type": "Spotlight",
     "role": "Presenter",
-    "date": "Dec 2026",
+    "date": "Dec 10, 2026",
     "location": "Sydney, Australia",
     "cover": "/talks/neurips-2026-sydney.webp",
     "image": "/publications/fits-figure1-ts-module.webp",
@@ -21,7 +21,7 @@
     "id": "emnlp-2026-fork-merge",
     "no": 1,
     "title": "Fork-Merge Decoding: Enhancing Multimodal Understanding in Audio-Visual Large Language Models",
-    "subtitle": "Research notes ahead of EMNLP 2026",
+    "subtitle": "Research notes from my EMNLP 2026 poster",
     "event": "EMNLP 2026",
     "eventFull": "Findings of Empirical Methods in Natural Language Processing (EMNLP)",
     "type": "Poster",
@@ -31,8 +31,9 @@
     "paperId": "fork-merge-decoding-enhancing-multimodal",
     "summary": "Giving an audio-visual model both inputs does not ensure that it uses the evidence a question needs. Fork-Merge Decoding separates audio and video processing in the first few decoder layers, then brings them together. These notes focus on the examples, the layer trade-off, and the limits of what improved.",
     "published": true,
-    "upcoming": true,
+    "upcoming": false,
     "location": "Budapest, Hungary",
-    "cover": "/talks/emnlp-2026-budapest.webp"
+    "cover": "/talks/emnlp-2026-poster.webp",
+    "coverPosition": "left top"
   }
 ]

@@ -1,18 +1,8 @@
 # Heading to NeurIPS 2026
 
-FiTS has been accepted to NeurIPS 2026 as a Spotlight paper, and as the first author I will be in Sydney in early December to present it at the poster session.
+FiTS has been accepted to NeurIPS 2026 as a Spotlight paper, and as the first author I will be in Sydney in early December to present it at Poster Session 6.
 
 ![Sydney, Australia, the host city of NeurIPS 2026](/talks/neurips-2026-sydney.webp)
-
-# Spotlight presentation
-
-:::event
-Date: Dec 2026
-Title: NeurIPS 2026
-Detail: Spotlight paper, presented at the poster session
-Place: Sydney, Australia
-Note: Session and time to be announced
-:::
 
 # At a glance
 
@@ -43,6 +33,23 @@ We evaluate FiTS on auditory benchmarks, where frequency selectivity and timing 
 
 Beyond accuracy, the learned target frequencies and group-delay shifts provide interpretable, neuron-level summaries of how the network organizes frequency and timing.
 
-# Looking ahead
+# At NeurIPS 2026
 
-If you are attending, please come say hello. I would love to talk about spiking neurons, frequency selectivity, and what biology can still teach us about network design. After the conference, I will update this page with questions from the session, key discussion points, and personal takeaways. See you in Sydney!
+I will be presenting this work as a Spotlight paper at NeurIPS 2026 in Sydney.
+
+:::event
+Date: Dec 10, 2026
+Title: NeurIPS 2026 · Poster Session 6
+Detail: Spotlight paper, presented at the poster session
+Time: Thu 17:00, Sydney time (AEDT, UTC+11)
+Place: Hall 1-4, Sydney, Australia
+Calendar: /talks/fits/neurips-2026-fits-poster.ics
+:::
+
+## What I'd like to discuss
+
+I would love to talk about spiking neurons, frequency selectivity, and what biology can still teach us about network design. If you are attending, please come say hello.
+
+## After the session
+
+> After the conference, I will update this page with questions from the session, key discussion points, and personal takeaways. See you in Sydney!

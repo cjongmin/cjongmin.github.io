@@ -124,7 +124,7 @@ These examples show the kinds of errors that remain. FMD can improve the use of 
 
 # At EMNLP 2026
 
-I will be presenting this work at Findings of EMNLP 2026 in Budapest.
+I presented this work at Findings of EMNLP 2026 in Budapest.
 
 :::event
 Date: Oct 26, 2026
@@ -132,15 +132,16 @@ Title: EMNLP 2026 Findings · Poster Session C
 Detail: Session 5 · In-person poster
 Time: 09:00–10:30, Budapest time (CET, UTC+1)
 Place: Hall H, Hungexpo Budapest Congress and Exhibition Center
-Calendar: /talks/fmd/emnlp-2026-fmd-poster.ics
 :::
 
-The full conference schedule is in the [EMNLP 2026 program](https://2026.emnlp.org/program/).
+## What I wanted to discuss
 
-## What I'd like to discuss
-
-Beyond the performance gains, I am curious about what actually takes shape inside the LLM decoder. What information does each layer build up as the model reasons, and is that processing hierarchical? If it is, that might explain why processing each modality on its own before merging works. I would love to hear your thoughts on this at the poster.
+Beyond the performance gains, I wanted to talk about what actually takes shape inside the LLM decoder. What information does each layer build up as the model reasons, and is that processing hierarchical? If it is, that might explain why processing each modality on its own before merging works. I would still love to hear your thoughts on this.
 
 ## After the session
 
-> I will update this section after EMNLP with the questions that sharpened the discussion, what the current experiments can answer, and what still needs testing. If a conversation changes how I interpret a result, I will revise the relevant section above and note the change here.
+![The Hungarian Parliament reflected in the Danube, from my time in Budapest.](/talks/fmd/budapest-parliament.webp)
+
+This was the first poster presentation I led myself, and it was a lot of fun.
+
+It also showed me what to work on. I want to study English harder, and when I prepare a presentation, I want to think through more ways of getting the ideas across. I came back from Budapest with that motivation.

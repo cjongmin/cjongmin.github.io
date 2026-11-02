@@ -5,7 +5,8 @@ import { ArrowLeft, ArrowRight } from 'lucide-react'
 import AlbumFolder from './components/AlbumFolder'
 import AlbumViewer from './components/AlbumViewer'
 import GalleryWindow from './components/GalleryWindow'
-import { albumPath, albums, albumTone, countPhotos, dateTitle, GalleryAlbum } from './data/gallery'
+import { albumPath, albumTone, countPhotos, dateTitle, GalleryAlbum } from './data/gallery'
+import { albums } from './data/galleryAlbums'
 import { profile } from './data/profile'
 
 /** The heading inside a window: the big title, then a row of small facts. */

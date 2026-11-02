@@ -54,7 +54,7 @@ gallery/
 |---|---|
 | `title`, `context` | 앨범 제목과 맥락 |
 | `date` | 앨범 날짜를 직접 정할 때만 적어요. 없으면 사진의 찍은 날짜로 만들어요 (아래 참고) |
-| `tone` | 앨범 색: `coral`, `periwinkle`, `sage`, `butter`. 없으면 순서대로 정해져요 |
+| `tone` | 앨범 색: `coral`, `periwinkle`, `sage`, `butter`. 없으면 오래된 앨범부터 순서대로 정해져요 |
 | `cover` | 폴더에 보이고 앨범을 열면 처음 보이는 사진. 없으면 가장 먼저 찍은 사진 |
 | `link` | 앨범 위에 표시할 관련 글 링크 |
 | `photos` | 사진별 설명. 순서에는 영향을 주지 않아요 |
@@ -77,11 +77,11 @@ gallery/
 
 ```bash
 pip install pillow pillow-heif
-python3 scripts/build_gallery.py      # public/gallery/와 src/data/gallery.json을 다시 만들어요
+python3 scripts/build_gallery.py      # public/gallery/와 src/data/의 데이터 파일을 다시 만들어요
 npm run build
 npx wrangler pages deploy dist --project-name cjmin --branch main
 ```
 
 사진을 폴더에서 지우고 다시 실행하면 사이트에서도 빠져요. 이미 처리한 사진은 다시 처리하지 않아요.
-`public/gallery/`와 `src/data/gallery.json`은 스크립트가 만드는 파일이라 직접 고치지 마세요.
-이 두 곳은 git에 들어가므로, 원본이 없어도 사이트는 그대로 다시 배포할 수 있어요.
+`public/gallery/`, `src/data/gallery.json`, `src/data/gallery-home.json`은 스크립트가 만드는 파일이라 직접 고치지 마세요.
+이 파일들은 git에 들어가므로, 원본이 없어도 사이트는 그대로 다시 배포할 수 있어요.

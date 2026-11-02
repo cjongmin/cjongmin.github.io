@@ -5,8 +5,10 @@
 gallery/<album>/ holds the original photos and an optional album.json. The originals are not in
 git: phone photos carry GPS and full resolution. For each photo this writes upright sRGB WebP
 copies with no metadata to public/gallery/<album>/, and it rewrites src/data/gallery.json, which
-the pages read, with each photo's date in AoE when its time zone is known. Photos already written
-and not changed since are kept as they are. See gallery/README.md.
+the gallery pages read, with each photo's date in AoE when its time zone is known, and
+src/data/gallery-home.json, just the few photos on the home page, so that the home page's script
+does not grow with the albums. Photos already written and not changed since are kept as they are.
+See gallery/README.md.
 """
 import io
 import json
@@ -27,6 +29,8 @@ ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / 'gallery'
 OUT = ROOT / 'public' / 'gallery'
 DATA = ROOT / 'src' / 'data' / 'gallery.json'
+HOME = ROOT / 'src' / 'data' / 'gallery-home.json'
+TONES = ('coral', 'periwinkle', 'sage', 'butter')
 LONG_EDGES = (640, 1280, 2200)   # thumbnails, phones and tiles, the large view
 PHOTO_TYPES = {'.jpg', '.jpeg', '.png', '.webp', '.heic', '.heif'}
 SRGB = ImageCms.createProfile('sRGB')
@@ -191,6 +195,9 @@ def main():
             by_file[f'{folder.name}/{name}'] = (slug, photo['id'])
 
     albums.sort(key=lambda a: a.pop('_sort'), reverse=True)
+    # colours are counted from the oldest, so an album keeps its own as newer ones arrive
+    for i, album in enumerate(reversed(albums)):
+        album.setdefault('tone', TONES[i % len(TONES)])
 
     # anything published earlier that is no longer in an album goes
     keep = {OUT / a['slug'] / 'og.jpg' for a in albums}
@@ -210,11 +217,19 @@ def main():
     for name in wanted:
         if name not in by_file:
             sys.exit(f'gallery/gallery.json: no photo named {name}')
-    featured = [{'album': by_file[n][0], 'photo': by_file[n][1]} for n in wanted]
-    if not featured and albums:
-        featured = [{'album': albums[0]['slug'], 'photo': p['id']} for p in albums[0]['photos'][:3]]
+    picks = [by_file[n] for n in wanted]
+    if not picks and albums:
+        picks = [(albums[0]['slug'], p['id']) for p in albums[0]['photos'][:3]]
+    home = []
+    for slug, pid in picks:
+        album = next(a for a in albums if a['slug'] == slug)
+        home.append({
+            'album': {k: album[k] for k in ('slug', 'title', 'tone', 'context', 'date') if k in album},
+            'photo': next(p for p in album['photos'] if p['id'] == pid),
+        })
 
-    DATA.write_text(json.dumps({'featured': featured, 'albums': albums}, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+    DATA.write_text(json.dumps({'albums': albums}, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+    HOME.write_text(json.dumps(home, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
     print(f"{DATA.relative_to(ROOT)}: {len(albums)} albums, {sum(len(a['photos']) for a in albums)} photos")
 
 

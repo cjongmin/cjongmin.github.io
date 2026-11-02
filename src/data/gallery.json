@@ -1,18 +1,4 @@
 {
-  "featured": [
-    {
-      "album": "budapest",
-      "photo": "img-0090"
-    },
-    {
-      "album": "budapest",
-      "photo": "img-2943"
-    },
-    {
-      "album": "budapest",
-      "photo": "img-0059"
-    }
-  ],
   "albums": [
     {
       "slug": "budapest",
@@ -318,23 +304,424 @@
       ]
     },
     {
-      "slug": "hawaii",
-      "title": "Hawaii",
-      "tone": "periwinkle",
-      "date": "Oct 18–21, 2025 (AoE)",
-      "cover": "img-4417",
+      "slug": "barcelona",
+      "title": "Barcelona",
+      "tone": "sage",
+      "context": "ICASSP 2026",
+      "date": "May 4–8, 2026 (AoE)",
+      "cover": "img-7296",
       "photos": [
         {
-          "id": "img-4417",
-          "width": 2835,
-          "height": 1595,
+          "id": "img-7296",
+          "width": 3166,
+          "height": 2374,
           "widths": [
             640,
             1280,
             2200
           ],
-          "color": "#778176",
-          "alt": "A full rainbow arching over a marina and city towers under dark clouds.",
+          "color": "#81655a",
+          "alt": "A red balcony full of flowers above a shuttered corner shop.",
+          "date": "May 4, 2026 (AoE)"
+        },
+        {
+          "id": "img-7340",
+          "width": 3950,
+          "height": 2222,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#5b5636",
+          "alt": "Palm trees on a stone terrace below a wooded hillside.",
+          "date": "May 4, 2026 (AoE)"
+        },
+        {
+          "id": "img-7354",
+          "width": 5712,
+          "height": 4284,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#a29175",
+          "alt": "Stone columns holding up a white mosaic ceiling.",
+          "date": "May 4, 2026 (AoE)"
+        },
+        {
+          "id": "img-7389",
+          "width": 5712,
+          "height": 4284,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#8e8e81",
+          "alt": "Crowds on the mosaic stairs of Park Güell, below a columned terrace.",
+          "date": "May 4, 2026 (AoE)"
+        },
+        {
+          "id": "img-7394",
+          "width": 3024,
+          "height": 4032,
+          "widths": [
+            480,
+            960,
+            1650
+          ],
+          "color": "#6e543c",
+          "alt": "Pans of black rice and vegetable paella on a checked tablecloth.",
+          "date": "May 4, 2026 (AoE)"
+        },
+        {
+          "id": "img-7395",
+          "width": 2884,
+          "height": 3846,
+          "widths": [
+            480,
+            960,
+            1650
+          ],
+          "color": "#91867e",
+          "alt": "A souvenir shop doorway hung with magnets and novelty license plates.",
+          "date": "May 4, 2026 (AoE)"
+        },
+        {
+          "id": "img-7399",
+          "width": 4032,
+          "height": 3024,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#8b877d",
+          "alt": "Pigeons around a café table with a cup of coffee on it.",
+          "date": "May 4, 2026 (AoE)"
+        },
+        {
+          "id": "img-7420",
+          "width": 3213,
+          "height": 5712,
+          "widths": [
+            360,
+            720,
+            1238
+          ],
+          "color": "#8a8f77",
+          "alt": "The spires of the Sagrada Família rising above green trees.",
+          "date": "May 5, 2026 (AoE)"
+        },
+        {
+          "id": "img-7428",
+          "width": 3024,
+          "height": 4032,
+          "widths": [
+            480,
+            960,
+            1650
+          ],
+          "color": "#806f4f",
+          "alt": "Sculptures and a white cross among the towers of the Sagrada Família.",
+          "date": "May 5, 2026 (AoE)"
+        },
+        {
+          "id": "img-7449",
+          "width": 5712,
+          "height": 4284,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#556c71",
+          "alt": "The wavy stone balconies of Casa Milà against a blue sky.",
+          "date": "May 5, 2026 (AoE)"
+        },
+        {
+          "id": "img-7472",
+          "width": 4284,
+          "height": 5712,
+          "widths": [
+            480,
+            960,
+            1650
+          ],
+          "color": "#32607a",
+          "alt": "Street signs pointing to Passeig de Gràcia, Casa Batlló and La Pedrera.",
+          "date": "May 5, 2026 (AoE)"
+        },
+        {
+          "id": "img-7488",
+          "width": 5712,
+          "height": 3213,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#6a7377",
+          "alt": "A long avenue of stone buildings under a bright blue sky.",
+          "date": "May 5, 2026 (AoE)"
+        },
+        {
+          "id": "img-7500",
+          "width": 3003,
+          "height": 4004,
+          "widths": [
+            480,
+            960,
+            1650
+          ],
+          "color": "#314b56",
+          "alt": "A street at dusk under a dark teal sky, with a Hola Sant Adrià banner.",
+          "date": "May 5, 2026 (AoE)"
+        },
+        {
+          "id": "img-7504",
+          "width": 3450,
+          "height": 4600,
+          "widths": [
+            480,
+            960,
+            1650
+          ],
+          "color": "#657b92",
+          "alt": "The CCIB convention centre beside a glass office tower, with two people walking up the ramp.",
+          "date": "May 5, 2026 (AoE)"
+        },
+        {
+          "id": "img-7535",
+          "width": 3024,
+          "height": 4032,
+          "widths": [
+            480,
+            960,
+            1650
+          ],
+          "color": "#686257",
+          "alt": "The yellow upper floors of a courtyard building against the night sky.",
+          "date": "May 6, 2026 (AoE)"
+        },
+        {
+          "id": "img-7543",
+          "width": 2958,
+          "height": 3944,
+          "widths": [
+            480,
+            960,
+            1650
+          ],
+          "color": "#48341b",
+          "alt": "A lamp-lit arcade with people sitting at café tables at night.",
+          "date": "May 6, 2026 (AoE)"
+        },
+        {
+          "id": "img-7555",
+          "width": 3827,
+          "height": 5103,
+          "widths": [
+            480,
+            960,
+            1650
+          ],
+          "color": "#584a2f",
+          "alt": "A lit shrine on a stone corner above the street signs for Sant Sever and Santa Eulàlia.",
+          "date": "May 6, 2026 (AoE)"
+        },
+        {
+          "id": "img-7574",
+          "width": 2268,
+          "height": 4032,
+          "widths": [
+            360,
+            720,
+            1238
+          ],
+          "color": "#7e7a75",
+          "alt": "The Gothic façade of a cathedral lit up at night.",
+          "date": "May 6, 2026 (AoE)"
+        },
+        {
+          "id": "img-3937",
+          "width": 2904,
+          "height": 3872,
+          "widths": [
+            480,
+            960,
+            1650
+          ],
+          "color": "#443929",
+          "alt": "A person leaning against the wall of a narrow lamp-lit alley at night.",
+          "date": "May 6, 2026 (AoE)"
+        },
+        {
+          "id": "img-7607",
+          "width": 5339,
+          "height": 4004,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#866a49",
+          "alt": "A cardboard box stamped MADE IN SPAIN against a plain wall.",
+          "date": "May 6, 2026 (AoE)"
+        },
+        {
+          "id": "img-7624",
+          "width": 4284,
+          "height": 5712,
+          "widths": [
+            480,
+            960,
+            1650
+          ],
+          "color": "#564431",
+          "alt": "Pedestrians on a wet street beside a large lit stone building at night.",
+          "date": "May 6, 2026 (AoE)"
+        },
+        {
+          "id": "img-7631",
+          "width": 3000,
+          "height": 4000,
+          "widths": [
+            480,
+            960,
+            1650
+          ],
+          "color": "#a4634f",
+          "alt": "Bunches of vine tomatoes in a green crate.",
+          "date": "May 6, 2026 (AoE)"
+        },
+        {
+          "id": "img-7639",
+          "width": 3024,
+          "height": 4032,
+          "widths": [
+            480,
+            960,
+            1650
+          ],
+          "color": "#878f8b",
+          "alt": "People at a busy street corner beside a taxi sign, among stone buildings.",
+          "date": "May 6, 2026 (AoE)"
+        },
+        {
+          "id": "img-7679",
+          "width": 5712,
+          "height": 3213,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#4e4539",
+          "alt": "A bar with wide windows overlooking the city at dusk.",
+          "date": "May 7, 2026 (AoE)"
+        },
+        {
+          "id": "img-7687",
+          "width": 5489,
+          "height": 3088,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#5d5441",
+          "alt": "Looking down on a city block at night, over treetops and parked cars.",
+          "date": "May 7, 2026 (AoE)"
+        },
+        {
+          "id": "img-7735",
+          "width": 3024,
+          "height": 4032,
+          "widths": [
+            480,
+            960,
+            1650
+          ],
+          "color": "#533a22",
+          "alt": "Two colourful cocktails with fruit, seen from above on a dark table.",
+          "date": "May 7, 2026 (AoE)"
+        },
+        {
+          "id": "img-7746",
+          "width": 4284,
+          "height": 5712,
+          "widths": [
+            480,
+            960,
+            1650
+          ],
+          "color": "#605b53",
+          "alt": "An empty metro platform and tunnel, with a sign showing the next train.",
+          "date": "May 7, 2026 (AoE)"
+        },
+        {
+          "id": "img-7747",
+          "width": 4284,
+          "height": 5712,
+          "widths": [
+            480,
+            960,
+            1650
+          ],
+          "color": "#614e10",
+          "alt": "A deserted street washed in yellow light from curved street lamps.",
+          "date": "May 7, 2026 (AoE)"
+        },
+        {
+          "id": "img-7757",
+          "width": 4032,
+          "height": 2268,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#a6a7a4",
+          "alt": "A hazy view across city rooftops to distant towers and hills.",
+          "date": "May 7, 2026 (AoE)"
+        },
+        {
+          "id": "img-7786",
+          "width": 4193,
+          "height": 5590,
+          "widths": [
+            480,
+            960,
+            1650
+          ],
+          "color": "#447b97",
+          "alt": "A bright blue Royal Dutch Airlines plane on the ground, seen through a window.",
+          "date": "May 8, 2026 (AoE)"
+        }
+      ]
+    },
+    {
+      "slug": "hawaii",
+      "title": "Hawaii",
+      "tone": "periwinkle",
+      "context": "ICCV 2025",
+      "date": "Oct 18–21, 2025 (AoE)",
+      "cover": "img-4523",
+      "photos": [
+        {
+          "id": "img-4523",
+          "width": 3024,
+          "height": 4032,
+          "widths": [
+            480,
+            960,
+            1650
+          ],
+          "color": "#68693c",
+          "alt": "People on a beach beyond a green lawn, framed by large banyan trees in low sun.",
           "date": "Oct 21, 2025 (AoE)"
         },
         {
@@ -387,6 +774,19 @@
           "date": "Oct 20, 2025"
         },
         {
+          "id": "img-4417",
+          "width": 2835,
+          "height": 1595,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#778176",
+          "alt": "A full rainbow arching over a marina and city towers under dark clouds.",
+          "date": "Oct 21, 2025 (AoE)"
+        },
+        {
           "id": "img-4447",
           "width": 3856,
           "height": 2892,
@@ -423,19 +823,6 @@
           ],
           "color": "#4f4a45",
           "alt": "Close-up of a banyan tree's tangled trunks, carved with names.",
-          "date": "Oct 21, 2025 (AoE)"
-        },
-        {
-          "id": "img-4523",
-          "width": 3024,
-          "height": 4032,
-          "widths": [
-            480,
-            960,
-            1650
-          ],
-          "color": "#68693c",
-          "alt": "People on a beach beyond a green lawn, framed by large banyan trees in low sun.",
           "date": "Oct 21, 2025 (AoE)"
         }
       ]

@@ -101,7 +101,7 @@ links on the live pages; a small script turns them back in the browser.
 Each folder in [gallery/](gallery/README.md) is a photo album, shown at `cjmin.me/gallery/<folder>/`, with up to
 three photos on the home page. The original photos stay out of git because they carry GPS and full resolution:
 [scripts/build_gallery.py](scripts/build_gallery.py) (Pillow, pillow-heif) publishes upright sRGB WebP copies with no
-metadata to `public/gallery/` and writes `src/data/gallery.json`. Run it after changing an album, then build and deploy.
+metadata to `public/gallery/` and writes `src/data/gallery.json` and `gallery-home.json`. Run it after changing an album, then build and deploy.
 
 ## Short links
 

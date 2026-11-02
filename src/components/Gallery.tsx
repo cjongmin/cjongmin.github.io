@@ -1,13 +1,16 @@
 import { useRef } from 'react'
 import { m, useInView } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
-import { albumPath, albumTone, featured, photoSrcSet, photoUrl, GalleryAlbum, GalleryPhoto } from '../data/gallery'
+import { albumPath, albumTone, photoSrcSet, photoUrl, GalleryAlbumInfo, GalleryPhoto } from '../data/gallery'
+import featuredData from '../data/gallery-home.json'
 import FolderGlyph from './FolderGlyph'
+
+const featured = featuredData as { album: GalleryAlbumInfo; photo: GalleryPhoto }[]
 
 const LEAD_SIZES = '(min-width: 2100px) 33vw, (min-width: 1164px) 700px, (min-width: 640px) 66vw, 100vw'
 const SIDE_SIZES = '(min-width: 2100px) 17vw, (min-width: 1164px) 350px, (min-width: 640px) 33vw, 50vw'
 
-function Tile({ album, photo, sizes, className }: { album: GalleryAlbum; photo: GalleryPhoto; sizes: string; className: string }) {
+function Tile({ album, photo, sizes, className }: { album: GalleryAlbumInfo; photo: GalleryPhoto; sizes: string; className: string }) {
   return (
     <a
       href={`${albumPath(album)}#${photo.id}`}

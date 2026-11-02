@@ -1,0 +1,69 @@
+[
+  {
+    "album": {
+      "slug": "budapest",
+      "title": "Budapest",
+      "tone": "coral",
+      "context": "EMNLP 2026",
+      "date": "Oct 23–27, 2026 (AoE)"
+    },
+    "photo": {
+      "id": "img-0090",
+      "width": 4032,
+      "height": 3024,
+      "widths": [
+        640,
+        1280,
+        2200
+      ],
+      "color": "#a9aaa7",
+      "alt": "The Hungarian Parliament reflected in the Danube.",
+      "caption": "The Hungarian Parliament reflected in the Danube.",
+      "date": "Oct 24, 2026 (AoE)"
+    }
+  },
+  {
+    "album": {
+      "slug": "budapest",
+      "title": "Budapest",
+      "tone": "coral",
+      "context": "EMNLP 2026",
+      "date": "Oct 23–27, 2026 (AoE)"
+    },
+    "photo": {
+      "id": "img-2943",
+      "width": 2233,
+      "height": 1675,
+      "widths": [
+        640,
+        1280,
+        2200
+      ],
+      "color": "#3f2d18",
+      "alt": "A lit church spire and hilltop buildings across the river at night.",
+      "date": "Oct 24, 2026 (AoE)"
+    }
+  },
+  {
+    "album": {
+      "slug": "budapest",
+      "title": "Budapest",
+      "tone": "coral",
+      "context": "EMNLP 2026",
+      "date": "Oct 23–27, 2026 (AoE)"
+    },
+    "photo": {
+      "id": "img-0059",
+      "width": 3319,
+      "height": 2489,
+      "widths": [
+        640,
+        1280,
+        2200
+      ],
+      "color": "#8a653d",
+      "alt": "An orange sunrise over a bridge, reflected in the river.",
+      "date": "Oct 24, 2026 (AoE)"
+    }
+  }
+]

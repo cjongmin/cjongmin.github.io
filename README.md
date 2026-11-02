@@ -89,8 +89,9 @@ The iOS apps' support and privacy pages are plain HTML files, copied into the bu
 |---|---|
 | `cjmin.me/app/pickcam/` | [public/app/pickcam/index.html](public/app/pickcam/index.html) |
 | `cjmin.me/app/nureumkkot/` | [public/app/nureumkkot/index.html](public/app/nureumkkot/index.html) |
+| `cjmin.me/app/ttakidaero/` | [public/app/ttakidaero/index.html](public/app/ttakidaero/index.html) |
 
-Edit the file, then build and deploy as above. They started as copies of
+Edit the file, then build and deploy as above. The first two started as copies of
 cjongmin.github.io/pickcam-site/ and cjongmin.github.io/nureumkkot-site/, which still answer
 until the App Store listings point here. Cloudflare's email obfuscation rewrites the `mailto:`
 links on the live pages; a small script turns them back in the browser.

@@ -18,7 +18,7 @@ export interface Project {
   accentColor?: string       // optional hex used as icon backdrop glow
   screenshots?: string[]     // /projects/<id>/screenshot-1.png ... (portrait, ~1290x2796)
   platforms: string[]        // e.g. ["iOS", "iPadOS", "watchOS"]
-  status?: 'App Store' | 'TestFlight' | 'In Development'
+  status?: 'App Store' | 'TestFlight' | 'In Review' | 'In Development'
   year?: number
   features?: string[]        // key feature bullets
   techStack?: string[]       // e.g. ["Swift", "SwiftUI", "Combine"]

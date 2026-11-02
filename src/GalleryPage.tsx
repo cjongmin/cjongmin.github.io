@@ -5,17 +5,14 @@ import { ArrowLeft, ArrowRight } from 'lucide-react'
 import AlbumFolder from './components/AlbumFolder'
 import AlbumViewer from './components/AlbumViewer'
 import GalleryWindow from './components/GalleryWindow'
-import { albumPath, albums, albumTone, countPhotos, GalleryAlbum } from './data/gallery'
+import { albumPath, albums, albumTone, countPhotos, dateTitle, GalleryAlbum } from './data/gallery'
 import { profile } from './data/profile'
 
-/** The heading inside a window: a dashed mark, the big title, then a row of small facts. */
+/** The heading inside a window: the big title, then a row of small facts. */
 function WindowHeader({ title, intro, children }: { title: string; intro?: string; children: ReactNode }) {
   return (
     <header className="mx-5 sm:mx-8 pt-5 sm:pt-7 pb-4 sm:pb-5 border-b border-black/[0.08] dark:border-white/[0.1]">
-      <div className="flex items-center gap-3.5 sm:gap-4">
-        <span aria-hidden className="gal-mark"><i /><i /></span>
-        <h1 className="min-w-0 text-[28px] sm:text-[36px] font-semibold tracking-tight leading-tight text-[#1D1D1F] dark:text-[#F5F5F7]">{title}</h1>
-      </div>
+      <h1 className="text-[28px] sm:text-[36px] font-semibold tracking-tight leading-tight text-[#1D1D1F] dark:text-[#F5F5F7]">{title}</h1>
       {intro && <p className="mt-2.5 text-[15px] sm:text-[17px] text-secondary">{intro}</p>}
       <div className="mt-3.5 sm:mt-4 flex flex-wrap items-center gap-x-6 sm:gap-x-8 gap-y-2.5">{children}</div>
     </header>
@@ -86,7 +83,7 @@ function AlbumPage({ album }: { album: GalleryAlbum }) {
     >
       <WindowHeader title={album.title}>
         {album.context && <Fact label="About"><span className="gal-pill">{album.context}</span></Fact>}
-        {album.date && <Fact label="When"><span className="gal-tag">{album.date}</span></Fact>}
+        {album.date && <Fact label="When"><span className="gal-tag" title={dateTitle(album.date)}>{album.date}</span></Fact>}
         <Fact label="Photos"><span className="gal-tag">{album.photos.length}</span></Fact>
         {album.link && (
           <a href={album.link.href} className="group sm:ml-auto inline-flex items-center gap-1.5 text-[15px] font-medium gal-accent">

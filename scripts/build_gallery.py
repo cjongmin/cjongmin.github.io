@@ -5,14 +5,14 @@
 gallery/<album>/ holds the original photos and an optional album.json. The originals are not in
 git: phone photos carry GPS and full resolution. For each photo this writes upright sRGB WebP
 copies with no metadata to public/gallery/<album>/, and it rewrites src/data/gallery.json, which
-the pages read. Photos already written and not changed since are kept as they are.
-See gallery/README.md.
+the pages read, with each photo's date in AoE when its time zone is known. Photos already written
+and not changed since are kept as they are. See gallery/README.md.
 """
 import io
 import json
 import re
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from PIL import Image, ImageCms, ImageOps
@@ -30,6 +30,7 @@ DATA = ROOT / 'src' / 'data' / 'gallery.json'
 LONG_EDGES = (640, 1280, 2200)   # thumbnails, phones and tiles, the large view
 PHOTO_TYPES = {'.jpg', '.jpeg', '.png', '.webp', '.heic', '.heif'}
 SRGB = ImageCms.createProfile('sRGB')
+AOE = timezone(timedelta(hours=-12))   # Anywhere on Earth
 
 
 def slugify(name):
@@ -40,12 +41,30 @@ def slugify(name):
 
 
 def taken_at(im):
+    """When the photo was taken, and whether that is in AoE. The time zone comes from the EXIF offset,
+    or else the GPS clock, which runs on UTC (only the time is read, never the place). With neither,
+    it is the time as the camera wrote it. DateTimeOriginal comes first: DateTime changes on editing."""
     exif = im.getexif()
-    stamp = exif.get_ifd(0x8769).get(36867) or exif.get(306)
+    sub, gps = exif.get_ifd(0x8769), exif.get_ifd(0x8825)
     try:
-        return datetime.strptime(str(stamp).strip(), '%Y:%m:%d %H:%M:%S')
+        local = datetime.strptime(str(sub.get(36867) or exif.get(306)).strip(), '%Y:%m:%d %H:%M:%S')
     except ValueError:
-        return None
+        local = None
+
+    utc = None
+    offset = re.fullmatch(r'([+-])(\d\d):(\d\d)', str(sub.get(36881) or sub.get(36880) or '').strip())
+    if local and offset:
+        delta = timedelta(hours=int(offset[2]), minutes=int(offset[3]))
+        utc = local - delta if offset[1] == '+' else local + delta
+    elif gps.get(29) and gps.get(7):
+        try:
+            h, m, s = (float(v) for v in gps[7])
+            utc = datetime.strptime(str(gps[29]).strip(), '%Y:%m:%d') + timedelta(hours=h, minutes=m, seconds=s)
+        except (TypeError, ValueError):
+            pass
+    if utc:
+        return utc.replace(tzinfo=timezone.utc).astimezone(AOE).replace(tzinfo=None), True
+    return local, False
 
 
 def load(path):
@@ -88,13 +107,24 @@ def publish(path, slug, pid, known):
     return width, height, widths, f'#{r:02x}{g:02x}{b:02x}', taken
 
 
-def month_span(dates):
-    if not dates:
+def day(d):
+    return f'{d:%b} {d.day}, {d.year}'
+
+
+def day_span(taken):
+    """The album's dates from (time, is AoE) pairs. It says AoE only if every photo's date is in AoE."""
+    if not taken:
         return None
-    first, last = min(dates), max(dates)
-    if (first.year, first.month) == (last.year, last.month):
-        return f'{first:%B %Y}'
-    return f'{first:%B} – {last:%B %Y}' if first.year == last.year else f'{first:%B %Y} – {last:%B %Y}'
+    first, last = min(t for t, _ in taken), max(t for t, _ in taken)
+    if first.date() == last.date():
+        span = day(first)
+    elif (first.year, first.month) == (last.year, last.month):
+        span = f'{first:%b} {first.day}–{last.day}, {first.year}'
+    elif first.year == last.year:
+        span = f'{first:%b} {first.day} – {last:%b} {last.day}, {first.year}'
+    else:
+        span = f'{day(first)} – {day(last)}'
+    return f'{span} (AoE)' if all(aoe for _, aoe in taken) else span
 
 
 def og_card(slug, photo):
@@ -123,39 +153,40 @@ def main():
         print(slug)
 
         listed = {e['file']: e for e in meta.get('photos', [])}
-        for name in listed:
+        order = meta.get('order') or ([meta['cover']] if meta.get('cover') else [])
+        for name in [*listed, *order]:
             if not (folder / name).exists():
                 sys.exit(f'{meta_file}: no photo named {name}')
         rows = []
         for path in files:
             pid = slugify(path.stem)
-            width, height, widths, color, taken = publish(path, slug, pid, previous.get((slug, pid)))
+            width, height, widths, color, (taken, aoe) = publish(path, slug, pid, previous.get((slug, pid)))
             entry = listed.get(path.name, {})
-            rows.append((path.name, taken, {
+            rows.append((path.name, taken, aoe, {
                 'id': pid, 'width': width, 'height': height, 'widths': widths, 'color': color,
                 'alt': entry.get('alt') or entry.get('caption') or f"Photo from {meta.get('title', folder.name)}",
                 **({'caption': entry['caption']} if entry.get('caption') else {}),
                 **({'position': entry['position']} if entry.get('position') else {}),
+                **({'date': day(taken) + (' (AoE)' if aoe else '')} if taken else {}),
             }))
-        # the order album.json gives, then the rest by when they were taken
-        order = list(listed)
+        # the order album.json gives, or else the cover first; then the rest by when they were taken
         rows.sort(key=lambda r: (order.index(r[0]) if r[0] in order else len(order), r[1] or datetime.max, r[0]))
-        photos = [r[2] for r in rows]
-        taken = [r[1] for r in rows if r[1]]
+        photos = [r[3] for r in rows]
+        taken = [(r[1], r[2]) for r in rows if r[1]]
 
-        cover = next((r[2]['id'] for r in rows if r[0] == meta.get('cover')), photos[0]['id'])
+        cover = next((r[3]['id'] for r in rows if r[0] == meta.get('cover')), photos[0]['id'])
         og_card(slug, next(p for p in photos if p['id'] == cover))
         albums.append({
             'slug': slug,
             'title': meta.get('title') or folder.name.replace('-', ' ').title(),
             **({'context': meta['context']} if meta.get('context') else {}),
-            **({'date': meta.get('date') or month_span(taken)} if meta.get('date') or taken else {}),
+            **({'date': meta.get('date') or day_span(taken)} if meta.get('date') or taken else {}),
             **({'link': meta['link']} if meta.get('link') else {}),
             'cover': cover,
             'photos': photos,
-            '_sort': meta.get('sort') or (max(taken).strftime('%Y-%m-%d') if taken else ''),
+            '_sort': meta.get('sort') or (max(t for t, _ in taken).strftime('%Y-%m-%d') if taken else ''),
         })
-        for name, _, photo in rows:
+        for name, _, _, photo in rows:
             by_file[f'{folder.name}/{name}'] = (slug, photo['id'])
 
     albums.sort(key=lambda a: a.pop('_sort'), reverse=True)

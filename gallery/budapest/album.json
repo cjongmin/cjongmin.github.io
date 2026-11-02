@@ -1,11 +1,30 @@
 {
   "title": "Budapest",
   "context": "EMNLP 2026",
-  "date": "October 2026",
   "cover": "IMG_0090.jpg",
   "link": { "label": "Read the EMNLP 2026 notes", "href": "/talks/1/" },
   "photos": [
     { "file": "IMG_0090.jpg", "caption": "The Hungarian Parliament reflected in the Danube." },
-    { "file": "IMG_1373 2.heic", "caption": "With my poster at EMNLP 2026.", "position": "left top" }
+    { "file": "IMG_1373 2.heic", "caption": "With my poster at EMNLP 2026.", "position": "left top" },
+    { "file": "IMG_9704.JPG", "alt": "Two glasses of beer and peanut shells on a wooden pub table." },
+    { "file": "IMG_9768.JPG", "alt": "Coffee and a hot dish in a small pan on a café table." },
+    { "file": "IMG_9958.JPG", "alt": "A stew in a bread bowl beside another plate of food and glasses of white wine." },
+    { "file": "IMG_2892.JPG", "alt": "The dome of the Hungarian Parliament lit gold at night, seen from close by." },
+    { "file": "IMG_2943.JPG", "alt": "A lit church spire and hilltop buildings across the river at night." },
+    { "file": "IMG_0043.JPG", "alt": "Bronze shoes on the stone edge of the Danube, one holding a red rose." },
+    { "file": "IMG_0059.JPG", "alt": "An orange sunrise over a bridge, reflected in the river." },
+    { "file": "IMG_0247.JPG", "alt": "A red door covered in stickers beside graffitied walls and a toilet sign." },
+    { "file": "IMG_0316.JPG", "alt": "A red beer and a lager in Dreher glasses on an outdoor table." },
+    { "file": "IMG_3559.JPG", "alt": "Hungarian flags with a hole in the centre flying against a pale sky." },
+    { "file": "IMG_0375.JPG", "alt": "A view down over Budapest's rooftops and a street along the river." },
+    { "file": "IMG_0398.JPG", "alt": "The Chain Bridge over the Danube, framed by autumn trees." },
+    { "file": "IMG_0452.JPG", "alt": "Two glasses of white wine clinking together." },
+    { "file": "IMG_0496.JPG", "alt": "A pale cocktail and a red drink with a rosemary sprig on a wooden table, beside a candle." },
+    { "file": "IMG_0735.jpg", "alt": "The Hungarian Parliament lit gold at night under a bright moon, reflected in the river." },
+    { "file": "IMG_0866.JPG", "alt": "Two lángos, one with salad and one with bacon and cheese, beside a beer and an orange drink." },
+    { "file": "IMG_0889.JPG", "alt": "Sunlight sparkling on rippling water." },
+    { "file": "IMG_0926.jpg", "alt": "A fountain on a pond at sunset, with trees and a stone bridge behind it." },
+    { "file": "IMG_0937.JPG", "alt": "Two domed towers of an ornate yellow building against a clear sky." },
+    { "file": "IMG_4789.JPG", "alt": "A grilled steak on sliced potatoes with a small pan of sauce." }
   ]
 }

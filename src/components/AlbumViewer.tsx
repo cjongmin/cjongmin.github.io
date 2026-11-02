@@ -1,7 +1,7 @@
 import { TouchEvent, useCallback, useEffect, useRef, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { Check, ChevronLeft, ChevronRight } from 'lucide-react'
-import { photoSrcSet, photoUrl, GalleryAlbum } from '../data/gallery'
+import { dateTitle, photoSrcSet, photoUrl, GalleryAlbum } from '../data/gallery'
 import Lightbox from './Lightbox'
 
 const STAGE_SIZES = '(min-width: 2100px) 50vw, (min-width: 1164px) 1036px, 100vw'
@@ -127,7 +127,12 @@ export default function AlbumViewer({ album }: { album: GalleryAlbum }) {
       </div>
 
       <div className="flex items-baseline justify-between gap-4 px-4 sm:px-6 py-3">
-        <p className="min-w-0 text-[15px] leading-snug text-body">{captions && photo.caption}</p>
+        <p className="min-w-0 text-[15px] leading-snug text-body">
+          {captions && photo.caption}
+          {captions && photo.date && (
+            <span title={dateTitle(photo.date)} className={`whitespace-nowrap text-[14px] text-secondary ${photo.caption ? 'ml-2.5' : ''}`}>{photo.date}</span>
+          )}
+        </p>
         <p aria-live={slideshow ? 'off' : 'polite'} className="shrink-0 text-[14px] tabular-nums text-secondary">{index + 1} / {photos.length}</p>
       </div>
 

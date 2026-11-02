@@ -11,13 +11,14 @@ export interface GalleryPhoto {
   alt: string
   caption?: string
   position?: string                 // which part to keep when a tile crops it (CSS object-position)
+  date?: string                     // the day it was taken, e.g. "Oct 25, 2026 (AoE)"
 }
 
 export interface GalleryAlbum {
   slug: string
   title: string
   context?: string                  // what the trip was for, e.g. "EMNLP 2026"
-  date?: string
+  date?: string                     // the days its photos were taken, e.g. "Oct 24–25, 2026 (AoE)"
   link?: { label: string; href: string }
   cover: string                     // id of the photo on the folder
   photos: GalleryPhoto[]
@@ -35,6 +36,9 @@ export const featured = data.featured.flatMap(({ album: slug, photo: id }) => {
 const TONES = ['gal-tone-coral', 'gal-tone-periwinkle', 'gal-tone-sage', 'gal-tone-butter']
 /** An album's colours, counted from the oldest so it keeps them when newer albums arrive. */
 export const albumTone = (a: GalleryAlbum) => TONES[(albums.length - 1 - albums.indexOf(a)) % TONES.length]
+
+/** A tooltip for dates given in AoE. */
+export const dateTitle = (date: string) => (date.includes('AoE') ? 'Anywhere on Earth (UTC−12)' : undefined)
 
 export const albumPath = (a: GalleryAlbum) => `/gallery/${a.slug}/`
 export const coverOf = (a: GalleryAlbum) => a.photos.find(p => p.id === a.cover) ?? a.photos[0]

@@ -6,7 +6,11 @@
     },
     {
       "album": "budapest",
-      "photo": "img-1373-2"
+      "photo": "img-2943"
+    },
+    {
+      "album": "budapest",
+      "photo": "img-0059"
     }
   ],
   "albums": [
@@ -14,7 +18,7 @@
       "slug": "budapest",
       "title": "Budapest",
       "context": "EMNLP 2026",
-      "date": "October 2026",
+      "date": "Oct 23–27, 2026 (AoE)",
       "link": {
         "label": "Read the EMNLP 2026 notes",
         "href": "/talks/1/"
@@ -32,7 +36,190 @@
           ],
           "color": "#a9aaa7",
           "alt": "The Hungarian Parliament reflected in the Danube.",
-          "caption": "The Hungarian Parliament reflected in the Danube."
+          "caption": "The Hungarian Parliament reflected in the Danube.",
+          "date": "Oct 24, 2026 (AoE)"
+        },
+        {
+          "id": "img-9704",
+          "width": 4032,
+          "height": 3024,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#a0764c",
+          "alt": "Two glasses of beer and peanut shells on a wooden pub table.",
+          "date": "Oct 23, 2026 (AoE)"
+        },
+        {
+          "id": "img-9768",
+          "width": 5712,
+          "height": 4284,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#a69177",
+          "alt": "Coffee and a hot dish in a small pan on a café table.",
+          "date": "Oct 23, 2026 (AoE)"
+        },
+        {
+          "id": "img-9958",
+          "width": 3484,
+          "height": 2613,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#c19e82",
+          "alt": "A stew in a bread bowl beside another plate of food and glasses of white wine.",
+          "date": "Oct 24, 2026 (AoE)"
+        },
+        {
+          "id": "img-2892",
+          "width": 2760,
+          "height": 3680,
+          "widths": [
+            480,
+            960,
+            1650
+          ],
+          "color": "#5e410d",
+          "alt": "The dome of the Hungarian Parliament lit gold at night, seen from close by.",
+          "date": "Oct 24, 2026 (AoE)"
+        },
+        {
+          "id": "img-2943",
+          "width": 2233,
+          "height": 1675,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#3f2d18",
+          "alt": "A lit church spire and hilltop buildings across the river at night.",
+          "date": "Oct 24, 2026 (AoE)"
+        },
+        {
+          "id": "img-0043",
+          "width": 4032,
+          "height": 3024,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#918476",
+          "alt": "Bronze shoes on the stone edge of the Danube, one holding a red rose.",
+          "date": "Oct 24, 2026 (AoE)"
+        },
+        {
+          "id": "img-0059",
+          "width": 3319,
+          "height": 2489,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#8a653d",
+          "alt": "An orange sunrise over a bridge, reflected in the river.",
+          "date": "Oct 24, 2026 (AoE)"
+        },
+        {
+          "id": "img-0247",
+          "width": 4260,
+          "height": 5680,
+          "widths": [
+            480,
+            960,
+            1650
+          ],
+          "color": "#a5866f",
+          "alt": "A red door covered in stickers beside graffitied walls and a toilet sign.",
+          "date": "Oct 24, 2026 (AoE)"
+        },
+        {
+          "id": "img-0316",
+          "width": 5664,
+          "height": 4248,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#c1b4ab",
+          "alt": "A red beer and a lager in Dreher glasses on an outdoor table.",
+          "date": "Oct 25, 2026 (AoE)"
+        },
+        {
+          "id": "img-3559",
+          "width": 3021,
+          "height": 2266,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#b4ab93",
+          "alt": "Hungarian flags with a hole in the centre flying against a pale sky.",
+          "date": "Oct 25, 2026 (AoE)"
+        },
+        {
+          "id": "img-0375",
+          "width": 2918,
+          "height": 3891,
+          "widths": [
+            480,
+            960,
+            1650
+          ],
+          "color": "#8f7d67",
+          "alt": "A view down over Budapest's rooftops and a street along the river.",
+          "date": "Oct 25, 2026 (AoE)"
+        },
+        {
+          "id": "img-0398",
+          "width": 2784,
+          "height": 3712,
+          "widths": [
+            480,
+            960,
+            1650
+          ],
+          "color": "#8d8d7e",
+          "alt": "The Chain Bridge over the Danube, framed by autumn trees.",
+          "date": "Oct 25, 2026 (AoE)"
+        },
+        {
+          "id": "img-0452",
+          "width": 2947,
+          "height": 2210,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#9f8561",
+          "alt": "Two glasses of white wine clinking together.",
+          "date": "Oct 25, 2026 (AoE)"
+        },
+        {
+          "id": "img-0496",
+          "width": 4032,
+          "height": 3024,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#ac6a2b",
+          "alt": "A pale cocktail and a red drink with a rosemary sprig on a wooden table, beside a candle.",
+          "date": "Oct 25, 2026 (AoE)"
         },
         {
           "id": "img-1373-2",
@@ -46,7 +233,86 @@
           "color": "#a79c94",
           "alt": "With my poster at EMNLP 2026.",
           "caption": "With my poster at EMNLP 2026.",
-          "position": "left top"
+          "position": "left top",
+          "date": "Oct 25, 2026 (AoE)"
+        },
+        {
+          "id": "img-0735",
+          "width": 3929,
+          "height": 2946,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#483712",
+          "alt": "The Hungarian Parliament lit gold at night under a bright moon, reflected in the river.",
+          "date": "Oct 26, 2026 (AoE)"
+        },
+        {
+          "id": "img-0866",
+          "width": 3024,
+          "height": 2268,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#a28361",
+          "alt": "Two lángos, one with salad and one with bacon and cheese, beside a beer and an orange drink.",
+          "date": "Oct 27, 2026 (AoE)"
+        },
+        {
+          "id": "img-0889",
+          "width": 3920,
+          "height": 2940,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#c1ad94",
+          "alt": "Sunlight sparkling on rippling water.",
+          "date": "Oct 27, 2026 (AoE)"
+        },
+        {
+          "id": "img-0926",
+          "width": 2881,
+          "height": 3841,
+          "widths": [
+            480,
+            960,
+            1650
+          ],
+          "color": "#6d5d3e",
+          "alt": "A fountain on a pond at sunset, with trees and a stone bridge behind it.",
+          "date": "Oct 27, 2026 (AoE)"
+        },
+        {
+          "id": "img-0937",
+          "width": 3024,
+          "height": 4032,
+          "widths": [
+            480,
+            960,
+            1650
+          ],
+          "color": "#9c9488",
+          "alt": "Two domed towers of an ornate yellow building against a clear sky.",
+          "date": "Oct 27, 2026 (AoE)"
+        },
+        {
+          "id": "img-4789",
+          "width": 4120,
+          "height": 3090,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#b38c5c",
+          "alt": "A grilled steak on sliced potatoes with a small pan of sauce.",
+          "date": "Oct 27, 2026 (AoE)"
         }
       ]
     }

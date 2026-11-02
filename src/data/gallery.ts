@@ -32,9 +32,12 @@ export const featured = data.featured.flatMap(({ album: slug, photo: id }) => {
   return album && photo ? [{ album, photo }] : []
 })
 
+const TONES = ['gal-tone-coral', 'gal-tone-periwinkle', 'gal-tone-sage', 'gal-tone-butter']
+/** An album's colours, counted from the oldest so it keeps them when newer albums arrive. */
+export const albumTone = (a: GalleryAlbum) => TONES[(albums.length - 1 - albums.indexOf(a)) % TONES.length]
+
 export const albumPath = (a: GalleryAlbum) => `/gallery/${a.slug}/`
 export const coverOf = (a: GalleryAlbum) => a.photos.find(p => p.id === a.cover) ?? a.photos[0]
-export const albumMeta = (a: GalleryAlbum) => [a.context, a.date].filter(Boolean).join(' · ')
 export const countPhotos = (n: number) => `${n} photo${n === 1 ? '' : 's'}`
 
 export const photoUrl = (a: GalleryAlbum, p: GalleryPhoto, width = p.widths[0]) =>

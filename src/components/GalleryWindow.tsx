@@ -6,34 +6,37 @@ export interface PathPart {
 }
 
 /**
- * The frame of the gallery pages: a window from an older computer, with a pinstriped title
- * bar and a close box that goes up one level, a path line, and a status line at the bottom.
+ * The frame of the gallery pages: a desktop window with the path in its title bar. The red
+ * light closes it, going up one level; the other two are only there to look right.
  */
-export default function GalleryWindow({ title, up, path, status, children }: {
-  title: string
+export default function GalleryWindow({ up, path, tone, children }: {
   up: string
   path: PathPart[]
-  status: ReactNode
+  tone: string
   children: ReactNode
 }) {
   return (
-    <div className="gal-window">
+    <div className={`gal-window ${tone}`}>
       <div className="gal-titlebar">
-        <a href={up} aria-label="Close this window" title="Close" className="gal-closebox" />
-        <span className="gal-plate">{title}</span>
+        <div className="flex items-center gap-2 shrink-0">
+          <a href={up} aria-label="Close this window" title="Close" className="gal-light gal-light-red">
+            <svg viewBox="0 0 10 10" aria-hidden><path d="M2.8 2.8l4.4 4.4m0-4.4L2.8 7.2" /></svg>
+          </a>
+          <span aria-hidden className="gal-light gal-light-yellow" />
+          <span aria-hidden className="gal-light gal-light-green" />
+        </div>
+        <nav aria-label="Folder path" className="min-w-0 flex items-center gap-1.5 text-[14px] text-secondary">
+          {path.map((part, i) => (
+            <span key={part.label} className={`inline-flex items-center gap-1.5 ${i === path.length - 1 ? 'min-w-0' : 'shrink-0'}`}>
+              {i > 0 && <span aria-hidden className="opacity-50">/</span>}
+              {part.href
+                ? <a href={part.href} className="hover:text-[#1D1D1F] dark:hover:text-[#F5F5F7] transition-colors">{part.label}</a>
+                : <span aria-current="page" className="truncate">{part.label}</span>}
+            </span>
+          ))}
+        </nav>
       </div>
-      <nav aria-label="Folder path" className="gal-mono gal-pathbar">
-        {path.map((part, i) => (
-          <span key={part.label} className="inline-flex items-center gap-1.5 min-w-0">
-            {i > 0 && <span aria-hidden className="opacity-50">/</span>}
-            {part.href
-              ? <a href={part.href} className="hover:text-[#0071E3] dark:hover:text-[#2997FF] transition-colors">{part.label}</a>
-              : <span aria-current="page" className="truncate text-[#1D1D1F] dark:text-[#F5F5F7]">{part.label}</span>}
-          </span>
-        ))}
-      </nav>
       {children}
-      <div className="gal-mono gal-statusbar">{status}</div>
     </div>
   )
 }

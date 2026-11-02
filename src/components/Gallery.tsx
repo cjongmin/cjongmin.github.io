@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { m, useInView } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
-import { albumMeta, albumPath, featured, photoSrcSet, photoUrl, GalleryAlbum, GalleryPhoto } from '../data/gallery'
+import { albumPath, albumTone, featured, photoSrcSet, photoUrl, GalleryAlbum, GalleryPhoto } from '../data/gallery'
 import FolderGlyph from './FolderGlyph'
 
 const LEAD_SIZES = '(min-width: 2100px) 33vw, (min-width: 1164px) 700px, (min-width: 640px) 66vw, 100vw'
@@ -86,12 +86,13 @@ export default function Gallery() {
             ))}
           </div>
 
-          <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1">
+          <div className={`mt-4 flex flex-wrap items-center gap-x-2.5 gap-y-2 ${albumTone(album)}`}>
             <FolderGlyph />
             <a href={albumPath(album)} className="text-[17px] font-semibold tracking-tight text-[#1D1D1F] dark:text-[#F5F5F7] hover:opacity-70 transition-opacity">
               {album.title}
             </a>
-            {albumMeta(album) && <span className="gal-mono text-[13px] text-secondary">{albumMeta(album)}</span>}
+            {album.context && <span className="gal-tag">{album.context}</span>}
+            {album.date && <span className="gal-tag">{album.date}</span>}
             <a href={albumPath(album)} className="group ml-auto inline-flex items-center gap-1.5 text-[14px] font-medium text-[#0071E3] dark:text-[#2997FF]">
               View album
               <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" aria-hidden />

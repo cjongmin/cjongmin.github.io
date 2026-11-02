@@ -1,31 +1,75 @@
 // The albums on their own pages: /gallery/ and /gallery/<album>/ (see main.tsx and scripts/prerender.mjs).
+import { ReactNode } from 'react'
 import { LazyMotion, MotionConfig, domAnimation } from 'framer-motion'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Plus } from 'lucide-react'
 import AlbumFolder from './components/AlbumFolder'
 import AlbumViewer from './components/AlbumViewer'
 import GalleryWindow from './components/GalleryWindow'
-import { albumMeta, albumPath, albums, countPhotos, GalleryAlbum } from './data/gallery'
+import { albumPath, albums, albumTone, coverOf, countPhotos, photoUrl, GalleryAlbum } from './data/gallery'
 import { profile } from './data/profile'
 
-const HEADING = 'text-[30px] sm:text-[40px] font-semibold tracking-tight leading-tight text-[#1D1D1F] dark:text-[#F5F5F7]'
+/** The heading inside a window: a dashed mark, the big title, then a row of small facts. */
+function WindowHeader({ title, intro, children }: { title: string; intro?: string; children: ReactNode }) {
+  return (
+    <header className="mx-5 sm:mx-8 pt-5 sm:pt-7 pb-4 sm:pb-5 border-b border-black/[0.08] dark:border-white/[0.1]">
+      <div className="flex items-center gap-3.5 sm:gap-4">
+        <span aria-hidden className="gal-mark"><i /><i /></span>
+        <h1 className="min-w-0 text-[28px] sm:text-[36px] font-semibold tracking-tight leading-tight text-[#1D1D1F] dark:text-[#F5F5F7]">{title}</h1>
+      </div>
+      {intro && <p className="mt-2.5 text-[15px] sm:text-[17px] text-secondary">{intro}</p>}
+      <div className="mt-3.5 sm:mt-4 flex flex-wrap items-center gap-x-6 sm:gap-x-8 gap-y-2.5">{children}</div>
+    </header>
+  )
+}
 
-/** A lone album fills the window beside its details; several sit in a grid of equal folders. */
+function Fact({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div className="flex items-center gap-2.5 min-w-0">
+      <span className="text-[14px] sm:text-[15px] text-secondary">{label}</span>
+      {children}
+    </div>
+  )
+}
+
+/** A few photos as overlapping circles, the way a team shows its members. */
+function PhotoStack({ photos }: { photos: { album: GalleryAlbum; photo: GalleryAlbum['photos'][number] }[] }) {
+  return (
+    <span aria-hidden className="flex items-center pl-2">
+      {photos.slice(0, 4).map(({ album, photo }) => (
+        <img
+          key={`${album.slug}/${photo.id}`}
+          src={photoUrl(album, photo)}
+          alt=""
+          decoding="async"
+          style={{ backgroundColor: photo.color, objectPosition: photo.position }}
+          className="gal-stack"
+        />
+      ))}
+    </span>
+  )
+}
+
+/** A lone album fills the window beside its details; several sit in a grid of equal cards. */
 function AlbumCard({ album, wide }: { album: GalleryAlbum; wide: boolean }) {
-  const meta = albumMeta(album)
   return (
     <a
       href={albumPath(album)}
       aria-label={`Open the ${album.title} album, ${countPhotos(album.photos.length)}`}
-      className={`group block ${wide ? 'sm:grid sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] sm:items-center sm:gap-12' : ''}`}
+      className={`group gal-card ${albumTone(album)} ${wide
+        ? 'p-6 sm:p-10 sm:grid sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] sm:items-center sm:gap-12'
+        : 'p-5 flex flex-col'}`}
     >
-      <AlbumFolder album={album} sizes={wide ? '(min-width: 2100px) 22vw, (min-width: 640px) 45vw, 80vw' : '(min-width: 2100px) 15vw, (min-width: 1024px) 300px, (min-width: 640px) 45vw, 80vw'} />
-      <div className={wide ? 'mt-6 sm:mt-0' : 'mt-4'}>
-        <p className={`${wide ? 'text-[26px] sm:text-[32px]' : 'text-[18px]'} font-semibold tracking-tight text-[#1D1D1F] dark:text-[#F5F5F7]`}>
+      <AlbumFolder album={album} sizes={wide ? '(min-width: 2100px) 20vw, (min-width: 640px) 40vw, 80vw' : '(min-width: 2100px) 14vw, (min-width: 1024px) 280px, (min-width: 640px) 45vw, 80vw'} />
+      <div className={wide ? 'mt-6 sm:mt-0' : 'mt-5 flex-1 flex flex-col items-start'}>
+        <p className={`${wide ? 'text-[26px] sm:text-[32px]' : 'text-[20px]'} font-semibold tracking-tight leading-tight text-[#1D1D1F] dark:text-[#F5F5F7]`}>
           {album.title}
         </p>
-        {meta && <p className="gal-mono mt-1 text-[13px] text-secondary">{meta}</p>}
-        <p className="gal-mono mt-1 text-[13px] text-secondary">{countPhotos(album.photos.length)}</p>
-        <span className="mt-4 inline-flex items-center gap-1.5 text-[15px] font-medium text-[#0071E3] dark:text-[#2997FF]">
+        <div className="mt-3 flex flex-wrap gap-1.5 sm:gap-2">
+          {album.context && <span className="gal-tag">{album.context}</span>}
+          {album.date && <span className="gal-tag">{album.date}</span>}
+          <span className="gal-tag">{countPhotos(album.photos.length)}</span>
+        </div>
+        <span className={`inline-flex items-center gap-1.5 text-[15px] font-medium gal-accent ${wide ? 'mt-5' : 'mt-auto pt-4'}`}>
           Open folder
           <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" aria-hidden />
         </span>
@@ -37,47 +81,48 @@ function AlbumCard({ album, wide }: { album: GalleryAlbum; wide: boolean }) {
 function AlbumList() {
   const total = albums.reduce((n, a) => n + a.photos.length, 0)
   const wide = albums.length === 1
+  const latest = albums[0]
   return (
-    <>
-      <h1 className={HEADING}>Gallery</h1>
-      <p className="mt-2 mb-8 sm:mb-10 text-[16px] sm:text-[18px] text-secondary">Photos from conferences and trips, one folder at a time.</p>
-      <GalleryWindow
-        title="Gallery"
-        up="/#gallery"
-        path={[{ label: 'cjmin.me', href: '/#gallery' }, { label: 'gallery' }]}
-        status={<><span>{albums.length} {albums.length === 1 ? 'folder' : 'folders'}</span><span>{countPhotos(total)}</span></>}
-      >
-        <div className={`p-6 sm:p-10 ${wide ? '' : 'grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10'}`}>
-          {albums.map(a => <AlbumCard key={a.slug} album={a} wide={wide} />)}
-        </div>
-      </GalleryWindow>
-    </>
+    <GalleryWindow up="/#gallery" tone={albumTone(latest)} path={[{ label: 'cjmin.me', href: '/#gallery' }, { label: 'Gallery' }]}>
+      <WindowHeader title="Gallery" intro="Photos from conferences and trips, one folder at a time.">
+        <Fact label="Latest"><a href={albumPath(latest)} className="gal-pill">{latest.title}</a></Fact>
+        <Fact label="Photos">
+          <PhotoStack photos={albums.map(a => ({ album: a, photo: coverOf(a) })).concat(albums.flatMap(a => a.photos.filter(p => p !== coverOf(a)).map(photo => ({ album: a, photo }))))} />
+          <span className="text-[14px] sm:text-[15px] text-secondary">{total}</span>
+          <span aria-hidden className="gal-next"><Plus size={12} /></span>
+          <span className="text-[14px] sm:text-[15px] font-medium gal-accent">next stop?</span>
+        </Fact>
+      </WindowHeader>
+      <div className={`p-5 sm:p-8 ${wide ? '' : 'grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5'}`}>
+        {albums.map(a => <AlbumCard key={a.slug} album={a} wide={wide} />)}
+      </div>
+    </GalleryWindow>
   )
 }
 
 function AlbumPage({ album }: { album: GalleryAlbum }) {
-  const meta = albumMeta(album)
   return (
-    <>
-      <h1 className={HEADING}>{album.title}</h1>
-      <div className="mt-1.5 mb-6 flex flex-wrap items-baseline gap-x-4 gap-y-1">
-        {meta && <p className="gal-mono text-[14px] text-secondary">{meta}</p>}
+    <GalleryWindow
+      up="/gallery/"
+      tone={albumTone(album)}
+      path={[{ label: 'cjmin.me', href: '/#gallery' }, { label: 'Gallery', href: '/gallery/' }, { label: album.title }]}
+    >
+      <WindowHeader title={album.title}>
+        {album.context && <Fact label="About"><span className="gal-pill">{album.context}</span></Fact>}
+        {album.date && <Fact label="When"><span className="gal-tag">{album.date}</span></Fact>}
+        <Fact label="Photos">
+          <PhotoStack photos={album.photos.map(photo => ({ album, photo }))} />
+          <span className="text-[14px] sm:text-[15px] text-secondary">{album.photos.length}</span>
+        </Fact>
         {album.link && (
-          <a href={album.link.href} className="group inline-flex items-center gap-1.5 text-[15px] font-medium text-[#0071E3] dark:text-[#2997FF]">
+          <a href={album.link.href} className="group sm:ml-auto inline-flex items-center gap-1.5 text-[15px] font-medium gal-accent">
             {album.link.label}
             <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" aria-hidden />
           </a>
         )}
-      </div>
-      <GalleryWindow
-        title={album.title}
-        up="/gallery/"
-        path={[{ label: 'cjmin.me', href: '/#gallery' }, { label: 'gallery', href: '/gallery/' }, { label: album.slug }]}
-        status={<><span>{countPhotos(album.photos.length)}</span>{album.photos.length > 1 && <span className="hidden sm:inline">← → to browse</span>}</>}
-      >
-        <AlbumViewer album={album} />
-      </GalleryWindow>
-    </>
+      </WindowHeader>
+      <AlbumViewer album={album} />
+    </GalleryWindow>
   )
 }
 
@@ -96,7 +141,7 @@ export default function GalleryPage({ slug }: { slug?: string }) {
               <span className="text-[12px] sm:text-[13px] font-semibold text-secondary uppercase tracking-widest">Gallery</span>
             </div>
           </div>
-          <main className="section-container pt-8 sm:pt-10 pb-24">
+          <main className="section-container pt-6 sm:pt-8 pb-24">
             {album ? <AlbumPage album={album} /> : <AlbumList />}
           </main>
         </div>

@@ -1,9 +1,10 @@
-import { coverOf, countPhotos, photoSrcSet, photoUrl, GalleryAlbum } from '../data/gallery'
+import { Images } from 'lucide-react'
+import { coverOf, photoSrcSet, photoUrl, GalleryAlbum } from '../data/gallery'
 
 /**
- * An album as a manila folder with its photos sticking out of the top. Hovering the link around
- * it (a .group) opens the flap and fans the prints. It is a picture of the link, so it is hidden
- * from screen readers; the link says what it opens.
+ * An album as a folder with its photos sticking out of the top, in the colours of its tone.
+ * Hovering the link around it (a .group) opens the flap and fans the prints. It is a picture
+ * of the link, so it is hidden from screen readers; the link says what it opens.
  */
 export default function AlbumFolder({ album, sizes }: { album: GalleryAlbum; sizes: string }) {
   const cover = coverOf(album)
@@ -25,10 +26,7 @@ export default function AlbumFolder({ album, sizes }: { album: GalleryAlbum; siz
         />
       ))}
       <div className="gal-folder-front">
-        <div className="gal-mono gal-folder-label">
-          <span className="block truncate font-semibold uppercase tracking-[0.08em]">{album.title}</span>
-          <span className="block truncate opacity-70">{countPhotos(album.photos.length)}</span>
-        </div>
+        <Images className="gal-folder-mark" strokeWidth={1.5} />
       </div>
     </div>
   )

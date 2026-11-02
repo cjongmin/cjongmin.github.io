@@ -6,6 +6,7 @@ import Publications from './components/Publications'
 import Talks from './components/Talks'
 import Education from './components/Education'
 import Projects from './components/Projects'
+import Gallery from './components/Gallery'
 import Contact from './components/Contact'
 import BackgroundGlow from './components/BackgroundGlow'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -49,6 +50,7 @@ export default function App() {
               <Talks />
               <Education />
               <Projects />
+              <Gallery />
               <Contact />
             </ErrorBoundary>
           </main>

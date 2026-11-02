@@ -1,0 +1,11 @@
+{
+  "title": "Budapest",
+  "context": "EMNLP 2026",
+  "date": "October 2026",
+  "cover": "IMG_0090.jpg",
+  "link": { "label": "Read the EMNLP 2026 notes", "href": "/talks/1/" },
+  "photos": [
+    { "file": "IMG_0090.jpg", "caption": "The Hungarian Parliament reflected in the Danube." },
+    { "file": "IMG_1373 2.heic", "caption": "With my poster at EMNLP 2026.", "position": "left top" }
+  ]
+}

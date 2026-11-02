@@ -14,6 +14,7 @@ const NAV_ITEMS = [
   { label: 'Talks', id: 'talks' },
   { label: 'Education', id: 'education' },
   { label: 'Projects', id: 'projects' },
+  { label: 'Gallery', id: 'gallery' },
   { label: 'Contact', id: 'contact' },
 ]
 
@@ -76,7 +77,7 @@ export default function Navbar({ toggleTheme }: NavbarProps) {
         {/* Logo */}
         <button
           onClick={() => handleNav('home')}
-          className="font-semibold text-[15px] tracking-tight text-[#1D1D1F] dark:text-[#F5F5F7] hover:opacity-60 transition-opacity duration-150"
+          className="font-semibold text-[15px] tracking-tight whitespace-nowrap text-[#1D1D1F] dark:text-[#F5F5F7] hover:opacity-60 transition-opacity duration-150"
         >
           Jongmin Choi
         </button>
@@ -87,7 +88,7 @@ export default function Navbar({ toggleTheme }: NavbarProps) {
             <button
               key={item.id}
               onClick={() => handleNav(item.id)}
-              className={`px-3.5 py-1.5 rounded-full text-sm font-medium transition-all duration-150
+              className={`px-1.5 lg:px-3.5 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-150
                 ${activeSection === item.id
                   ? 'bg-black/[0.07] dark:bg-white/[0.1] text-[#1D1D1F] dark:text-[#F5F5F7]'
                   : 'text-secondary hover:text-[#1D1D1F] dark:hover:text-[#F5F5F7] hover:bg-black/[0.04] dark:hover:bg-white/[0.06]'

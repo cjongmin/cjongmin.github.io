@@ -5,6 +5,7 @@ import { StrictMode } from 'react'
 import { renderToString } from 'react-dom/server'
 import App from './App'
 import TalkPage from './TalkPage'
+import GalleryPage from './GalleryPage'
 
 export function render(): string {
   return renderToString(<StrictMode><App /></StrictMode>)
@@ -12,4 +13,8 @@ export function render(): string {
 
 export function renderTalk(no: number): string {
   return renderToString(<StrictMode><TalkPage no={no} /></StrictMode>)
+}
+
+export function renderGallery(slug?: string): string {
+  return renderToString(<StrictMode><GalleryPage slug={slug} /></StrictMode>)
 }

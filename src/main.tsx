@@ -19,8 +19,12 @@ const mount = (app: ReactNode) =>
 
 // /talks/<no>/ is a talk post on its own page (prerendered; this takes over once loaded)
 const talk = window.location.pathname.match(/^\/talks\/(\d+)\/?$/)
+// /gallery/ and /gallery/<album>/ are pages of their own too
+const gallery = window.location.pathname.match(/^\/gallery(?:\/([^/]+))?\/?$/)
 if (talk) {
   import('./TalkPage').then(({ default: TalkPage }) => mount(<TalkPage no={Number(talk[1])} />))
+} else if (gallery) {
+  import('./GalleryPage').then(({ default: GalleryPage }) => mount(<GalleryPage slug={gallery[1]} />))
 } else {
   mount(<App />)
 }

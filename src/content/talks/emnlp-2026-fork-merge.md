@@ -145,3 +145,5 @@ Beyond the performance gains, I wanted to talk about what actually takes shape i
 This was the first poster presentation I led myself, and it was a lot of fun.
 
 It also showed me what to work on. I want to study English harder, and when I prepare a presentation, I want to think through more ways of getting the ideas across. I came back from Budapest with that motivation.
+
+[View the Budapest album →](/gallery/budapest/)

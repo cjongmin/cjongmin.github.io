@@ -8,7 +8,8 @@
 //     title, description, canonical URL, card image (public/talks/og/<id>.jpg,
 //     scripts/talk_og.py) and BlogPosting JSON-LD. In the browser, main.tsx sees
 //     /talks/<no>/ and mounts the post as a page (not the home page).
-//  3. Write sitemap.xml, robots.txt and 404.html.
+//  3. Write the gallery and each album as pages, dist/gallery/ (data from scripts/build_gallery.py).
+//  4. Write sitemap.xml, robots.txt and 404.html.
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { createServer } from 'vite'
 
@@ -16,6 +17,7 @@ const SITE = 'https://cjmin.me'
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 const talks = JSON.parse(readFileSync('src/data/talks.json', 'utf8')).filter(t => t.published)
 const profile = JSON.parse(readFileSync('src/data/profile.json', 'utf8'))
+const { albums } = JSON.parse(readFileSync('src/data/gallery.json', 'utf8'))
 
 const file = 'dist/index.html'
 const slot = '<div id="root"></div>'
@@ -43,36 +45,59 @@ function setTag(html, pattern, replacement) {
   return html.replace(pattern, replacement)
 }
 
+/** The template with one page's title, description, address and card image, and its markup in #root. */
+function pageHtml({ title, description, url, image, imageAlt, type, markup, head = '' }) {
+  let html = template
+  html = setTag(html, /<title>[^<]*<\/title>/, `<title>${esc(title)}</title>`)
+  html = setTag(html, /<meta name="description" content="[^"]*" \/>/, `<meta name="description" content="${esc(description)}" />`)
+  html = setTag(html, /<link rel="canonical" href="[^"]*" \/>/, `<link rel="canonical" href="${url}" />`)
+  html = setTag(html, /<meta property="og:type" content="[^"]*" \/>/, `<meta property="og:type" content="${type}" />`)
+  html = setTag(html, /<meta property="og:title" content="[^"]*" \/>/, `<meta property="og:title" content="${esc(title)}" />`)
+  html = setTag(html, /<meta property="og:description" content="[^"]*" \/>/, `<meta property="og:description" content="${esc(description)}" />`)
+  html = setTag(html, /<meta property="og:url" content="[^"]*" \/>/, `<meta property="og:url" content="${url}" />`)
+  html = setTag(html, /<meta property="og:image" content="[^"]*" \/>/, `<meta property="og:image" content="${SITE}${image}" />`)
+  html = setTag(html, /<meta property="og:image:alt" content="[^"]*" \/>/, `<meta property="og:image:alt" content="${esc(imageAlt)}" />`)
+  html = setTag(html, /<meta name="twitter:image" content="[^"]*" \/>/, `<meta name="twitter:image" content="${SITE}${image}" />`)
+  if (head) html = html.replace('</head>', () => `${head}\n  </head>`)
+  return html.replace(slot, () => root(markup))
+}
+
 function talkHtml(t, article) {
   const url = `${SITE}/talks/${t.no}/`
   const card = existsSync(`public/talks/og/${t.id}.jpg`) ? `/talks/og/${t.id}.jpg` : t.cover ?? '/og-image.png'
   const title = `${t.title} · ${t.event} ${t.type}`
   const description = t.summary   // the card teaser says what the work is; the subtitle can be just a tagline
-  let html = template
-  html = setTag(html, /<title>[^<]*<\/title>/, `<title>${esc(title)}</title>`)
-  html = setTag(html, /<meta name="description" content="[^"]*" \/>/, `<meta name="description" content="${esc(description)}" />`)
-  html = setTag(html, /<link rel="canonical" href="[^"]*" \/>/, `<link rel="canonical" href="${url}" />`)
-  html = setTag(html, /<meta property="og:type" content="[^"]*" \/>/, '<meta property="og:type" content="article" />')
-  html = setTag(html, /<meta property="og:title" content="[^"]*" \/>/, `<meta property="og:title" content="${esc(title)}" />`)
-  html = setTag(html, /<meta property="og:description" content="[^"]*" \/>/, `<meta property="og:description" content="${esc(description)}" />`)
-  html = setTag(html, /<meta property="og:url" content="[^"]*" \/>/, `<meta property="og:url" content="${url}" />`)
-  html = setTag(html, /<meta property="og:image" content="[^"]*" \/>/, `<meta property="og:image" content="${SITE}${card}" />`)
-  html = setTag(html, /<meta property="og:image:alt" content="[^"]*" \/>/, `<meta property="og:image:alt" content="${esc(t.title)}" />`)
-  html = setTag(html, /<meta name="twitter:image" content="[^"]*" \/>/, `<meta name="twitter:image" content="${SITE}${card}" />`)
   const ld = {
     '@context': 'https://schema.org', '@type': 'BlogPosting',
     headline: t.title, description, url, image: `${SITE}${card}`,
     author: { '@type': 'Person', name: profile.name, url: `${SITE}/` },
     about: t.title, isPartOf: { '@type': 'Blog', name: 'Presentation Notes', url: `${SITE}/#talks` },
   }
-  html = html.replace('</head>', `<script type="application/ld+json">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script>\n  </head>`)
-  return html.replace(slot, () => root(article))
+  return pageHtml({
+    title, description, url, image: card, imageAlt: t.title, type: 'article', markup: article,
+    head: `<script type="application/ld+json">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script>`,
+  })
+}
+
+function galleryHtml(album, markup) {
+  const first = albums[0]
+  return pageHtml({
+    title: album ? `${album.title} · Gallery · ${profile.name}` : `Gallery · ${profile.name}`,
+    description: album
+      ? `Photos from ${[album.title, album.context, album.date].filter(Boolean).join(', ')}.`
+      : `Photo albums by ${profile.name}, from conferences and trips.`,
+    url: `${SITE}/gallery/${album ? `${album.slug}/` : ''}`,
+    image: `/gallery/${(album ?? first).slug}/og.jpg`,
+    imageAlt: album ? `${album.title} photo album` : 'Photo albums',
+    type: 'website',
+    markup,
+  })
 }
 
 // One-shot render: no file watcher (it can hit the OS watch limit and is never needed here)
 const vite = await createServer({ server: { middlewareMode: true, watch: null }, appType: 'custom', logLevel: 'error' })
 try {
-  const { render, renderTalk } = await vite.ssrLoadModule('/src/entry-server.tsx')
+  const { render, renderTalk, renderGallery } = await vite.ssrLoadModule('/src/entry-server.tsx')
   const app = render()
   writeFileSync(file, template.replace(slot, () => root(app)))
   console.log(`prerender: ${(app.length / 1024).toFixed(1)} KB of HTML written into ${file}`)
@@ -82,11 +107,24 @@ try {
     writeFileSync(`dist/talks/${t.no}/index.html`, talkHtml(t, article))
   }
   console.log(`prerender: ${talks.length} talk posts as pages in dist/talks/`)
+  if (albums.length) {
+    mkdirSync('dist/gallery', { recursive: true })
+    writeFileSync('dist/gallery/index.html', galleryHtml(null, renderGallery()))
+    for (const a of albums) {
+      mkdirSync(`dist/gallery/${a.slug}`, { recursive: true })
+      writeFileSync(`dist/gallery/${a.slug}/index.html`, galleryHtml(a, renderGallery(a.slug)))
+    }
+    console.log(`prerender: the gallery and ${albums.length} albums as pages in dist/gallery/`)
+  }
 } finally {
   await vite.close()
 }
 
-const urls = [`${SITE}/`, ...talks.map(t => `${SITE}/talks/${t.no}/`)]
+const urls = [
+  `${SITE}/`,
+  ...talks.map(t => `${SITE}/talks/${t.no}/`),
+  ...(albums.length ? [`${SITE}/gallery/`, ...albums.map(a => `${SITE}/gallery/${a.slug}/`)] : []),
+]
 writeFileSync('dist/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map(u => `  <url><loc>${u}</loc></url>`).join('\n')}

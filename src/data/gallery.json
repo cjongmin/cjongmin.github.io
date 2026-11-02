@@ -1,0 +1,54 @@
+{
+  "featured": [
+    {
+      "album": "budapest",
+      "photo": "img-0090"
+    },
+    {
+      "album": "budapest",
+      "photo": "img-1373-2"
+    }
+  ],
+  "albums": [
+    {
+      "slug": "budapest",
+      "title": "Budapest",
+      "context": "EMNLP 2026",
+      "date": "October 2026",
+      "link": {
+        "label": "Read the EMNLP 2026 notes",
+        "href": "/talks/1/"
+      },
+      "cover": "img-0090",
+      "photos": [
+        {
+          "id": "img-0090",
+          "width": 4032,
+          "height": 3024,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#a9aaa7",
+          "alt": "The Hungarian Parliament reflected in the Danube.",
+          "caption": "The Hungarian Parliament reflected in the Danube."
+        },
+        {
+          "id": "img-1373-2",
+          "width": 3556,
+          "height": 2667,
+          "widths": [
+            640,
+            1280,
+            2200
+          ],
+          "color": "#a79c94",
+          "alt": "With my poster at EMNLP 2026.",
+          "caption": "With my poster at EMNLP 2026.",
+          "position": "left top"
+        }
+      ]
+    }
+  ]
+}

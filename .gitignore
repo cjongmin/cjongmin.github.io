@@ -12,3 +12,7 @@ dist-github
 # paper sources dropped in for reference (never commit them)
 /arXiv-*
 .wrangler
+# gallery originals stay on this machine: phone photos carry GPS and full resolution.
+# scripts/build_gallery.py publishes stripped copies to public/gallery/
+/gallery/*/*
+!/gallery/*/album.json

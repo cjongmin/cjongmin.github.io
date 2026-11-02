@@ -11,7 +11,7 @@ const LEAD_SIZES = '(min-width: 2100px) 33vw, (min-width: 1164px) 700px, (min-wi
 const SIDE_SIZES = '(min-width: 2100px) 17vw, (min-width: 1164px) 350px, (min-width: 640px) 33vw, 50vw'
 
 /** A photo with its album named underneath, in the album's colours; the whole of it opens the album. */
-function Tile({ album, photo, sizes, className }: { album: GalleryAlbumInfo; photo: GalleryPhoto; sizes: string; className: string }) {
+function Tile({ album, photo, sizes, side = false, className }: { album: GalleryAlbumInfo; photo: GalleryPhoto; sizes: string; side?: boolean; className: string }) {
   return (
     <a href={`${albumPath(album)}#${photo.id}`} className={`group flex flex-col min-w-0 min-h-0 ${albumTone(album)} ${className}`}>
       <span
@@ -32,7 +32,8 @@ function Tile({ album, photo, sizes, className }: { album: GalleryAlbumInfo; pho
       <span className="mt-2.5 flex flex-wrap sm:flex-nowrap items-center gap-x-2 gap-y-1">
         <FolderGlyph />
         <span className="text-[16px] font-semibold tracking-tight text-[#1D1D1F] dark:text-[#F5F5F7]">{album.title}</span>
-        {album.context && <span className="gal-tag">{album.context}</span>}
+        {/* the small photos are too narrow for the tag on tablets; a second line would shrink one photo */}
+        {album.context && <span className={`gal-tag whitespace-nowrap ${side ? 'sm:hidden lg:inline-block' : ''}`}>{album.context}</span>}
         <ArrowRight size={14} className="hidden lg:block shrink-0 ml-auto gal-accent group-hover:translate-x-0.5 transition-transform" aria-hidden />
       </span>
     </a>
@@ -91,6 +92,7 @@ export default function Gallery() {
               album={album}
               photo={photo}
               sizes={SIDE_SIZES}
+              side
               className={rest.length === 1 ? 'col-span-2 sm:col-span-1 sm:row-span-2' : ''}
             />
           ))}

@@ -10,23 +10,31 @@ const featured = featuredData as { album: GalleryAlbumInfo; photo: GalleryPhoto 
 const LEAD_SIZES = '(min-width: 2100px) 33vw, (min-width: 1164px) 700px, (min-width: 640px) 66vw, 100vw'
 const SIDE_SIZES = '(min-width: 2100px) 17vw, (min-width: 1164px) 350px, (min-width: 640px) 33vw, 50vw'
 
+/** A photo with its album named underneath, in the album's colours; the whole of it opens the album. */
 function Tile({ album, photo, sizes, className }: { album: GalleryAlbumInfo; photo: GalleryPhoto; sizes: string; className: string }) {
   return (
-    <a
-      href={`${albumPath(album)}#${photo.id}`}
-      style={{ backgroundColor: photo.color }}
-      className={`group relative block overflow-hidden rounded-2xl ring-1 ring-black/[0.06] dark:ring-white/[0.08] ${className}`}
-    >
-      <img
-        src={photoUrl(album, photo, photo.widths[1] ?? photo.widths[0])}
-        srcSet={photoSrcSet(album, photo)}
-        sizes={sizes}
-        alt={photo.alt}
-        loading="lazy"
-        decoding="async"
-        style={photo.position ? { objectPosition: photo.position } : undefined}
-        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-      />
+    <a href={`${albumPath(album)}#${photo.id}`} className={`group flex flex-col min-w-0 min-h-0 ${albumTone(album)} ${className}`}>
+      <span
+        style={{ backgroundColor: photo.color }}
+        className="relative block aspect-[4/3] sm:aspect-auto sm:flex-1 sm:min-h-0 overflow-hidden rounded-2xl ring-1 ring-black/[0.06] dark:ring-white/[0.08]"
+      >
+        <img
+          src={photoUrl(album, photo, photo.widths[1] ?? photo.widths[0])}
+          srcSet={photoSrcSet(album, photo)}
+          sizes={sizes}
+          alt={photo.alt}
+          loading="lazy"
+          decoding="async"
+          style={photo.position ? { objectPosition: photo.position } : undefined}
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+        />
+      </span>
+      <span className="mt-2.5 flex flex-wrap sm:flex-nowrap items-center gap-x-2 gap-y-1">
+        <FolderGlyph />
+        <span className="text-[16px] font-semibold tracking-tight text-[#1D1D1F] dark:text-[#F5F5F7]">{album.title}</span>
+        {album.context && <span className="gal-tag">{album.context}</span>}
+        <ArrowRight size={14} className="hidden lg:block shrink-0 ml-auto gal-accent group-hover:translate-x-0.5 transition-transform" aria-hidden />
+      </span>
     </a>
   )
 }
@@ -42,7 +50,6 @@ export default function Gallery() {
 
   if (featured.length === 0) return null
   const [lead, ...rest] = featured.slice(0, 3)
-  const album = lead.album
 
   return (
     <section id="gallery" ref={ref} className="py-16 sm:py-24">
@@ -70,37 +77,23 @@ export default function Gallery() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.45 }}
+          className="grid grid-cols-2 sm:grid-cols-3 sm:grid-rows-2 gap-x-3 sm:gap-x-4 gap-y-4 sm:aspect-[16/8.4]"
         >
-          <div className="grid grid-cols-2 sm:grid-cols-3 sm:grid-rows-2 gap-3 sm:gap-4 sm:aspect-[16/8]">
+          <Tile
+            album={lead.album}
+            photo={lead.photo}
+            sizes={LEAD_SIZES}
+            className={`col-span-2 sm:row-span-2 ${rest.length === 0 ? 'sm:col-span-3' : ''}`}
+          />
+          {rest.map(({ album, photo }) => (
             <Tile
+              key={`${album.slug}/${photo.id}`}
               album={album}
-              photo={lead.photo}
-              sizes={LEAD_SIZES}
-              className={`col-span-2 aspect-[4/3] sm:aspect-auto sm:row-span-2 ${rest.length === 0 ? 'sm:col-span-3' : ''}`}
+              photo={photo}
+              sizes={SIDE_SIZES}
+              className={rest.length === 1 ? 'col-span-2 sm:col-span-1 sm:row-span-2' : ''}
             />
-            {rest.map(({ album: a, photo }) => (
-              <Tile
-                key={photo.id}
-                album={a}
-                photo={photo}
-                sizes={SIDE_SIZES}
-                className={`aspect-[4/3] sm:aspect-auto ${rest.length === 1 ? 'col-span-2 sm:col-span-1 sm:row-span-2' : ''}`}
-              />
-            ))}
-          </div>
-
-          <div className={`mt-4 flex flex-wrap items-center gap-x-2.5 gap-y-2 ${albumTone(album)}`}>
-            <FolderGlyph />
-            <a href={albumPath(album)} className="text-[17px] font-semibold tracking-tight text-[#1D1D1F] dark:text-[#F5F5F7] hover:opacity-70 transition-opacity">
-              {album.title}
-            </a>
-            {album.context && <span className="gal-tag">{album.context}</span>}
-            {album.date && <span className="gal-tag">{album.date}</span>}
-            <a href={albumPath(album)} className="group ml-auto inline-flex items-center gap-1.5 text-[14px] font-medium text-[#0071E3] dark:text-[#2997FF]">
-              View album
-              <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" aria-hidden />
-            </a>
-          </div>
+          ))}
         </m.div>
       </div>
     </section>

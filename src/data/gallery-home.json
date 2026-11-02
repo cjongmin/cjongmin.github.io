@@ -24,46 +24,46 @@
   },
   {
     "album": {
-      "slug": "budapest",
-      "title": "Budapest",
-      "tone": "coral",
-      "context": "EMNLP 2026",
-      "date": "Oct 23–27, 2026 (AoE)"
+      "slug": "barcelona",
+      "title": "Barcelona",
+      "tone": "sage",
+      "context": "ICASSP 2026",
+      "date": "May 4–8, 2026 (AoE)"
     },
     "photo": {
-      "id": "img-2943",
-      "width": 2233,
-      "height": 1675,
+      "id": "img-7296",
+      "width": 3166,
+      "height": 2374,
       "widths": [
         640,
         1280,
         2200
       ],
-      "color": "#3f2d18",
-      "alt": "A lit church spire and hilltop buildings across the river at night.",
-      "date": "Oct 24, 2026 (AoE)"
+      "color": "#81655a",
+      "alt": "A red balcony full of flowers above a shuttered corner shop.",
+      "date": "May 4, 2026 (AoE)"
     }
   },
   {
     "album": {
-      "slug": "budapest",
-      "title": "Budapest",
-      "tone": "coral",
-      "context": "EMNLP 2026",
-      "date": "Oct 23–27, 2026 (AoE)"
+      "slug": "hawaii",
+      "title": "Hawaii",
+      "tone": "periwinkle",
+      "context": "ICCV 2025",
+      "date": "Oct 18–21, 2025 (AoE)"
     },
     "photo": {
-      "id": "img-0059",
-      "width": 3319,
-      "height": 2489,
+      "id": "img-4523",
+      "width": 3024,
+      "height": 4032,
       "widths": [
-        640,
-        1280,
-        2200
+        480,
+        960,
+        1650
       ],
-      "color": "#8a653d",
-      "alt": "An orange sunrise over a bridge, reflected in the river.",
-      "date": "Oct 24, 2026 (AoE)"
+      "color": "#68693c",
+      "alt": "People on a beach beyond a green lawn, framed by large banyan trees in low sun.",
+      "date": "Oct 21, 2025 (AoE)"
     }
   }
 ]

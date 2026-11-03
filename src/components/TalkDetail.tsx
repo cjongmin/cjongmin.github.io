@@ -162,7 +162,7 @@ export default function TalkDetail({ talk, onClose, onNavigate, standalone = fal
             <div className="mt-7 flex items-center gap-3">
               {profile.profileImage && (
                 <img
-                  src={profile.profileImage}
+                  src={people[profile.name]?.photo ?? profile.profileImage}
                   alt=""
                   className="w-10 h-10 rounded-full object-cover ring-1 ring-black/[0.08] dark:ring-white/[0.12]"
                 />

@@ -15,7 +15,7 @@
       "/projects/ttakidaero/screenshot-6.webp"
     ],
     "platforms": ["iOS", "iPadOS"],
-    "status": "In Review",
+    "status": "App Store",
     "year": 2026,
     "features": [
       "Pick a photo or a social-media screenshot; the photo inside the screenshot is found automatically",
@@ -54,6 +54,7 @@
       "Share Extension"
     ],
     "links": {
+      "appStore": "https://apps.apple.com/app/id6828974681",
       "website": "https://cjmin.me/app/ttakidaero/"
     }
   },

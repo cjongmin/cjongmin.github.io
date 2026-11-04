@@ -2,9 +2,12 @@ import { profile } from '../data/profile'
 import { news } from '../data/news'
 import { SocialIcon, SocialIconName } from './SocialIcons'
 
-// "[text](https://…)" in the bio becomes a link.
+// "[text](https://…)" in the bio becomes a link, and "***text***" (the opening question) bold italics.
 function renderLinks(text: string) {
-  return text.split(/(\[[^\]]+\]\([^)]+\))/).map((part, i) => {
+  return text.split(/(\[[^\]]+\]\([^)]+\)|\*\*\*[^*]+\*\*\*)/).map((part, i) => {
+    if (part.startsWith('***') && part.endsWith('***')) {
+      return <strong key={i} className="font-semibold italic text-[#1D1D1F] dark:text-[#F5F5F7]">{part.slice(3, -3)}</strong>
+    }
     const m = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/)
     return m ? (
       <a

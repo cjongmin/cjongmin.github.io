@@ -10,7 +10,6 @@
       "Joon Son Chung"
     ],
     "venue": "arXiv",
-    "submittedTo": "ICASSP 2027",
     "year": 2026,
     "order": 1,
     "links": {
@@ -19,8 +18,7 @@
       "code": "https://github.com/kaistmm/OmniKVQuant"
     },
     "bibtex": "@misc{yoo2026omnikvquant,\n      title={OmniKVQuant: KV Cache Quantization for Omni-LLMs},\n      author={Suho Yoo and Hyunjong Ok and Jongmin Choi and Jihoo Jung and Joon Son Chung},\n      year={2026},\n      eprint={2609.11582},\n      archivePrefix={arXiv},\n      primaryClass={cs.CV},\n      url={https://arxiv.org/abs/2609.11582},\n}",
-    "image": "/publications/omnikvquant-kv-cache-quantization.webp",
-    "venueFull": "IEEE International Conference on Acoustics, Speech, and Signal Processing (ICASSP)"
+    "image": "/publications/omnikvquant-kv-cache-quantization.webp"
   },
   {
     "id": "fork-merge-decoding-enhancing-multimodal",

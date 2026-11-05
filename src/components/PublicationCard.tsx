@@ -129,9 +129,10 @@ export default function PublicationCard({ pub, index }: PublicationCardProps) {
             {/* 1. Venue / status / presentation tier / selectivity */}
             <div className="flex items-center gap-2 flex-wrap">
               {isPreprint ? (
-                // One light chip for preprints: status and where it is under review
+                // One light chip for preprints. Where a paper is under review is never shown: until it is
+                // accepted, it is a preprint.
                 <span className={`${VENUE_CHIP} ${PREPRINT}`}>
-                  <span className={CAP_TRIM}>{pub.submittedTo ? `Preprint: Submitted to ${pub.submittedTo}` : 'Preprint'}</span>
+                  <span className={CAP_TRIM}>Preprint</span>
                 </span>
               ) : (
                 <span className={`${VENUE_CHIP} ${ACCEPTED_VENUE}`}>

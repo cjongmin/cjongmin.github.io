@@ -20,7 +20,6 @@ export interface Publication {
   year: number
   order: number
   status?: 'Conference' | 'Workshop' | 'Preprint' | 'Journal'
-  submittedTo?: string      // Venue a preprint is under review at, e.g. "NeurIPS 2026"
   presentationType?: 'Oral' | 'Poster' | 'Spotlight'
   // How selective the presentation tier was, e.g. Oral + Spotlight = 404 of 30,709 submissions
   selection?: { selected: number; submissions: number; basis: string }

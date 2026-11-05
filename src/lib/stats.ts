@@ -11,14 +11,23 @@ function setOff(off: boolean) {
   } catch { /* storage can be blocked */ }
 }
 
-function excluded(): boolean {
-  const param = new URLSearchParams(location.search).get('stats')
-  if (param === 'off' || param === 'on') {
-    setOff(param === 'off')
-    const url = new URL(location.href)
+let landingQuery = ''
+
+/** Keeps the query for the first view, then tidies the address so a copied link carries no ?ref= or ?stats=. */
+function readAddress() {
+  landingQuery = location.search
+  const url = new URL(location.href)
+  const param = url.searchParams.get('stats')
+  if (param === 'off' || param === 'on') setOff(param === 'off')
+  if (url.searchParams.has('stats') || url.searchParams.has('ref')) {
     url.searchParams.delete('stats')
+    url.searchParams.delete('ref')
     history.replaceState(null, '', url)
   }
+}
+
+function excluded(): boolean {
+  readAddress()
   const w = window as unknown as Record<string, unknown>
   const d = document as unknown as Record<string, unknown>
   const nav = navigator as Navigator & { globalPrivacyControl?: boolean }
@@ -60,7 +69,7 @@ export function trackView(path = location.pathname, title = document.title) {
   shownAt = document.hidden ? 0 : Date.now()
   send({
     k: 'view', p: path, t: title, id: vid, s: screen.width,
-    r: firstView ? document.referrer : '', q: firstView ? location.search : '',
+    r: firstView ? document.referrer : '', q: firstView ? landingQuery : '',
   })
   firstView = false
 }

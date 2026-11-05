@@ -102,7 +102,7 @@ npx wrangler deploy
 It covers the home page, talks, the gallery and world.cjmin.me, not the static `/app/*`
 pages. Old data and the previous day's salt are deleted by the first event of each day, not
 by a cron trigger, which would need a workers.dev subdomain on the account. Opening the dashboard, or
-`cjmin.me/?stats=off`, leaves that browser out of the counts (`?stats=on` undoes it). `map.txt` is land outlines from Natural Earth (public domain).
+`cjmin.me/?stats=off`, leaves that browser out of the counts (`?stats=on` undoes it). The map is [Leaflet](https://leafletjs.com) (`vendor/`, BSD licence) with OpenStreetMap's tiles (no key; their usage policy asks for a Referer and attribution). Its coordinates are Cloudflare's estimates, often just the centre of a city.
 
 ## App pages
 

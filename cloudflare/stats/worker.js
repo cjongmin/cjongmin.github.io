@@ -7,7 +7,8 @@
 // Cloudflare supplies the estimated place and network owner in request.cf. Set the key yourself:
 //   npx wrangler secret put STATS_KEY
 import dashboardHtml from './dashboard.html'
-import worldMap from './map.txt'
+import leafletJs from './vendor/leaflet.js.txt'
+import leafletCss from './vendor/leaflet.css.txt'
 
 // Each site's prefix in the stored address: world.cjmin.me/atlas/, but plain /talks/1/ for the main site
 const SITES = new Map([['https://cjmin.me', ''], ['https://world.cjmin.me', 'world.cjmin.me']])
@@ -69,6 +70,7 @@ const REF_GROUPS = {
   'naver.com': 'Naver', 'search.naver.com': 'Naver', 'm.search.naver.com': 'Naver', 'm.naver.com': 'Naver',
   'daum.net': 'Daum', 'search.daum.net': 'Daum', 'm.search.daum.net': 'Daum',
   'bing.com': 'Bing', 'duckduckgo.com': 'DuckDuckGo',
+  'cjongmin.github.io': 'Old address (cjongmin.github.io)',   // it forwards here, and hands on the real source when it has one
 }
 
 function refGroup(host) {
@@ -127,7 +129,7 @@ function systemOf(ua) {
   return ['Other', null]
 }
 
-const round1 = v => { const n = parseFloat(v); return Number.isFinite(n) ? Math.round(n * 10) / 10 : null }
+const coordinate = v => { const n = parseFloat(v); return Number.isFinite(n) ? Number(n.toFixed(5)) : null }
 const hex = buf => [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('')
 const kstDay = ms => new Date(ms + 9 * 3600000).toISOString().slice(0, 10)
 
@@ -185,21 +187,23 @@ async function store(request, env, body, sitePrefix) {
   // A source in the link says more than the referrer, which is often hidden.
   const params = new URLSearchParams(query)
   const from = body.k === 'view' ? referrer(body.r) : { ref: null, refPath: null }
-  const source = body.k === 'view' ? firstParam(params, ['utm_source', 'ref', 'src', 'source']) : null
+  const named = body.k === 'view' ? firstParam(params, ['utm_source', 'ref', 'src', 'source']) : null
+  const namedHost = named?.toLowerCase().replace(/^www\./, '')
+  const source = named && !OWN_HOSTS.has(namedHost) ? refGroup(namedHost) ?? named : null
   const campaign = body.k === 'view' ? firstParam(params, ['utm_campaign', 'campaign']) : null
   const [browser, browserVer] = browserOf(ua)
   const [os, osVer] = systemOf(ua)
   const width = Math.round(Number(body.s))
   await env.DB.prepare(`INSERT INTO events
       (ts, type, page, label, ref, country, region, city, lat, lon, org, asn, kind, visitor, vid, device, browser, lang,
-       title, ref_path, campaign, browser_ver, os, os_ver, width)
-      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20, ?21, ?22, ?23, ?24, ?25)`)
+       title, ref_path, campaign, browser_ver, os, os_ver, width, postal)
+      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20, ?21, ?22, ?23, ?24, ?25, ?26)`)
     .bind(
       now, body.k, page, label, source ?? from.ref,
-      clip(cf.country, 2), clip(cf.region, 80), clip(cf.city, 80), round1(cf.latitude), round1(cf.longitude),
+      clip(cf.country, 2), clip(cf.region, 80), clip(cf.city, 80), coordinate(cf.latitude), coordinate(cf.longitude),
       org, Number.isInteger(cf.asn) ? cf.asn : null, classify(org), visitor, clip(body.id, 16),
       deviceOf(ua), browser, clip((request.headers.get('accept-language') ?? '').split(/[,;]/)[0], 12),
-      clip(body.t, 200) || null, from.refPath, campaign, browserVer, os, osVer, width > 0 && width < 20000 ? width : null,
+      clip(body.t, 200) || null, from.refPath, campaign, browserVer, os, osVer, width > 0 && width < 20000 ? width : null, clip(cf.postalCode, 12),
     ).run()
 }
 
@@ -249,7 +253,7 @@ const PAGE_HEADERS = {
   'x-robots-tag': 'noindex, nofollow',
   'referrer-policy': 'same-origin',
   'x-content-type-options': 'nosniff',
-  'content-security-policy': "default-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'",
+  'content-security-policy': "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data: https://tile.openstreetmap.org; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'",
 }
 
 const json = (data, status = 200) => new Response(JSON.stringify(data), {
@@ -365,7 +369,7 @@ export async function summary(env, { from, to, by, cloud, page, exact }) {
     breakdown('campaign', 'ref', 'AND campaign IS NOT NULL'),
     q(`SELECT label, MAX(title) AS title, COUNT(*) AS clicks, COUNT(DISTINCT visitor) AS visitors
        FROM events WHERE ${scope} AND type = 'click' GROUP BY label ORDER BY clicks DESC LIMIT 50`),
-    q(`SELECT country, region, city, ROUND(AVG(lat), 1) AS lat, ROUND(AVG(lon), 1) AS lon, COUNT(*) AS views, COUNT(DISTINCT visitor) AS visitors
+    q(`SELECT country, region, city, ROUND(AVG(lat), 4) AS lat, ROUND(AVG(lon), 4) AS lon, COUNT(*) AS views, COUNT(DISTINCT visitor) AS visitors
        FROM events WHERE ${scope} AND type = 'view' AND lat IS NOT NULL GROUP BY country, region, city ORDER BY views DESC LIMIT 200`),
     q(`SELECT country, region, city, org, COUNT(*) AS views
        FROM events WHERE ${scope} AND type = 'view' AND lat IS NOT NULL AND org IS NOT NULL
@@ -380,8 +384,12 @@ export async function summary(env, { from, to, by, cloud, page, exact }) {
     breakdown(`CASE WHEN width IS NULL OR width = 0 THEN 'Unknown' WHEN width <= 600 THEN 'Phones' WHEN width <= 1000 THEN 'Tablets' WHEN width <= 1920 THEN 'Desktop' ELSE 'Desktop HD' END`, 'width'),
     breakdown(`COALESCE(NULLIF(lang, ''), 'Unknown')`, `''`),
     breakdown(`COALESCE(country, '')`, 'region'),
+    q(`SELECT visitor, lat, lon, MAX(country) AS country, MAX(region) AS region, MAX(city) AS city, MAX(postal) AS postal, MAX(org) AS org, MAX(kind) AS kind,
+         MAX(device) AS device, MAX(browser) AS browser, MAX(browser_ver) AS browser_ver, MAX(os) AS os, MAX(os_ver) AS os_ver, MAX(NULLIF(lang, '')) AS lang,
+         SUM(type = 'view') AS views, SUM(type = 'click') AS clicks, MIN(ts) AS first, MAX(ts) AS last, GROUP_CONCAT(DISTINCT page) AS pages
+       FROM events WHERE ${scope} AND lat IS NOT NULL GROUP BY visitor, lat, lon ORDER BY last DESC LIMIT 600`),
   ])
-  const [totals, prev, trend, pages, pageTrend, refs, campaigns, clicks, cities, cityOrgs, orgs, orgPages, browsers, systems, sizes, langs, countries] = results.map(r => r.results)
+  const [totals, prev, trend, pages, pageTrend, refs, campaigns, clicks, cities, cityOrgs, orgs, orgPages, browsers, systems, sizes, langs, countries, points] = results.map(r => r.results)
   const pagesByOrg = {}
   for (const row of orgPages) (pagesByOrg[row.org] ??= []).length < 3 && pagesByOrg[row.org].push(row.page)
   const placeKey = r => `${r.country}|${r.region}|${r.city}`
@@ -391,6 +399,8 @@ export async function summary(env, { from, to, by, cloud, page, exact }) {
     from, to, hourly, span, totals: totals[0], prev: from > 0 ? prev[0] : null, trend, pages, pageTrend, clicks,
     refs: tree(refs), campaigns: tree(campaigns), browsers: tree(browsers), systems: tree(systems), sizes: tree(sizes), langs: tree(langs), countries: tree(countries),
     cities: cities.map(c => ({ ...c, orgs: (orgsByPlace[placeKey(c)] ?? []).slice(0, 4) })),
+    // one for each visitor at each spot, for the close-up map; the visitor code itself stays here
+    points: points.map(({ visitor, pages, ...p }) => ({ ...p, pages: (pages ?? '').split(',').slice(0, 6) })),
     orgs: orgs.map(o => ({ ...o, pages: pagesByOrg[o.org] ?? [] })),
   }
 }
@@ -407,7 +417,7 @@ export async function paths(env, { from, to, cloud, page, exact }) {
 
 /** One page of the raw records for the CSV download, without the visitor code. */
 async function exportRows(env, { from, to }, after) {
-  const { results } = await env.DB.prepare(`SELECT id, ts, type, page, title, label, ref, ref_path, campaign, country, region, city, lat, lon, org, asn, kind,
+  const { results } = await env.DB.prepare(`SELECT id, ts, type, page, title, label, ref, ref_path, campaign, country, region, city, postal, lat, lon, org, asn, kind,
       device, browser, browser_ver, os, os_ver, width, lang, secs, depth
     FROM events WHERE id > ?1 AND ts >= ?2 AND ts < ?3 ORDER BY id LIMIT 2000`).bind(after, from, to).all()
   return results
@@ -445,7 +455,8 @@ async function dashboard(request, env) {
   if (url.pathname === '/stats/api/paths') return json(await paths(env, period))
   if (url.pathname === '/stats/api/export') return json(await exportRows(env, period, number('after', 0)))
   if (url.pathname === '/stats/api/live') return json(await live(env, cloud))
-  if (url.pathname === '/stats/map.txt') return new Response(worldMap, { headers: { 'content-type': 'text/plain; charset=utf-8', 'cache-control': 'private, max-age=86400' } })
+  if (url.pathname === '/stats/leaflet.js') return new Response(leafletJs, { headers: { 'content-type': 'text/javascript; charset=utf-8', 'cache-control': 'private, max-age=604800' } })
+  if (url.pathname === '/stats/leaflet.css') return new Response(leafletCss, { headers: { 'content-type': 'text/css; charset=utf-8', 'cache-control': 'private, max-age=604800' } })
   return json({ error: 'not found' }, 404)
 }
 

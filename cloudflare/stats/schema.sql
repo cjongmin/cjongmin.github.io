@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS events (
   country TEXT,
   region  TEXT,
   city    TEXT,
-  lat     REAL,               -- estimated from the IP and rounded to 0.1 degree (about 10 km)
+  lat     REAL,               -- Cloudflare's estimate from the IP, as given: often the centre of the city
   lon     REAL,
   org     TEXT,               -- the organization that owns the network, not the person's affiliation
   asn     INTEGER,
@@ -29,7 +29,8 @@ CREATE TABLE IF NOT EXISTS events (
   browser_ver TEXT,
   os          TEXT,
   os_ver      TEXT,
-  width       INTEGER         -- screen width
+  width       INTEGER,        -- screen width
+  postal      TEXT            -- Cloudflare's estimate, when it has one
 );
 CREATE INDEX IF NOT EXISTS events_ts ON events (ts);
 CREATE INDEX IF NOT EXISTS events_vid ON events (vid);

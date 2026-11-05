@@ -17,7 +17,12 @@ const page = canonical => `<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Jongmin Choi · moved to cjmin.me</title>
-${canonical ? `<link rel="canonical" href="${canonical}">\n` : ''}<script>location.replace('${SITE}' + location.pathname + location.search + location.hash)</script>
+${canonical ? `<link rel="canonical" href="${canonical}">\n` : ''}<script>
+var to = new URL('${SITE}' + location.pathname + location.search + location.hash)
+// Moving on makes this page the referrer, so the real one goes along as ?ref=, which the statistics read.
+try { var from = new URL(document.referrer).hostname; if (from && !to.searchParams.has('ref')) to.searchParams.set('ref', from) } catch (e) {}
+location.replace(to)
+</script>
 <noscript><meta http-equiv="refresh" content="0; url=${canonical || `${SITE}/`}"></noscript>
 </head>
 <body style="font-family: system-ui, sans-serif; margin: 48px 16px">

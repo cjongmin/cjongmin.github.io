@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Stats · cjmin.me</title>
+<link rel="stylesheet" href="/stats/leaflet.css">
 <script>
   // Opening this page marks the browser as the owner's, so its visits are left out of the counts.
   try {
@@ -75,21 +76,28 @@
   .card h2 { font-size: 1.1em; font-weight: 600; letter-spacing: -.01em; }
   .card .sub { color: var(--mut); font-size: .88em; margin-top: 2px; }
   .frame { margin-top: 10px; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
-  .map-wrap { position: relative; background: var(--sea); }
-  .map-wrap svg { display: block; width: 100%; aspect-ratio: 9 / 4; cursor: grab; user-select: none; }
-  .map-wrap svg.dragging { cursor: grabbing; }
-  .land { fill: var(--land); stroke: var(--sea); stroke-width: .5px; vector-effect: non-scaling-stroke; }
-  .dot { fill: var(--mark); fill-opacity: .62; stroke: var(--surface); stroke-width: 1.5px; vector-effect: non-scaling-stroke; pointer-events: none; }
-  .hit { fill: transparent; cursor: pointer; outline: none; }
+  .map-wrap { position: relative; background: var(--sea); isolation: isolate; }
+  #map { width: 100%; aspect-ratio: 9 / 5; background: var(--sea); font: inherit; }
+  .dot { fill: var(--mark); fill-opacity: .62; stroke: var(--surface); stroke-width: 1.5px; }
+  .hit { fill: transparent; outline: none; }
   .hit:hover + .dot, .hit:focus + .dot { fill-opacity: .95; }
   .hit:focus-visible + .dot { stroke: var(--fg); stroke-width: 2.5px; }
-  .now { fill: none; stroke: var(--mark); stroke-width: 2px; vector-effect: non-scaling-stroke; pointer-events: none; transform-box: fill-box; transform-origin: center; animation: ping 1.8s ease-out infinite; }
+  .leader { fill: none; stroke: var(--mut); stroke-width: 1px; }
+  .anchor { fill: var(--fg); stroke: var(--surface); stroke-width: 1px; }
+  .now { fill: none; stroke: var(--mark); stroke-width: 2px; transform-box: fill-box; transform-origin: center; animation: ping 1.8s ease-out infinite; }
   @keyframes ping { 0% { transform: scale(.5); opacity: 1; } 100% { transform: scale(2.2); opacity: 0; } }
-  .place-label { fill: var(--fg); paint-order: stroke; stroke: var(--sea); stroke-linejoin: round; font-weight: 600; pointer-events: none; }
-  .map-tools { position: absolute; left: 10px; top: 10px; display: flex; gap: 6px; flex-wrap: wrap; }
-  .map-tools .seg { background: color-mix(in srgb, var(--surface) 88%, transparent); box-shadow: 0 1px 3px rgba(0,0,0,.14); }
-  .zoom { position: absolute; right: 10px; bottom: 10px; display: flex; flex-direction: column; gap: 4px; }
+  .map-tools { position: absolute; z-index: 1000; left: 10px; top: 10px; right: 10px; display: flex; pointer-events: none; }
+  .map-tools .seg { flex-wrap: wrap; pointer-events: auto; background: color-mix(in srgb, var(--surface) 88%, transparent); box-shadow: 0 1px 3px rgba(0,0,0,.14); }
+  .zoom { position: absolute; z-index: 1000; right: 10px; bottom: 30px; display: flex; flex-direction: column; gap: 4px; }
   .zoom button { width: 2em; height: 2em; border-radius: 8px; border: 0; background: var(--surface); box-shadow: 0 1px 3px rgba(0,0,0,.2); cursor: pointer; font-size: 1.1em; line-height: 1; }
+  .zoom button:disabled { opacity: .45; cursor: default; }
+  .map-hint { position: absolute; z-index: 1000; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: .35em .9em; border-radius: 8px; background: var(--fg); color: var(--page); font-size: .88em; white-space: nowrap; opacity: 0; transition: opacity .2s; pointer-events: none; }
+  .map-hint.on { opacity: .9; }
+  .dark .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) saturate(.4) brightness(.95) contrast(.85); }
+  .leaflet-container .leaflet-control-attribution { background: color-mix(in srgb, var(--surface) 80%, transparent); color: var(--mut); font-size: 11px; }
+  .leaflet-container .leaflet-control-attribution a { color: inherit; }
+  .place { padding: 0; color: var(--fg); font-weight: 500; text-align: left; }
+  .place:hover { color: var(--fg); text-decoration: underline; }
   .tip { position: fixed; z-index: 10; max-width: 22em; padding: 9px 11px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); box-shadow: 0 8px 24px rgba(0,0,0,.18); pointer-events: none; font-size: .9em; line-height: 1.4; }
   .tip b { display: block; font-size: 1.1em; font-weight: 600; font-variant-numeric: tabular-nums; } .tip span { display: block; color: var(--mut); } .tip em { display: block; font-style: normal; color: var(--body); margin-top: 3px; }
   table { width: 100%; border-collapse: collapse; font-size: .93em; }
@@ -144,7 +152,7 @@
   .empty { padding: 28px 16px; text-align: center; color: var(--mut); }
   .note { color: var(--mut); font-size: .86em; }
   @media (max-width: 960px) { .cols, .cols3 { grid-template-columns: minmax(0, 1fr); } .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } .tile:last-child { grid-column: 1 / -1; } .feedbox { min-height: 0; } .feed { position: static; max-height: 24em; } }
-  @media (max-width: 560px) { .head, .body { padding-left: 14px; padding-right: 14px; } h1 { font-size: 1.6em; } .only-sm { display: block; } .map-wrap svg { aspect-ratio: 9 / 5; } .hide-sm { display: none; } }
+  @media (max-width: 560px) { .head, .body { padding-left: 14px; padding-right: 14px; } h1 { font-size: 1.6em; } .only-sm { display: block; } #map { aspect-ratio: 1 / 1; } .map-tools .seg button { padding: 4px 8px; } .hide-sm { display: none; } }
   @media (prefers-reduced-motion: reduce) { .now, .live-pill.on i, .feed li.new { animation: none; } }
 </style>
 </head>
@@ -175,7 +183,7 @@
       <div class="cols">
         <section class="card">
           <h2>Where visitors are</h2>
-          <p class="sub">Estimated from the IP address and rounded to about 10 km: usually the city or the provider's hub, never an exact spot. Rings mark the last 5 minutes.</p>
+          <p class="sub">Cloudflare's estimate from the IP address, not GPS: often the centre of the city or the provider's hub, so people in one city can share a spot. Zoomed in, each visitor gets a dot, and dots sharing a spot fan out around it. Someone back on another day gets a new dot. Rings mark the last 5 minutes.</p>
           <div class="frame"><div class="map-wrap" id="map-wrap"></div></div>
         </section>
         <section class="card feedcard">
@@ -227,6 +235,7 @@
   </div>
 </main>
 <div class="tip" id="tip" hidden></div>
+<script src="/stats/leaflet.js"></script>
 <script>
 'use strict'
 // Everything shown here came from visitors' requests, so it goes in as text, never as HTML.
@@ -316,115 +325,128 @@ function tipEvents(parts) {
   }
 }
 
-// ---- the map: x = longitude + 180, y = 90 - latitude, with a view box to pan and zoom
-const VIEWS = { World: { x: 0, y: 0, w: 360, h: 150 }, Asia: { x: 245, y: 25, w: 90, h: 45 }, Korea: { x: 300.2, y: 50.3, w: 13.6, h: 6.8 }, Seoul: { x: 305.75, y: 51.95, w: 2.5, h: 1.2 } }
-let svg, bubbles, rings
-const project = (lat, lon) => [lon + 180, 90 - lat]
+// ---- the map: Leaflet with OpenStreetMap's own tiles
+const VIEWS = {
+  World: [[-56, -170], [72, 190]], Asia: [[5, 88], [52, 150]], Korea: [[33.1, 124.4], [38.6, 131]],
+  Seoul: [[37.3, 126.6], [37.7, 127.25]], Daejeon: [[36.24, 127.26], [36.46, 127.52]],
+}
+const VISITOR_ZOOM = 9   // from this close, one dot per visitor instead of one per place
+const calm = matchMedia('(prefers-reduced-motion: reduce)').matches
+let map, places, rings
 
-function aspect() { const r = svg.getBoundingClientRect(); return r.width && r.height ? r.width / r.height : 2 }
-function setView(v) {
-  const a = aspect()
-  const w = Math.min(360, v.w), hh = w / a
-  state.view = { x: v.x, y: v.y + (v.h - hh) / 2, w, h: hh }
-  if (hh >= 150) state.view.y = (150 - hh) / 2
-  clampView(); applyView()
-}
-function clampView() {
-  const v = state.view
-  v.x = Math.max(0, Math.min(360 - v.w, v.x))
-  v.y = v.h >= 150 ? (150 - v.h) / 2 : Math.max(0, Math.min(150 - v.h, v.y))
-}
-function applyView() {
-  const v = state.view
-  svg.setAttribute('viewBox', `${v.x} ${v.y} ${v.w} ${v.h}`)
-  drawBubbles()
-}
-function zoomBy(f, cx, cy) {
-  const v = state.view, w = Math.max(3, Math.min(360, v.w * f)), k = w / v.w
-  cx ??= v.x + v.w / 2; cy ??= v.y + v.h / 2
-  state.view = { x: cx - (cx - v.x) * k, y: cy - (cy - v.y) * k, w, h: v.h * k }
-  clampView(); applyView()
+function goTo(lat, lon, zoom) {
+  if (calm) map.setView([lat, lon], zoom, { animate: false })
+  else map.flyTo([lat, lon], zoom, { duration: .7 })
 }
 
-function buildMap(d) {
-  const wrap = $('map-wrap')
-  svg = s('svg', { role: 'img', 'aria-label': 'World map of visitor locations. The Places table below has the same numbers.' })
-  svg.append(s('path', { class: 'land', d }))
-  bubbles = s('g', {})
-  rings = s('g', {})
-  svg.append(bubbles, rings)
-  const seg = h('div', { class: 'seg', role: 'group', 'aria-label': 'Map area' })
+function buildMap() {
+  const box = h('div', { id: 'map', 'aria-label': 'Map of estimated visitor locations. The Places table has the same numbers.' })
+  const hint = h('div', { class: 'map-hint', role: 'status' })
+  const areas = h('div', { class: 'seg', role: 'group', 'aria-label': 'Map area' })
+  const zoomIn = h('button', { type: 'button', 'aria-label': 'Zoom in', onclick: () => map.zoomIn(1) }, '+')
+  const zoomOut = h('button', { type: 'button', 'aria-label': 'Zoom out', onclick: () => map.zoomOut(1) }, '−')
+  $('map-wrap').replaceChildren(box, h('div', { class: 'map-tools' }, areas), h('div', { class: 'zoom' }, zoomIn, zoomOut), hint)
+
+  map = L.map(box, {
+    zoomControl: false, zoomSnap: .5, minZoom: 1, maxZoom: 19, scrollWheelZoom: false, dragging: !L.Browser.mobile,
+    maxBounds: [[-85, -230], [85, 250]], maxBoundsViscosity: .7,
+  })
+  map.attributionControl.setPrefix('<a href="https://leafletjs.com">Leaflet</a>')
+  // OpenStreetMap's server asks to see which site is calling, so tiles send the site's name, never the page's address.
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19, referrerPolicy: 'strict-origin-when-cross-origin',
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  }).addTo(map)
+  map.fitBounds(VIEWS.World, { animate: false })
+  places = L.layerGroup().addTo(map)
+  rings = L.layerGroup().addTo(map)
+  map.on('zoomend', drawPlaces)
+  map.on('zoomend zoomlevelschange', () => {
+    zoomIn.disabled = map.getZoom() >= map.getMaxZoom()
+    zoomOut.disabled = map.getZoom() <= map.getMinZoom()
+  })
   for (const name of Object.keys(VIEWS)) {
-    seg.append(h('button', { type: 'button', 'aria-pressed': name === 'World' ? 'true' : 'false', onclick: e => {
-      seg.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b === e.currentTarget ? 'true' : 'false'))
-      setView(VIEWS[name])
-    } }, name))
+    areas.append(h('button', { type: 'button', onclick: () => (calm ? map.fitBounds(VIEWS[name], { animate: false }) : map.flyToBounds(VIEWS[name], { duration: .7 })) }, name))
   }
-  wrap.replaceChildren(svg,
-    h('div', { class: 'map-tools' }, seg),
-    h('div', { class: 'zoom' },
-      h('button', { type: 'button', 'aria-label': 'Zoom in', onclick: () => zoomBy(.6) }, '+'),
-      h('button', { type: 'button', 'aria-label': 'Zoom out', onclick: () => zoomBy(1 / .6) }, '−')))
-  setView(VIEWS.World)
-  new ResizeObserver(() => { if (state.view) setView(state.view) }).observe(svg)
+  new ResizeObserver(() => map.invalidateSize({ animate: false })).observe(box)
 
-  // Dragging moves the map. Only a pinch or Ctrl + wheel zooms it, so scrolling the page still scrolls.
-  let drag = null
-  svg.addEventListener('pointerdown', e => {
-    if (e.pointerType !== 'mouse' || e.button !== 0) return
-    drag = { x: e.clientX, y: e.clientY, vx: state.view.x, vy: state.view.y }
-    svg.setPointerCapture(e.pointerId); svg.classList.add('dragging')
-  })
-  svg.addEventListener('pointermove', e => {
-    if (!drag) return
-    const k = state.view.w / svg.getBoundingClientRect().width
-    state.view.x = drag.vx - (e.clientX - drag.x) * k
-    state.view.y = drag.vy - (e.clientY - drag.y) * k
-    clampView()
-    svg.setAttribute('viewBox', `${state.view.x} ${state.view.y} ${state.view.w} ${state.view.h}`)
-  })
-  const stop = () => { drag = null; svg.classList.remove('dragging') }
-  svg.addEventListener('pointerup', stop); svg.addEventListener('pointercancel', stop)
-  svg.addEventListener('wheel', e => {
-    if (!e.ctrlKey && !e.metaKey) return
-    e.preventDefault()
-    const r = svg.getBoundingClientRect(), v = state.view
-    zoomBy(e.deltaY > 0 ? 1.18 : 1 / 1.18, v.x + (e.clientX - r.left) / r.width * v.w, v.y + (e.clientY - r.top) / r.height * v.h)
-  }, { passive: false })
+  // The wheel zooms after a click on the map or with Ctrl (a trackpad pinch counts), so the page still scrolls past it.
+  let armed = false, hintTimer
+  const wrap = $('map-wrap')
+  wrap.addEventListener('wheel', e => {
+    if (armed || e.ctrlKey || e.metaKey) { map.scrollWheelZoom.enable(); return }
+    map.scrollWheelZoom.disable()
+    hint.textContent = 'Click the map to zoom with the wheel, or hold Ctrl'
+    hint.classList.add('on')
+    clearTimeout(hintTimer)
+    hintTimer = setTimeout(() => hint.classList.remove('on'), 1300)
+  }, { capture: true, passive: true })
+  box.addEventListener('pointerdown', () => { armed = true; hint.classList.remove('on') })
+  wrap.addEventListener('pointerleave', () => { armed = false })
 }
 
+function addMark(latlng, radius, hitRadius, label, parts) {
+  const hit = L.circleMarker(latlng, { radius: hitRadius, className: 'hit', stroke: false }).addTo(places)
+  L.circleMarker(latlng, { radius, className: 'dot', interactive: false }).addTo(places)
+  const el = hit.getElement()
+  el.setAttribute('tabindex', '0')
+  el.setAttribute('aria-label', label)
+  for (const [name, fn] of Object.entries(tipEvents(parts))) el.addEventListener(name.slice(2), fn)
+  return el
+}
+
+function drawPlaces() {
+  if (!map || !state.data) return
+  places.clearLayers()
+  hideTip()
+  if (map.getZoom() >= VISITOR_ZOOM) drawVisitors()
+  else drawBubbles()
+  drawRings(true)
+}
+
+// Far out: one bubble per place. Selecting one goes in close enough to see its visitors.
 function drawBubbles() {
-  if (!svg || !bubbles || !state.data) return
-  const px = state.view.w / (svg.getBoundingClientRect().width || 1)
-  const places = state.data.cities
-  const max = Math.max(1, ...places.map(c => c.views))
-  const nodes = []
-  const seen = []
-  const k = scale()
-  const labelSize = 12 * k * px
-  // biggest first, so small places stay on top and can be reached
-  for (const c of [...places].sort((a, b) => b.views - a.views)) {
-    const [x, y] = project(c.lat, c.lon)
-    const rPx = (5 + (state.view.w < 40 ? 7 : 13) * Math.sqrt(c.views / max)) * k   // smaller when close, so neighbours separate
-    const parts = () => [
+  const k = scale(), cities = state.data.cities
+  const max = Math.max(1, ...cities.map(c => c.views))
+  for (const c of [...cities].sort((a, b) => b.views - a.views)) {   // biggest first, so small places stay reachable
+    const radius = (5 + 13 * Math.sqrt(c.views / max)) * k
+    const el = addMark([c.lat, c.lon], radius, Math.max(12, radius + 3), `${placeName(c)}: ${plural(c.views, 'view')}`, () => [
       h('b', null, `${plural(c.views, 'view')} · ${plural(c.visitors, 'visitor')}`),
       h('span', null, placeName(c)),
       h('span', null, `About ${c.lat}, ${c.lon} (estimated)`),
       ...c.orgs.map(o => h('em', null, `${o.org} (${o.views})`)),
-    ]
-    nodes.push(s('circle', { class: 'hit', cx: x, cy: y, r: Math.max(12, rPx + 4) * px, tabindex: 0, 'aria-label': `${placeName(c)}: ${plural(c.views, 'view')}`, ...tipEvents(parts) }))
-    nodes.push(s('circle', { class: 'dot', cx: x, cy: y, r: rPx * px }))
-    // labels only once zoomed in, and only where they have room
-    if (state.view.w < 120 && c.city && x > state.view.x && x < state.view.x + state.view.w && y > state.view.y && y < state.view.y + state.view.h) {
-      const box = { x: x + (rPx + 4) * px, y, w: c.city.length * 7 * k * px, h: 14 * k * px }
-      if (!seen.some(o => box.x < o.x + o.w && o.x < box.x + box.w && Math.abs(box.y - o.y) < box.h) && seen.length < 10) {
-        seen.push(box)
-        nodes.push(s('text', { class: 'place-label', x: box.x, y: y + 4 * k * px, 'font-size': labelSize, 'stroke-width': 3 * px }, c.city))
-      }
-    }
+    ])
+    el.addEventListener('click', () => goTo(c.lat, c.lon, Math.max(11, map.getZoom() + 2)))
   }
-  bubbles.replaceChildren(...nodes)
-  drawRings(true)
+}
+
+// Close up: one dot per visitor. Cloudflare often gives everyone in a city the same spot, so dots that
+// share one fan out around it, with a line back to it. Their distance from it means nothing.
+function drawVisitors() {
+  const groups = new Map()
+  for (const p of state.data.points) {
+    const key = `${p.lat},${p.lon}`
+    if (!groups.has(key)) groups.set(key, [])
+    groups.get(key).push(p)
+  }
+  const k = scale(), step = 15 * k
+  for (const group of groups.values()) {
+    const spot = L.latLng(group[0].lat, group[0].lon), centre = map.latLngToLayerPoint(spot)
+    if (group.length > 1) L.circleMarker(spot, { radius: 2.5 * k, className: 'anchor', interactive: false }).addTo(places)
+    group.forEach((p, i) => {
+      const angle = i * 2.39996, far = group.length > 1 ? step * Math.sqrt(i + 1) : 0
+      const at = map.layerPointToLatLng(centre.add(L.point(Math.cos(angle) * far, Math.sin(angle) * far)))
+      if (far) L.polyline([spot, at], { className: 'leader', interactive: false }).addTo(places)
+      addMark(at, 6 * k, Math.max(10, 7 * k), `${p.org ?? 'Unknown network'}, ${placeName(p)}: ${plural(p.views, 'view')}`, () => [
+        h('b', null, p.org ?? 'Unknown network'),
+        h('span', null, [placeName(p), p.postal].filter(Boolean).join(' · ')),
+        h('span', null, `Estimated spot ${p.lat}, ${p.lon}${group.length > 1 ? `, shared by ${group.length}` : ''}`),
+        h('span', null, [p.device, [p.browser, p.browser_ver].filter(Boolean).join(' '), [p.os, p.os_ver].filter(Boolean).join(' '), p.lang].filter(Boolean).join(' · ')),
+        h('span', null, `${plural(p.views, 'view')}${p.clicks ? ` · ${plural(p.clicks, 'click')}` : ''} · ${kstTime(p.first)}${p.last !== p.first ? ` to ${kstTime(p.last)}` : ''}`),
+        ...p.pages.slice(0, 4).map(page => h('em', null, page)),
+      ])
+    })
+  }
 }
 
 // Rings for the last 5 minutes. Redrawn only when they change, so they do not restart every poll.
@@ -432,16 +454,12 @@ let ringKey = ''
 function drawRings(force) {
   if (!rings) return
   const cutoff = Date.now() - 5 * 60000
-  const places = [...new Set(state.liveEvents.filter(e => e.ts >= cutoff && e.lat != null).map(e => `${e.lat},${e.lon}`))]
-  const key = places.join(';')
+  const spots = [...new Set(state.liveEvents.filter(e => e.ts >= cutoff && e.lat != null).map(e => `${e.lat},${e.lon}`))]
+  const key = spots.join(';')
   if (!force && key === ringKey) return
   ringKey = key
-  const r = 10 * scale() * state.view.w / (svg.getBoundingClientRect().width || 1)
-  rings.replaceChildren(...places.map(p => {
-    const [lat, lon] = p.split(',').map(Number)
-    const [x, y] = project(lat, lon)
-    return s('circle', { class: 'now', cx: x, cy: y, r })
-  }))
+  rings.clearLayers()
+  for (const spot of spots) L.circleMarker(spot.split(',').map(Number), { radius: 10 * scale(), className: 'now', interactive: false }).addTo(rings)
 }
 
 // ---- trend: one series, so one colour and no legend
@@ -644,7 +662,7 @@ function render(d) {
   $('places').replaceChildren(d.cities.length ? fold('places', `All places (${d.cities.length}), with the numbers on the map`,
     h('div', { class: 'scroll' }, h('table', null,
       h('thead', null, h('tr', null, h('th', null, 'Place'), h('th', { class: 'hide-sm' }, 'Coordinates'), h('th', { class: 'hide-sm' }, 'Networks'), h('th', { class: 'num' }, 'Views'), h('th', { class: 'num hide-sm' }, 'Visitors'))),
-      h('tbody', null, d.cities.map(c => h('tr', null, h('td', { class: 'name' }, placeName(c), h('div', { class: 'only-sm' }, c.orgs.map(o => o.org).join(', '))), h('td', { class: 'muted hide-sm', style: 'white-space:nowrap' }, `${c.lat}, ${c.lon}`), h('td', { class: 'pages hide-sm' }, c.orgs.map(o => o.org).join(', ')), h('td', { class: 'num' }, num(c.views)), h('td', { class: 'num hide-sm' }, num(c.visitors))))))), d.cities.length <= 8)
+      h('tbody', null, d.cities.map(c => h('tr', null, h('td', { class: 'name' }, h('button', { type: 'button', class: 'linkish place', onclick: () => { $('map-wrap').scrollIntoView({ block: 'center', behavior: calm ? 'auto' : 'smooth' }); goTo(c.lat, c.lon, Math.max(11, map.getZoom())) } }, placeName(c)), h('div', { class: 'only-sm' }, c.orgs.map(o => o.org).join(', '))), h('td', { class: 'muted hide-sm', style: 'white-space:nowrap' }, `${c.lat}, ${c.lon}`), h('td', { class: 'pages hide-sm' }, c.orgs.map(o => o.org).join(', ')), h('td', { class: 'num' }, num(c.views)), h('td', { class: 'num hide-sm' }, num(c.visitors))))))), d.cities.length <= 8)
     : h('div', { class: 'empty' }, 'No places in this period yet.'))
 
   drawTrend(d)
@@ -658,7 +676,7 @@ function render(d) {
   rankList('countries', d.countries, { nameOf: r => countryName(r.name) || 'Unknown', childOf: c => c.name })
   rankList('langs', d.langs, { nameOf: r => (r.name === 'Unknown' ? r.name : languageName(r.name)) })
   rankList('campaigns', d.campaigns, { childOf: c => `from ${c.name}` })
-  drawBubbles()
+  drawPlaces()
 }
 
 function renderLive(l) {
@@ -798,7 +816,7 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) poll
 document.addEventListener('click', hideTip)
 window.addEventListener('resize', () => { if (state.data) drawTrend(state.data) })
 
-fetch('/stats/map.txt').then(r => r.text()).then(d => { buildMap(d); drawBubbles() })
+buildMap()
 refresh().then(poll)
 setInterval(poll, 5000)
 </script>

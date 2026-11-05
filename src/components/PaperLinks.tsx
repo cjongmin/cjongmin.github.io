@@ -31,14 +31,14 @@ export default function PaperLinks({ pub, links = pub.links ?? {}, className, ic
   return (
     <>
       {items.map(({ label, icon: Icon, href }) => (
-        <a key={label} href={href} target="_blank" rel="noopener noreferrer"
+        <a key={label} href={href} target="_blank" rel="noopener noreferrer" data-stat={`pub:${pub.id}:${label}`}
            aria-label={`${label} for ${pub.title}`} className={className}>
           <Icon size={iconSize} />
           {label}
         </a>
       ))}
       {pub.bibtex && (
-        <button onClick={() => setBibtexOpen(true)} aria-label={`Show BibTeX for ${pub.title}`} className={className}>
+        <button onClick={() => setBibtexOpen(true)} data-stat={`pub:${pub.id}:BibTeX`} aria-label={`Show BibTeX for ${pub.title}`} className={className}>
           <Quote size={iconSize} />
           BibTeX
         </button>

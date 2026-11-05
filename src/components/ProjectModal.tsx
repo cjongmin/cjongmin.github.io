@@ -191,6 +191,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
+                  data-stat={`project:${project.id}:${label}`}
                   className={label === 'App Store' ? 'btn-primary' : 'btn-secondary'}
                 >
                   <Icon size={14} />

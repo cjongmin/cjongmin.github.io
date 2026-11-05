@@ -2,6 +2,7 @@ import { StrictMode, type ReactNode } from 'react'
 import { createRoot, hydrateRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
+import './lib/stats'
 
 // Apply theme before first paint to avoid flash
 const stored = localStorage.getItem('theme')

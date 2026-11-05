@@ -36,6 +36,7 @@ export default function Projects() {
             <m.button
               key={project.id}
               onClick={() => setSelected(project)}
+              data-stat={`project:${project.id}`}
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}

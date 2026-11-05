@@ -2,6 +2,7 @@ import { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react'
 import { m, useInView } from 'framer-motion'
 import { ArrowRight, CalendarDays, ChevronLeft, ChevronRight } from 'lucide-react'
 import { talkPath, talks, Talk } from '../data/talks'
+import { endView, trackView } from '../lib/stats'
 // The post view (and every post's text) loads only when a post is opened
 const TalkDetail = lazy(() => import('./TalkDetail'))
 
@@ -18,9 +19,10 @@ function talkFromLocation(): Talk | null {
   return talks.find(t => String(t.no) === key || t.id === key) ?? null
 }
 
-/** GoatCounter counts page loads only; a post opened over the home page is counted here, under its own address. */
+/** Page loads count themselves; a post opened over the home page is counted here, under its own address. */
 function countView(t: Talk) {
   (window as { goatcounter?: { count?: (o: object) => void } }).goatcounter?.count?.({ path: talkPath(t), title: t.title, event: false })
+  trackView(talkPath(t), t.title)
 }
 
 // One slide = card width + the track's gap (gap-4, which grows with the root font size).
@@ -124,6 +126,7 @@ export default function Talks() {
   }, [])
 
   const close = useCallback(() => {
+    endView()
     if (pushedRef.current) {
       pushedRef.current = false
       history.back()                      // popstate → sync() clears selection

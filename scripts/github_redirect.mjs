@@ -11,6 +11,7 @@ const SITE = 'https://cjmin.me'
 const SRC = 'dist'
 const OUT = 'dist-github'
 
+// Moving on makes the forwarding page the referrer, so the real one goes along as ?ref=.
 const page = canonical => `<!doctype html>
 <html lang="en">
 <head>
@@ -19,7 +20,6 @@ const page = canonical => `<!doctype html>
 <title>Jongmin Choi · moved to cjmin.me</title>
 ${canonical ? `<link rel="canonical" href="${canonical}">\n` : ''}<script>
 var to = new URL('${SITE}' + location.pathname + location.search + location.hash)
-// Moving on makes this page the referrer, so the real one goes along as ?ref=, which the statistics read.
 try { var from = new URL(document.referrer).hostname; if (from && !to.searchParams.has('ref')) to.searchParams.set('ref', from) } catch (e) {}
 location.replace(to)
 </script>

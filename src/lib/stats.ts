@@ -1,5 +1,4 @@
-// First-party statistics, stored by the Worker in cloudflare/stats.
-// Nothing here identifies a person across days. It filters what
+// First-party page statistics. Nothing here identifies a person across days. It filters what
 // GoatCounter's script filters (bots, frames, pages never seen) and adds time on page and scroll depth.
 // Opening cjmin.me/stats/ or /?stats=off leaves a browser out, here and on world.cjmin.me.
 

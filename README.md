@@ -81,29 +81,6 @@ engines and link previews see the content without running JavaScript. It also
 writes each talk post's own page, `sitemap.xml`, `robots.txt` and `404.html`. The talk post view
 is a separate chunk that loads only when a post is opened.
 
-## Statistics
-
-[cloudflare/stats](cloudflare/stats/worker.js) is the site's own analytics: a Worker and a D1 database
-that answer `cjmin.me/api/v` (events from [src/lib/stats.ts](src/lib/stats.ts) and from a copy of the same
-logic in world.cjmin.me's pages) and `cjmin.me/stats/` (the owner's dashboard). It tracks everything
-GoatCounter does: pages and titles, referrers, campaigns, browsers, systems, screen sizes, countries and
-regions, languages, clicks, a page filter over all of it, any date range and CSV export. On top of that it shows
-live visits, a map of estimated places, network owners such as universities and companies, one
-visitor's path through the site, time on page, scroll depth and the change from the previous period. It stores no IP address and sets no cookie
-for visitors. New clicks are counted by adding `data-stat="<label>"`.
-
-```bash
-cd cloudflare/stats
-npx wrangler d1 execute cjmin-stats --remote --file schema.sql   # new database only
-npx wrangler secret put STATS_KEY                                # the dashboard's key
-npx wrangler deploy
-```
-
-It covers the home page, talks, the gallery and world.cjmin.me, not the static `/app/*`
-pages. Old data and the previous day's salt are deleted by the first event of each day, not
-by a cron trigger, which would need a workers.dev subdomain on the account. Opening the dashboard, or
-`cjmin.me/?stats=off`, leaves that browser out of the counts (`?stats=on` undoes it). The map is [Leaflet](https://leafletjs.com) (`vendor/`, BSD licence) with OpenStreetMap's tiles (no key; their usage policy asks for a Referer and attribution). Its coordinates are Cloudflare's estimates, often just the centre of a city.
-
 ## App pages
 
 The iOS apps' support and privacy pages are plain HTML files, copied into the build as they are:

@@ -1,4 +1,4 @@
-// Statistics for cjmin.me and world.cjmin.me (see README → Statistics and public/privacy/).
+// Statistics for cjmin.me and world.cjmin.me (see README → Statistics).
 //
 //   POST /api/v        one event from either site (src/lib/stats.ts)
 //   GET  /stats/       the owner's dashboard, behind STATS_KEY

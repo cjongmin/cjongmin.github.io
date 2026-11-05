@@ -55,9 +55,7 @@ export default function App() {
             </ErrorBoundary>
           </main>
           <footer className="py-6 text-center text-secondary text-[14px] border-t border-black/[0.06] dark:border-white/[0.06]">
-            <p suppressHydrationWarning>
-              © {new Date().getFullYear()} Jongmin Choi · <a href="/privacy/" className="hover:underline">Privacy</a>
-            </p>
+            <p suppressHydrationWarning>© {new Date().getFullYear()} Jongmin Choi</p>
           </footer>
         </div>
       </MotionConfig>

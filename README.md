@@ -90,8 +90,7 @@ GoatCounter does: pages and titles, referrers, campaigns, browsers, systems, scr
 regions, languages, clicks, a page filter over all of it, any date range and CSV export. On top of that it shows
 live visits, a map of estimated places, network owners such as universities and companies, one
 visitor's path through the site, time on page, scroll depth and the change from the previous period. It stores no IP address and sets no cookie
-for visitors; [public/privacy/index.html](public/privacy/index.html) says this publicly, so change that
-page whenever what is collected changes. New clicks are counted by adding `data-stat="<label>"`.
+for visitors. New clicks are counted by adding `data-stat="<label>"`.
 
 ```bash
 cd cloudflare/stats
@@ -100,7 +99,7 @@ npx wrangler secret put STATS_KEY                                # the dashboard
 npx wrangler deploy
 ```
 
-It covers the home page, talks, the gallery and world.cjmin.me, not the static `/app/*` and `/privacy/`
+It covers the home page, talks, the gallery and world.cjmin.me, not the static `/app/*`
 pages. Old data and the previous day's salt are deleted by the first event of each day, not
 by a cron trigger, which would need a workers.dev subdomain on the account. Opening the dashboard, or
 `cjmin.me/?stats=off`, leaves that browser out of the counts (`?stats=on` undoes it). `map.txt` is land outlines from Natural Earth (public domain).

@@ -13,11 +13,13 @@ This is the question behind **FiTS**. We factorize temporal computation *within 
 
 # Background — From Perceptrons to Spiking Neurons
 
+:::lead
 A conventional perceptron computes a weighted sum of its inputs and applies an activation function. A biological neuron works differently: ions move through channels in its cell membrane, changing the electrical potential across that membrane. When the conditions are right, the neuron generates an *action potential* that propagates to other neurons.
 
 **Spiking Neural Networks (SNNs)** capture some of this time-dependent behavior in simplified mathematical models. One of the most common is the **Leaky Integrate-and-Fire (LIF)** neuron. Its membrane voltage integrates incoming current, gradually leaks over time, and generates a spike when it reaches a threshold. The voltage is then reset.
 
-![The standard LIF neuron: ion flow across a cell membrane, a biological neuron, and the integrate–leak–spike–reset cycle.](/talks/fits/fits-lif-background.webp "wide")
+![The cell membrane of a standard LIF neuron: input current I flows in, and the leak −μV pulls the membrane potential V back.](/talks/fits/membrane-lif.webp)
+:::
 
 Before a spike and reset, the membrane voltage follows a particularly simple equation:
 
@@ -53,9 +55,13 @@ $$
 
 The magnitude decreases as the input frequency increases. Its maximum is at **0 Hz**. In other words, the standard LIF neuron's *subthreshold membrane dynamics* act as a **low-pass filter (LPF)**.
 
+:::lead
 This does **not** mean an SNN made of LIF neurons cannot learn high-frequency information: synaptic weights, spikes and resets, and network structure all matter. The limitation is more specific. A standard LIF neuron does not have an explicit parameter that lets us place the peak of its own subthreshold response at a chosen, nonzero frequency.
 
 Here, biology offers an interesting clue. Some biological neurons exhibit **intrinsic resonance**, responding more strongly to particular input frequencies because of their membrane and ion-channel dynamics. An **adaptive LIF** model captures an aspect of this behavior by introducing a voltage-dependent adaptation current, $a(t)$:
+
+![Adaptive LIF adds a voltage-dependent adaptation current a, through a channel that opens with V.](/talks/fits/membrane-adaptive-lif.webp)
+:::
 
 $$
 \dot V(t)=-\mu V(t)+I(t)-\eta a(t),
@@ -64,8 +70,6 @@ $$
 $$
 
 This feedback can move the peak of the magnitude response away from 0 Hz.
-
-![Adaptive LIF adds a voltage-dependent adaptation current, allowing a nonzero-frequency peak in the subthreshold response.](/talks/fits/fits-adaptive-lif.webp "wide")
 
 But that leads to a more useful question: **Instead of indirectly learning adaptation coefficients, could we let each neuron learn its preferred frequency directly?**
 

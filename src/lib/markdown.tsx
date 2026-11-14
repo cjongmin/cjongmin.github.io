@@ -1,4 +1,5 @@
 import { Fragment, ReactNode } from 'react'
+import FitsFrequencyDemo from '../components/FitsFrequencyDemo'
 import { Brain, CalendarDays, CalendarPlus, ChevronRight, Clock, Info, Landmark, MapPin, Presentation, Users } from 'lucide-react'
 
 /**
@@ -32,6 +33,8 @@ import { Brain, CalendarDays, CalendarPlus, ChevronRight, Clock, Info, Landmark,
  *                          → a rounded card set apart from the sections: label, illustration,
  *                            title and subtitle, the text, and a closing note under a rule.
  *                            Its title is not a heading, so it stays out of the contents box.
+ *   :::fits-frequency-demo Title: … / Description: … → the FiTS frequency-response demo
+ *                          (src/components/FitsFrequencyDemo.tsx); other *-demo names render nothing
  *
  * Parsing produces plain data, so the same headings feed the table of contents.
  */
@@ -50,6 +53,7 @@ export type Block =
   | { kind: 'quote'; text: string }
   | { kind: 'lead'; blocks: Block[]; figure?: { src: string; alt: string } }
   | { kind: 'details'; title: string; blocks: Block[] }
+  | { kind: 'demo'; name: string; fields: Record<string, string> }
   | { kind: 'intuition'; title: string; fields: Record<string, string>; blocks: Block[]; figure?: { src: string; alt: string } }
 
 export function slugify(text: string): string {
@@ -118,6 +122,19 @@ export function parseMarkdown(src: string): Block[] {
       const inner = parseMarkdown(raw.join('\n'))
       const img = inner.find((b): b is Extract<Block, { kind: 'image' }> => b.kind === 'image')
       blocks.push({ kind: 'lead', blocks: inner.filter(b => b !== img), figure: img && { src: img.src, alt: img.alt } })
+      continue
+    }
+
+    const demo = line.match(/^:::([a-z0-9-]+-demo)\s*$/)
+    if (demo) {
+      const fields: Record<string, string> = {}
+      i++
+      while (i < lines.length && lines[i].trim() !== ':::') {
+        const l = lines[i++].trim(), k = l.indexOf(':')
+        if (k > 0) fields[l.slice(0, k).trim().toLowerCase()] = l.slice(k + 1).trim()
+      }
+      i++                                                     // closing :::
+      blocks.push({ kind: 'demo', name: demo[1], fields })
       continue
     }
 
@@ -432,6 +449,10 @@ export function MarkdownBody({ blocks, onImageClick }: {
             )
           case 'event':
             return <EventTicket key={i} fields={b.fields} />
+          case 'demo':
+            return b.name === 'fits-frequency-demo'
+              ? <FitsFrequencyDemo key={i} title={b.fields.title} description={b.fields.description} />
+              : null
           case 'details':
             return (
               <details key={i} className="group mt-6 rounded-xl border border-black/[0.06] dark:border-white/[0.08]

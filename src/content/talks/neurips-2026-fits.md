@@ -1,41 +1,155 @@
-# Heading to NeurIPS 2026
+:::intuition What Should a Neuron Listen For?
+Eyebrow: A personal intuition
+Subtitle: From biological neurons to frequency-selective temporal computation
 
-FiTS has been accepted to NeurIPS 2026 as a Spotlight paper, and as the first author I will be in Sydney in early December to present it at Poster Session 6.
+When several instruments play together, we can still follow the low notes of a bass or the higher notes of a melody. The same sound contains different frequency components, yet we can pay attention to particular ones.
 
-![Sydney, Australia, the host city of NeurIPS 2026](/talks/neurips-2026-sydney.webp)
+That made me wonder about the neurons in a neural network. **Could individual neurons learn to respond to different frequencies, rather than all starting with the same temporal preference?** And for a spiking neuron, might it matter not only *which* frequency it responds to, but also *when* that response contributes to its membrane voltage? After all, a small change in timing can change whether the membrane voltage crosses its spiking threshold.
 
-# At a glance
+**What if a spiking neuron could learn both which frequency to respond to and when it should contribute?**
 
-- **Temporal computation, inside each neuron.** FiTS is a spiking neuron that factorizes the temporal computation within each neuron into **Frequency Selectivity (FS)** and **Temporal Shaping (TS)**.
-- **No extra network machinery.** On auditory benchmarks, FiTS consistently improves over a plain Leaky Integrate-and-Fire (LIF) baseline in simple feedforward SNNs, without recurrence or network-level delays, while remaining competitive with strong temporal SNN baselines.
-- **Interpretable by design.** The learned target frequencies and group-delay shifts summarize, neuron by neuron, the frequency and timing organization the network has learned.
-
-# Motivation
-
-Spiking Neural Networks (SNNs) are a promising framework for event-driven temporal processing. Prior work has improved their temporal modeling through richer neuron dynamics and network-level mechanisms such as recurrence and delays. What remains unclear is how individual spiking neurons should specialize within a network.
-
-:::quote
-How should a single spiking neuron specialize in time: which frequency it responds to, and when those frequency components contribute to its membrane voltage?
+This is the question behind **FiTS**. We factorize temporal computation *within each neuron* into **Frequency Selectivity (FS)** and **Temporal Shaping (TS)**.
 :::
 
-# Key idea: frequency selectivity and temporal shaping
+# Background — From Perceptrons to Spiking Neurons
+
+A conventional perceptron computes a weighted sum of its inputs and applies an activation function. A biological neuron works differently: ions move through channels in its cell membrane, changing the electrical potential across that membrane. When the conditions are right, the neuron generates an *action potential* that propagates to other neurons.
+
+**Spiking Neural Networks (SNNs)** capture some of this time-dependent behavior in simplified mathematical models. One of the most common is the **Leaky Integrate-and-Fire (LIF)** neuron. Its membrane voltage integrates incoming current, gradually leaks over time, and generates a spike when it reaches a threshold. The voltage is then reset.
+
+![The standard LIF neuron: ion flow across a cell membrane, a biological neuron, and the integrate–leak–spike–reset cycle.](/talks/fits/fits-lif-background.webp "wide")
+
+Before a spike and reset, the membrane voltage follows a particularly simple equation:
+
+$$
+\dot V(t)=-\mu V(t)+I(t), \qquad \mu=1/\tau_m.
+$$
+
+Here, $V(t)$ is membrane voltage, $I(t)$ is input current, and $\tau_m$ is the membrane time constant. The input increases the voltage, while the leak term pulls it back down.
+
+:::details A little signal processing: magnitude, phase, and group delay
+A **Fourier transform** lets us describe a time-varying signal in terms of its frequency components. A **Laplace transform** is useful for studying differential equations like the one above through a *transfer function*. For a stable linear system, its frequency response can be written as
+
+$$
+H(j\Omega)=|H(j\Omega)|e^{j\phi(\Omega)}.
+$$
+
+- **Magnitude response**, $|H(j\Omega)|$: How strongly does the system respond to each frequency?
+- **Phase response**, $\phi(\Omega)$: How does the phase of each component change?
+- **Group delay**, $\tau_g(\Omega)=-d\phi(\Omega)/d\Omega$: How does that phase change affect the timing of nearby frequency components?
+
+These are the two views that matter for FiTS: *magnitude* leads to FS, while *phase and group delay* motivate TS.
+:::
+
+# Motivation — Why Is Standard LIF a Low-Pass Filter?
+
+If we analyze the **subthreshold** LIF equation as a linear system, its frequency response is
+
+$$
+H_{\mathrm{LIF}}(j\Omega)=\frac{1}{\mu+j\Omega},
+\qquad
+|H_{\mathrm{LIF}}(j\Omega)|=\frac{1}{\sqrt{\mu^2+\Omega^2}}.
+$$
+
+The magnitude decreases as the input frequency increases. Its maximum is at **0 Hz**. In other words, the standard LIF neuron's *subthreshold membrane dynamics* act as a **low-pass filter (LPF)**.
+
+This does **not** mean an SNN made of LIF neurons cannot learn high-frequency information: synaptic weights, spikes and resets, and network structure all matter. The limitation is more specific. A standard LIF neuron does not have an explicit parameter that lets us place the peak of its own subthreshold response at a chosen, nonzero frequency.
+
+Here, biology offers an interesting clue. Some biological neurons exhibit **intrinsic resonance**, responding more strongly to particular input frequencies because of their membrane and ion-channel dynamics. An **adaptive LIF** model captures an aspect of this behavior by introducing a voltage-dependent adaptation current, $a(t)$:
+
+$$
+\dot V(t)=-\mu V(t)+I(t)-\eta a(t),
+\qquad
+\dot a(t)=-\rho a(t)+\gamma V(t).
+$$
+
+This feedback can move the peak of the magnitude response away from 0 Hz.
+
+![Adaptive LIF adds a voltage-dependent adaptation current, allowing a nonzero-frequency peak in the subthreshold response.](/talks/fits/fits-adaptive-lif.webp "wide")
+
+But that leads to a more useful question: **Instead of indirectly learning adaptation coefficients, could we let each neuron learn its preferred frequency directly?**
+
+# Method — Frequency Selectivity and Temporal Shaping
 
 :::steps
-Frequency Selectivity (FS) | Parameterizes each neuron's target frequency as the maximizer of its subthreshold magnitude response.
-Temporal Shaping (TS) | Reshapes when frequency components contribute to membrane voltage accumulation, through group-delay modulation.
+Frequency Selectivity (FS) | **Which frequency?** Make the target frequency—the peak of a neuron's subthreshold magnitude response—an explicit, learnable variable.
+Temporal Shaping (TS) | **When does it contribute?** Modulate the timing of frequency components in the membrane voltage through group-delay shaping.
 :::
 
-![The Temporal Shaping (TS) module from the paper: the voltage passes through a chain of AP blocks, and the intermediate outputs are mixed with weights λ.](/publications/fits-figure1-ts-module.webp "wide")
+## Frequency Selectivity (FS)
 
-# Key findings
+For the adaptive LIF model, let $\kappa=\eta\gamma$. Its subthreshold frequency response becomes
 
-We evaluate FiTS on auditory benchmarks, where frequency selectivity and timing are central to the structure of the input. In simple feedforward SNNs without recurrence or network-level delays, FiTS consistently improves over the LIF baseline while remaining competitive with strong temporal SNN baselines.
+$$
+H(j\Omega)=\frac{\rho+j\Omega}{(\mu\rho+\kappa-\Omega^2)+j(\mu+\rho)\Omega}.
+$$
 
-Beyond accuracy, the learned target frequencies and group-delay shifts provide interpretable, neuron-level summaries of how the network organizes frequency and timing.
+Under the conditions derived in the paper, this response has a **unique nonzero global maximum** at a target frequency $\Omega^\star$. The key step in FiTS is to **invert** that relationship: instead of learning $\kappa$ and discovering the resulting peak afterward, we specify $\Omega^\star$ and calculate the $\kappa^\star$ that produces it.
+
+$$
+\boxed{\Omega^\star\;\text{(learnable)}\ \longrightarrow\ \kappa^\star\ \longrightarrow\ H(j\Omega)}
+$$
+
+Now each neuron can learn *where* it responds most strongly. Its initialization, optimization, and interpretation can all be expressed in the same frequency coordinate, rather than through an indirect adaptation parameter.
+
+:::details The closed-form inverse (Theorem 1)
+For a desired $\Omega^\star>0$, the continuous-time analysis gives a unique adaptation strength that places the magnitude-response peak at that frequency:
+
+$$
+\kappa^\star=\rho(\rho+\mu)\left[\sqrt{1+\frac{\left(1+(\Omega^\star/\rho)^2\right)^2}{(1+\mu/\rho)^2}}-1\right].
+$$
+
+The implemented neuron runs in discrete time, so the realized frequency-response peak can differ slightly from its continuous-time target because of discretization.
+:::
+
+:::fits-frequency-demo
+Title: From a fixed low-pass peak to a learnable target frequency
+Description: Move the target-frequency slider to compare the normalized subthreshold magnitude responses of standard LIF and FS.
+:::
+
+## Temporal Shaping (TS)
+
+Choosing a frequency is only part of the problem. **When** frequency components contribute to the membrane voltage can also change when—or whether—the voltage crosses its spiking threshold.
+
+Once the FS parameters are set, their associated phase and group-delay responses are determined too. To give a neuron more control over its timing, TS combines an **all-pass filter cascade** with **$\lambda$-mixing**.
+
+An individual all-pass stage changes phase while preserving magnitude:
+
+$$
+A_m(z)=\frac{z^{-1}-\beta_m}{1-\beta_m z^{-1}},\qquad |\beta_m|<1.
+$$
+
+The $\lambda$-mixing operation then blends outputs from the cascade:
+
+$$
+\widetilde V_m[k+1]=(1-\lambda_m)\widetilde V_{m-1}[k+1]+\lambda_m V_m[k+1].
+$$
+
+![The TS module: a cascade of all-pass stages with λ-mixing of intermediate outputs.](/publications/fits-figure1-ts-module.webp "wide")
+
+A cascade of stable first-order all-pass stages contributes positive group delay. With $\lambda$-mixing, however, **both positive and negative group-delay shifts relative to the FS-only response** become possible. A negative *shift* does not mean accessing future input. And while each all-pass stage preserves magnitude, the mixed overall response need not preserve it exactly.
+
+FS and TS thus give each neuron complementary controls over **frequency preference and temporal response**, without adding recurrence or delays at the *network level*.
+
+:::quote
+Which frequency should a neuron respond to, and when should that response contribute to its membrane voltage?
+:::
+
+# What We Found
+
+We evaluated FiTS on auditory benchmarks, using simple feedforward SNNs without network-level recurrence or delays. FiTS consistently outperformed the plain LIF baseline in these experiments and remained competitive with stronger temporal SNN baselines.
+
+:::stats
++13.57 pp | SHD vs. plain LIF | 81.74% → 95.31%
++9.06 pp | SSC vs. plain LIF | 69.17% → 78.23%
++14.46 pp | GSC vs. plain LIF | 80.02% → 94.48%
+:::
+
+Beyond accuracy, I find the learned representations particularly interesting. We can inspect each neuron's **target frequency** and **group-delay shifts**, giving us a more interpretable view of how the network organizes frequency and timing. These quantities do not explain every aspect of a neuron's behavior, and our experiments focus on auditory tasks, but they provide a concrete place to begin looking.
 
 # At NeurIPS 2026
 
-I will be presenting this work as a Spotlight paper at NeurIPS 2026 in Sydney.
+FiTS has been accepted to **NeurIPS 2026 as a Spotlight paper**. I'll be presenting it in Sydney this December, and I'd love to discuss what biological neuron dynamics might teach us about designing more interpretable temporal computation.
 
 :::event
 Date: Dec 10, 2026
@@ -46,10 +160,8 @@ Place: Hall 1-4, Sydney, Australia
 Calendar: /talks/fits/neurips-2026-fits-poster.ics
 :::
 
+[Paper (camera-ready)](https://arxiv.org/pdf/2605.13071) · [Code](https://github.com/kaistmm/FiTS)
+
 ## What I'd like to discuss
 
-I would love to talk about spiking neurons, frequency selectivity, and what biology can still teach us about network design. If you are attending, please come say hello.
-
-## After the session
-
-> After the conference, I will update this page with questions from the session, key discussion points, and personal takeaways. See you in Sydney!
+We often begin by asking **how neurons should be connected**. Working on FiTS also made me interested in a different question: **what should each neuron learn to compute over time?** I'd love to hear other perspectives on that at the poster session.

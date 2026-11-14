@@ -4,7 +4,7 @@ Subtitle: From biological neurons to frequency-selective temporal computation
 
 When several instruments play together, we can still follow the low notes of a bass or the higher notes of a melody. The same sound contains different frequency components, yet we can pay attention to particular ones.
 
-That made me wonder about the neurons in a neural network. **Could individual neurons learn to respond to different frequencies, rather than all starting with the same temporal preference?** And for a spiking neuron, might it matter not only *which* frequency it responds to, but also *when* that response contributes to its membrane voltage? After all, a small change in timing can change whether the membrane voltage crosses its spiking threshold.
+That made me wonder about the neurons in a neural network. For a spiking neuron, timing matters as well: a small change in timing can change whether the membrane voltage crosses its spiking threshold.
 
 **What if a spiking neuron could learn both which frequency to respond to and when it should contribute?**
 
@@ -53,10 +53,8 @@ H_{\mathrm{LIF}}(j\Omega)=\frac{1}{\mu+j\Omega},
 |H_{\mathrm{LIF}}(j\Omega)|=\frac{1}{\sqrt{\mu^2+\Omega^2}}.
 $$
 
-The magnitude decreases as the input frequency increases. Its maximum is at **0 Hz**. In other words, the standard LIF neuron's *subthreshold membrane dynamics* act as a **low-pass filter (LPF)**.
-
 :::lead
-This does **not** mean an SNN made of LIF neurons cannot learn high-frequency information: synaptic weights, spikes and resets, and network structure all matter. The limitation is more specific. A standard LIF neuron does not have an explicit parameter that lets us place the peak of its own subthreshold response at a chosen, nonzero frequency.
+The magnitude decreases as the input frequency increases. Its maximum is at **0 Hz**. In other words, the standard LIF neuron's *subthreshold membrane dynamics* act as a **low-pass filter (LPF)**.
 
 Here, biology offers an interesting clue. Some biological neurons exhibit **intrinsic resonance**, responding more strongly to particular input frequencies because of their membrane and ion-channel dynamics. An **adaptive LIF** model captures an aspect of this behavior by introducing a voltage-dependent adaptation current, $a(t)$:
 
@@ -102,8 +100,6 @@ For a desired $\Omega^\star>0$, the continuous-time analysis gives a unique adap
 $$
 \kappa^\star=\rho(\rho+\mu)\left[\sqrt{1+\frac{\left(1+(\Omega^\star/\rho)^2\right)^2}{(1+\mu/\rho)^2}}-1\right].
 $$
-
-The implemented neuron runs in discrete time, so the realized frequency-response peak can differ slightly from its continuous-time target because of discretization.
 :::
 
 :::fits-frequency-demo
@@ -131,13 +127,9 @@ $$
 
 ![The TS module: a cascade of all-pass stages with λ-mixing of intermediate outputs.](/publications/fits-figure1-ts-module.webp "wide")
 
-A cascade of stable first-order all-pass stages contributes positive group delay. With $\lambda$-mixing, however, **both positive and negative group-delay shifts relative to the FS-only response** become possible. A negative *shift* does not mean accessing future input. And while each all-pass stage preserves magnitude, the mixed overall response need not preserve it exactly.
+A cascade of stable first-order all-pass stages contributes positive group delay. With $\lambda$-mixing, however, **both positive and negative group-delay shifts relative to the FS-only response** become possible.
 
 FS and TS thus give each neuron complementary controls over **frequency preference and temporal response**, without adding recurrence or delays at the *network level*.
-
-:::quote
-Which frequency should a neuron respond to, and when should that response contribute to its membrane voltage?
-:::
 
 # What We Found
 
@@ -149,7 +141,7 @@ We evaluated FiTS on auditory benchmarks, using simple feedforward SNNs without 
 +14.46 pp | GSC vs. plain LIF | 80.02% → 94.48%
 :::
 
-Beyond accuracy, I find the learned representations particularly interesting. We can inspect each neuron's **target frequency** and **group-delay shifts**, giving us a more interpretable view of how the network organizes frequency and timing. These quantities do not explain every aspect of a neuron's behavior, and our experiments focus on auditory tasks, but they provide a concrete place to begin looking.
+Beyond accuracy, I find the learned representations particularly interesting. We can inspect each neuron's **target frequency** and **group-delay shifts**, giving us a more interpretable view of how the network organizes frequency and timing.
 
 # At NeurIPS 2026
 
@@ -163,8 +155,6 @@ Time: Thu 17:00, Sydney time (AEDT, UTC+11)
 Place: Hall 1-4, Sydney, Australia
 Calendar: /talks/fits/neurips-2026-fits-poster.ics
 :::
-
-[Paper (camera-ready)](https://arxiv.org/pdf/2605.13071) · [Code](https://github.com/kaistmm/FiTS)
 
 ## What I'd like to discuss
 

@@ -179,7 +179,7 @@ function CommentForm({ postId, parent, prefill = '', onPosted, onCancel, autoFoc
   return (
     <form onSubmit={submit} className="mt-4">
       <TextBox value={body} onChange={setBody} label={parent ? 'Your reply' : 'Your comment'}
-               placeholder={parent ? 'Write a reply. LaTeX works too: $\\Omega^\\star$' : 'Leave a comment. LaTeX works too: $\\Omega^\\star$'}
+               placeholder={parent ? 'Write a reply (LaTeX supported)' : 'Leave a comment (LaTeX supported)'}
                autoFocusAt={autoFocus ? prefill.length : undefined} />
       <div className="mt-2.5 grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] gap-2 sm:gap-3">
         <label className="block min-w-0">

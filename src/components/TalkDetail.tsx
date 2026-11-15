@@ -9,6 +9,7 @@ import { profile } from '../data/profile'
 import { people } from '../data/people'
 import { Block, MarkdownBody, parseMarkdown } from '../lib/markdown'
 import PaperLinks from './PaperLinks'
+import TalkComments from './TalkComments'
 import Lightbox, { LightboxImage } from './Lightbox'
 
 interface TalkDetailProps {
@@ -196,6 +197,11 @@ export default function TalkDetail({ talk, onClose, onNavigate, standalone = fal
                 </div>
               </section>
             )}
+
+            {/* ---------- Comments (loaded when they come near the screen) ---------- */}
+            <div className="print:hidden">
+              <TalkComments postId={talk.id} eyebrowClass={EYEBROW} />
+            </div>
 
             {/* ---------- All posts ---------- */}
             <div className="print:hidden">

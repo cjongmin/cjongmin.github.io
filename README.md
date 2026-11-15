@@ -41,6 +41,9 @@ Each talk opens as a blog post with the same layout:
    `:::fits-frequency-demo` (`Title`, `Description` rows) places the interactive FiTS frequency-response
    plot from [src/components/FitsFrequencyDemo.tsx](src/components/FitsFrequencyDemo.tsx).
 5. **Paper & resources**: Paper, Scholar, Code, Poster, BibTeX… from the paper's `links`.
+   Below it are **comments** ([src/components/TalkComments.tsx](src/components/TalkComments.tsx)): replies one level
+   deep, a nickname and a password to post, and the password to delete one's own comment. They are stored by a
+   Cloudflare Worker at `cjmin.me/api/comments` that is not in this repository; the site's owner can delete any.
 6. **Presentation Notes**: every post, newest first (`#2, #1`), five per page. `no` is the post's
    permanent number; give a new post the next one.
 

@@ -111,6 +111,10 @@ three photos on the home page. The original photos stay out of git because they 
 [scripts/build_gallery.py](scripts/build_gallery.py) (Pillow, pillow-heif) publishes upright sRGB WebP copies with no
 metadata to `public/gallery/` and writes `src/data/gallery.json` and `gallery-home.json`. Run it after changing an album, then build and deploy.
 
+Each photo in an album has a heart ([src/components/PhotoLikes.tsx](src/components/PhotoLikes.tsx)). Anyone can tap it,
+and every tap counts, up to a daily number per person and photo. The counts are kept by a Cloudflare Worker at
+`cjmin.me/api/likes` that is not in this repository.
+
 ## Short links
 
 [public/_redirects](public/_redirects) holds the site's redirects (Cloudflare Pages applies them):

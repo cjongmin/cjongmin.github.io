@@ -3,6 +3,7 @@ import { AnimatePresence } from 'framer-motion'
 import { Check, ChevronLeft, ChevronRight } from 'lucide-react'
 import { dateTitle, photoSrcSet, photoUrl, GalleryAlbum } from '../data/gallery'
 import Lightbox from './Lightbox'
+import { LikeButton, useAlbumLikes } from './PhotoLikes'
 
 const STAGE_SIZES = '(min-width: 2100px) 50vw, (min-width: 1164px) 1036px, 100vw'
 const SHEET_FROM = 12       // with this many photos, a contact sheet of all of them follows the large view
@@ -24,6 +25,7 @@ export default function AlbumViewer({ album }: { album: GalleryAlbum }) {
   const stageRef = useRef<HTMLDivElement>(null)
   const touch = useRef<{ x: number; y: number } | null>(null)
   const photo = photos[index]
+  const likes = useAlbumLikes(album.slug)
 
   const go = useCallback((i: number) => {
     const next = (i + photos.length) % photos.length
@@ -133,7 +135,10 @@ export default function AlbumViewer({ album }: { album: GalleryAlbum }) {
             <span title={dateTitle(photo.date)} className={`whitespace-nowrap text-[14px] text-secondary ${photo.caption ? 'ml-2.5' : ''}`}>{photo.date}</span>
           )}
         </p>
-        <p aria-live={slideshow ? 'off' : 'polite'} className="shrink-0 text-[14px] tabular-nums text-secondary">{index + 1} / {photos.length}</p>
+        <div className="shrink-0 flex items-baseline gap-3">
+          <LikeButton id={photo.id} count={likes.counts[photo.id] ?? 0} liked={likes.liked.has(photo.id)} full={likes.full.has(photo.id)} onTap={likes.tap} />
+          <p aria-live={slideshow ? 'off' : 'polite'} className="text-[14px] tabular-nums text-secondary">{index + 1} / {photos.length}</p>
+        </div>
       </div>
 
       {photos.length > 1 && (

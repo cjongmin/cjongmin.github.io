@@ -45,7 +45,8 @@ Each talk opens as a blog post with the same layout:
    deep, a nickname and a password to post, and the password to edit or delete one's own comment. `$…$` and
    `$$…$$` in a comment are drawn with KaTeX ([src/lib/katex.ts](src/lib/katex.ts)), loaded only when a comment
    has a `$`. They are stored by a
-   Cloudflare Worker at `cjmin.me/api/comments` that is not in this repository; the site's owner can delete any.
+   Cloudflare Worker at `cjmin.me/api/comments` that is not in this repository. Signed in, the site's owner
+   writes under their own name (marked Author) with no nickname or password, and can delete any comment.
 6. **Presentation Notes**: every post, newest first (`#2, #1`), five per page. `no` is the post's
    permanent number; give a new post the next one.
 

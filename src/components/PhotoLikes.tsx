@@ -81,12 +81,14 @@ export function LikeButton({ id, count, liked, full, onTap }: { id: string; coun
       onClick={() => { onTap(id); setPops(p => p + 1) }}
       aria-label={`Like this photo${count ? `, ${count} like${count === 1 ? '' : 's'} so far` : ''}`}
       title={full ? 'Thank you! That is all the likes one person can give this photo today.' : 'Like'}
-      className={`group inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 -my-1 text-[14px] tabular-nums transition-colors
+      className={`group inline-flex items-baseline rounded-full px-2.5 py-1 -my-1 text-[14px] leading-5 tabular-nums transition-colors
         ${liked ? 'text-[#E0245E] dark:text-[#FF5C8A]' : 'text-secondary hover:text-[#E0245E] dark:hover:text-[#FF5C8A]'}
         hover:bg-[#E0245E]/[0.08] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E0245E]/50`}
     >
-      <Heart key={pops} size={17} aria-hidden fill={liked ? 'currentColor' : 'none'} className={pops ? 'like-pop' : ''} />
-      {count > 0 && <span aria-hidden>{count}</span>}
+      {/* The heart is centred on the line; the text gives the button its baseline, so it lines up with the
+          text beside it. With no count yet, a zero-width space still gives it one. */}
+      <Heart key={pops} size={17} aria-hidden fill={liked ? 'currentColor' : 'none'} className={`self-center ${pops ? 'like-pop' : ''}`} />
+      <span aria-hidden className={count > 0 ? 'ml-1.5' : ''}>{count > 0 ? count : '\u200b'}</span>
     </button>
   )
 }

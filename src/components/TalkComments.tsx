@@ -1,9 +1,10 @@
 import { FormEvent, Fragment, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
+import { profile } from '../data/profile'
 
 // Comments under a talk post, served from /api/comments by a Cloudflare Worker (not in this
 // repository). Anyone can comment or reply with a nickname and a password; the password lets them
-// edit or delete their comment later. The site's owner, signed in on this browser, can delete any
-// comment, and comments written while signed in are marked as the author's.
+// edit or delete their comment later. The site's owner, signed in on this browser, writes
+// under their own name with no nickname or password (marked Author), and can delete any comment.
 // Comments load only when the section comes near the screen, so they never slow the post down.
 // $…$ and $$…$$ in a comment are drawn as maths with KaTeX, loaded only when some comment has a $.
 
@@ -145,9 +146,14 @@ function PasswordField({ value, onChange, autoComplete = 'new-password' }: { val
   )
 }
 
-function CommentForm({ postId, parent, prefill = '', onPosted, onCancel, autoFocus = false }: {
+const AuthorBadge = () => (
+  <span className="shrink-0 rounded-full bg-[#0071E3]/10 dark:bg-[#2997FF]/15 px-2 py-0.5 text-[11.5px] font-semibold text-[#0071E3] dark:text-[#2997FF]">Author</span>
+)
+
+function CommentForm({ postId, parent, prefill = '', admin, onPosted, onCancel, autoFocus = false }: {
   postId: string
   parent?: number
+  admin: boolean
   prefill?: string
   onPosted: (c: Comment) => void
   onCancel?: () => void
@@ -165,8 +171,8 @@ function CommentForm({ postId, parent, prefill = '', onPosted, onCancel, autoFoc
     e.preventDefault()
     setBusy(true); setError('')
     try {
-      const out = await send(API, { post: postId, parent, nick, password, body, website })
-      try { localStorage.setItem(NICK_KEY, nick.trim()) } catch { /* fine */ }
+      const out = await send(API, admin ? { post: postId, parent, body } : { post: postId, parent, nick, password, body, website })
+      if (!admin) try { localStorage.setItem(NICK_KEY, nick.trim()) } catch { /* fine */ }
       setBody(''); setPassword('')
       if (out.comment) onPosted(out.comment)
     } catch (err) {
@@ -181,14 +187,24 @@ function CommentForm({ postId, parent, prefill = '', onPosted, onCancel, autoFoc
       <TextBox value={body} onChange={setBody} label={parent ? 'Your reply' : 'Your comment'}
                placeholder={parent ? 'Write a reply (LaTeX supported)' : 'Leave a comment (LaTeX supported)'}
                autoFocusAt={autoFocus ? prefill.length : undefined} />
-      <div className="mt-2.5 grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] gap-2 sm:gap-3">
-        <label className="block min-w-0">
-          <span className="sr-only">Nickname</span>
-          <input className={FIELD} placeholder="Nickname" value={nick} onChange={e => setNick(e.target.value)} maxLength={24} required autoComplete="nickname" />
-        </label>
-        <PasswordField value={password} onChange={setPassword} />
-        <button type="submit" className={BUTTON} disabled={busy}>{parent ? 'Reply' : 'Post'}</button>
-      </div>
+      {admin ? (
+        <div className="mt-2.5 flex items-center justify-between gap-3">
+          <p className="min-w-0 flex items-center gap-2 text-[14px] text-secondary">
+            <span className="truncate">Posting as <span className="font-semibold text-[#1D1D1F] dark:text-[#F5F5F7]">{profile.name}</span></span>
+            <AuthorBadge />
+          </p>
+          <button type="submit" className={BUTTON} disabled={busy}>{parent ? 'Reply' : 'Post'}</button>
+        </div>
+      ) : (
+        <div className="mt-2.5 grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] gap-2 sm:gap-3">
+          <label className="block min-w-0">
+            <span className="sr-only">Nickname</span>
+            <input className={FIELD} placeholder="Nickname" value={nick} onChange={e => setNick(e.target.value)} maxLength={24} required autoComplete="nickname" />
+          </label>
+          <PasswordField value={password} onChange={setPassword} />
+          <button type="submit" className={BUTTON} disabled={busy}>{parent ? 'Reply' : 'Post'}</button>
+        </div>
+      )}
       {/* Hidden from people and from assistive technology; bots that fill every field give themselves away. */}
       <div aria-hidden="true" className="absolute -left-[9999px] w-px h-px overflow-hidden">
         <label>Website <input tabIndex={-1} autoComplete="off" value={website} onChange={e => setWebsite(e.target.value)} /></label>
@@ -280,9 +296,7 @@ function CommentView({ c, admin, math, action, setAction, onReply, onSaved, onDe
     <div>
       <p className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
         <span className="text-[15px] font-semibold text-[#1D1D1F] dark:text-[#F5F5F7] break-all">{c.nick}</span>
-        {c.owner && (
-          <span className="rounded-full bg-[#0071E3]/10 dark:bg-[#2997FF]/15 px-2 py-0.5 text-[11.5px] font-semibold text-[#0071E3] dark:text-[#2997FF]">Author</span>
-        )}
+        {c.owner && <AuthorBadge />}
         <time dateTime={new Date(c.ts).toISOString()} className="text-[12.5px] text-secondary tabular-nums">{when(c.ts)}</time>
         {c.edited && <span className="text-[12.5px] text-secondary" title={`Edited ${when(c.edited)}`}>· edited</span>}
       </p>
@@ -327,6 +341,19 @@ export default function TalkComments({ postId, eyebrowClass }: { postId: string;
     return () => io.disconnect()
   }, [status, load])
 
+  // Coming back to the tab reloads them, so a comment written meanwhile (or on another device) appears.
+  // Not while a form is open: a reload never touches what is being typed, but it would move things.
+  useEffect(() => {
+    if (status !== 'ready') return
+    let hiddenAt = 0
+    const onVisible = () => {
+      if (document.hidden) { hiddenAt = Date.now(); return }
+      if (hiddenAt && Date.now() - hiddenAt > 15000 && !replyTo && !action) load()
+    }
+    document.addEventListener('visibilitychange', onVisible)
+    return () => document.removeEventListener('visibilitychange', onVisible)
+  }, [status, load, replyTo, action])
+
   const threads = items.filter(c => c.parent === null)
   const repliesOf = (id: number) => items.filter(c => c.parent === id)
   const count = items.filter(c => !c.deleted).length
@@ -339,10 +366,10 @@ export default function TalkComments({ postId, eyebrowClass }: { postId: string;
   )
 
   return (
-    <section ref={sectionRef} aria-label="Comments" className="mt-14">
+    <section ref={sectionRef} id="comments" aria-label="Comments" className="mt-14 scroll-mt-24">
       <p className={eyebrowClass}>Comments{status === 'ready' && count > 0 ? ` · ${count}` : ''}</p>
       {admin && (
-        <p className="mt-2 text-[13px] text-secondary">You are signed in as the site's owner: you can delete any comment, and your comments are marked as the author's.</p>
+        <p className="mt-2 text-[13px] text-secondary">You are signed in as the site's owner: you write as {profile.name} with the Author badge, and can delete any comment.</p>
       )}
 
       {status === 'error' && (
@@ -364,7 +391,7 @@ export default function TalkComments({ postId, eyebrowClass }: { postId: string;
               )}
               {replyTo?.thread === t.id && (
                 <div className="mt-2 pl-4 sm:pl-6 border-l-2 border-[#0071E3]/30 dark:border-[#2997FF]/40">
-                  <CommentForm key={`${t.id}:${replyTo.prefill}`} postId={postId} parent={t.id} prefill={replyTo.prefill} autoFocus
+                  <CommentForm key={`${t.id}:${replyTo.prefill}`} postId={postId} parent={t.id} prefill={replyTo.prefill} admin={admin} autoFocus
                                onPosted={added} onCancel={() => setReplyTo(null)} />
                 </div>
               )}
@@ -374,7 +401,7 @@ export default function TalkComments({ postId, eyebrowClass }: { postId: string;
       )}
 
       <div className={threads.length > 0 ? 'mt-8' : ''}>
-        <CommentForm postId={postId} onPosted={added} />
+        <CommentForm postId={postId} admin={admin} onPosted={added} />
       </div>
     </section>
   )

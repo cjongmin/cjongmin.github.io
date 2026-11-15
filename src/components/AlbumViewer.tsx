@@ -137,7 +137,7 @@ export default function AlbumViewer({ album }: { album: GalleryAlbum }) {
         </p>
         <div className="shrink-0 flex items-baseline gap-3">
           <LikeButton id={photo.id} count={likes.counts[photo.id] ?? 0} liked={likes.liked.has(photo.id)} full={likes.full.has(photo.id)} onTap={likes.tap} />
-          <p aria-live={slideshow ? 'off' : 'polite'} className="text-[14px] tabular-nums text-secondary">{index + 1} / {photos.length}</p>
+          <p aria-live={slideshow ? 'off' : 'polite'} className="text-[14px] leading-5 tabular-nums text-secondary">{index + 1} / {photos.length}</p>
         </div>
       </div>
 

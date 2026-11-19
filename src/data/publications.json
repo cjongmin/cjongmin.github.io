@@ -106,7 +106,8 @@
     "links": {
       "paper": "https://arxiv.org/abs/2605.13071",
       "scholar": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=sPvkgm8AAAAJ&citation_for_view=sPvkgm8AAAAJ:9yKSN-GCB0IC",
-      "code": "https://github.com/kaistmm/FiTS"
+      "code": "https://github.com/kaistmm/FiTS",
+      "poster": "/publications/fits-poster.pdf"
     },
     "bibtex": "@inproceedings{choi2026fits,\n  title={FiTS: Interpretable Spiking Neurons via Frequency Selectivity and Temporal Shaping},\n  author={Choi, Jongmin and Chung, Joon Son},\n  booktitle={Advances in Neural Information Processing Systems (NeurIPS)},\n  year={2026}\n}",
     "image": "/publications/fits-figure1-ts-module.webp",

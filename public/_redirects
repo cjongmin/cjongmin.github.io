@@ -9,6 +9,8 @@
 # Posters: /poster/<venue><year>/<paper title>
 /poster/emnlp2026/fork-merge-decoding     /publications/fork-merge-decoding-poster.pdf    302
 /poster/emnlp2026/fork-merge-decoding/    /publications/fork-merge-decoding-poster.pdf    302
+/poster/neurips2026/fits                   /publications/fits-poster.pdf                   302
+/poster/neurips2026/fits/                  /publications/fits-poster.pdf                   302
 
 # Presentation notes live at /talks/<no>/; /talks itself is the section on the home page
 /talks     /#talks    302

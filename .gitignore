@@ -7,8 +7,10 @@ dist-github
 .env.local
 *.zip
 /[0-9]_*.png
-# working files dropped in the repo root (e.g. a poster before it goes to public/)
+# working files dropped in the repo root (e.g. a poster before it goes to public/, or its slides)
 /*.pdf
+/*.pptx
+/*.key
 # paper sources dropped in for reference (never commit them)
 /arXiv-*
 .wrangler
